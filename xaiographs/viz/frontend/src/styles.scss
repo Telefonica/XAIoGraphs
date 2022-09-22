@@ -1,0 +1,130 @@
+@import "~@angular/material/theming";
+@import "assets/XAIoWeb.scss";
+@import "assets/header.scss";
+@import "assets/global.scss";
+@import "assets/local.scss";
+@import "assets/fairness.scss";
+@import "assets/data.scss";
+@include mat-core();
+
+$mat-customized: (
+    50: #ffebee,
+    100: #ffcdd2,
+    200: #ef9a9a,
+    300: #e57373,
+    400: #ef5350,
+    500: #f44336,
+    600: #e53935,
+    700: #019ba9,
+    800: #019ba9,
+    900: #019ba9,
+    A100: #ff8a80,
+    A200: #ff5252,
+    A400: #ff1744,
+    A700: #d50000,
+    contrast: (
+        50: $black-87-opacity,
+        100: $black-87-opacity,
+        200: $black-87-opacity,
+        300: $black-87-opacity,
+        400: $black-87-opacity,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: $black-87-opacity,
+        A200: white,
+        A400: white,
+        A700: white,
+    ),
+);
+
+$mat-customized-second: (
+    50: #ffebee,
+    100: #ffcdd2,
+    200: #ef9a9a,
+    300: #e57373,
+    400: #ef5350,
+    500: #f44336,
+    600: #e53935,
+    700: #003b4c,
+    800: #003b4c,
+    900: #003b4c,
+    A100: #ff8a80,
+    A200: #ff5252,
+    A400: #ff1744,
+    A700: #d50000,
+    contrast: (
+        50: $black-87-opacity,
+        100: $black-87-opacity,
+        200: $black-87-opacity,
+        300: $black-87-opacity,
+        400: $black-87-opacity,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: $black-87-opacity,
+        A200: white,
+        A400: white,
+        A700: white,
+    ),
+);
+
+$mat-customized-third: (
+    50: #ffebee,
+    100: #ffcdd2,
+    200: #ef9a9a,
+    300: #e57373,
+    400: #ef5350,
+    500: #f44336,
+    600: #e53935,
+    700: #29a5e9,
+    800: #29a5e9,
+    900: #29a5e9,
+    A100: #ff8a80,
+    A200: #ff5252,
+    A400: #ff1744,
+    A700: #ff4a4a,
+    contrast: (
+        50: $black-87-opacity,
+        100: $black-87-opacity,
+        200: $black-87-opacity,
+        300: $black-87-opacity,
+        400: $black-87-opacity,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: $black-87-opacity,
+        A200: white,
+        A400: white,
+        A700: white,
+    ),
+);
+
+$PROJECT-primary: mat-palette($mat-customized, 700, 800, 900);
+$PROJECT-accent: mat-palette($mat-customized-second, 700, 800, 900);
+$PROJECT-warn: mat-palette($mat-customized-third, A700, A700, A700);
+$PROJECT-theme: mat-light-theme($PROJECT-primary, $PROJECT-accent, $PROJECT-warn);
+
+@include angular-material-theme($PROJECT-theme);
+
+// @font-face {
+//     font-family: "telefonica_sans_regular";
+//     src: url("assets/fonts/Telefonica_Sans_Regular.eot"),
+//          url("assets/fonts/Telefonica_Sans_Regular.otf") format("opentype");
+//     font-weight: normal;
+//     font-style: normal;
+// }
+
+// $custom-typography: mat-typography-config(
+//     $font-family: "telefonica_sans_regular",
+//     $headline: mat-typography-level(32px, 48px, 700),
+//     $body-1: mat-typography-level(16px, 24px, 500),
+// );
+
+// @include angular-material-typography($custom-typography);

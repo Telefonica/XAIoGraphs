@@ -1,0 +1,27 @@
+<div fxFlex fxLayout="column" fxLayoutGap="10px">
+    <div fxFlex fxLayout="row" fxLayoutAlign="end start">
+        <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="localCard">
+            <label class="localDatasetTitle">Features selection</label>
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="" fxLayoutGap="10px">
+                <mat-slider min=1 step=1 max="{{ maxFeatures }}" thumbLabel='true' [(ngModel)]="numFeatures" style="width: 100%;" (input)="updateFeatures($event)"></mat-slider>
+                <label>{{ numFeatures }}</label>
+            </div>
+        </div>
+    </div>
+
+    <div fxLayout="row" class="localDataset">
+        <table fxFlex mat-table [dataSource]="dataSource" matSort>
+            <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
+                <td mat-cell *matCellDef="let row">
+                    <label *ngIf="column != 'id'">{{ row[column] }}</label>
+                    <div *ngIf="column == 'id'">
+                        <mat-radio-button [value]="true" [checked]="row.id == currentID" (change)="radioSelected(row)"></mat-radio-button>
+                    </div>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

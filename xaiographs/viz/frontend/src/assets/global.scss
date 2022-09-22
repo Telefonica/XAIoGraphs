@@ -1,0 +1,34 @@
+.globalTitle {
+    @extend .bgGrey4;
+    @extend .fontWhite;
+    @extend .fontBold;
+    height: 60px;
+    padding-left: 25px;
+    font-size: 25px;
+}
+
+.globalBody {
+    @extend .bodyComponent;
+    overflow: auto;
+}
+
+.globalCard {
+    @extend .contentComponent;
+    @extend .brdGrey3;
+    @extend .bgWhite;
+}
+
+.globalFeatureTitle, .globalDistributionTitle, .globalFeatureTargetTitle, .globalNetGraphTitle, .globalTargetTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 18px;
+}
+
+.globalFeatureChart, .globalDistributionChart {
+    @extend .width100;
+    height: 300px;
+}
+.globalNetGraphChart, .globalFeatureTargetChart {
+    @extend .width100;
+    height: 500px;
+}

@@ -1,0 +1,11 @@
+{
+    "script": "bin/www.js",
+    "watch": true,
+    "ignore_watch": [
+        "public"
+    ],
+    "watch_options": {
+        "followSymlinks": false
+    },
+    "name": "XAioWeb"
+}
