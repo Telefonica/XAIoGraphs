@@ -87,3 +87,5 @@ _output
 
 # Mac related
 .DS_Store
+
+xaiographs/viz/backend/public/

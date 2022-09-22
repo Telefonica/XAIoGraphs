@@ -1,0 +1,27 @@
+.dataTitle {
+    @extend .bgGrey4;
+    @extend .fontWhite;
+    @extend .fontBold;
+    height: 60px;
+    padding-left: 25px;
+    font-size: 25px;
+}
+
+.dataBody {
+    @extend .bodyComponent;
+    overflow: auto;
+}
+
+.dataCard {
+    @extend .contentComponent;
+    @extend .brdGrey3;
+    @extend .bgWhite;
+}
+
+.dataDataset {
+    @extend .brdGrey3;
+    @extend .bgWhite;
+    border-radius: 8px;
+    height: 600px;
+    overflow-y: auto;
+}

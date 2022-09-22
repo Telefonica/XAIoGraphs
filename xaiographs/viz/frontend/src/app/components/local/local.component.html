@@ -1,0 +1,15 @@
+<div fxFlex fxLayout="column" style="height: 100vh;">
+    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="start center" class="localTitle">
+        <label>Local explainability</label>
+    </div>
+    <div fxFlex fxLayout="column" fxLayoutGap="20px" class="localBody">
+        <app-local-dataset fxFlex class=""></app-local-dataset>
+
+        <app-local-reason fxFlex class="localCard"></app-local-reason>
+
+        <div fxFlex fxLayout="row" fxLayoutGap="20px">
+            <app-local-graph fxFlex class="localCard"></app-local-graph>
+            <app-local-features fxFlex class="localCard"></app-local-features>
+        </div>
+    </div>
+</div>

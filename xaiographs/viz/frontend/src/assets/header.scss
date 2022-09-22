@@ -1,0 +1,23 @@
+.headerBody {
+    @extend .bgGrey8;
+    width: 100px;
+}
+
+.headerLogo {
+    height: 60px;
+}
+
+.headerMenu {
+    @extend .fontWhite;
+    padding: 15px 0px;
+}
+.headerMenuLogo {
+
+}
+.headerMenuLabel {
+
+}
+.headerMenuSelected {
+    @extend .bgGrey6;
+    @extend .fontBold;
+}

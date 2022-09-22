@@ -1,0 +1,29 @@
+{
+    "name": "xaioweb",
+    "version": "1.0.0",
+    "main": "app.js",
+    "scripts": {
+        "start": "NODE_ENV='production' pm2-runtime bin/www.js -i max",
+        "start-dev": "ndb nodemon bin/www",
+        "test": "mocha --timeout 10000"
+    },
+    "dependencies": {
+        "body-parser": "^1.19.2",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "csv-parser": "^3.0.0",
+        "eslint": "^8.12.0",
+        "express": "^4.17.3",
+        "express-jwt": "^6.1.1",
+        "gauss": "^0.2.12",
+        "helmet": "^5.0.2",
+        "hpp": "^0.2.3",
+        "jsonwebtoken": "^8.5.1",
+        "mongodb": "^4.4.1",
+        "mongoose": "^6.2.8",
+        "morgan": "^1.10.0",
+        "passport": "^0.5.2",
+        "passport-local": "^1.0.0",
+        "pm2": "^5.2.0"
+    }
+}

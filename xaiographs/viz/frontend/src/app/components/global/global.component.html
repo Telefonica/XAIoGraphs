@@ -1,0 +1,18 @@
+<div fxFlex fxLayout="column" style="height: 100vh;">
+    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="start center" class="globalTitle">
+        <label>Global explainability</label>
+    </div>
+    <div fxFlex fxLayout="column" fxLayoutGap="20px" class="globalBody">
+        <div fxFlex fxLayout="row" fxLayoutGap="20px">
+            <app-global-features fxFlex class="globalCard"></app-global-features>
+            <app-global-distribution fxFlex class="globalCard"></app-global-distribution>
+        </div>
+
+        <app-global-target fxFlex class=""></app-global-target>
+
+        <div fxFlex fxLayout="row" fxLayoutGap="20px">
+            <app-global-target-graph fxFlex class="globalCard"></app-global-target-graph>
+            <app-global-target-features fxFlex class="globalCard"></app-global-target-features>
+        </div>
+    </div>
+</div>
