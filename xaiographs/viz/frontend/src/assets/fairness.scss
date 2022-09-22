@@ -1,0 +1,19 @@
+.fairnessTitle {
+    @extend .bgGrey4;
+    @extend .fontWhite;
+    @extend .fontBold;
+    height: 60px;
+    padding-left: 25px;
+    font-size: 25px;
+}
+
+.fairnessBody {
+    @extend .bodyComponent;
+    overflow: auto;
+}
+
+.fairnessCard {
+    @extend .contentComponent;
+    @extend .brdGrey3;
+    @extend .bgWhite;
+}

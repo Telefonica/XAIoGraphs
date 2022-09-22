@@ -1,0 +1,4 @@
+<div fxFlex fxLayout="column" fxLayoutGap="25px">
+    <label class="globalFeatureTitle">Features importance</label>
+    <google-chart class="globalFeatureChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>
+</div>

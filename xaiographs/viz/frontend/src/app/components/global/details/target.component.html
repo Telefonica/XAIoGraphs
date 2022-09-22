@@ -1,0 +1,17 @@
+<div fxFlex fxLayout="row" fxLayoutGap="10px">
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="globalCard">
+        <label class="globalTargetTitle">Target filter</label>
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="" fxLayoutGap="10px">
+            <mat-select placeholder="Target" [formControl]="filterTarget" (selectionChange)="updateTarget()">
+                <mat-option [value]="target" *ngFor="let target of listTarget">{{ target }}</mat-option>
+            </mat-select>
+        </div>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="globalCard">
+        <label class="globalTargetTitle">Features selection</label>
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="" fxLayoutGap="10px">
+            <mat-slider min=1 step=1 max="{{ maxFeatures }}" thumbLabel='true' [(ngModel)]="numFeatures" style="width: 100%;" (input)="updateFeatures($event)"></mat-slider>
+            <label>{{ numFeatures }}</label>
+        </div>
+    </div>
+</div>
