@@ -11,11 +11,12 @@ export class SnackbarService {
 
     openSnackBar(message: any, error = true) {
         const config = new MatSnackBarConfig();
-        config.duration = 3000;
         if (error) {
             config.panelClass = ['snackBarBody', 'snackBarError', 'fontWhite'];
+            config.duration = 10000;
         } else {
             config.panelClass = ['snackBarBody', 'snackBarMessage', 'fontWhite'];
+            config.duration = 3000;
         }
         this.snackBar.open(message, '', config);
     }

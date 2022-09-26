@@ -11,13 +11,13 @@ exports.index = (req, res) => {
 exports.readCSV = async (req, res) => {
     if (!req.body.fileName) {
         const msg = 'Missing parameters';
-        console.error('readCSV', msg);
+        console.log('ERROR - readCSV', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
             .then((response) => { return res.status(200).json(response) })
             .catch((error) => {
-                console.error('readCSV', error);
+                console.log('ERROR - readCSV', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -28,7 +28,7 @@ exports.readCSV = async (req, res) => {
 exports.listGlobalTarget = async (req, res) => {
     if (!req.body.fileName) {
         const msg = 'Missing parameters';
-        console.error('listGlobalTarget', msg);
+        console.log('ERROR - listGlobalTarget', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
@@ -41,7 +41,7 @@ exports.listGlobalTarget = async (req, res) => {
                 })
             })
             .catch((error) => {
-                console.error('listGlobalTarget', error);
+                console.log('ERROR - listGlobalTarget', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -49,7 +49,7 @@ exports.listGlobalTarget = async (req, res) => {
 exports.readGlobalNodesWeights = async (req, res) => {
     if (!req.body.fileName || !req.body.target || !req.body.numFeatures) {
         const msg = 'Missing parameters';
-        console.error('readGlobalNodesWeights', msg);
+        console.log('ERROR - readGlobalNodesWeights', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
@@ -62,7 +62,7 @@ exports.readGlobalNodesWeights = async (req, res) => {
                 );
             })
             .catch((error) => {
-                console.error('readGlobalNodesWeights', error);
+                console.log('ERROR - readGlobalNodesWeights', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -70,7 +70,7 @@ exports.readGlobalNodesWeights = async (req, res) => {
 exports.readGlobalEdgesWeights = async (req, res) => {
     if (!req.body.fileName || !req.body.target || !req.body.nodeNames) {
         const msg = 'Missing parameters';
-        console.error('readGlobalEdgesWeights', msg);
+        console.log('ERROR - readGlobalEdgesWeights', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
@@ -84,7 +84,7 @@ exports.readGlobalEdgesWeights = async (req, res) => {
                 );
             })
             .catch((error) => {
-                console.error('readGlobalEdgesWeights', error);
+                console.log('ERROR - readGlobalEdgesWeights', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -95,7 +95,7 @@ exports.readGlobalEdgesWeights = async (req, res) => {
 exports.readLocalDataset = async (req, res) => {
     if (!req.body.fileName) {
         const msg = 'Missing parameters';
-        console.error('readLocalDataset', msg);
+        console.log('ERROR - readLocalDataset', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
@@ -103,7 +103,7 @@ exports.readLocalDataset = async (req, res) => {
                 return res.status(200).json(response)
             })
             .catch((error) => {
-                console.error('readLocalDataset', error);
+                console.log('ERROR - readLocalDataset', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -111,7 +111,7 @@ exports.readLocalDataset = async (req, res) => {
 exports.readLocalNodesWeights = async (req, res) => {
     if (!req.body.fileName || !req.body.target || !req.body.numFeatures) {
         const msg = 'Missing parameters';
-        console.error('readLocalNodesWeights', msg);
+        console.log('ERROR - readLocalNodesWeights', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
@@ -124,7 +124,7 @@ exports.readLocalNodesWeights = async (req, res) => {
                 );
             })
             .catch((error) => {
-                console.error('readLocalNodesWeights', error);
+                console.log('ERROR - readLocalNodesWeights', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -132,7 +132,7 @@ exports.readLocalNodesWeights = async (req, res) => {
 exports.readLocalEdgesWeights = async (req, res) => {
     if (!req.body.fileName || !req.body.target || !req.body.nodeNames) {
         const msg = 'Missing parameters';
-        console.error('readLocalEdgesWeights', msg);
+        console.log('ERROR - readLocalEdgesWeights', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
@@ -146,7 +146,7 @@ exports.readLocalEdgesWeights = async (req, res) => {
                 );
             })
             .catch((error) => {
-                console.error('readLocalEdgesWeights', error);
+                console.log('ERROR - readLocalEdgesWeights', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -154,7 +154,7 @@ exports.readLocalEdgesWeights = async (req, res) => {
 exports.readLocalReasonWhy = async (req, res) => {
     if (!req.body.fileName || !req.body.target) {
         const msg = 'Missing parameters';
-        console.error('readLocalReasonWhy', msg);
+        console.log('ERROR - readLocalReasonWhy', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
@@ -166,7 +166,7 @@ exports.readLocalReasonWhy = async (req, res) => {
                 );
             })
             .catch((error) => {
-                console.error('readLocalReasonWhy', error);
+                console.log('ERROR - readLocalReasonWhy', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -177,7 +177,7 @@ exports.readLocalReasonWhy = async (req, res) => {
 exports.listDatasetHeaders = async (req, res) => {
     if (!req.body.fileName) {
         const msg = 'Missing parameters';
-        console.error('listDatasetHeaders', msg);
+        console.log('ERROR - listDatasetHeaders', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
@@ -185,7 +185,7 @@ exports.listDatasetHeaders = async (req, res) => {
                 return res.status(200).json(response.headers);
             })
             .catch((error) => {
-                console.error('listDatasetHeaders', error);
+                console.log('ERROR - listDatasetHeaders', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -193,7 +193,7 @@ exports.listDatasetHeaders = async (req, res) => {
 exports.readDatasetSelected = async (req, res) => {
     if (!req.body.fileName || !req.body.displayedColumns) {
         const msg = 'Missing parameters';
-        console.error('readDatasetSelected', msg);
+        console.log('ERROR - readDatasetSelected', msg);
         return res.status(404).json({ msg: msg });
     } else {
         const filteredData = [];
@@ -242,7 +242,7 @@ exports.readDatasetSelected = async (req, res) => {
                 });
             })
             .catch((error) => {
-                console.error('readDatasetSelected', error);
+                console.log('ERROR - readDatasetSelected', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -257,25 +257,31 @@ const getData = async (fileName) => {
     let csvData = [];
 
     return new Promise((resolve, reject) => {
-        fs.createReadStream(csvPath)
-            .pipe(csv({
-                separator: ','
-            }))
-            .on('headers', (headers) => {
-                csvHeaders = headers
-            })
-            .on('data', (data) => {
-                csvData.push(data)
-            })
-            .on('end', () => {
-                resolve({
-                    headers: csvHeaders,
-                    data: csvData,
+        if (fs.existsSync(csvPath)) {
+            console.log('getData - File ready: ', csvPath)
+            fs.createReadStream(csvPath)
+                .pipe(csv({
+                    separator: ','
+                }))
+                .on('headers', (headers) => {
+                    csvHeaders = headers
+                })
+                .on('data', (data) => {
+                    csvData.push(data)
+                })
+                .on('end', () => {
+                    resolve({
+                        headers: csvHeaders,
+                        data: csvData,
+                    });
+                })
+                .on('error', (error) => {
+                    console.log('ERROR - getData: ', error);
+                    reject({ err: error });
                 });
-            })
-            .on('error', (error) => {
-                console.error(error);
-                reject({ err: error });
-            });
+        } else {
+            console.log('ERROR - getData: Missing file at', csvPath);
+            reject({ err: 'ERROR - getData: Missing file at', csvPath });
+        }
     });
 };

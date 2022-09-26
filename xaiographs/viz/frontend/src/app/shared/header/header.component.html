@@ -3,7 +3,7 @@
         logo pdt
     </div>
     <div *ngFor="let item of optionsMenu" style="width: 100%">
-        <div fxLayout="column" fxLayoutAlign="start center" class="headerMenu" [routerLink]="item.component" [ngClass]="{headerMenuSelected: (this.current == item.component)}">
+        <div fxLayout="column" fxLayoutAlign="start center" class="headerMenu" [routerLink]="item.component" skipLocationChange="true" [ngClass]="{headerMenuSelected: (this.current == item.component)}">
             <mat-icon class="headerMenuLogo">{{ item.icon }}</mat-icon>
             <label class="headerMenuLabel">{{ item.title }}</label>
         </div>

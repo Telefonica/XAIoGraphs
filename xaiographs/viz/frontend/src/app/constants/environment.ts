@@ -6,6 +6,6 @@ export const ctsDevEnvrionment = {
 
 export const ctsPrdEnvrionment = {
     production: true,
-    domain: '',
+    domain: 'localhost:3000',
     backend_api: 'api_xai',
 };
