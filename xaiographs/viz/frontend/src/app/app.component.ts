@@ -13,14 +13,15 @@ import { ctsGlobal } from './constants/global';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     title = ctsGlobal.titleApp;
     currentModule = ctsGlobal.initial_component;
 
     constructor(
         private router: Router,
-        private _apiSB: SnackbarService,
-    ) { }
+    ) {
+        this.router.navigate(['/global'], {skipLocationChange: true});
+    }
 
     ngOnInit() {
         this.router.events.subscribe(val => {

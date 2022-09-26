@@ -1,11 +1,12 @@
 {
-    "name": "xaioweb",
+    "name": "XAIoWeb",
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
         "start": "ng serve --host 0.0.0.0 --disable-host-check --port 3000",
         "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && ng build",
         "build-prod": "export SET NODE_OPTIONS=--openssl-legacy-provider && ng build --configuration production",
+        "build-xai": "ng build --configuration production --output-path=../XAIoWeb --base-href=XAIoWeb",
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e"

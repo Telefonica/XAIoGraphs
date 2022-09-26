@@ -1,5 +1,5 @@
 {
-    "script": "bin/www.js",
+    "script": "backend/bin/www.js",
     "watch": true,
     "ignore_watch": [
         "public"
