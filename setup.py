@@ -7,7 +7,7 @@ The program(s) may be used and or copied only with the express written consent o
 the terms and conditions stipulated in the agreement/contract under which the program(s) have been supplied.
 """
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 __VERSION__ = open('VERSION').read().strip()
 
@@ -23,8 +23,8 @@ setup(
     author_email='ricardo.moyagarcia@telefonica.com',
     license='(C) Telefonica I+D',
     long_description='Python library providing explainability AI funcionalities',
-    python_requires='>=3.6',
-    packages=['xaiographs'],
+    python_requires='>=3.7',
+    packages=find_packages(),
     include_package_data=True,
     test_suite='nose.collector',
     tests_require=['nose']
