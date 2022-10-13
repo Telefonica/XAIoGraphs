@@ -52,35 +52,35 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 def print_upper_line():
     """
-    This function print the upper line of the requirements validatons table.
+    This function print the upper line of the requirements validations table.
     The only functionality it has is when viewing the fulfillment of requirements
     """
     print(u"\u2554", end='')
-    for i in range(LEFT_COL_HEIGHT):
+    for _ in range(LEFT_COL_HEIGHT):
         print(u"\u2550", end='')
     print(u"\u2566", end='')
-    for i in range(RIGHT_COL_HEIGHT):
+    for _ in range(RIGHT_COL_HEIGHT):
         print(u"\u2550", end='')
     print(u"\u2557")
 
 
 def print_middle_line():
     """
-    This function print the middle line of the requirements validatons table.
+    This function print the middle line of the requirements validation table.
     The only functionality it has is when viewing the fulfillment of requirements
     """
     print(u"\u2560", end='')
-    for i in range(LEFT_COL_HEIGHT):
+    for _ in range(LEFT_COL_HEIGHT):
         print(u"\u2550", end='')
     print(u"\u256C", end='')
-    for i in range(RIGHT_COL_HEIGHT):
+    for _ in range(RIGHT_COL_HEIGHT):
         print(u"\u2550", end='')
     print(u"\u2563")
 
 
 def print_message_line(message: str, status: str, style: str):
     """
-    This function print a message line of the requirements validatons table.
+    This function print a message line of the requirements validations table.
     The only functionality it has is when viewing the fulfillment of requirements
     The message shows the status of compliance with some of the requirements.
 
@@ -97,14 +97,14 @@ def print_message_line(message: str, status: str, style: str):
 
 def print_bottom_line():
     """
-    This function print the bottom line of the requirements validatons table.
+    This function print the bottom line of the requirements validations table.
     The only functionality it has is when viewing the fulfillment of requirements
     """
     print(u"\u255A", end='')
-    for i in range(LEFT_COL_HEIGHT):
+    for _ in range(LEFT_COL_HEIGHT):
         print(u"\u2550", end='')
     print(u"\u2569", end='')
-    for i in range(RIGHT_COL_HEIGHT):
+    for _ in range(RIGHT_COL_HEIGHT):
         print(u"\u2550", end='')
     print(u"\u255D")
 
