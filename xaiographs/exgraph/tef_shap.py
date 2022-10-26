@@ -1,235 +1,274 @@
 import time
 from itertools import combinations
-from typing import Dict, List, Optional
+from typing import Dict, List, Union
 
 import numpy as np
 import pandas as pd
 import scipy
-from numpy import ndarray
+from absl import logging
+from tqdm import tqdm
 
+from xaiographs.common.constants import COUNT, MEAN
 from xaiographs.exgraph.explainer import Explainer
-
-COALITIONS = 'coalitions'
-COALITIONS_WEIGHTS = 'coalitions_weights'
-DEFAULT_TARGET_COLS = ['target']
-DF_EXPLANATION = 'df_explanation'
-MODEL = 'model'
-PHI0 = 'phi0'
-QUALITY_MEASURE = 'quality_measure'
-SHAPLEY_VALUES = 'shapley_values'
 
 
 class TefShap(Explainer):
+    _COALITIONS = 'coalitions'
+    _COALITIONS_WEIGHTS = 'coalitions_weights'
+    _MODEL = 'model'
+    _RES_DICT = 'res_dict'
 
     def __init__(self, explainer_params: Dict):
         self.explainer_params: Dict = explainer_params
 
-    def train(self, dataframe: pd.DataFrame, target_cols: List[str], count_col: Optional[str] = 'count') -> Dict:
+    def train(self, df: pd.DataFrame, target_cols: List[str]) -> Dict[str, Dict[str,
+                                                                                Union[Dict, Union[np.ndarray,
+                                                                                                  List[List[str]],
+                                                                                                  List[float]]]]]:
         """
-        In this function, starting from a properly formatted dataframe, we generate a training model, the list of
-        possible coalitions and the weight of each of these coalitions.
+        This function trains a model by kind of "memorizing" dataset examples, for this reason, df parameter (which
+        represents the dataset) must accurately represent the problem domain. It also takes care of generating the list
+         of possible coalitions and computing the corresponding weight for each
 
-        :params: dataframe: pd.DataFrame used as importance stimator.
-        :params: target_cols: List['str'] with all column names identified as target.
-        :params: count_col: Optional[str] used to count the targets concurrences.
-        :return: Dict. with the following structure and keys:
-                - model: Dict:
-                - coalitions: Dict: with all possible coalitions based on features
-                - coalitions_weight: Dict: weight of each coalition
+        :param: df:            A pandas DataFrame used as importance estimator
+        :param: target_cols:   List of strings containing all column names identified as target
+        :return:               Dictionary with the following structure and keys:
+                               - model: Dictionary with the model column names as keys and the feature values as values
+                               - coalitions: Dictionary with the column names as keys and their corresponding lists of
+                               coalitions as values
+                               - coalitions_weight: Dictionary with the column names as keys and their corresponding
+                               list of weights for the list of coalitions associated to that column, as value
+                               - res_dict: Empty dictionary, representing the empty coalition
         """
         start = time.time()
 
         if target_cols is None:
-            target_cols = DEFAULT_TARGET_COLS
+            target_cols = Explainer._DEFAULT_TARGET_COLS
 
-        model_df: pd.DataFrame = (dataframe.groupby([c for c in list(dataframe.columns) if c not in target_cols])
-                                  .agg(
-            {c: (['count', 'mean'] if i == 0 else ['mean']) for i, c in enumerate(target_cols)})
-                                  .reset_index())
-        model_df.columns = ['_'.join(col).strip() if col[1] != '' else col[0] for col in model_df.columns.values]
-        model_df = model_df.rename(columns={'_'.join([target_cols[0], 'mean']): target_cols[0],
-                                            '_'.join([target_cols[0], 'count']): count_col})
+        # The given DataFrame is grouped by its features, COUNT is calculated on the first of the targets in order to
+        # know the number of different feature combinations. MEAN is computed on each of the targets
+        model_df = (df.groupby([c for c in list(df.columns) if c not in target_cols])
+                    .agg(
+            {c: ([COUNT, MEAN] if i == 0 else [MEAN]) for i, c in enumerate(target_cols)})
+                    .reset_index())
+
+        # Pandas hierarchical indexing messes up the header...
+        model_df.columns = ['_'.join(col).strip() if col[1] != '' else col[0] for col in model_df.columns]
+        model_df = model_df.rename(columns={'_'.join([target_cols[0], MEAN]): target_cols[0],
+                                            '_'.join([target_cols[0], COUNT]): COUNT})
         if len(target_cols) > 1:
-            model_df = model_df.rename(columns={'_'.join([c, 'mean']): c for c in target_cols[1:]})
+            model_df = model_df.rename(columns={'_'.join([c, MEAN]): c for c in target_cols[1:]})
 
-        model: Dict = {}
+        # The resulting model is stored into a str/ndarray dictionary for later calculations
+        model = {}
         for c in model_df.columns:
             model[c] = model_df[c].values
 
-        coalitions: Dict = {}
-        coalitions_weights: Dict = {}
-        cols_names: List = dataframe.columns
-        len_names: int = len(cols_names)
-        for c in [tmp_c for tmp_c in dataframe.columns if tmp_c not in target_cols]:
-            coalitions[c] = TefShap.__get_coalitions(cols_names, c, target_cols)
-            coalitions_weights[c] = [1 / (scipy.special.comb(len_names - 1 - len(target_cols), len(coalition)) * (
-                    len_names - len(target_cols))) for coalition in coalitions[c]]
+        # Now coalitions are computed
+        coalitions = {}
+        coalitions_weights = {}
+        cols_names = df.columns
+        n_cols = len(cols_names)
 
-        print('Training time: {}'.format(time.time() - start))
+        # To compute coalitions, only features are taken into account
+        for c in [tmp_c for tmp_c in df.columns if tmp_c not in target_cols]:
+
+            # In order to compute every possible coalition, for each feature, only the remaining features are taken
+            # into account
+            coalitions[c] = TefShap.__get_coalitions(columns=[feature for feature in cols_names if feature not in [c] +
+                                                              target_cols])
+            # Weights for the calculated coalitions are computed
+            coalitions_weights[c] = [1 / (scipy.special.comb(n_cols - 1 - len(target_cols), len(coalition)) * (
+                    n_cols - len(target_cols))) for coalition in coalitions[c]]
+
+        logging.info('Training time: {}'.format(time.time() - start))
 
         return {
-            MODEL: model,
-            COALITIONS: coalitions,
-            COALITIONS_WEIGHTS: coalitions_weights
+            self._MODEL: model,
+            self._COALITIONS: coalitions,
+            self._COALITIONS_WEIGHTS: coalitions_weights,
+            self._RES_DICT: {}
         }
 
-    def calculate_shapley_values(self, df_discretized: pd.DataFrame, df_normalized: pd.DataFrame,
-                                 target_cols: List[str], count_col: Optional[str] = 'count',
-                                 res_dict=None, **params) -> Dict:
+    def calculate_shapley_values(self, df_aggregated: pd.DataFrame, target_cols: List[str],
+                                 **params) -> Dict[str, np.ndarray]:
         """
+        This function takes care of calculating the Shapley values. Note that it will do it locally. This means that
+        for every row in the aggregated DataFrame, it will calculate the Shapley Values for each of its features.
+        There will be as many values as targets per feature
 
-        :params: df_discretized: pd.DataFrame
-        :params: df_normalized: pd.DataFrame
-        :params: target_cols: List['str'] with all column names identified as target.
-        :params: count_col: Optional[str] used to count the targets concurrences.
-        :params: res_dict: Dict
+        :params: df_aggregated: Pandas DataFrame for which Shapley Values will be locally computed
+        :params: target_cols:   List of strings with all column names identified as target
+        :params: res_dict:      Dictionary with the following structure and keys:
+                                - phi0: Dictionary containing the empty coalition as key and the baseline as value
+                                - shapley_value:
         :return:
         """
 
         if target_cols is None:
-            target_cols = DEFAULT_TARGET_COLS
+            target_cols = Explainer._DEFAULT_TARGET_COLS
 
-        if res_dict is None:
-            res_dict = dict()
+        res_dict = params[self._RES_DICT]
 
         start = time.time()
 
-        shap_values_list: List = []
-        for i in range(df_normalized.shape[0]):
-            # Only for trace/log
-            if (i > 0) and (i % 100 == 0):
-                print('Progress: row {}'.format(i))
+        shap_values_list = []
+        n_features_combinations = df_aggregated.shape[0]
+        feature_columns = [col for col in df_aggregated.columns if col not in target_cols]
 
-            # XAI: para cada fila, calculo de los shapley value
-            x = df_normalized.iloc[i]
-            shap_values: List = []
-            for col in df_normalized.columns:
-                # For sobre las columnas: hay que calcular un shapley value para cada columna
-                if col in target_cols:
-                    continue
+        # For each of the aggregated DataFrame rows
+        pbar = tqdm(range(n_features_combinations))
+        for i in pbar:
+            if (i > 0) and (i % 100 == 0):
+                pbar.set_description('Progress: row {}'.format(i))
+
+            # For each row, Shapley values are computed for the i-th row
+            x = df_aggregated.iloc[i]
+
+            # Shapley for each of the features for the i-th row are computed
+            shap_values = []
+            for col in feature_columns:
+
+                # Shapley value for i-th row and col feature
                 shap_value = np.sum(
-                    np.array([TefShap.__coalition_contribution(x, col, coalition, weight, params['model'],
-                                                                    res_dict, target_cols, count_col)
-                              for coalition, weight in
-                              zip(params['coalitions'][col], params['coalitions_weights'][col])]),
-                    axis=0)
+                    np.array([TefShap.__coalition_contribution(x=x, col=col, coalition=coalition, weight=weight,
+                                                               model=params[self._MODEL], res_dict=res_dict,
+                                                               target_cols=target_cols)
+                              for coalition, weight in zip(params[self._COALITIONS][col],
+                                                           params[self._COALITIONS_WEIGHTS][col])]), axis=0)
+
+                # Shapley values for each row
                 shap_values.append(shap_value)
+
+            # Shapley values for all the rows
             shap_values_list.append(shap_values)
 
-        print('Computation time: {}'.format(time.time() - start))
+        logging.info('Computation time: {}'.format(time.time() - start))
 
         shapley_values = np.array(shap_values_list)
 
+        # TODO: Con un dataset con sus targets desbalanceados, la frecuencia de dichos targets puede influir en las
+        #  explicaciones y el baseline obtenido para cada uno de ellos ¿podría haber que hacer la media
+        #  de los Shapley Values para los targets?
+        logging.info(shapley_values.shape)
+
+        # Data is formatted for the sanity check
         y_hat_reduced = res_dict[str({})] + np.sum(shapley_values, axis=1)
-        counts = [0 for _ in range(len(target_cols))]
-        eps_error = 0.000001
-        for i in range(len(df_normalized)):
-            for j, tar in enumerate(target_cols):
-                if abs(y_hat_reduced[i, j] - df_normalized.iloc[i][tar]) > eps_error:
-                    counts[j] += 1
-                    print(i, tar, y_hat_reduced[i, j], df_normalized.iloc[i][tar])
-        local_accuracy_message = 'Discrepancias (predicción modelo original != predicción SHAP) detectadas {}: {}'
-        for j, tar in enumerate(target_cols):
-            print(local_accuracy_message.format(tar, counts[j]))
+        y = df_aggregated[target_cols].values
+        Explainer.sanity_check(ground_truth=y, prediction=y_hat_reduced, target_cols=target_cols, scope='aggregated')
 
         return {
-            PHI0: res_dict[str({})],
-            SHAPLEY_VALUES: shapley_values,
+            TefShap._PHI0: res_dict[str({})],
+            TefShap._SHAPLEY_VALUES: shapley_values,
         }
 
-    def global_explain(self, **params):
-        return np.abs(params[SHAPLEY_VALUES]).mean(axis=0)
+    def global_explain(self, feature_cols: List[str], target_cols: List[str], **params):
+        df_global_explain = np.abs(params[TefShap._SHAPLEY_VALUES]).mean(axis=0)
+        # If global_target_explainability.csv must be generated the following steps must be followed
+        pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1), np.transpose(df_global_explain)), axis=1),
+                     columns=Explainer._DEFAULT_TARGET_COLS + feature_cols).to_csv('/home/cx02747/Utils/df1.csv',
+                                                                                   sep=',', index=False)
+
+        # If global_explainability.csv must be generated the following steps must be followed
+        top1_target_list = params[TefShap._TOP1_TARGET].tolist()
+        target_probs = np.array([top1_target_list.count(target) for target in target_cols]) / len(top1_target_list)
+        pd.DataFrame((target_probs.reshape(-1, 1) * np.transpose(df_global_explain)).mean(axis=0).reshape(1, -1),
+                     columns=feature_cols).to_csv('/home/cx02747/Utils/df2.csv', sep=',', index=False)
+
+        return df_global_explain
 
     @staticmethod
-    def __get_coalitions(columns: List[str], col: str, target_cols: List[str]) -> List[List[str]]:
+    def __get_coalitions(columns: List[str]) -> List[List[str]]:
         """
-        Given the list of dataframe columns, compute the list of coalitions of columns compatible with the column
-        specified in the parameter col.
-        :param: columns: List of columns from which build the coalitions.
-        :param: col: str, Name of the column to exclude from the coalitions.
-        :param: target_cols: str, name of the column target. By default = 'target'.
-        :return: A list of coalitions compatible with the column col. Each coalition is itself a List.
+        This function computes the list of all possible coalitions (combinations) for the given list of columns
+
+        :param: columns: List of columns for which all possible coalitions will be generated
+        :return:         List of coalitions so that each coalition is itself a list
         """
-        remaining_features: List[str] = [feature for feature in columns if feature not in [col] + target_cols]
-        coalitions_list: List = []
-        for feature in range(len(remaining_features) + 1):
-            for coalition in combinations(remaining_features, feature):
+        coalitions_list = []
+        for n_features in range(len(columns) + 1):
+            for coalition in combinations(columns, n_features):
                 coalitions_list.append(list(coalition))
         return coalitions_list
 
     @staticmethod
-    def __get_worth(coalition_features: Dict, model: Dict, target_cols: List[str],
-                    count_col: Optional[str] = 'count') -> ndarray:
+    def __get_worth(coalition_features: Dict, model: Dict, target_cols: List[str]) -> np.ndarray:
         """
-        Compute the coalition worth (\nu(S))
+        This function takes care of computing the coalition worth (\nu(S))
 
-        :param: coalition_features: Dict with features of the coalition for which the "worth" has be estimated.
-                                   key: column name
-                                   value: value
-        :param: model: Dict, model to use for the coalition "worth" estimation.
-            Key: column name
-            Value: numpy array of values
-        :param: targets_col: List[str], list containing the names of the target columns, by default ['target']
-        :param: count_col: str, name of the count column, by default 'count'
+        :param: coalition_features: Dictionary with the coalition features for which "worth" will be estimated. For each
+                                    element, the key represents the column name and the value...the corresponding value
+        :param: model:              Dictionary representing model to use for the coalition "worth" estimation. For each
+                                    element, the key is the feature name and the value, the corresponding numpy array
+                                    of values for that feature
+        :param: targets_col:        List of strings containing the names of the target columns, by default ['target']
 
-        :return: np.Array, the "worth" of the current coalition for each target
+        :return:                    Numpy array containing the "worth" of the current coalition for each target
         """
 
-        cond: np.array = np.ones_like(list(model.values())[0], dtype=np.bool8)
+        cond = np.ones_like(list(model.values())[0], dtype=np.bool8)
         for k, v in coalition_features.items():
             if isinstance(v, str):
                 cond = (cond & (model[k] == v))
             else:
                 cond = (cond & (np.abs(model[k] - v) < 10 ** -6))
-        counts: np.array = model[count_col][cond]
+
+        ## TODO si cond es False no se puede calcular el promedio del target, habría que tomar la probabilidad a priori
+        #   del target (probabilidad del target sobre el dataset). ¿Sería mejor hacer un blend que tenga en cuenta el
+        #   a priori y el a posterori? Esto cubriría todas las casuísticas
+        counts = model[COUNT][cond]
         return np.array([np.sum(counts * model[target_col][cond]) / np.sum(counts) for target_col in target_cols])
 
     @staticmethod
-    def __coalition_worth(x, coalition: List[str], model: Dict, res_dict: Dict,
-                          target_cols: List[str], count_col: Optional[str] = 'count') -> ndarray:
-        """Return the coalition worth (\nu(S))
-
-        :param x: Features to use for specialize the coalition template
-        :param model: Dict, model to use for the coalition "worth" estimation.
-            Key: column name
-            Value: numpy array of values
-        :param res_dict: Dict, containing the coalition worth already computed.
-            Key: str associated to the coalition
-            Value: float
-        :param: targets_col: List[str], list containing the names of the target columns, by default ['target']
-        :param count_col: str, name of the count column, by default 'count'
-
-        :return: float, the "worth" of the current coalition
+    def __coalition_worth(x: pd.Series, coalition: List[str], model: Dict, res_dict: Dict,
+                          target_cols: List[str]) -> np.ndarray:
         """
+        This function takes care of invoking the computation of the coalition worth and keeping the results into a
+        dictionary so some computations can be retrieved from that dictionary
+
+        :param x:               Pandas Series containing the features to be used to specialize the coalition template
+        :param: coalition:      List of strings containing the features coalition for which the "worth" is being
+                                computed
+        :param model:           Dictionary representing model to use for the coalition "worth" estimation. For each
+                                element, the key is the feature name and the value, the corresponding numpy array
+                                of values for that feature
+        :param res_dict:        Dictionary containing the coalitions worth already computed. For each element, the key
+                                is a string representing the coalition and the value, a float representing the worth
+        :param: targets_col:    List of strings containing the names of the target columns, by default ['target']
+
+        :return:                Numpy array containing the "worth" of the current coalition for each target
+        """
+        # TODO Reducir tamaño clave (hashear de la manera más ligera posible)
         coalition_features: Dict = {c: x[c] if isinstance(x[c], str) else float(x[c]) for c in sorted(coalition)}
         str_cf: str = str(coalition_features)
         if res_dict.get(str_cf, None) is not None:
             return res_dict[str_cf]
 
-        to_ret: ndarray = TefShap.__get_worth(coalition_features, model, target_cols, count_col)
+        to_ret = TefShap.__get_worth(coalition_features=coalition_features, model=model, target_cols=target_cols)
+        # TODO Solucionar mutabilidad diccionario res_dict = res_dict.copy()
         res_dict.update({str_cf: to_ret})
+
         return to_ret
 
     @staticmethod
-    def __coalition_contribution(x, col: str, coalition: List[str], weight: float, model: Dict, res_dict: Dict,
-                                 target_cols: List[str], count_col: Optional[str] = 'count') -> ndarray:
+    def __coalition_contribution(x: pd.Series, col: str, coalition: List[str], weight: float, model: Dict,
+                                 res_dict: Dict, target_cols: List[str]) -> np.ndarray:
         """
-        Compute the contribution of the current coalition to the Shapley value of the column  "col".
+        This functions computes the contribution of the current coalition to the Shapley value of the col column
 
-        :param: x: Features to use for specialize the coalition template.
-        :param: coalition: List, coalition for which the contribution has to be computed.
-        :param: weight: float, coalition contribution weight (combinatorial weight)
-        :param: model: Dict, model to use for the coalition "worth" estimation.
-            key: column name
-            value: numpy array of values
-        :param: res_dict: Dict, containing the coalition worth already computed.
-            key: str associated to the coalition
-            value: float
-        :param: target_col: str, name of the target column, by default 'target'
-        :param: count_col: str, name of the count column, by default 'count'
+        :param: x            Pandas Series representing the row for which Shapley values are being computed
+        :param: coalition:   List of strings containing the features coalition for which the contribution is being
+                             computed
+        :param: weight:      Float representing the coalition contribution weight (combinatorial weight)
+        :param: model:       Dictionary of numpy arrays containing the model to use for the coalition worth estimation.
+                             In this dictionary, key represents the column name and value, a numpy array of values
+        :param: res_dict:    Dictionary containing the coalitions worth already computed. Here, key is a string which
+                             univocally represents a coalition and value a float representing the coalition worth
+        :param: target_cols: String representing the name of the target column
 
-        :return: float the current coalition contribution to the Shapley Value
+        :return:             Float representing the contribution to the Shapley Value of the current coalition
         """
-
-        return weight * (TefShap.__coalition_worth(x, coalition + [col], model, res_dict, target_cols, count_col) -
-                         TefShap.__coalition_worth(x, coalition, model, res_dict, target_cols, count_col))
+        return weight * (TefShap.__coalition_worth(x=x, coalition=coalition + [col], model=model, res_dict=res_dict,
+                                                   target_cols=target_cols) -
+                         TefShap.__coalition_worth(x=x, coalition=coalition, model=model, res_dict=res_dict,
+                                                   target_cols=target_cols))

@@ -1,0 +1,8 @@
+COUNT = 'count'
+ID = 'id'
+MEAN = 'mean'
+NODE_NAME = 'node_name'
+NODE_WEIGHT = 'node_weight'
+RANK = 'rank'
+SHAP_SUFFIX = '_shap'
+TARGET = 'target'
