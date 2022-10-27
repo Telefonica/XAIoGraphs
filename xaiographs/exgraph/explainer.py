@@ -32,11 +32,12 @@ class Explainer(metaclass=ABCMeta):
         :param: target_cols:    List of strings with all column names identified as target
         :return: Tuple[pd.Dataframe, ]:
         """
-        df_aggregated = Explainer.__aggregate(df_2_explain=df_2_explain, target_cols=target_cols)
+        df_aggregated = Explainer.__aggregate(df_2_explain=df_2_explain.drop(ID, axis=1), target_cols=target_cols)
 
         shapley_dict = self.calculate_shapley_values(df_aggregated=df_aggregated,
                                                      target_cols=target_cols,
                                                      **params)
+
         return Explainer.__disaggregate(phi0=shapley_dict[Explainer._PHI0],
                                         shapley_values=shapley_dict[Explainer._SHAPLEY_VALUES],
                                         df_2_explain=df_2_explain,
@@ -98,9 +99,11 @@ class Explainer(metaclass=ABCMeta):
 
         # For each feature column and target column pair a new column is generated to store the corresponding
         # Shapley value
+        feature_cols = [c for c in df_2_explain.columns if c not in target_cols + [ID]]
+        print(feature_cols)
         c_shap_columns = []
         for i, c in enumerate(df_aggregated.columns):
-            if c not in target_cols:
+            if c in feature_cols:
                 for j, target_col in enumerate(target_cols):
                     df_aggregated['{}_{}{}'.format(target_col, c, SHAP_SUFFIX)] = shapley_values[:, i, j]
                     c_shap_columns.append('{}_{}{}'.format(target_col, c, SHAP_SUFFIX))
@@ -108,8 +111,8 @@ class Explainer(metaclass=ABCMeta):
         # DataFrame to be explained is left joined with the normalized DataFrame (already containing columns with the
         # computed Shapley values). The join is on the features of the DataFrame to be explained
         df_aggregated_features = df_aggregated.drop(target_cols, axis=1)
-        column_names = [c for c in df_2_explain.columns if c not in target_cols]
-        df_explanation = pd.merge(df_2_explain, df_aggregated_features, on=column_names, how='left')
+        df_explanation = pd.merge(df_2_explain, df_aggregated_features, on=feature_cols, how='left')
+        df_explanation.to_pickle('/home/cx02747/Utils/df_explanation.pkl')
 
         # Normalization trick:
         #   Ground truth values are retrieved from df_explanation
@@ -159,12 +162,12 @@ class Explainer(metaclass=ABCMeta):
         # If local_dataset_reliability.csv must be generated the following steps must be followed
         top1_argmax = np.argmax(df_explanation[target_cols].values, axis=1)
         top1_target = np.array([target_cols[am] for am in top1_argmax])
-        float_features = df_explanation[column_names].select_dtypes('float')
-        df_local_feature_values = df_explanation[column_names].reset_index().values
+        float_features = df_explanation[feature_cols].select_dtypes('float')
+        df_local_feature_values = df_explanation[[ID] + feature_cols].values
         # TODO: Para ciertos float, la representación puede dispararse en cuanto a número de decimales
         #  Habría que ver una manera de especificar el tope de precisión a garantizar para las features con valores de
         #  ese tipo
-        for i, feature_col in enumerate(column_names):
+        for i, feature_col in enumerate(feature_cols):
             if feature_col in float_features:
                 df_local_feature_values[:, i+1] = np.around(df_local_feature_values[:, i+1].astype('float'), decimals=2)
 
@@ -175,29 +178,29 @@ class Explainer(metaclass=ABCMeta):
                                          np.arange(df_local_quality_measure_values.shape[0]), top1_argmax].reshape(-1,
                                                                                                                    1)),
                                     axis=1),
-                     columns=[ID] + column_names + [TARGET] + [
+                     columns=[ID] + feature_cols + [TARGET] + [
                          Explainer._QUALITY_MEASURE]).to_csv('/home/cx02747/Utils/df3.csv', sep=',', index=False)
 
         # If local_explainability.csv must be generated the following steps must be followed
         adapted_shapley_by_target = []
         for target_value in top1_target:
             adapted_shapley_by_target.append(adapted_shapley_mask[target_value])
-        pd.DataFrame(np.concatenate((df_explanation.reset_index().index.values.reshape(-1, 1),
+        pd.DataFrame(np.concatenate((df_explanation[ID].values.reshape(-1, 1),
                                      df_explanation[c_shap_columns].values[
                                          np.array(adapted_shapley_by_target)].reshape(len(df_explanation), -1),
                                      top1_target.reshape(-1, 1)),
-                                    axis=1), columns=[ID] + column_names + [TARGET]).to_csv(
+                                    axis=1), columns=[ID] + feature_cols + [TARGET]).to_csv(
             '/home/cx02747/Utils/df4.csv', sep=',', index=False)
 
         # TODO: Para ciertos float, la representación puede dispararse en cuanto a número de decimales
         #  Habría que ver una manera de especificar el tope de precisión a garantizar para las features con valores de
         #  ese tipo
         # if local_explainability_graph_nodes_weights.csv must be generated the following steps must be followed
-        all_columns = list(df_explanation.reset_index().columns)
-        df_explanation_values = df_explanation.reset_index().values
+        all_columns = list(df_explanation.columns)
+        df_explanation_values = df_explanation.values
         graph_nodes_values = []
         for i, row in enumerate(df_explanation_values):
-            for feature_col in column_names:
+            for feature_col in feature_cols:
                 feature_value_raw = row[all_columns.index(feature_col)]
                 if feature_col in float_features:
                     feature_value = '_'.join([feature_col, "{:.02f}".format(feature_value_raw)])
@@ -216,8 +219,8 @@ class Explainer(metaclass=ABCMeta):
 
         # if global_explainability_graph_nodes_weights.csv must be generated the following steps must be followed
         node_names = []
-        for row in df_explanation[column_names].values:
-            for i, feature_col in enumerate(column_names):
+        for row in df_explanation[feature_cols].values:
+            for i, feature_col in enumerate(feature_cols):
                 feature_value_raw = row[i]
                 if feature_col in float_features:
                     feature_value = '_'.join([feature_col, "{:.02f}".format(feature_value_raw)])
@@ -226,7 +229,7 @@ class Explainer(metaclass=ABCMeta):
                 node_names.append(feature_value)
 
         df_global_graph_nodes = pd.DataFrame(
-            np.concatenate((np.tile(np.array(target_cols), len(df_explanation) * len(column_names)).reshape(-1, 1),
+            np.concatenate((np.tile(np.array(target_cols), len(df_explanation) * len(feature_cols)).reshape(-1, 1),
                             np.repeat(np.array(node_names), len(target_cols)).reshape(-1, 1),
                             np.abs(df_explanation[c_shap_columns].values).reshape(-1, 1)), axis=1),
             columns=[TARGET, NODE_NAME, NODE_WEIGHT])
@@ -236,7 +239,6 @@ class Explainer(metaclass=ABCMeta):
             method='dense', ascending=False).astype(int)
         df_global_graph_nodes_aggregated.sort_values(by=[TARGET, RANK]).to_csv('/home/cx02747/Utils/df6.csv',
                                                                                sep=',', index=False)
-
         return {
             Explainer._DF_EXPLANATION: df_explanation,
             Explainer._SHAPLEY_VALUES: adapted_shapley,

@@ -1,3 +1,4 @@
+import itertools
 from pathlib import Path
 from typing import List, Tuple
 
@@ -12,8 +13,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
+from xaiographs.common.constants import COUNT, ID, NODE_1, NODE_2, TARGET, PERCENTAGE
 from xaiographs.exgraph.tef_shap import TefShap
-from xaiographs.common.constants import ID, TARGET
 
 CAT_COLUMN_NAMES_BI = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
 CAT_COLUMN_NAMES_MULTI = ['family_size', 'embarked', 'sex', 'title', 'is_alone', 'survived']
@@ -124,7 +125,9 @@ def discretize_titanic(multi_label: bool, titanic_prediction: pd.DataFrame, targ
     # A DataFrame with the continuous features discretized is returned. Typing is coerced for certain features
     # The provided dataset it is assumed to have an ID, so here the index is used to simulate that ID
     ## TODO METER ID
-    return df_2_explain.astype({**{'is_alone': 'float'}, **{target_col: 'float' for target_col in target_cols}})
+    return df_2_explain.astype(
+        {**{'is_alone': 'float'}, **{target_col: 'float' for target_col in target_cols}}).reset_index().rename(
+        columns={'index': ID})
 
 
 def random_forest_titanic(titanic_cooked: pd.DataFrame):
@@ -229,17 +232,55 @@ def main():
     # Right now, it is necessary that headers consist only of strings
     titanic_2_explain = discretize_titanic(multi_label=multi_label_problem, titanic_prediction=df_titanic_cooked,
                                            target_cols=target_cols)
-    titanic_2_explain.to_pickle('/home/cx02747/Utils/titanic_2_explain.pkl')
+
     # Cálculo de estadísticos
     # Sobre df_2_explain: target_distribution.csv group by count por target_cols
+    # if target_distribution.csv must be generated the following steps must be followed
+    target_count = np.sum(titanic_2_explain[target_cols].values, axis=0).reshape(-1, 1)
+    pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1),
+                                 target_count,
+                                 target_count / np.sum(target_count)), axis=1),
+                 columns=[TARGET, COUNT, PERCENTAGE]).to_csv(
+        '/home/cx02747/Utils/target_distribution.csv', sep=',', index=False)
 
+    # if global_explainability_graph_edges_weights.csv must be generated the following steps must be followed
+    float_feature_cols = titanic_2_explain[feature_cols].select_dtypes(include='float')
+    for feature_col in feature_cols:
+        if feature_col in float_feature_cols:
+            titanic_2_explain[feature_col] = feature_col + '_' + titanic_2_explain[feature_col].apply(
+                "{:.02f}".format).map(str)
+        else:
+            titanic_2_explain[feature_col] = feature_col + '_' + titanic_2_explain[feature_col].map(str)
+
+    top1_argmax = np.argmax(titanic_2_explain[target_cols].values, axis=1)
+    top1_target = np.array([target_cols[am] for am in top1_argmax])
+    titanic_2_explain[TARGET] = top1_target
+    feature_cols_combinations = itertools.combinations(feature_cols, 2)
+    df_global_graph_edges_list = []
+    df_local_graph_edges_list = []
+    for feature_cols_tuple in feature_cols_combinations:
+        feature_cols_pair = list(feature_cols_tuple)
+        df_local_graph_edges_list.append(titanic_2_explain[[ID, TARGET] + feature_cols_pair].rename(
+                columns={feature_cols_pair[0]: NODE_1, feature_cols_pair[1]: NODE_2}))
+        df_global_graph_edges_list.append(
+            titanic_2_explain[[TARGET] + feature_cols_pair].value_counts().reset_index(name='edge_weight').rename(
+                columns={feature_cols_pair[0]: NODE_1, feature_cols_pair[1]: NODE_2}))
+
+    df_global_graph_edges = pd.concat(df_global_graph_edges_list).sort_values(by=[TARGET, NODE_1, NODE_2]).reset_index(
+        drop=True)
+    df_local_graph_edges_wo_weight = pd.concat(df_local_graph_edges_list).sort_values(
+        by=[ID, NODE_1, NODE_2]).reset_index(drop=True)
+    df_local_graph_edges = df_local_graph_edges_wo_weight.merge(df_global_graph_edges, how='left', on=[TARGET, NODE_1,
+                                                                                                       NODE_2])
+    df_local_graph_edges.to_pickle('/home/cx02747/Utils/local_edges_final.pkl')
+    exit(0)
     # From here, the Explainer main flow starts
     # TEF_SHAP explainer is instantiated
     explainer = TefShap(explainer_params={})
 
     # Explainer is trained here. Just like in Machine Learning, the dataset must accurately represent the problem domain
     # to obtain valid results
-    explainer_trained = explainer.train(titanic_2_explain, target_cols=target_cols)
+    explainer_trained = explainer.train(titanic_2_explain.drop(ID, axis=1), target_cols=target_cols)
 
     # The trained Explainer is used to provide local explainability. In this case the dataset to train and to explain
     # are identical. However, this isn't always the case. They can be different
