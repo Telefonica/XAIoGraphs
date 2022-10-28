@@ -4,7 +4,7 @@ export const ctsFiles = {
     input_dataset_discretized: 'input_dataset_discretized.csv',
     input_dataset: 'input_dataset.csv',
     local_explainability:'local_explainability.csv',
-    target_distribution:'target_distribution.csv',
+    global_target_distribution:'global_target_distribution.csv',
     global_explainability_edges: 'global_explainability_graph_edges_weights.csv',
     global_explainability_nodes: 'global_explainability_graph_nodes_weights.csv',
 
