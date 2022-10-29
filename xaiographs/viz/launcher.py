@@ -36,10 +36,10 @@ CSV_FILES = ["global_explainability.csv",
              "local_graph_nodes.csv",
              "local_graph_edges.csv",
              "data_correlation_matrix_dataset.csv",
-             "input_dataset.csv",
-             "input_dataset_discretized.csv",
-             "global_target_explainability[DEPRECATED].csv",
-             "local_explainability[DEPRECATED].csv",
+             "[DEPRECATED]_input_dataset.csv",
+             "[DEPRECATED]_input_dataset_discretized.csv",
+             "[DEPRECATED]_global_target_explainability.csv",
+             "[DEPRECATED]_local_explainability.csv",
              ]
 
 # Parameters definition
