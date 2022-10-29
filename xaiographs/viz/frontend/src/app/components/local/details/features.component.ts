@@ -49,7 +49,7 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
         this.currentFeatures = this._apiEmitter.getLocalFeatures();
 
         const bodyNodes = {
-            fileName: ctsFiles.local_explainability_nodes,
+            fileName: ctsFiles.local_graph_nodes,
             target: this.currentTarget,
             numFeatures: this.currentFeatures,
         }

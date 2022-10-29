@@ -49,7 +49,7 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
         this.currentFeatures = this._apiEmitter.getGlobalFeatures();
 
         const bodyNodes = {
-            fileName: ctsFiles.global_explainability_nodes,
+            fileName: ctsFiles.global_graph_nodes,
             target: this.currentTarget,
             numFeatures: this.currentFeatures,
         }

@@ -46,7 +46,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
         this.currentFeatures = this._apiEmitter.getGlobalFeatures();
 
         const bodyNodes = {
-            fileName: ctsFiles.global_explainability_nodes,
+            fileName: ctsFiles.global_graph_nodes,
             target: this.currentTarget,
             numFeatures: this.currentFeatures,
         }
@@ -60,7 +60,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
             },
             complete: () => {
                 const bodyEdges = {
-                    fileName: ctsFiles.global_explainability_edges,
+                    fileName: ctsFiles.global_graph_edges,
                     target: this.currentTarget,
                     nodeNames: this.nodeNames,
                 }

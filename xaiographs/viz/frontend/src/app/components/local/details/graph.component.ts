@@ -48,7 +48,7 @@ export class LocalGraphComponent implements OnInit {
         this.currentFeatures = this._apiEmitter.getLocalFeatures();
 
         const bodyNodes = {
-            fileName: ctsFiles.local_explainability_nodes,
+            fileName: ctsFiles.local_graph_nodes,
             target: this.currentTarget,
             numFeatures: this.currentFeatures,
         }
@@ -62,7 +62,7 @@ export class LocalGraphComponent implements OnInit {
             },
             complete: () => {
                 const bodyEdges = {
-                    fileName: ctsFiles.local_explainability_edges,
+                    fileName: ctsFiles.local_graph_edges,
                     target: this.currentTarget,
                     nodeNames: this.nodeNames,
                 }
