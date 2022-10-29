@@ -87,7 +87,7 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
             const barStyle = JSON.stringify(featuresGraphStyle[index % featuresGraphStyle.length]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
             transformDataSet.push([
                 data.node_name,
-                parseFloat(data.node_weight),
+                parseFloat(data.node_importance),
                 barStyle
             ]);
         });
