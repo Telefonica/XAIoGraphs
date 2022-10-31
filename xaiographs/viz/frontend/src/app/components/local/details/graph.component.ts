@@ -48,7 +48,7 @@ export class LocalGraphComponent implements OnInit {
         this.currentFeatures = this._apiEmitter.getLocalFeatures();
 
         const bodyNodes = {
-            fileName: ctsFiles.local_explainability_nodes,
+            fileName: ctsFiles.local_graph_nodes,
             target: this.currentTarget,
             numFeatures: this.currentFeatures,
         }
@@ -62,7 +62,7 @@ export class LocalGraphComponent implements OnInit {
             },
             complete: () => {
                 const bodyEdges = {
-                    fileName: ctsFiles.local_explainability_edges,
+                    fileName: ctsFiles.local_graph_edges,
                     target: this.currentTarget,
                     nodeNames: this.nodeNames,
                 }
@@ -89,7 +89,7 @@ export class LocalGraphComponent implements OnInit {
         let elements: any[] = [];
 
         this.nodeList.forEach((node: any) => {
-            const weight = parseFloat(node.node_weight) * 100;
+            const weight = parseFloat(node.node_weight);
             elements.push({
                 data: {
                     id: node.node_name,
@@ -104,7 +104,7 @@ export class LocalGraphComponent implements OnInit {
         });
 
         this.edgeList.forEach((edge: any) => {
-            const weight = parseFloat(edge.edge_weight) * 10;
+            const weight = parseFloat(edge.edge_weight);
             elements.push({
                 data: {
                     id: edge.node_1 + '-' + edge.node_2,

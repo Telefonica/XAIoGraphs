@@ -28,7 +28,7 @@ export class GlobalDistributionComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this._apiReader.readCSV({ fileName: ctsFiles.target_distribution }).subscribe({
+        this._apiReader.readCSV({ fileName: ctsFiles.global_target_distribution }).subscribe({
             next: (response: any) => {
                 this.initGraph();
                 this.createGraph(response);

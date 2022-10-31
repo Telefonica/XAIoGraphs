@@ -25,11 +25,11 @@ jobs:
 
   test_library_matrix:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [telefonica]
         python: ['3.7']
 
     steps:
@@ -41,7 +41,7 @@ jobs:
       - name: Set up Python ${{ github.event.inputs.python || inputs.python }}
         uses: actions/setup-python@v3
         with:
-          python-version: ${{ github.event.inputs.python || inputs.python }}
+          python-version: ${{ matrix.python }}
 
       - uses: actions/setup-java@v3
         with:
@@ -63,38 +63,39 @@ jobs:
 
   test_doc_ci:
 
-    runs-on: ubuntu-latest
+    runs-on: telefonica
 
     steps:
       - name: Checkout ${{ github.event.inputs.branch || inputs.branch }}
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.branch || inputs.branch }}
-    - name: Set up Python ${{ github.event.inputs.python || inputs.python }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.6'
 
-    - uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '8'
+      - name: Set up Python ${{ github.event.inputs.python || inputs.python }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.6'
 
-    - name: Install dependencies
-      shell: bash
-      run: |
-        python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        if [ -f requirements-doc.txt ]; then pip install -r requirements-doc.txt; fi
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
 
-    - name: Run tests and collect coverage
-      shell: bash
-      run: |
-        mkdir -p ./docs/_build/doctest
-        cd docs
-        sphinx-apidoc -o . ../xaiographs
-        sphinx-build -b doctest . ../xaiographs | tee ./_build/doctest/output.txt
-        if [ $(cat ./_build/doctest/output.txt | grep -c "\*\*\*Test Failed\*\*\*") -gt 0 ]; then
-          echo "Documentation Test Failed.";
-          exit 1;
-        fi
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-doc.txt ]; then pip install -r requirements-doc.txt; fi
+
+      - name: Run tests and collect coverage
+        shell: bash
+        run: |
+          mkdir -p ./docs/_build/doctest
+          cd docs
+          sphinx-apidoc -o . ../xaiographs
+          sphinx-build -b doctest . ../xaiographs | tee ./_build/doctest/output.txt
+          if [ $(cat ./_build/doctest/output.txt | grep -c "\*\*\*Test Failed\*\*\*") -gt 0 ]; then
+            echo "Documentation Test Failed.";
+            exit 1;
+          fi

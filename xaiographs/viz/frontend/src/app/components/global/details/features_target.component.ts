@@ -49,7 +49,7 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
         this.currentFeatures = this._apiEmitter.getGlobalFeatures();
 
         const bodyNodes = {
-            fileName: ctsFiles.global_explainability_nodes,
+            fileName: ctsFiles.global_graph_nodes,
             target: this.currentTarget,
             numFeatures: this.currentFeatures,
         }
@@ -87,7 +87,7 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
             const barStyle = JSON.stringify(featuresTargetGraphStyle[index % featuresTargetGraphStyle.length]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
             transformDataSet.push([
                 data.node_name,
-                parseFloat(data.node_weight),
+                parseFloat(data.node_importance),
                 barStyle
             ]);
         });
