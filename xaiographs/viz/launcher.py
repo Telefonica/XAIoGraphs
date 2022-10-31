@@ -27,19 +27,20 @@ TEXT_COLOR_RED = '\033[91m'
 TEXT_COLOR_GREEN = '\033[92m'
 XAIOWEB_DISTRIBUTION = 'XAIoWeb distribution'
 
-CSV_FILES = ["data_correlation_matrix_dataset.csv",
-             "input_dataset.csv",
-             "local_explainability_graph_nodes_weights.csv",
-             "global_explainability.csv",
-             "input_dataset_discretized.csv",
-             "local_reason_why.csv",
-             "global_explainability_graph_edges_weights.csv",
-             "local_dataset_reliability.csv",
+CSV_FILES = ["global_explainability.csv",
              "global_target_distribution.csv",
-             "global_explainability_graph_nodes_weights.csv",
-             "local_explainability.csv",
-             "global_target_explainability.csv",
-             "local_explainability_graph_edges_weights.csv"]
+             "global_graph_nodes.csv",
+             "global_graph_edges.csv",
+             "local_dataset_reliability.csv",
+             "local_reason_why.csv",
+             "local_graph_nodes.csv",
+             "local_graph_edges.csv",
+             "data_correlation_matrix_dataset.csv",
+             "[DEPRECATED]_input_dataset.csv",
+             "[DEPRECATED]_input_dataset_discretized.csv",
+             "[DEPRECATED]_global_target_explainability.csv",
+             "[DEPRECATED]_local_explainability.csv",
+             ]
 
 # Parameters definition
 flags.DEFINE_integer(name='port', default=8080, help='Web server port', required=False)
