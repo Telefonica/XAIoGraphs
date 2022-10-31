@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 from absl import logging
 
-from xaiographs.common.constants import ID, MEAN, NODE_NAME, NODE_WEIGHT, RANK, SHAP_SUFFIX, TARGET
+from xaiographs.common.constants import ID, MAX_NODE_WEIGHT, MEAN, MIN_NODE_WEIGHT, NODE_IMPORTANCE, \
+    NODE_NAME, NODE_WEIGHT, BIN_WIDTH_NODE_WEIGHT, N_BINS_NODE_WEIGHT, RANK, SHAP_SUFFIX, TARGET
 
 
 class Explainer(metaclass=ABCMeta):
@@ -100,6 +101,8 @@ class Explainer(metaclass=ABCMeta):
         # For each feature column and target column pair a new column is generated to store the corresponding
         # Shapley value
         feature_cols = [c for c in df_2_explain.columns if c not in target_cols + [ID]]
+        print("feature_cols")
+        print(target_cols)
         print(feature_cols)
         c_shap_columns = []
         for i, c in enumerate(df_aggregated.columns):
@@ -112,7 +115,6 @@ class Explainer(metaclass=ABCMeta):
         # computed Shapley values). The join is on the features of the DataFrame to be explained
         df_aggregated_features = df_aggregated.drop(target_cols, axis=1)
         df_explanation = pd.merge(df_2_explain, df_aggregated_features, on=feature_cols, how='left')
-        df_explanation.to_pickle('/home/cx02747/Utils/df_explanation.pkl')
 
         # Normalization trick:
         #   Ground truth values are retrieved from df_explanation
@@ -158,7 +160,7 @@ class Explainer(metaclass=ABCMeta):
             (0, 2, 1)), axis=1)
         Explainer.sanity_check(ground_truth=y, prediction=y_hat_reduced, target_cols=target_cols, scope='original')
 
-        df_explanation.to_pickle('/home/cx02747/Utils/df_explanation.pkl')
+        ####################################################################################################
         # If local_dataset_reliability.csv must be generated the following steps must be followed
         top1_argmax = np.argmax(df_explanation[target_cols].values, axis=1)
         top1_target = np.array([target_cols[am] for am in top1_argmax])
@@ -179,7 +181,8 @@ class Explainer(metaclass=ABCMeta):
                                                                                                                    1)),
                                     axis=1),
                      columns=[ID] + feature_cols + [TARGET] + [
-                         Explainer._QUALITY_MEASURE]).to_csv('/home/cx02747/Utils/df3.csv', sep=',', index=False)
+                         Explainer._QUALITY_MEASURE]).to_csv('/home/cx02747/Utils/local_dataset_reliability.csv',
+                                                             sep=',', index=False)
 
         # If local_explainability.csv must be generated the following steps must be followed
         adapted_shapley_by_target = []
@@ -190,12 +193,12 @@ class Explainer(metaclass=ABCMeta):
                                          np.array(adapted_shapley_by_target)].reshape(len(df_explanation), -1),
                                      top1_target.reshape(-1, 1)),
                                     axis=1), columns=[ID] + feature_cols + [TARGET]).to_csv(
-            '/home/cx02747/Utils/df4.csv', sep=',', index=False)
+            '/home/cx02747/Utils/local_explainability.csv', sep=',', index=False)
 
         # TODO: Para ciertos float, la representación puede dispararse en cuanto a número de decimales
         #  Habría que ver una manera de especificar el tope de precisión a garantizar para las features con valores de
         #  ese tipo
-        # if local_explainability_graph_nodes_weights.csv must be generated the following steps must be followed
+        # if local_graph_nodes.csv must be generated the following steps must be followed
         all_columns = list(df_explanation.columns)
         df_explanation_values = df_explanation.values
         graph_nodes_values = []
@@ -210,14 +213,20 @@ class Explainer(metaclass=ABCMeta):
                 graph_nodes_values.append([row[0], feature_value, row[all_columns.index(feature_target_shap_col)],
                                            top1_target[i]])
 
-        df_graph_nodes = pd.DataFrame(graph_nodes_values, columns=[ID, NODE_NAME, NODE_WEIGHT, TARGET])
-        df_graph_nodes[RANK] = df_graph_nodes.groupby(ID)[NODE_WEIGHT].rank(method='dense',
-                                                                            ascending=False).astype(int)
-        df_graph_nodes.sort_values(by=[ID, RANK]).to_csv('/home/cx02747/Utils/df5.csv',
-                                                         columns=[ID, NODE_NAME, NODE_WEIGHT,
-                                                                  RANK, TARGET], sep=',', index=False)
+        df_local_graph_nodes = pd.DataFrame(graph_nodes_values, columns=[ID, NODE_NAME, NODE_IMPORTANCE, TARGET])
+        df_local_graph_nodes[RANK] = df_local_graph_nodes.groupby(ID)[NODE_IMPORTANCE].rank(method='dense',
+                                                                                            ascending=False).astype(int)
+        df_local_graph_nodes[NODE_WEIGHT] = pd.cut(df_local_graph_nodes[NODE_IMPORTANCE],
+                                                   bins=N_BINS_NODE_WEIGHT,
+                                                   labels=list(range(
+                                                       MIN_NODE_WEIGHT,
+                                                       MAX_NODE_WEIGHT + BIN_WIDTH_NODE_WEIGHT,
+                                                       BIN_WIDTH_NODE_WEIGHT)))
+        df_local_graph_nodes.sort_values(by=[ID, RANK]).to_csv(
+            '/home/cx02747/Utils/local_graph_nodes.csv',
+            columns=[ID, NODE_NAME, NODE_IMPORTANCE, NODE_WEIGHT, RANK, TARGET], sep=',', index=False)
 
-        # if global_explainability_graph_nodes_weights.csv must be generated the following steps must be followed
+        # if global_graph_nodes.csv must be generated the following steps must be followed
         node_names = []
         for row in df_explanation[feature_cols].values:
             for i, feature_col in enumerate(feature_cols):
@@ -232,13 +241,21 @@ class Explainer(metaclass=ABCMeta):
             np.concatenate((np.tile(np.array(target_cols), len(df_explanation) * len(feature_cols)).reshape(-1, 1),
                             np.repeat(np.array(node_names), len(target_cols)).reshape(-1, 1),
                             np.abs(df_explanation[c_shap_columns].values).reshape(-1, 1)), axis=1),
-            columns=[TARGET, NODE_NAME, NODE_WEIGHT])
-        df_global_graph_nodes[NODE_WEIGHT] = pd.to_numeric(df_global_graph_nodes[NODE_WEIGHT]).abs()
+            columns=[TARGET, NODE_NAME, NODE_IMPORTANCE])
+        df_global_graph_nodes[NODE_IMPORTANCE] = pd.to_numeric(df_global_graph_nodes[NODE_IMPORTANCE])
         df_global_graph_nodes_aggregated = df_global_graph_nodes.groupby([TARGET, NODE_NAME]).mean().reset_index()
-        df_global_graph_nodes_aggregated[RANK] = df_global_graph_nodes_aggregated.groupby([TARGET])[NODE_WEIGHT].rank(
-            method='dense', ascending=False).astype(int)
-        df_global_graph_nodes_aggregated.sort_values(by=[TARGET, RANK]).to_csv('/home/cx02747/Utils/df6.csv',
-                                                                               sep=',', index=False)
+        df_global_graph_nodes_aggregated[RANK] = df_global_graph_nodes_aggregated.groupby([TARGET])[
+            NODE_IMPORTANCE].rank(method='dense', ascending=False).astype(int)
+        df_global_graph_nodes_aggregated[NODE_WEIGHT] = pd.cut(df_global_graph_nodes_aggregated[NODE_IMPORTANCE],
+                                                               bins=N_BINS_NODE_WEIGHT,
+                                                               labels=list(range(
+                                                                   MIN_NODE_WEIGHT,
+                                                                   MAX_NODE_WEIGHT + BIN_WIDTH_NODE_WEIGHT,
+                                                                   BIN_WIDTH_NODE_WEIGHT)))
+        df_global_graph_nodes_aggregated.sort_values(by=[TARGET, RANK]).to_csv(
+            '/home/cx02747/Utils/global_graph_nodes.csv', columns=[TARGET, NODE_NAME, NODE_IMPORTANCE, NODE_WEIGHT,
+                                                                   RANK], sep=',', index=False)
+        ####################################################################################################
         return {
             Explainer._DF_EXPLANATION: df_explanation,
             Explainer._SHAPLEY_VALUES: adapted_shapley,

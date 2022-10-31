@@ -9,6 +9,7 @@ from absl import logging
 from tqdm import tqdm
 
 from xaiographs.common.constants import COUNT, MEAN
+from xaiographs.common.data_access import save_global_target_explained_info
 from xaiographs.exgraph.explainer import Explainer
 
 
@@ -164,7 +165,10 @@ class TefShap(Explainer):
 
     def global_explain(self, feature_cols: List[str], target_cols: List[str], **params):
         df_global_explain = np.abs(params[TefShap._SHAPLEY_VALUES]).mean(axis=0)
-        # If global_target_explainability.csv must be generated the following steps must be followed
+
+        save_global_target_explained_info(df_global_explain, feature_cols, target_cols,
+                                          params[TefShap._TOP1_TARGET].tolist())
+        """
         pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1), np.transpose(df_global_explain)), axis=1),
                      columns=Explainer._DEFAULT_TARGET_COLS + feature_cols).to_csv('/home/cx02747/Utils/df1.csv',
                                                                                    sep=',', index=False)
@@ -174,7 +178,7 @@ class TefShap(Explainer):
         target_probs = np.array([top1_target_list.count(target) for target in target_cols]) / len(top1_target_list)
         pd.DataFrame((target_probs.reshape(-1, 1) * np.transpose(df_global_explain)).mean(axis=0).reshape(1, -1),
                      columns=feature_cols).to_csv('/home/cx02747/Utils/df2.csv', sep=',', index=False)
-
+        """
         return df_global_explain
 
     @staticmethod

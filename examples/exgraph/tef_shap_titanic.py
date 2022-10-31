@@ -13,11 +13,10 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
-from xaiographs.common.constants import COUNT, ID, NODE_1, NODE_2, TARGET, PERCENTAGE
+from xaiographs.common.constants import COUNT, EDGE_WEIGHT, ID, MAX_EDGE_WEIGHT, NODE_1, NODE_2, TARGET
 from xaiographs.exgraph.tef_shap import TefShap
 
-CAT_COLUMN_NAMES_BI = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
-CAT_COLUMN_NAMES_MULTI = ['family_size', 'embarked', 'sex', 'title', 'is_alone', 'survived']
+CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
 CONT_COLUMN_NAMES = ['age', 'fare']
 QUANTILE_SIZE = 10
 TAR_COLUMN_NAMES = [TARGET]
@@ -28,13 +27,16 @@ retrieved explainability information so that it can be displayed
 """
 
 
-def titanic_cooking(multi_label: bool) -> pd.DataFrame:
+def titanic_cooking() -> Tuple[pd.DataFrame, List[str]]:
     """
     This function takes care of loading and preprocessing the Titanic dataset so that the resulting DataFrame can
     be used to train a Machine Learning model
 
-    :return: A pandas DataFrame containing the preprocessed data so that it's suitable for training a Machine Learning
+    :return: Pandas DataFrame containing the preprocessed data so that it's suitable for training a Machine Learning
              model
+             List of strings providing the names of the definitive categorical features, which may be recalculated
+             depending on which categorical feature will be considered as target (by default survived is assumend to be
+             the target)
     """
     # A random seed is fixed so that results are reproducible from one execution to another
     np.random.seed(42)
@@ -69,7 +71,7 @@ def titanic_cooking(multi_label: bool) -> pd.DataFrame:
 
     # Transformation Pipelines will be put into a ColumnTransformer so that they can be all run sequentially
     preprocessor = ColumnTransformer(
-        transformers=[('num', num_transformer, CONT_COLUMN_NAMES), ('cat', cat_transformer, CAT_COLUMN_NAMES_BI)])
+        transformers=[('num', num_transformer, CONT_COLUMN_NAMES), ('cat', cat_transformer, CAT_COLUMN_NAMES)])
     preprocessor.fit(x_train)
     x_train_prepro = preprocessor.transform(x_train)
 
@@ -77,31 +79,38 @@ def titanic_cooking(multi_label: bool) -> pd.DataFrame:
     concat_train_prepro = np.concatenate((x_train_prepro, np.expand_dims(y_train.values, axis=1)), axis=1).tolist()
 
     # The numpy matrix, representing the preprocessed dataset is not transformed into a pandas DataFrame
-    df_train = pd.DataFrame(concat_train_prepro, columns=CONT_COLUMN_NAMES + CAT_COLUMN_NAMES_BI + TAR_COLUMN_NAMES)
+    df_train = pd.DataFrame(concat_train_prepro, columns=CONT_COLUMN_NAMES + CAT_COLUMN_NAMES + TAR_COLUMN_NAMES)
 
-    if multi_label:
-        df_train.rename(columns={"target": "survived", "pclass": "target"}, inplace=True)
-        df_train_targets = pd.get_dummies(df_train[TARGET], prefix=TARGET)
-        df_train = pd.DataFrame(np.concatenate((df_train[CONT_COLUMN_NAMES + CAT_COLUMN_NAMES_MULTI].values,
-                                                df_train_targets.values), axis=1),
-                                columns=CONT_COLUMN_NAMES + CAT_COLUMN_NAMES_MULTI + list(df_train_targets.columns))
-    return df_train
+    # Survived is the target feature by default. If any other of the features (i.e: pclass) is going to be used as
+    # target, please, setup old_target to 'survived' and new_target to the feature to be used as target
+    old_target = 'survived'
+    new_target = 'pclass'
+    if old_target != new_target:
+        df_train.rename(columns={"target": old_target, new_target: "target"}, inplace=True)
+        new_cat_column_names = CAT_COLUMN_NAMES.copy()
+        new_cat_column_names.remove(new_target)
+        new_cat_column_names.append(old_target)
+    else:
+        new_cat_column_names = CAT_COLUMN_NAMES.copy()
+    df_train_targets = pd.get_dummies(df_train[TARGET], prefix=TARGET)
+    df_train = pd.DataFrame(np.concatenate((df_train[CONT_COLUMN_NAMES + new_cat_column_names].values,
+                                            df_train_targets.values), axis=1),
+                            columns=CONT_COLUMN_NAMES + new_cat_column_names + list(df_train_targets.columns))
+    return df_train, new_cat_column_names
 
 
-def discretize_titanic(multi_label: bool, titanic_prediction: pd.DataFrame, target_cols: List[str]) -> pd.DataFrame:
+def discretize_titanic(titanic_prediction: pd.DataFrame, target_cols: List[str],
+                       cat_col_names: List[str]) -> pd.DataFrame:
     """
     This functions takes care of discretizing all continuous variables within the dataset of analyze, to fulfill
     the Explainer requirements
 
-    :param:  titanic_prediction: A pandas DataFrame to be explained. Its continuous features are not discretized
+    :param: titanic_prediction:  A pandas DataFrame to be explained. Its continuous features are not discretized
     :param: target_cols:         List of strings containing all column names identified as target
-    :return:                     A pandas DataFrame to be explained. But now its continuous features have been
+    :param: cat_col_names:       List of strings containing all column names to be considered categorical
+    :return:                     Pandas DataFrame to be explained. But now its continuous features have been
                                  discretized and the DataFrame is ready for the Explainer
     """
-    if multi_label:
-        cat_column_names = CAT_COLUMN_NAMES_MULTI
-    else:
-        cat_column_names = CAT_COLUMN_NAMES_BI
 
     # Continuous features are retrieved
     cont_vars_train = titanic_prediction[CONT_COLUMN_NAMES]
@@ -113,18 +122,17 @@ def discretize_titanic(multi_label: bool, titanic_prediction: pd.DataFrame, targ
     cont_train = qt.transform(cont_vars_train)
 
     # Once discretized, continuous features are vertically concatenated with the categorical ones and the target/s
-    data_2_explain = np.concatenate((cont_train, titanic_prediction[cat_column_names].values,
+    data_2_explain = np.concatenate((cont_train, titanic_prediction[cat_col_names].values,
                                      titanic_prediction[target_cols].values), axis=1).tolist()
 
     # A DataFrame is created from the numpy matrix resulting from the previous step
-    df_2_explain = pd.DataFrame(data_2_explain, columns=CONT_COLUMN_NAMES + cat_column_names + target_cols)
+    df_2_explain = pd.DataFrame(data_2_explain, columns=CONT_COLUMN_NAMES + cat_col_names + target_cols)
 
     for col_name in CONT_COLUMN_NAMES:
         df_2_explain[col_name] = round(df_2_explain[col_name], int(QUANTILE_SIZE/10)) + 0.05
 
     # A DataFrame with the continuous features discretized is returned. Typing is coerced for certain features
     # The provided dataset it is assumed to have an ID, so here the index is used to simulate that ID
-    ## TODO METER ID
     return df_2_explain.astype(
         {**{'is_alone': 'float'}, **{target_col: 'float' for target_col in target_cols}}).reset_index().rename(
         columns={'index': ID})
@@ -136,14 +144,14 @@ def random_forest_titanic(titanic_cooked: pd.DataFrame):
     the resulting dataset for training and prediction. Once predictions have been obtained, the original target in the
     dataset provided as parameter, is replaced by that prediction. The model of choice is a Random Forest Classifier
 
-    :param: titanic_cooked: A pandas DataFrame on which basic imputing and scaling operations have been performed
-    :return:                A pandas DataFrame which is identical to the aforementioned parameter but its target
+    :param: titanic_cooked: Pandas DataFrame on which basic imputing and scaling operations have been performed
+    :return:                Pandas DataFrame which is identical to the aforementioned parameter but its target
                             has been replaced by the prediction of the trained model
     """
 
     # Features and labels are separated in three different numpy structures: one for continuous features, one for
     # categorical features and the third one for the target/s
-    cat = titanic_cooked[CAT_COLUMN_NAMES_BI].values
+    cat = titanic_cooked[CAT_COLUMN_NAMES].values
     cont = titanic_cooked[CONT_COLUMN_NAMES].values
     tar = titanic_cooked[TAR_COLUMN_NAMES].values
 
@@ -157,7 +165,7 @@ def random_forest_titanic(titanic_cooked: pd.DataFrame):
     # this will be done for each categorical feature and each of their possible values. Finally, the target column name
     # will be added
     enc_names = CONT_COLUMN_NAMES.copy()
-    for col_n in CAT_COLUMN_NAMES_BI:
+    for col_n in CAT_COLUMN_NAMES:
         for v in pd.unique(titanic_cooked[col_n]):
             enc_names.append(col_n + '_{}'.format(v) if isinstance(v, str) else col_n + '_{:.1f}'.format(v))
     enc_names.append(TARGET)
@@ -179,30 +187,33 @@ def random_forest_titanic(titanic_cooked: pd.DataFrame):
 
     # Original dataset is returned exactly as it was received but including the model prediction. Column order must
     # remain the same
-    return rf_predict[CONT_COLUMN_NAMES + CAT_COLUMN_NAMES_BI + TAR_COLUMN_NAMES]
+    return rf_predict[CONT_COLUMN_NAMES + CAT_COLUMN_NAMES + TAR_COLUMN_NAMES]
 
 
-def prepare_titanic(multi_label: bool) -> Tuple[pd.DataFrame, List[str], List[str]]:
+def prepare_titanic() -> Tuple[pd.DataFrame, List[str], List[str], List[str]]:
     """
+    This function is intended to coordinate the Titanic dataset load and preprocess together with the use of a Machine
+    Learning model to predict the target column
 
-
-    :param multi_label:
-    :return:
+    :return:    Pandas DataFrame properly preprocessed. Its target may have result from the prediction of a Machine
+                Learning model
+                List of columns containing the features of the resulting Pandas DataFrame
+                List of columns used as target
+                List of columns to be considered categorical
     """
     feature_cols = []
     target_cols = []
     # This first step represents the dataset preprocessing, in other words: all that is needed to do to the dataset
     # so that the predictive model will successfully train from it. It's important to remark that it is the user who
     # is responsible for this step
-    df_titanic_cooked = titanic_cooking(multi_label=multi_label)
+    df_titanic_cooked, final_cat_col_names = titanic_cooking()
 
-    if multi_label:
-        for col in df_titanic_cooked.columns:
-            if col.startswith(TARGET):
-                target_cols.append(col)
-            else:
-                feature_cols.append(col)
-        return df_titanic_cooked, feature_cols, target_cols
+    for col in df_titanic_cooked.columns:
+        if col.startswith(TARGET):
+            target_cols.append(col)
+        else:
+            feature_cols.append(col)
+    return df_titanic_cooked, feature_cols, target_cols, final_cat_col_names
 
     # A predictive model (in this case a Random Forest Classifier) is used to train and predict. These predictions
     # replace the original target in the dataset provided as parameter. Then, the resulting DataFrame is returned. Again
@@ -214,66 +225,72 @@ def prepare_titanic(multi_label: bool) -> Tuple[pd.DataFrame, List[str], List[st
         else:
             feature_cols.append(col)
 
-    return df_titanic_prediction, feature_cols, target_cols
+    return df_titanic_prediction, feature_cols, target_cols, final_cat_col_names
 
 
 def main():
     logging.set_verbosity(logging.INFO)
-    multi_label_problem = True
     output_path = Path.joinpath(Path(__file__).parent.parent.absolute(), TefShap.__name__, 'Titanic')
     print(output_path)
 
-    df_titanic_cooked, feature_cols, target_cols = prepare_titanic(multi_label=multi_label_problem)
+    df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic()
+    print(feature_cols)
+    print(target_cols)
+    print(len(df_titanic_cooked))
 
     # This next step consists on;
     # - Continuous features discretization
     # - Categorical feature cleansing/dimensionality reduction (neither os these are necessary for Titanic dataset)
     # Right now, this step falls also on the user's side. However at some point the library might also take care of it
     # Right now, it is necessary that headers consist only of strings
-    titanic_2_explain = discretize_titanic(multi_label=multi_label_problem, titanic_prediction=df_titanic_cooked,
-                                           target_cols=target_cols)
+    titanic_2_explain = discretize_titanic(titanic_prediction=df_titanic_cooked, target_cols=target_cols,
+                                           cat_col_names=final_cat_col_names)
 
+    ######################################################################################################
     # Cálculo de estadísticos
     # Sobre df_2_explain: target_distribution.csv group by count por target_cols
     # if target_distribution.csv must be generated the following steps must be followed
-    target_count = np.sum(titanic_2_explain[target_cols].values, axis=0).reshape(-1, 1)
+    df_2_explain = titanic_2_explain.copy()
     pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1),
-                                 target_count,
-                                 target_count / np.sum(target_count)), axis=1),
-                 columns=[TARGET, COUNT, PERCENTAGE]).to_csv(
-        '/home/cx02747/Utils/target_distribution.csv', sep=',', index=False)
+                                 np.sum(df_2_explain[target_cols].values, axis=0).reshape(-1, 1)) , axis=1),
+                 columns=[TARGET, COUNT]).to_csv(
+        '/home/cx02747/Utils/global_target_distribution.csv', sep=',', index=False)
 
-    # if global_explainability_graph_edges_weights.csv must be generated the following steps must be followed
-    float_feature_cols = titanic_2_explain[feature_cols].select_dtypes(include='float')
+    # if global_graph_edges.csv must be generated the following steps must be followed
+    float_feature_cols = df_2_explain[feature_cols].select_dtypes(include='float')
     for feature_col in feature_cols:
         if feature_col in float_feature_cols:
-            titanic_2_explain[feature_col] = feature_col + '_' + titanic_2_explain[feature_col].apply(
+            df_2_explain[feature_col] = feature_col + '_' + df_2_explain[feature_col].apply(
                 "{:.02f}".format).map(str)
         else:
-            titanic_2_explain[feature_col] = feature_col + '_' + titanic_2_explain[feature_col].map(str)
+            df_2_explain[feature_col] = feature_col + '_' + df_2_explain[feature_col].map(str)
 
-    top1_argmax = np.argmax(titanic_2_explain[target_cols].values, axis=1)
+    top1_argmax = np.argmax(df_2_explain[target_cols].values, axis=1)
     top1_target = np.array([target_cols[am] for am in top1_argmax])
-    titanic_2_explain[TARGET] = top1_target
+    df_2_explain[TARGET] = top1_target
     feature_cols_combinations = itertools.combinations(feature_cols, 2)
     df_global_graph_edges_list = []
     df_local_graph_edges_list = []
     for feature_cols_tuple in feature_cols_combinations:
         feature_cols_pair = list(feature_cols_tuple)
-        df_local_graph_edges_list.append(titanic_2_explain[[ID, TARGET] + feature_cols_pair].rename(
+        df_local_graph_edges_list.append(df_2_explain[[ID, TARGET] + feature_cols_pair].rename(
                 columns={feature_cols_pair[0]: NODE_1, feature_cols_pair[1]: NODE_2}))
         df_global_graph_edges_list.append(
-            titanic_2_explain[[TARGET] + feature_cols_pair].value_counts().reset_index(name='edge_weight').rename(
+            df_2_explain[[TARGET] + feature_cols_pair].value_counts().reset_index(name=COUNT).rename(
                 columns={feature_cols_pair[0]: NODE_1, feature_cols_pair[1]: NODE_2}))
 
     df_global_graph_edges = pd.concat(df_global_graph_edges_list).sort_values(by=[TARGET, NODE_1, NODE_2]).reset_index(
         drop=True)
+    df_global_graph_edges[EDGE_WEIGHT] = pd.cut(df_global_graph_edges[COUNT], bins=MAX_EDGE_WEIGHT,
+                                                labels=range(1, MAX_EDGE_WEIGHT + 1))
+    df_global_graph_edges.to_csv('/home/cx02747/Utils/global_graph_edges.csv', sep=',',
+                                 index=False)
     df_local_graph_edges_wo_weight = pd.concat(df_local_graph_edges_list).sort_values(
         by=[ID, NODE_1, NODE_2]).reset_index(drop=True)
     df_local_graph_edges = df_local_graph_edges_wo_weight.merge(df_global_graph_edges, how='left', on=[TARGET, NODE_1,
                                                                                                        NODE_2])
-    df_local_graph_edges.to_pickle('/home/cx02747/Utils/local_edges_final.pkl')
-    exit(0)
+    df_local_graph_edges.to_csv('/home/cx02747/Utils/local_graph_edges.csv', sep=',', index=False)
+    ######################################################################################################
     # From here, the Explainer main flow starts
     # TEF_SHAP explainer is instantiated
     explainer = TefShap(explainer_params={})
