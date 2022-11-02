@@ -22,21 +22,23 @@ QUANTILE_SIZE = 10
 TAR_COLUMN_NAMES = [TARGET]
 
 """
-This process illustrates the end to end usage of XAIoGraphs from the bare dataset to the exportation of the 
+This process illustrates the end to end usage of XAIoGraphs from the bare Titanic dataset to the exportation of the 
 retrieved explainability information so that it can be displayed 
 """
 
 
-def titanic_cooking() -> Tuple[pd.DataFrame, List[str]]:
+def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
     """
     This function takes care of loading and preprocessing the Titanic dataset so that the resulting DataFrame can
-    be used to train a Machine Learning model
+    be used to train a Machine Learning model. Optionally, the column to be predicted can be changed (default is
+    'survived')
 
-    :return: Pandas DataFrame containing the preprocessed data so that it's suitable for training a Machine Learning
-             model
-             List of strings providing the names of the definitive categorical features, which may be recalculated
-             depending on which categorical feature will be considered as target (by default survived is assumend to be
-             the target)
+    :param: target_col:  String representing the column name to be considered as target (defaul is 'survived')
+    :return:             Pandas DataFrame containing the preprocessed data so that it's suitable for training a Machine
+                         Learning model
+                         List of strings providing the names of the definitive categorical features, which may be
+                         recalculated depending on which categorical feature will be considered as target (defaul target
+                          is 'survived')
     """
     # A random seed is fixed so that results are reproducible from one execution to another
     np.random.seed(42)
@@ -82,20 +84,19 @@ def titanic_cooking() -> Tuple[pd.DataFrame, List[str]]:
     df_train = pd.DataFrame(concat_train_prepro, columns=CONT_COLUMN_NAMES + CAT_COLUMN_NAMES + TAR_COLUMN_NAMES)
 
     # Survived is the target feature by default. If any other of the features (i.e: pclass) is going to be used as
-    # target, please, setup old_target to 'survived' and new_target to the feature to be used as target
-    old_target = 'survived'
-    new_target = 'pclass'
-    if old_target != new_target:
-        df_train.rename(columns={"target": old_target, new_target: "target"}, inplace=True)
+    # target, target_col parameter will be used to set it up
+    if target_col != 'survived':
+        df_train.rename(columns={TARGET: 'survived', target_col: TARGET}, inplace=True)
         new_cat_column_names = CAT_COLUMN_NAMES.copy()
-        new_cat_column_names.remove(new_target)
-        new_cat_column_names.append(old_target)
+        new_cat_column_names.remove(target_col)
+        new_cat_column_names.append('survived')
     else:
         new_cat_column_names = CAT_COLUMN_NAMES.copy()
-    df_train_targets = pd.get_dummies(df_train[TARGET], prefix=TARGET)
-    df_train = pd.DataFrame(np.concatenate((df_train[CONT_COLUMN_NAMES + new_cat_column_names].values,
-                                            df_train_targets.values), axis=1),
-                            columns=CONT_COLUMN_NAMES + new_cat_column_names + list(df_train_targets.columns))
+
+    logging.info('Target to be predicted for Titanic example: {}'.format(target_col))
+    df_train = pd.DataFrame(df_train[CONT_COLUMN_NAMES + new_cat_column_names + TAR_COLUMN_NAMES].values,
+                            columns=CONT_COLUMN_NAMES + new_cat_column_names + TAR_COLUMN_NAMES)
+
     return df_train, new_cat_column_names
 
 
@@ -138,20 +139,21 @@ def discretize_titanic(titanic_prediction: pd.DataFrame, target_cols: List[str],
         columns={'index': ID})
 
 
-def random_forest_titanic(titanic_cooked: pd.DataFrame):
+def random_forest_titanic(titanic_cooked: pd.DataFrame, cat_col_names: List[str]):
     """
     This function takes care of encoding categorical variables and set dummy variable names accordingly. It also uses
     the resulting dataset for training and prediction. Once predictions have been obtained, the original target in the
     dataset provided as parameter, is replaced by that prediction. The model of choice is a Random Forest Classifier
 
     :param: titanic_cooked: Pandas DataFrame on which basic imputing and scaling operations have been performed
+    :param: cat_col_names:  List of strings containing all column names to be considered categorical
     :return:                Pandas DataFrame which is identical to the aforementioned parameter but its target
                             has been replaced by the prediction of the trained model
     """
 
     # Features and labels are separated in three different numpy structures: one for continuous features, one for
     # categorical features and the third one for the target/s
-    cat = titanic_cooked[CAT_COLUMN_NAMES].values
+    cat = titanic_cooked[cat_col_names].values
     cont = titanic_cooked[CONT_COLUMN_NAMES].values
     tar = titanic_cooked[TAR_COLUMN_NAMES].values
 
@@ -165,32 +167,36 @@ def random_forest_titanic(titanic_cooked: pd.DataFrame):
     # this will be done for each categorical feature and each of their possible values. Finally, the target column name
     # will be added
     enc_names = CONT_COLUMN_NAMES.copy()
-    for col_n in CAT_COLUMN_NAMES:
+    for col_n in cat_col_names:
         for v in pd.unique(titanic_cooked[col_n]):
             enc_names.append(col_n + '_{}'.format(v) if isinstance(v, str) else col_n + '_{:.1f}'.format(v))
     enc_names.append(TARGET)
 
     # Original DataFrame is rebuilt, so that its structure matches the column name list built in the previous step
     data = np.concatenate((cont, cat_enc.toarray(), tar), axis=1)
-    model_train_df = pd.DataFrame(data, columns=enc_names)
+    df_train = pd.DataFrame(data, columns=enc_names)
+    df_train_features = df_train.drop([TARGET], axis=1)
+    df_train_target = df_train[TARGET].astype('int')
 
     # With the aforementioned DataFrame, a new model is instantiated and trained. Prediction for the same DataFrame is
     # retrieved too
     model = RandomForestClassifier()
-    model.fit(model_train_df.drop([TARGET], axis=1).values, model_train_df[TARGET].values)
-    pre_prediction = model.predict(model_train_df.drop([TARGET], axis=1).values)
-    logging.info('TRAIN ACCURACY: {:.4f}'.format(accuracy_score(model_train_df[TARGET].values, pre_prediction)))
+    model.fit(df_train_features.values, df_train_target.values)
+    pre_prediction = model.predict(df_train_features.values)
+    logging.info('Train accuracy: {:.4f}'.format(accuracy_score(df_train_target.values, pre_prediction)))
 
     # Target column is replaced in the ORIGINAL dataset (not the one with the dummy variables) by the prediction column
     rf_predict = titanic_cooked.drop([TARGET], axis=1)
     rf_predict[TARGET] = pre_prediction
+    rf_predict_targets = pd.get_dummies(rf_predict[TARGET], prefix=TARGET)
+    rf_predict = pd.concat([rf_predict.drop([TARGET], axis=1), rf_predict_targets], axis=1)
 
     # Original dataset is returned exactly as it was received but including the model prediction. Column order must
     # remain the same
-    return rf_predict[CONT_COLUMN_NAMES + CAT_COLUMN_NAMES + TAR_COLUMN_NAMES]
+    return rf_predict[CONT_COLUMN_NAMES + cat_col_names + list(rf_predict_targets.columns)]
 
 
-def prepare_titanic() -> Tuple[pd.DataFrame, List[str], List[str], List[str]]:
+def prepare_titanic(target_col: str = 'survived') -> Tuple[pd.DataFrame, List[str], List[str], List[str]]:
     """
     This function is intended to coordinate the Titanic dataset load and preprocess together with the use of a Machine
     Learning model to predict the target column
@@ -201,24 +207,18 @@ def prepare_titanic() -> Tuple[pd.DataFrame, List[str], List[str], List[str]]:
                 List of columns used as target
                 List of columns to be considered categorical
     """
-    feature_cols = []
-    target_cols = []
+
     # This first step represents the dataset preprocessing, in other words: all that is needed to do to the dataset
     # so that the predictive model will successfully train from it. It's important to remark that it is the user who
     # is responsible for this step
-    df_titanic_cooked, final_cat_col_names = titanic_cooking()
-
-    for col in df_titanic_cooked.columns:
-        if col.startswith(TARGET):
-            target_cols.append(col)
-        else:
-            feature_cols.append(col)
-    return df_titanic_cooked, feature_cols, target_cols, final_cat_col_names
+    df_titanic_cooked, final_cat_col_names = titanic_cooking(target_col=target_col)
 
     # A predictive model (in this case a Random Forest Classifier) is used to train and predict. These predictions
     # replace the original target in the dataset provided as parameter. Then, the resulting DataFrame is returned. Again
     # it is the user who is responsible for this step too
-    df_titanic_prediction = random_forest_titanic(titanic_cooked=df_titanic_cooked)
+    df_titanic_prediction = random_forest_titanic(titanic_cooked=df_titanic_cooked, cat_col_names=final_cat_col_names)
+    feature_cols = []
+    target_cols = []
     for col in df_titanic_prediction.columns:
         if col.startswith(TARGET):
             target_cols.append(col)
@@ -233,10 +233,7 @@ def main():
     output_path = Path.joinpath(Path(__file__).parent.parent.absolute(), TefShap.__name__, 'Titanic')
     print(output_path)
 
-    df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic()
-    print(feature_cols)
-    print(target_cols)
-    print(len(df_titanic_cooked))
+    df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic(target_col='pclass')
 
     # This next step consists on;
     # - Continuous features discretization
