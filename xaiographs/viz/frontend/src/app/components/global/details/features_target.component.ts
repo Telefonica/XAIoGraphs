@@ -83,8 +83,8 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
 
         this.columnNames = ['Feature', 'Weight', { role: 'style' }];
 
-        this.nodeList.map((data: any, index: number) => {
-            const barStyle = JSON.stringify(featuresTargetGraphStyle[index % featuresTargetGraphStyle.length]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+        this.nodeList.forEach((data: any) => {
+            const barStyle = JSON.stringify(featuresTargetGraphStyle[Math.trunc(parseFloat(data.node_weight) / 10) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
             transformDataSet.push([
                 data.node_name,
                 parseFloat(data.node_importance),

@@ -7,7 +7,7 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { featuresGraphStyle } from '../../../../assets/local';
+import { positiveFeaturesGraphStyle, negativeFeaturesGraphStyle } from '../../../../assets/local';
 
 @Component({
     selector: 'app-local-features',
@@ -83,11 +83,17 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
 
         this.columnNames = ['Feature', 'Weight', { role: 'style' }];
 
-        this.nodeList.map((data: any, index: number) => {
-            const barStyle = JSON.stringify(featuresGraphStyle[index % featuresGraphStyle.length]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+        this.nodeList.forEach((data: any, index: number) => {
+            let barStyle = '';
+            const nodeImportance = parseFloat(data.node_importance);
+            if(nodeImportance > 0) {
+                barStyle = JSON.stringify(positiveFeaturesGraphStyle[Math.trunc(parseFloat(data.node_weight) / 10) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+            } else {
+                barStyle = JSON.stringify(negativeFeaturesGraphStyle[Math.trunc(parseFloat(data.node_weight) / 10) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+            }
             transformDataSet.push([
                 data.node_name,
-                parseFloat(data.node_importance),
+                nodeImportance,
                 barStyle
             ]);
         });

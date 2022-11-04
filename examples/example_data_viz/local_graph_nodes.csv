@@ -6,7 +6,7 @@ id,node_name,node_importance,node_weight,rank
 1,economic_class_second,0.11,20,5
 1,gender_male,0.09,15,6
 1,economic_class_third,0.08,10,7
-1,incomes_low,0.02,5,8
+1,incomes_low,0.02,10,8
 2,incomes_mid,0.24,50,1
 2,economic_class_first,0.18,40,2
 2,incomes_high,0.17,30,3
@@ -14,7 +14,7 @@ id,node_name,node_importance,node_weight,rank
 2,gender_female,0.12,20,5
 2,incomes_low,0.08,15,6
 2,economic_class_third,0.05,10,7
-2,gender_male,0.03,5,8
+2,gender_male,0.03,10,8
 3,economic_class_second,0.34,50,1
 3,incomes_mid,0.24,40,2
 3,incomes_high,0.13,30,3
@@ -22,7 +22,7 @@ id,node_name,node_importance,node_weight,rank
 3,incomes_low,0.09,20,5
 3,economic_class_first,0.04,15,6
 3,gender_female,0.05,10,7
-3,economic_class_third,0.01,5,8
+3,economic_class_third,0.01,10,8
 4,economic_class_first,0.27,50,1
 4,incomes_high,0.25,40,2
 4,incomes_mid,0.14,30,3
@@ -30,7 +30,7 @@ id,node_name,node_importance,node_weight,rank
 4,economic_class_second,0.11,20,5
 4,incomes_low,0.04,15,6
 4,gender_male,0.05,10,7
-4,economic_class_third,0.01,5,8
+4,economic_class_third,0.01,10,8
 5,incomes_low,0.4,50,1
 5,economic_class_third,0.24,40,2
 5,incomes_mid,0.11,30,3
@@ -38,7 +38,7 @@ id,node_name,node_importance,node_weight,rank
 5,incomes_high,0.06,20,5
 5,gender_male,0.05,15,6
 5,economic_class_second,0.04,10,7
-5,economic_class_first,0.02,5,8
+5,economic_class_first,0.02,10,8
 6,incomes_mid,0.32,50,1
 6,economic_class_second,0.18,40,2
 6,incomes_low,0.17,30,3
@@ -46,7 +46,7 @@ id,node_name,node_importance,node_weight,rank
 6,economic_class_third,0.09,20,5
 6,gender_female,0.06,15,6
 6,incomes_high,0.02,10,7
-6,economic_class_first,0.01,5,8
+6,economic_class_first,0.01,10,8
 7,incomes_high,0.37,50,1
 7,incomes_mid,0.14,40,2
 7,gender_female,0.12,30,3
@@ -54,7 +54,7 @@ id,node_name,node_importance,node_weight,rank
 7,economic_class_first,0.11,20,5
 7,incomes_low,0.07,15,6
 7,economic_class_second,0.06,10,7
-7,economic_class_third,0.02,5,8
+7,economic_class_third,0.02,10,8
 8,incomes_high,0.27,50,1
 8,economic_class_first,0.25,40,2
 8,incomes_mid,0.12,30,3
@@ -62,7 +62,7 @@ id,node_name,node_importance,node_weight,rank
 8,gender_male,0.08,20,5
 8,gender_female,0.08,15,6
 8,economic_class_third,0.05,10,7
-8,incomes_low,0.03,5,8
+8,incomes_low,0.03,10,8
 9,economic_class_first,0.31,50,1
 9,incomes_high,0.24,40,2
 9,incomes_mid,0.13,30,3
@@ -70,7 +70,7 @@ id,node_name,node_importance,node_weight,rank
 9,gender_female,0.1,20,5
 9,economic_class_third,0.05,15,6
 9,gender_male,0.05,10,7
-9,incomes_low,0.01,5,8
+9,incomes_low,0.01,10,8
 10,incomes_mid,0.26,50,1
 10,incomes_high,0.24,40,2
 10,economic_class_first,0.13,30,3
@@ -78,7 +78,7 @@ id,node_name,node_importance,node_weight,rank
 10,incomes_low,0.08,20,5
 10,economic_class_third,0.07,15,6
 10,gender_male,0.07,10,7
-10,gender_female,0.02,5,8
+10,gender_female,0.02,10,8
 11,economic_class_third,0.23,50,1
 11,incomes_low,0.22,40,2
 11,incomes_mid,0.14,30,3
@@ -86,7 +86,7 @@ id,node_name,node_importance,node_weight,rank
 11,gender_female,0.12,20,5
 11,gender_male,0.1,15,6
 11,incomes_high,0.04,10,7
-11,economic_class_first,0.02,5,8
+11,economic_class_first,0.02,10,8
 12,incomes_low,0.31,50,1
 12,economic_class_third,0.27,40,2
 12,gender_female,0.1,30,3
@@ -94,7 +94,7 @@ id,node_name,node_importance,node_weight,rank
 12,economic_class_first,0.08,20,5
 12,incomes_mid,0.07,15,6
 12,gender_male,0.05,10,7
-12,incomes_high,0.03,5,8
+12,incomes_high,0.03,10,8
 13,incomes_high,0.39,50,1
 13,economic_class_first,0.22,40,2
 13,economic_class_second,0.12,30,3
@@ -102,7 +102,7 @@ id,node_name,node_importance,node_weight,rank
 13,gender_male,0.08,20,5
 13,gender_female,0.07,15,6
 13,economic_class_third,0.02,10,7
-13,incomes_low,0.01,5,8
+13,incomes_low,0.01,10,8
 14,incomes_high,0.34,50,1
 14,economic_class_first,0.27,40,2
 14,gender_female,0.14,30,3
@@ -110,7 +110,7 @@ id,node_name,node_importance,node_weight,rank
 14,incomes_mid,0.06,20,5
 14,incomes_low,0.04,15,6
 14,gender_male,0.04,10,7
-14,economic_class_third,0.01,5,8
+14,economic_class_third,0.01,10,8
 15,incomes_high,0.4,50,1
 15,economic_class_first,0.22,40,2
 15,gender_female,0.12,30,3
@@ -118,7 +118,7 @@ id,node_name,node_importance,node_weight,rank
 15,economic_class_second,0.09,20,5
 15,incomes_mid,0.05,15,6
 15,economic_class_third,0.01,10,7
-15,incomes_low,0,5,8
+15,incomes_low,0,10,8
 16,economic_class_second,0.22,50,1
 16,incomes_mid,0.22,40,2
 16,gender_male,0.12,30,3
@@ -126,7 +126,7 @@ id,node_name,node_importance,node_weight,rank
 16,economic_class_third,0.1,20,5
 16,incomes_low,0.08,15,6
 16,gender_female,0.08,10,7
-16,economic_class_first,0.07,5,8
+16,economic_class_first,0.07,10,8
 17,incomes_mid,0.45,50,1
 17,economic_class_second,0.32,40,2
 17,gender_male,0.06,30,3
@@ -134,7 +134,7 @@ id,node_name,node_importance,node_weight,rank
 17,incomes_low,0.04,20,5
 17,economic_class_third,0.04,15,6
 17,economic_class_first,0.02,10,7
-17,incomes_high,0.01,5,8
+17,incomes_high,0.01,10,8
 18,incomes_mid,0.39,50,1
 18,incomes_low,0.18,40,2
 18,gender_male,0.12,30,3
@@ -142,7 +142,7 @@ id,node_name,node_importance,node_weight,rank
 18,economic_class_second,0.09,20,5
 18,economic_class_third,0.08,15,6
 18,economic_class_first,0.04,10,7
-18,gender_female,0,5,8
+18,gender_female,0,10,8
 19,incomes_mid,0.37,50,1
 19,economic_class_second,0.28,40,2
 19,gender_male,0.12,30,3
@@ -150,7 +150,7 @@ id,node_name,node_importance,node_weight,rank
 19,economic_class_third,0.06,20,5
 19,incomes_high,0.04,15,6
 19,gender_female,0.03,10,7
-19,incomes_low,0.02,5,8
+19,incomes_low,0.02,10,8
 20,incomes_mid,0.19,50,1
 20,economic_class_second,0.19,40,2
 20,incomes_high,0.13,30,3
@@ -158,4 +158,4 @@ id,node_name,node_importance,node_weight,rank
 20,gender_female,0.11,20,5
 20,gender_male,0.1,15,6
 20,incomes_low,0.09,10,7
-20,economic_class_third,0.08,5,8
+20,economic_class_third,0.08,10,8

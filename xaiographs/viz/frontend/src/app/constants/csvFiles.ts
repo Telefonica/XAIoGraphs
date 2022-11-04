@@ -1,6 +1,7 @@
 export const ctsFiles = {
     global_explainability: 'global_explainability.csv',
     global_target_distribution:'global_target_distribution.csv',
+    global_graph_description: 'global_graph_description.csv',
     global_graph_nodes: 'global_graph_nodes.csv',
     global_graph_edges: 'global_graph_edges.csv',
     local_dataset_reliability: 'local_dataset_reliability.csv',
