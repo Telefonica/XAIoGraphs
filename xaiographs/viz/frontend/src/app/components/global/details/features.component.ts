@@ -54,11 +54,11 @@ export class GlobalFeaturesComponent implements OnInit {
 
         this.columnNames = ['Feature', 'Relevance', { role: 'style' }];
 
-        source.headers.map((header: any, index: number) => {
-            const barStyle = JSON.stringify(featuresGraphStyle[index % featuresGraphStyle.length]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+        source.data.map((node: any, index: number) => {
+            const barStyle = JSON.stringify(featuresGraphStyle[parseFloat(node.feature_weight)- 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
             transformDataSet.push([
-                header,
-                parseFloat(source.data[0][header]),
+                node.feature_name,
+                parseFloat(node.feature_importance),
                 barStyle
             ]);
         });

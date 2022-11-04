@@ -7,8 +7,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import cytoscape from 'cytoscape';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { nodeGraphStyle } from '../../../../assets/local';
-import { edgeGraphStyle } from '../../../../assets/local';
+import { positiveNodeGraphStyle, negativeNodeGraphStyle, edgeGraphStyle } from '../../../../assets/local';
 
 @Component({
     selector: 'app-local-graph',
@@ -16,7 +15,7 @@ import { edgeGraphStyle } from '../../../../assets/local';
     styles: [
     ]
 })
-export class LocalGraphComponent implements OnInit {
+export class LocalGraphComponent implements OnInit, OnDestroy {
 
     currentTarget = '';
     currentFeatures = 0;
@@ -90,13 +89,22 @@ export class LocalGraphComponent implements OnInit {
 
         this.nodeList.forEach((node: any) => {
             const weight = parseFloat(node.node_weight);
+            const importance = parseFloat(node.node_importance);
+            let backgroundColor = '';
+
+            if (importance > 0) {
+                backgroundColor = positiveNodeGraphStyle[Math.trunc(weight / 10) - 1]
+            } else {
+                backgroundColor = negativeNodeGraphStyle[Math.trunc(weight / 10) - 1]
+            }
+
             elements.push({
                 data: {
                     id: node.node_name,
                     label: node.node_name,
                 },
                 style: {
-                    'background-color': this.getNodeColor(weight),
+                    'background-color': backgroundColor,
                     height: weight,
                     width: weight,
                 }
@@ -113,7 +121,7 @@ export class LocalGraphComponent implements OnInit {
                 },
                 style: {
                     width: weight,
-                    'line-color': this.getEdgeColor(weight),
+                    'line-color': edgeGraphStyle[Math.trunc(weight / 2)],
                 }
             });
         });
@@ -122,9 +130,7 @@ export class LocalGraphComponent implements OnInit {
             {
                 selector: 'node',
                 style: {
-                    'background-color': '#666',
                     'label': 'data(label)',
-                    'padding': '5px',
                 }
             }
         ];
@@ -138,38 +144,10 @@ export class LocalGraphComponent implements OnInit {
             elements: elements,
             style: style,
             layout: layout,
-            zoomingEnabled: false,
-            autoungrabify: true,
+            zoomingEnabled: true,
+            userZoomingEnabled: false,
         });
 
-    }
-
-    getNodeColor(weight: number) {
-        let colorValue = nodeGraphStyle[nodeGraphStyle.length - 1]['color'];
-        nodeGraphStyle.every((style: any) => {
-            if (style.limit) {
-                if (weight < style.limit) {
-                    colorValue = style.color;
-                    return false;
-                }
-            }
-            return true;
-        });
-        return colorValue;
-    }
-
-    getEdgeColor(weight: number) {
-        let colorValue = edgeGraphStyle[edgeGraphStyle.length - 1]['color'];
-        edgeGraphStyle.every((style: any) => {
-            if (style.limit) {
-                if (weight < style.limit) {
-                    colorValue = style.color;
-                    return false;
-                }
-            }
-            return true;
-        });
-        return colorValue;
     }
 
     ngOnDestroy(): void {

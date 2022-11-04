@@ -15,8 +15,8 @@ export class ReaderService {
         return this.http.post(`${this.apiUrl}/readCSV`, body);
     }
 
-    listGlobalTarget(body: any) {
-        return this.http.post(`${this.apiUrl}/listGlobalTarget`, body);
+    readGlobalDescription(body: any) {
+        return this.http.post(`${this.apiUrl}/readGlobalDescription`, body);
     }
 
     readGlobalNodesWeights(body: any) {
@@ -25,6 +25,10 @@ export class ReaderService {
 
     readGlobalEdgesWeights(body: any) {
         return this.http.post(`${this.apiUrl}/readGlobalEdgesWeights`, body);
+    }
+
+    readGlobalGraphDetails(body: any) {
+        return this.http.post(`${this.apiUrl}/readGlobalGraphDetails`, body);
     }
 
     readLocalDataset(body: any) {

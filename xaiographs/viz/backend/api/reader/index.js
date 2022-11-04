@@ -4,9 +4,10 @@ const router = express.Router();
 
 router.get('/', controller.index);
 router.post('/readCSV', controller.readCSV);
-router.post('/listGlobalTarget', controller.listGlobalTarget);
+router.post('/readGlobalDescription', controller.readGlobalDescription);
 router.post('/readGlobalNodesWeights', controller.readGlobalNodesWeights);
 router.post('/readGlobalEdgesWeights', controller.readGlobalEdgesWeights);
+router.post('/readGlobalGraphDetails', controller.readGlobalGraphDetails);
 
 router.post('/readLocalDataset', controller.readLocalDataset);
 router.post('/readLocalNodesWeights', controller.readLocalNodesWeights);

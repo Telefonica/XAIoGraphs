@@ -25,23 +25,18 @@ exports.readCSV = async (req, res) => {
 
 
 
-exports.listGlobalTarget = async (req, res) => {
+exports.readGlobalDescription = async (req, res) => {
     if (!req.body.fileName) {
         const msg = 'Missing parameters';
-        console.log('ERROR - listGlobalTarget', msg);
+        console.log('ERROR - readGlobalDescription', msg);
         return res.status(404).json({ msg: msg });
     } else {
         await getData(req.body.fileName)
             .then((response) => {
-                return res.status(200).json({
-                    targets: response.data.map((row) => {
-                        return row.target;
-                    }),
-                    features: response.headers.length - 1,
-                })
+                return res.status(200).json(response.data)
             })
             .catch((error) => {
-                console.log('ERROR - listGlobalTarget', error);
+                console.log('ERROR - readGlobalDescription', error);
                 return res.status(400).json({ msg: error })
             });
     }
@@ -89,6 +84,29 @@ exports.readGlobalEdgesWeights = async (req, res) => {
             });
     }
 };
+
+exports.readGlobalGraphDetails = async (req, res) => {
+    if (!req.body.fileNodesName || !req.body.fileEdgesName || !req.body.target || !req.body.feature) {
+        const msg = 'Missing parameters';
+        console.log('ERROR - readGlobalGraphDetails', msg);
+        return res.status(404).json({ msg: msg });
+    } else {
+        await getData(req.body.fileEdgesName)
+            .then((responseEdges) => {
+                const edgesList = responseEdges.data.filter((row) => {
+                    return row.target == req.body.target && (
+                            row.node_1 == req.body.feature ||
+                            row.node_2 == req.body.feature
+                        );
+                })
+                console.log(edgesList);
+            })
+            .catch((errorEdges) => {
+                console.log('ERROR - readGlobalGraphDetails - Edges', errorEdges);
+                return res.status(400).json({ msg: error })
+            });
+    }
+}
 
 
 

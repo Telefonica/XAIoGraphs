@@ -29,6 +29,7 @@ XAIOWEB_DISTRIBUTION = 'XAIoWeb distribution'
 
 CSV_FILES = ["global_explainability.csv",
              "global_target_distribution.csv",
+             "global_graph_description.csv",
              "global_graph_nodes.csv",
              "global_graph_edges.csv",
              "local_dataset_reliability.csv",
@@ -40,7 +41,7 @@ CSV_FILES = ["global_explainability.csv",
              "[DEPRECATED]_input_dataset_discretized.csv",
              "[DEPRECATED]_global_target_explainability.csv",
              "[DEPRECATED]_local_explainability.csv",
-             ]
+            ]
 
 # Parameters definition
 flags.DEFINE_integer(name='port', default=8080, help='Web server port', required=False)

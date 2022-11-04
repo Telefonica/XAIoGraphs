@@ -6,6 +6,7 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { ctsFiles } from '../../../constants/csvFiles';
+import { ctsGlobal }  from '../../../constants/global';
 
 @Component({
     selector: 'app-global-target',
@@ -15,6 +16,7 @@ export class GlobalTargetComponent implements OnInit {
 
     filterTarget= new FormControl();
     listTarget: string[] = [];
+    listFeatures: number[] = [];
 
     maxFeatures = 0;
     numFeatures = 0;
@@ -26,15 +28,18 @@ export class GlobalTargetComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this._apiReader.listGlobalTarget({ fileName: ctsFiles.global_target_explainability }).subscribe({
+        this._apiReader.readGlobalDescription({ fileName: ctsFiles.global_graph_description }).subscribe({
             next: (response: any) => {
-                this.listTarget = response.targets;
-                this.maxFeatures = response.features;
+                response.forEach(description => {
+                    this.listTarget.push(description.target)
+                    this.listFeatures.push(description.num_features)
+                });
             },
             complete: () => {
-                this.filterTarget.setValue(this.listTarget[0]);
-                this.numFeatures = this.maxFeatures;
-                this._apiEmitter.setBothGlobal(this.filterTarget.value, this.maxFeatures);
+                this.filterTarget.setValue(0);
+                this.maxFeatures = this.listFeatures[0];
+                this.numFeatures = this.maxFeatures <= ctsGlobal.feature_limit ? this.maxFeatures: ctsGlobal.feature_limit;
+                this._apiEmitter.setBothGlobal(this.listTarget[0], this.numFeatures);
             },
             error: (err) => {
                 this._apiSnackBar.openSnackBar(JSON.stringify(err));
@@ -43,7 +48,8 @@ export class GlobalTargetComponent implements OnInit {
     }
 
     updateTarget() {
-        this._apiEmitter.setGlobalTarget(this.filterTarget.value);
+        const index = this.filterTarget.value;
+        this._apiEmitter.setBothGlobal(this.listTarget[index], this.numFeatures);
     }
 
     updateFeatures(event) {
