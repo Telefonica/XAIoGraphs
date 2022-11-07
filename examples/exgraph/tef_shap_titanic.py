@@ -1,5 +1,5 @@
 import itertools
-from pathlib import Path
+
 from typing import List, Tuple
 
 import numpy as np
@@ -13,7 +13,9 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
-from xaiographs.common.constants import COUNT, EDGE_WEIGHT, ID, MAX_EDGE_WEIGHT, NODE_1, NODE_2, TARGET
+from xaiographs.common.constants import BIN_WIDTH_EDGE_WEIGHT, COUNT, EDGE_WEIGHT, ID, MIN_EDGE_WEIGHT, MAX_EDGE_WEIGHT,\
+    N_BINS_EDGE_WEIGHT, NODE_1, NODE_2, TARGET
+from xaiographs.common.data_access import persist_sample, sample_by_target
 from xaiographs.exgraph.tef_shap import TefShap
 
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
@@ -51,7 +53,7 @@ def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
 
     # Synthetic features are calculated out of the given ones
     x_train['family_size'] = x_train['parch'] + x_train['sibsp']
-    x_train['is_alone'] = np.where(x_train['family_size'] > 1, 1, 0)
+    x_train['is_alone'] = np.where(x_train['family_size'] > 1, 0, 1)
 
     # Title feature can be extracted from the name
     x_train['title'] = x_train['name'].str.split(", ", expand=True)[1].str.split(".", expand=True)[0]
@@ -201,6 +203,10 @@ def prepare_titanic(target_col: str = 'survived') -> Tuple[pd.DataFrame, List[st
     This function is intended to coordinate the Titanic dataset load and preprocess together with the use of a Machine
     Learning model to predict the target column
 
+    :param:     target_col: String representing the column to be considered as target (default: 'survived'). For a
+                two-target problem default can be used, for a more than two targets problem, 'pclass' feature is the
+                one that has been used so far. Please bear in mind, binary problems have been modeled as multi target
+                (instead of target being 1 or 0, there're target_0 and target_1)
     :return:    Pandas DataFrame properly preprocessed. Its target may have result from the prediction of a Machine
                 Learning model
                 List of columns containing the features of the resulting Pandas DataFrame
@@ -230,9 +236,6 @@ def prepare_titanic(target_col: str = 'survived') -> Tuple[pd.DataFrame, List[st
 
 def main():
     logging.set_verbosity(logging.INFO)
-    output_path = Path.joinpath(Path(__file__).parent.parent.absolute(), TefShap.__name__, 'Titanic')
-    print(output_path)
-
     df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic(target_col='pclass')
 
     # This next step consists on;
@@ -264,6 +267,9 @@ def main():
 
     top1_argmax = np.argmax(df_2_explain[target_cols].values, axis=1)
     top1_target = np.array([target_cols[am] for am in top1_argmax])
+    target_probs = np.round(np.sum(df_2_explain[target_cols].values, axis=0) / len(df_2_explain), decimals=2)
+    sample_ids = sample_by_target(df_2_explain[ID].values, top1_target, num_samples=100, target_probs=target_probs,
+                                  target_cols=target_cols)
     df_2_explain[TARGET] = top1_target
     feature_cols_combinations = itertools.combinations(feature_cols, 2)
     df_global_graph_edges_list = []
@@ -278,15 +284,15 @@ def main():
 
     df_global_graph_edges = pd.concat(df_global_graph_edges_list).sort_values(by=[TARGET, NODE_1, NODE_2]).reset_index(
         drop=True)
-    df_global_graph_edges[EDGE_WEIGHT] = pd.cut(df_global_graph_edges[COUNT], bins=MAX_EDGE_WEIGHT,
-                                                labels=range(1, MAX_EDGE_WEIGHT + 1))
+    df_global_graph_edges[EDGE_WEIGHT] = pd.cut(df_global_graph_edges[COUNT], bins=N_BINS_EDGE_WEIGHT,
+                                                labels=range(MIN_EDGE_WEIGHT, MAX_EDGE_WEIGHT + BIN_WIDTH_EDGE_WEIGHT))
     df_global_graph_edges.to_csv('/home/cx02747/Utils/global_graph_edges.csv', sep=',',
                                  index=False)
     df_local_graph_edges_wo_weight = pd.concat(df_local_graph_edges_list).sort_values(
         by=[ID, NODE_1, NODE_2]).reset_index(drop=True)
     df_local_graph_edges = df_local_graph_edges_wo_weight.merge(df_global_graph_edges, how='left', on=[TARGET, NODE_1,
                                                                                                        NODE_2])
-    df_local_graph_edges.to_csv('/home/cx02747/Utils/local_graph_edges.csv', sep=',', index=False)
+    persist_sample(df=df_local_graph_edges, sample_ids=sample_ids, path='/home/cx02747/Utils/local_graph_edges.csv')
     ######################################################################################################
     # From here, the Explainer main flow starts
     # TEF_SHAP explainer is instantiated
@@ -298,15 +304,12 @@ def main():
 
     # The trained Explainer is used to provide local explainability. In this case the dataset to train and to explain
     # are identical. However, this isn't always the case. They can be different
-    local_explanation = explainer.local_explain(df_2_explain=titanic_2_explain,
-                                                target_cols=target_cols,
-                                                **explainer_trained)
+    local_explanation = explainer.local_explain(df_2_explain=titanic_2_explain, target_cols=target_cols,
+                                                sample_ids=sample_ids,  **explainer_trained)
 
     # Usamos el explainer para generar la información global (tantos números como features)
     global_explanation = explainer.global_explain(feature_cols=feature_cols, target_cols=target_cols,
                                                   **local_explanation)
-    print(global_explanation.shape)
-
     ####################################################################################################################
     # EXPORTACIÓN DE LOS DATOS CALCULADOS PARA SU VISUALIZACIÓN WEB
     ####################################################################################################################

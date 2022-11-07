@@ -151,7 +151,6 @@ class TefShap(Explainer):
         # TODO: Con un dataset con sus targets desbalanceados, la frecuencia de dichos targets puede influir en las
         #  explicaciones y el baseline obtenido para cada uno de ellos ¿podría haber que hacer la media
         #  de los Shapley Values para los targets?
-        logging.info(shapley_values.shape)
 
         # Data is formatted for the sanity check
         y_hat_reduced = res_dict[str({})] + np.sum(shapley_values, axis=1)
@@ -165,20 +164,9 @@ class TefShap(Explainer):
 
     def global_explain(self, feature_cols: List[str], target_cols: List[str], **params):
         df_global_explain = np.abs(params[TefShap._SHAPLEY_VALUES]).mean(axis=0)
+        save_global_target_explained_info(df_shapley_values=params[TefShap._SHAPLEY_VALUES], feature_cols=feature_cols,
+                                          target_cols=target_cols, top1_targets=params[TefShap._TOP1_TARGET].tolist())
 
-        save_global_target_explained_info(df_global_explain, feature_cols, target_cols,
-                                          params[TefShap._TOP1_TARGET].tolist())
-        """
-        pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1), np.transpose(df_global_explain)), axis=1),
-                     columns=Explainer._DEFAULT_TARGET_COLS + feature_cols).to_csv('/home/cx02747/Utils/df1.csv',
-                                                                                   sep=',', index=False)
-
-        # If global_explainability.csv must be generated the following steps must be followed
-        top1_target_list = params[TefShap._TOP1_TARGET].tolist()
-        target_probs = np.array([top1_target_list.count(target) for target in target_cols]) / len(top1_target_list)
-        pd.DataFrame((target_probs.reshape(-1, 1) * np.transpose(df_global_explain)).mean(axis=0).reshape(1, -1),
-                     columns=feature_cols).to_csv('/home/cx02747/Utils/df2.csv', sep=',', index=False)
-        """
         return df_global_explain
 
     @staticmethod
@@ -217,9 +205,9 @@ class TefShap(Explainer):
             else:
                 cond = (cond & (np.abs(model[k] - v) < 10 ** -6))
 
-        ## TODO si cond es False no se puede calcular el promedio del target, habría que tomar la probabilidad a priori
-        #   del target (probabilidad del target sobre el dataset). ¿Sería mejor hacer un blend que tenga en cuenta el
-        #   a priori y el a posterori? Esto cubriría todas las casuísticas
+        # TODO si cond es False no se puede calcular el promedio del target, habría que tomar la probabilidad a priori
+        #  del target (probabilidad del target sobre el dataset). ¿Sería mejor hacer un blend que tenga en cuenta el
+        #  a priori y el a posterori? Esto cubriría todas las casuísticas
         counts = model[COUNT][cond]
         return np.array([np.sum(counts * model[target_col][cond]) / np.sum(counts) for target_col in target_cols])
 
