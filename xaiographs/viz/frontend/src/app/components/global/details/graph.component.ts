@@ -7,8 +7,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import cytoscape from 'cytoscape';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { nodeGraphStyle } from '../../../../assets/global';
-import { edgeGraphStyle } from '../../../../assets/global';
+import { nodeGraphStyle, edgeGraphStyle } from '../../../../assets/global';
 
 @Component({
     selector: 'app-global-target-graph',
@@ -94,7 +93,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
                     label: node.node_name,
                 },
                 style: {
-                    'background-color': this.getNodeColor(weight),
+                    'background-color': nodeGraphStyle[Math.trunc(weight / 10) - 1],
                     height: weight,
                     width: weight,
                 }
@@ -111,7 +110,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
                 },
                 style: {
                     width: weight,
-                    'line-color': this.getEdgeColor(weight),
+                    'line-color': edgeGraphStyle[Math.trunc(weight / 2)],
                 }
             });
         });
@@ -120,9 +119,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
             {
                 selector: 'node',
                 style: {
-                    'background-color': '#666',
-                    'label': 'data(label)',
-                    'padding': '5px',
+                    'label': 'data(label)'
                 }
             }
         ];
@@ -136,38 +133,30 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
             elements: elements,
             style: style,
             layout: layout,
-            zoomingEnabled: false,
-            autoungrabify: true,
+            zoomingEnabled: true,
+            userZoomingEnabled: false,
+        }).addListener('click', 'nodes', (event) => {
+            this.getNodeDetails(event.target._private.data.id)
         });
 
     }
 
-    getNodeColor(weight: number) {
-        let colorValue = nodeGraphStyle[nodeGraphStyle.length - 1]['color'];
-        nodeGraphStyle.every((style: any) => {
-            if (style.limit) {
-                if (weight < style.limit) {
-                    colorValue = style.color;
-                    return false;
-                }
+    getNodeDetails(node_name) {
+        const detailsBody = {
+            fileNodesName: ctsFiles.global_graph_nodes,
+            fileEdgesName: ctsFiles.global_graph_edges,
+            target: this.currentTarget,
+            feature: node_name
+        };
+        this._apiReader.readGlobalGraphDetails(detailsBody).subscribe({
+            next: (response: any) => {
+            },
+            complete: () => {
+            },
+            error: (err) => {
+                this._apiSnackBar.openSnackBar(JSON.stringify(err));
             }
-            return true;
         });
-        return colorValue;
-    }
-
-    getEdgeColor(weight: number) {
-        let colorValue = edgeGraphStyle[edgeGraphStyle.length - 1]['color'];
-        edgeGraphStyle.every((style: any) => {
-            if (style.limit) {
-                if (weight < style.limit) {
-                    colorValue = style.color;
-                    return false;
-                }
-            }
-            return true;
-        });
-        return colorValue;
     }
 
     ngOnDestroy(): void {
