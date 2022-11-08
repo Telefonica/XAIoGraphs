@@ -1,6 +1,6 @@
 <div fxFlex fxLayout="column" fxLayoutAlign="start center" class="headerBody">
-    <div fxLayout="row" fxLayoutAlign="center center" class="headerLogo">
-        logo pdt
+    <div fxLayout="row" fxLayoutAlign="center center">
+        <img src="../../../assets/20221029_lamb_icon.png" alt="" class="headerLogo">
     </div>
     <div *ngFor="let item of optionsMenu" style="width: 100%">
         <div fxLayout="column" fxLayoutAlign="start center" class="headerMenu" [routerLink]="item.component" skipLocationChange="true" [ngClass]="{headerMenuSelected: (this.current == item.component)}">
