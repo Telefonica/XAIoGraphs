@@ -60,3 +60,46 @@
     + **broad jump_cm**
 
     + **class**: A,B,C,D ( A: best) / stratified
+  
+### Higgs Bosson (higgsBossonTraining.csv)
+
+* Source: https://www.kaggle.com/datasets/knight079/higgsb (train)
+  
+* Description: This is a dataset describing a Higgs Bosson: sometimes called the Higgs particle, is an elementary particle in the Standard Model of particle physics produced by the quantum excitation.
+
+* Features: (33 Features x 250000 elements)
+
+    + **1 EventId**:
+    + **2 DER_mass_MMC**:
+    + **3 DER_mass_transverse_met_lep**:
+    + **4 DER_mass_vis**:
+    + **5 DER_pt_h**:
+    + **6 DER_deltaeta_jet_jet**:
+    + **7 DER_mass_jet_jet**:
+    + **8 DER_prodeta_jet_jet**:
+    + **9 DER_deltar_tau_lep**:
+    + **10 DER_pt_tot**:
+    + **11 DER_sum_pt**:
+    + **12 DER_pt_ratio_lep_tau**:
+    + **13 DER_met_phi_centrality**:
+    + **14 DER_lep_eta_centrality**:
+    + **15 PRI_tau_pt**:
+    + **16 PRI_tau_eta**:
+    + **17 PRI_tau_phi**:
+    + **18 PRI_lep_pt**:
+    + **19 PRI_lep_eta**:
+    + **20 PRI_lep_phi**:
+    + **21 PRI_met**:
+    + **22 PRI_met_phi**:
+    + **23 PRI_met_sumet**:
+    + **24 PRI_jet_num**:
+    + **25 PRI_jet_leading_pt**:
+    + **26 PRI_jet_leading_eta**:
+    + **27 PRI_jet_leading_phi**:
+    + **28 PRI_jet_subleading_pt**:
+    + **29 PRI_jet_subleading_eta**:
+    + **30 PRI_jet_subleading_phi**:
+    + **31 PRI_jet_all_pt**:
+    + **32 Weight**:
+    + **33 Label**: s (34%) ,b (66%) (target)
+  
