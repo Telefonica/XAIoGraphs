@@ -1,4 +1,5 @@
 <div fxFlex fxLayout="column" fxLayoutGap="25px">
     <label class="localDistributionTitle">Features importance</label>
-    <google-chart class="localDistributionChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="display"> </google-chart>
+    <google-chart class="localDistributionChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>
+    <img src="../../../../assets/empty.png" class="localNoData" *ngIf="!displayGraph" alt="No data" />
 </div>

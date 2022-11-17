@@ -3,4 +3,5 @@ export const ctsGlobal = {
     initial_component: 'global',
     initial_language: 'es',
     feature_limit: 10,
+    frecuency_limit: -1,
 };

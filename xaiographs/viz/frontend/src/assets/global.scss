@@ -18,17 +18,30 @@
     @extend .bgWhite;
 }
 
-.globalFeatureTitle, .globalDistributionTitle, .globalFeatureTargetTitle, .globalNetGraphTitle, .globalTargetTitle {
+.globalFeatureTitle,
+.globalDistributionTitle,
+.globalFeatureTargetTitle,
+.globalNetGraphTitle,
+.globalTargetTitle {
     @extend .fontGrey5;
     @extend .fontBold;
     font-size: 18px;
 }
 
-.globalFeatureChart, .globalDistributionChart {
+.globalFeatureChart,
+.globalDistributionChart {
     @extend .width100;
     height: 300px;
 }
-.globalNetGraphChart, .globalFeatureTargetChart {
+.globalNetGraphChart,
+.globalFeatureTargetChart {
     @extend .width100;
     height: 500px;
+}
+
+.globalNoData {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }

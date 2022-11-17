@@ -6,7 +6,7 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { ctsGlobal }  from '../../../constants/global';
+import { ctsGlobal } from '../../../constants/global';
 
 @Component({
     selector: 'app-global-target',
@@ -14,12 +14,14 @@ import { ctsGlobal }  from '../../../constants/global';
 })
 export class GlobalTargetComponent implements OnInit {
 
-    filterTarget= new FormControl();
+    filterTarget = new FormControl();
     listTarget: string[] = [];
     listFeatures: number[] = [];
 
     maxFeatures = 0;
+    maxFrecuency = 0;
     numFeatures = 0;
+    numFrecuency = 0;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -37,9 +39,7 @@ export class GlobalTargetComponent implements OnInit {
             },
             complete: () => {
                 this.filterTarget.setValue(0);
-                this.maxFeatures = this.listFeatures[0];
-                this.numFeatures = this.maxFeatures <= ctsGlobal.feature_limit ? this.maxFeatures: ctsGlobal.feature_limit;
-                this._apiEmitter.setBothGlobal(this.listTarget[0], this.numFeatures);
+                this.setValueLimits(0)
             },
             error: (err) => {
                 this._apiSnackBar.openSnackBar(JSON.stringify(err));
@@ -48,11 +48,28 @@ export class GlobalTargetComponent implements OnInit {
     }
 
     updateTarget() {
-        const index = this.filterTarget.value;
-        this._apiEmitter.setBothGlobal(this.listTarget[index], this.numFeatures);
+        this.setValueLimits(this.filterTarget.value);
     }
 
     updateFeatures(event) {
         this._apiEmitter.setGlobalFeatures(event.value);
+    }
+
+    updateFrecuency(event) {
+        this._apiEmitter.setGlobalFrecuency(event.value);
+    }
+
+    setValueLimits(index) {
+        this.maxFeatures = this.listFeatures[index];
+        this.maxFrecuency = this.listFeatures[index];
+        if (ctsGlobal.feature_limit > 0)
+            this.numFeatures = this.maxFeatures <= ctsGlobal.feature_limit ? this.maxFeatures : ctsGlobal.feature_limit;
+        else
+            this.numFeatures = this.maxFeatures
+        if (ctsGlobal.frecuency_limit > 0)
+            this.numFrecuency = this.maxFrecuency <= ctsGlobal.frecuency_limit ? this.maxFrecuency : ctsGlobal.frecuency_limit;
+        else
+            this.numFrecuency = this.maxFrecuency
+        this._apiEmitter.setAllGlobal(this.listTarget[index], this.numFeatures, this.numFrecuency);
     }
 }

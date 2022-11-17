@@ -10,7 +10,14 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="globalCard">
         <label class="globalTargetTitle">Features selection</label>
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="" fxLayoutGap="10px">
-            <mat-slider min=1 step=1 max="{{ maxFeatures }}" thumbLabel='true' [(ngModel)]="numFeatures" style="width: 100%;" (input)="updateFeatures($event)"></mat-slider>
+            <mat-slider min=5 step=1 max="{{ maxFeatures }}" thumbLabel='true' [(ngModel)]="numFeatures" style="width: 100%;" (input)="updateFeatures($event)"></mat-slider>
+            <label>{{ maxFeatures }}</label>
+        </div>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="globalCard">
+        <label class="globalTargetTitle">Frecuency selection</label>
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="" fxLayoutGap="10px">
+            <mat-slider min=5 step=1 max="{{ maxFrecuency }}" thumbLabel='true' [(ngModel)]="numFrecuency" style="width: 100%;" (input)="updateFrecuency($event)"></mat-slider>
             <label>{{ maxFeatures }}</label>
         </div>
     </div>
