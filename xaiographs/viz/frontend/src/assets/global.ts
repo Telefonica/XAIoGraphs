@@ -32,7 +32,7 @@ export const featuresGraphStyle = [
     }
 ];
 
-export const featuresTargetGraphStyle = [
+export const featuresImportanceTargetGraphStyle = [
     {
         "stroke-color": "#F2CEDB",
         "stroke-width": 0,
@@ -66,17 +66,51 @@ export const featuresTargetGraphStyle = [
     }
 ];
 
+export const featuresFrecuencyTargetGraphStyle = [
+    {
+        "stroke-color": "#0F2B42",
+        "stroke-width": 0,
+        "stroke-opacity": 0,
+        "fill-color": "#0F2B42",
+        "fill-opacity": 1,
+    } , {
+        "stroke-color": "#294359",
+        "stroke-width": 0,
+        "stroke-opacity": 0,
+        "fill-color": "#294359",
+        "fill-opacity": 1,
+    }, {
+        "stroke-color": "#425666",
+        "stroke-width": 0,
+        "stroke-opacity": 0,
+        "fill-color": "#425666",
+        "fill-opacity": 1,
+    }, {
+        "stroke-color": "#667989",
+        "stroke-width": 0,
+        "stroke-opacity": 0,
+        "fill-color": "#667989",
+        "fill-opacity": 1,
+    }, {
+        "stroke-color": "#8C9DAA",
+        "stroke-width": 0,
+        "stroke-opacity": 0,
+        "fill-color": "#8C9DAA",
+        "fill-opacity": 1,
+    }
+]
+
 export const distributionGraphStyle = [
     {
         color: "#3F246D",
     }, {
-        color: "#5A3F87",
+        color: "#CDC1E0",
     }, {
         color: "#7B63A3",
     }, {
         color: "#A290C2",
     }, {
-        color: "#CDC1E0",
+        color: "#5A3F87",
     }
 ];
 

@@ -42,7 +42,7 @@ exports.readGlobalDescription = async (req, res) => {
     }
 };
 exports.readGlobalNodesWeights = async (req, res) => {
-    if (!req.body.fileName || !req.body.target || !req.body.numFeatures) {
+    if (!req.body.fileName || !req.body.target || !req.body.numFeatures || !req.body.numFrecuency) {
         const msg = 'Missing parameters';
         console.log('ERROR - readGlobalNodesWeights', msg);
         return res.status(404).json({ msg: msg });
@@ -52,7 +52,8 @@ exports.readGlobalNodesWeights = async (req, res) => {
                 return res.status(200).json(
                     response.data.filter((row) => {
                         return row.target == req.body.target
-                            && parseInt(row.rank) <= parseInt(req.body.numFeatures);
+                            && parseInt(row.rank) <= parseInt(req.body.numFeatures)
+                            && parseInt(row.node_name_ratio_rank) <= parseInt(req.body.numFrecuency);
                     })
                 );
             })

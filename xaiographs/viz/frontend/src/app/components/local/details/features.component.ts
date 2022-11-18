@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { ChartType } from 'angular-google-charts';
 
@@ -13,7 +13,7 @@ import { positiveFeaturesGraphStyle, negativeFeaturesGraphStyle } from '../../..
     selector: 'app-local-features',
     templateUrl: './features.component.html'
 })
-export class LocalFeaturesComponent implements OnInit, OnDestroy {
+export class LocalFeaturesComponent implements OnDestroy {
 
     currentTarget = '';
     currentFeatures = 0;
@@ -21,13 +21,13 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
     targetSubscription: any;
     featuresSubscription: any;
 
-    nodeList = [];
+    serviceResponse: any;
 
     type = ChartType.BarChart;
     dataGraph: any[] = [];
     columnNames: any[] = [];
     options: any = {};
-    display: boolean = false;
+    displayGraph: boolean = false;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -42,8 +42,6 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnInit(): void { }
-
     getData() {
         this.currentTarget = this._apiEmitter.getLocalTarget();
         this.currentFeatures = this._apiEmitter.getLocalFeatures();
@@ -55,15 +53,20 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
         }
 
         this._apiReader.readLocalNodesWeights(bodyNodes).subscribe({
-            next: (responseNodes: any) => {
-                this.nodeList = responseNodes;
+            next: (response: any) => {
+                this.serviceResponse = response;
             },
             complete: () => {
-                this.initGraph();
-                this.generateGraph();
-                this.display = true;
+                if(this.serviceResponse.length > 0) {
+                    this.initGraph();
+                    this.generateGraph();
+                    this.displayGraph = true;
+                } else {
+                    this.displayGraph = false;
+                }
             },
             error: (err) => {
+                this.displayGraph = false;
                 this._apiSnackBar.openSnackBar(JSON.stringify(err));
             }
         });
@@ -83,7 +86,7 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
 
         this.columnNames = ['Feature', 'Weight', { role: 'style' }];
 
-        this.nodeList.forEach((data: any, index: number) => {
+        this.serviceResponse.forEach((data: any, index: number) => {
             let barStyle = '';
             const nodeImportance = parseFloat(data.node_importance);
             if(nodeImportance > 0) {

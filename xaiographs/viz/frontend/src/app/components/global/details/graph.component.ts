@@ -17,9 +17,11 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
 
     currentTarget = '';
     currentFeatures = 0;
+    currentFrecuency = 0;
 
     targetSubscription: any;
     featuresSubscription: any;
+    frecuencySubscription: any;
 
     nodeList = [];
     edgeList = [];
@@ -36,6 +38,9 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
         this.featuresSubscription = this._apiEmitter.globalFeaturesChangeEmitter.subscribe(() => {
             this.getData();
         });
+        this.frecuencySubscription = this._apiEmitter.globalFrecuencyChangeEmitter.subscribe(() => {
+            this.getData();
+        });
     }
 
     ngOnInit(): void { }
@@ -43,11 +48,13 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
     getData() {
         this.currentTarget = this._apiEmitter.getGlobalTarget();
         this.currentFeatures = this._apiEmitter.getGlobalFeatures();
+        this.currentFrecuency = this._apiEmitter.getGlobalFrecuency();
 
         const bodyNodes = {
             fileName: ctsFiles.global_graph_nodes,
             target: this.currentTarget,
             numFeatures: this.currentFeatures,
+            numFrecuency: this.currentFrecuency,
         }
 
         this._apiReader.readGlobalNodesWeights(bodyNodes).subscribe({

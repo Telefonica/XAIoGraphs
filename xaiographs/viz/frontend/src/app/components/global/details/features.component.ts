@@ -20,6 +20,8 @@ export class GlobalFeaturesComponent implements OnInit {
     options: any = {};
     displayGraph: boolean = false;
 
+    serviceResponse: any;
+
     constructor(
         private _apiReader: ReaderService,
         private _apiSnackBar: SnackbarService,
@@ -28,13 +30,19 @@ export class GlobalFeaturesComponent implements OnInit {
     ngOnInit(): void {
         this._apiReader.readCSV({ fileName: ctsFiles.global_explainability }).subscribe({
             next: (response: any) => {
-                this.initGraph();
-                this.createGraph(response);
+                this.serviceResponse = response;
             },
             complete: () => {
-                this.displayGraph = true
+                if (this.serviceResponse.data.length > 0) {
+                    this.initGraph();
+                    this.createGraph();
+                    this.displayGraph = true;
+                } else {
+                    this.displayGraph = false;
+                }
             },
             error: (err) => {
+                this.displayGraph = false;
                 this._apiSnackBar.openSnackBar(JSON.stringify(err));
             }
         });
@@ -49,13 +57,13 @@ export class GlobalFeaturesComponent implements OnInit {
         };
     }
 
-    createGraph(source: any) {
+    createGraph() {
         let transformDataSet: any[] = [];
 
         this.columnNames = ['Feature', 'Relevance', { role: 'style' }];
 
-        source.data.map((node: any, index: number) => {
-            const barStyle = JSON.stringify(featuresGraphStyle[parseFloat(node.feature_weight)- 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+        this.serviceResponse.data.map((node: any, index: number) => {
+            const barStyle = JSON.stringify(featuresGraphStyle[parseFloat(node.feature_weight) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
             transformDataSet.push([
                 node.feature_name,
                 parseFloat(node.feature_importance),

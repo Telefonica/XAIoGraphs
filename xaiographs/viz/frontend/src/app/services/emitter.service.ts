@@ -7,11 +7,13 @@ export class EmitterService {
 
     currentGlobalTarget;
     currentGlobalFeatures;
+    currentGlobalFrencuency;
     currentLocalTarget;
     currentLocalFeatures;
 
     globalTargetChangeEmitter = new EventEmitter();
     globalFeaturesChangeEmitter = new EventEmitter();
+    globalFrecuencyChangeEmitter = new EventEmitter();
     localTargetChangeEmitter = new EventEmitter();
     localFeaturesChangeEmitter = new EventEmitter();
 
@@ -33,9 +35,19 @@ export class EmitterService {
         return this.currentGlobalFeatures;
     }
 
-    setBothGlobal(target: string, features: number) {
+    setGlobalFrecuency(frecuency: number) {
+        this.currentGlobalFrencuency = frecuency;
+        this.globalFrecuencyChangeEmitter.emit();
+    }
+
+    getGlobalFrecuency() {
+        return this.currentGlobalFrencuency;
+    }
+
+    setAllGlobal(target: string, features: number, frecuency: number) {
         this.currentGlobalTarget = target;
         this.currentGlobalFeatures = features;
+        this.currentGlobalFrencuency = frecuency;
         this.globalTargetChangeEmitter.emit();
     }
 
