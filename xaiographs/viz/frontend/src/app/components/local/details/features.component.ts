@@ -57,7 +57,7 @@ export class LocalFeaturesComponent implements OnDestroy {
                 this.serviceResponse = response;
             },
             complete: () => {
-                if(this.serviceResponse.length > 0) {
+                if (this.serviceResponse.length > 0) {
                     this.initGraph();
                     this.generateGraph();
                     this.displayGraph = true;
@@ -78,31 +78,55 @@ export class LocalFeaturesComponent implements OnDestroy {
             legend: 'none',
             bar: { groupWidth: "90%" },
             chartArea: { width: '70%', height: '80%' },
+            tooltip: { type: 'string', isHtml: true },
         };
     }
 
     generateGraph() {
         let transformDataSet: any[] = [];
 
-        this.columnNames = ['Feature', 'Weight', { role: 'style' }];
+        this.columnNames = [
+            'Feature',
+            'Weight',
+            { role: 'style' },
+            { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
+        ];
 
         this.serviceResponse.forEach((data: any, index: number) => {
             let barStyle = '';
             const nodeImportance = parseFloat(data.node_importance);
-            if(nodeImportance > 0) {
-                barStyle = JSON.stringify(positiveFeaturesGraphStyle[Math.trunc(parseFloat(data.node_weight) / 10) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+
+            if (nodeImportance > 0) {
+                const barStyleIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % positiveFeaturesGraphStyle.length;
+                barStyle = this.JSONCleaner(positiveFeaturesGraphStyle[barStyleIndex]);
             } else {
-                barStyle = JSON.stringify(negativeFeaturesGraphStyle[Math.trunc(parseFloat(data.node_weight) / 10) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+                const barStyleIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % negativeFeaturesGraphStyle.length;
+                barStyle = this.JSONCleaner(negativeFeaturesGraphStyle[barStyleIndex]);
             }
             transformDataSet.push([
                 data.node_name,
                 nodeImportance,
-                barStyle
+                barStyle,
+                '<table style="padding:5px; width:150px;"><tr>' +
+                '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.node_name + '</td>' +
+                '</tr><tr>' +
+                '<td colspan="2" style="border-bottom: 1px solid black; margin:10px;"></td>' +
+                '</tr><tr>' +
+                '<td style="font-weight:bold; padding-left: 5px">Importance</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + nodeImportance.toFixed(5) + '</td>' +
+                '</tr></table>',
             ]);
         });
 
         this.dataGraph = transformDataSet;
+    }
 
+    JSONCleaner(value) {
+        return JSON.stringify(value)
+            .replace('{', '')
+            .replace('}', '')
+            .replace(/"/g, '')
+            .replace(/,/g, ';')
     }
 
     ngOnDestroy(): void {

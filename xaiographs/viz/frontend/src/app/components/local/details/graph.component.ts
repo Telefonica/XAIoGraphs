@@ -90,12 +90,15 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
         this.nodeList.forEach((node: any) => {
             const weight = parseFloat(node.node_weight);
             const importance = parseFloat(node.node_importance);
+
             let backgroundColor = '';
 
             if (importance > 0) {
-                backgroundColor = positiveNodeGraphStyle[Math.trunc(weight / 10) - 1]
+                const graphStyleIndex = (Math.trunc(weight / 10) - 1) % positiveNodeGraphStyle.length;
+                backgroundColor = positiveNodeGraphStyle[graphStyleIndex];
             } else {
-                backgroundColor = negativeNodeGraphStyle[Math.trunc(weight / 10) - 1]
+                const graphStyleIndex = (Math.trunc(weight / 10) - 1) % negativeNodeGraphStyle.length;
+                backgroundColor = negativeNodeGraphStyle[graphStyleIndex]
             }
 
             elements.push({

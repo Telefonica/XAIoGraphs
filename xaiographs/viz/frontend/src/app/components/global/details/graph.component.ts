@@ -94,13 +94,15 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
 
         this.nodeList.forEach((node: any) => {
             const weight = parseFloat(node.node_weight);
+            const weightIndex = (Math.trunc(weight / 10) - 1) % nodeGraphStyle.length;
+
             elements.push({
                 data: {
                     id: node.node_name,
                     label: node.node_name,
                 },
                 style: {
-                    'background-color': nodeGraphStyle[Math.trunc(weight / 10) - 1],
+                    'background-color': nodeGraphStyle[weightIndex],
                     height: weight,
                     width: weight,
                 }
@@ -109,6 +111,8 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
 
         this.edgeList.forEach((edge: any) => {
             const weight = parseFloat(edge.edge_weight);
+            const weightIndex = (Math.trunc(weight / 2)) % edgeGraphStyle.length;
+
             elements.push({
                 data: {
                     id: edge.node_1 + '-' + edge.node_2,
@@ -117,7 +121,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
                 },
                 style: {
                     width: weight,
-                    'line-color': edgeGraphStyle[Math.trunc(weight / 2)],
+                    'line-color': edgeGraphStyle[weightIndex],
                 }
             });
         });
