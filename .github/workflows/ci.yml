@@ -25,11 +25,13 @@ jobs:
 
   test_library_matrix:
 
+    name: Test library
+
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [telefonica]
+        os: [cdorunner-aipro-cicd]
         python: ['3.7']
 
     steps:
@@ -63,7 +65,9 @@ jobs:
 
   test_doc_ci:
 
-    runs-on: telefonica
+    name: Test documentation
+
+    runs-on: [cdorunner-aipro-cicd]
 
     steps:
       - name: Checkout ${{ github.event.inputs.branch || inputs.branch }}
