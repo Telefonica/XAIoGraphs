@@ -54,20 +54,37 @@ export class GlobalFeaturesComponent implements OnInit {
             legend: 'none',
             bar: { groupWidth: "90%" },
             chartArea: { width: '70%', height: '80%' },
+            tooltip: { type: 'string', isHtml: true },
         };
     }
 
     createGraph() {
         let transformDataSet: any[] = [];
 
-        this.columnNames = ['Feature', 'Relevance', { role: 'style' }];
+        this.columnNames = [
+            'Feature',
+            'Relevance',
+            { role: 'style' },
+            { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
+        ];
 
         this.serviceResponse.data.map((node: any, index: number) => {
-            const barStyle = JSON.stringify(featuresGraphStyle[parseFloat(node.feature_weight) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+            const weight = parseFloat(node.feature_weight);
+            const importance = parseFloat(node.feature_importance);
+
+            const barStyle = JSON.stringify(featuresGraphStyle[weight - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
             transformDataSet.push([
                 node.feature_name,
-                parseFloat(node.feature_importance),
-                barStyle
+                importance,
+                barStyle,
+                '<table style="padding:5px; width:150px;"><tr>' +
+                '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + node.feature_name + '</td>' +
+                '</tr><tr>' +
+                '<td colspan="2" style="border-bottom: 1px solid black; margin:10px;"></td>' +
+                '</tr><tr>' +
+                '<td style="font-weight:bold; padding-left: 5px">Importance</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + importance.toFixed(5) + '</td>' +
+                '</tr></table>'
             ]);
         });
 

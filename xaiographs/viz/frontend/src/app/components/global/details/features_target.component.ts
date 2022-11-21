@@ -93,30 +93,73 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
             yAxes: {
                 0: { title: 'parsecs' },
                 1: { title: 'apparent magnitude' }
-            }
+            },
+            tooltip: { type: 'string', isHtml: true },
         };
     }
 
     generateGraph() {
         let transformDataSet: any[] = [];
 
-        this.columnNames = ['Feature', 'Weight', { role: 'style' }, 'Frecuency', { role: 'style' }];
+        this.columnNames = [
+            'Feature',
+            'Weight',
+            { role: 'style' },
+            { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
+            'Frecuency',
+            { role: 'style' },
+            { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
+        ];
 
         this.serviceResponse.forEach((data: any) => {
-            const barStyleIMP = JSON.stringify(featuresImportanceTargetGraphStyle[Math.trunc(parseFloat(data.node_weight) / 10) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
-            const barStyleFREC = JSON.stringify(featuresFrecuencyTargetGraphStyle[Math.trunc(parseFloat(data.node_name_ratio_weight) / 10) - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
+            const importance = parseFloat(data.node_importance);
+            const count = parseInt(data.node_count);
+            const frecuency = parseFloat(data.node_name_ratio);
+
+            const barStyleIMPIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % featuresImportanceTargetGraphStyle.length;
+            const barStyleFRECIndex = (Math.trunc(parseFloat(data.node_name_ratio_weight) / 10) - 1) % featuresFrecuencyTargetGraphStyle.length;
+
+            const barStyleIMP = this.JSONCleaner(featuresImportanceTargetGraphStyle[barStyleIMPIndex]);
+            const barStyleFREC = this.JSONCleaner(featuresFrecuencyTargetGraphStyle[barStyleFRECIndex]);
+
             transformDataSet.push([
                 data.node_name,
-                parseFloat(data.node_importance),
+                importance,
                 barStyleIMP,
-                parseFloat(data.total_count),
-                barStyleFREC
+                '<table style="padding:5px; width:150px;"><tr>' +
+                '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.node_name + '</td>' +
+                '</tr><tr>' +
+                '<td colspan="2" style="border-bottom: 1px solid black; margin:10px;"></td>' +
+                '</tr><tr>' +
+                '<td style="font-weight:bold; padding-left: 5px">Importance</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + importance.toFixed(5) + '</td>' +
+                '</tr></table>',
+                parseFloat(data.node_name_ratio),
+                barStyleFREC,
+                '<table style="padding:5px; width:150px;"><tr>' +
+                '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.node_name + '</td>' +
+                '</tr><tr>' +
+                '<td colspan="2" style="border-bottom: 1px solid black; margin:10px;"></td>' +
+                '</tr><tr>' +
+                '<td style="font-weight:bold; padding-left: 5px">Count</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + count + '</td>' +
+                '</tr><tr>' +
+                '<td style="font-weight:bold; padding-left: 5px">Frecuency</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + (frecuency * 100).toFixed(2) + '%' + '</td>' +
+                '</tr></table>',
             ]);
         });
 
         this.dataGraph = transformDataSet;
     }
 
+    JSONCleaner(value) {
+        return JSON.stringify(value)
+            .replace('{', '')
+            .replace('}', '')
+            .replace(/"/g, '')
+            .replace(/,/g, ';')
+    }
 
     ngOnDestroy(): void {
         this.targetSubscription.unsubscribe();

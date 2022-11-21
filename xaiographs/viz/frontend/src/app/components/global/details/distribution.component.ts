@@ -55,18 +55,39 @@ export class GlobalDistributionComponent implements OnInit {
             pieHole: distributionGraphPieHole,
             slices: distributionGraphStyle,
             chartArea: { width: '90%', height: '80%' },
+            tooltip: { type: 'string', isHtml: true },
         };
     }
 
     createGraph() {
         let transformDataSet: any[] = [];
 
-        this.columnNames = ['Target', 'Percentage'];
+        this.columnNames = [
+            'Target',
+            'Percentage',
+            { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
+        ];
+        const totalCount = this.serviceResponse.data.reduce((accumulator, target) => {
+            return accumulator + parseInt(target.count);
+        }, 0);
 
-        this.serviceResponse.data.map((data: any, index: number) => {
+        this.serviceResponse.data.map((data: any) => {
+            const count = parseInt(data.count);
+
             transformDataSet.push([
                 data.target,
-                parseFloat(data.count)
+                count,
+                '<table style="padding:5px; width:150px;"><tr>' +
+                '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.target + '</td>' +
+                '</tr><tr>' +
+                '<td colspan="2" style="border-bottom: 1px solid black; margin:10px;"></td>' +
+                '</tr><tr>' +
+                '<td style="font-weight:bold; padding-left: 5px">Count</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + count + '</td>' +
+                '</tr><tr>' +
+                '<td style="font-weight:bold; padding-left: 5px">Frecuency</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + (count / totalCount * 100).toFixed(2) + '%' + '</td>' +
+                '</tr></table>',
             ]);
         });
 
