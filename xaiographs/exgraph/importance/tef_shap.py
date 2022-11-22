@@ -5,34 +5,50 @@ from typing import Dict, List, Union
 import numpy as np
 import pandas as pd
 import scipy
-from absl import logging
 from tqdm import tqdm
 
 from xaiographs.common.constants import COUNT, MEAN
-from xaiographs.common.data_access import save_global_target_explained_info
-from xaiographs.exgraph.explainer import Explainer
+from xaiographs.exgraph.importance.importance_calculator import ImportanceCalculator
 
 
-class TefShap(Explainer):
+class TefShap(ImportanceCalculator):
+    """
+    This class implements ImportanceCalculator based on the mathematical Shapley values formula
+    """
     _COALITIONS = 'coalitions'
     _COALITIONS_WEIGHTS = 'coalitions_weights'
     _MODEL = 'model'
     _RES_DICT = 'res_dict'
 
-    def __init__(self, explainer_params: Dict):
+    def __init__(self, explainer_params: Dict, df: pd.DataFrame, sample_ids_mask_2_explain: np.ndarray,
+                 feature_cols: List[str], target_cols: List[str], train_size: float = 0.0,
+                 train_stratify: bool = False):
+        """
+        Constructor method for TefShap ImportanceCalculator
+
+        :param explainer_params:            Dictionary containing potentially useful information for this importance
+                                            calculator
+        :param df:                          Pandas DataFrame used to "train" the calculator
+        :param sample_ids_mask_2_explain:   Numpy array mask, which will be applied to the explanation pandas DataFrame
+                                            right after global explanation is computed
+        :param feature_cols:                List of strings containing the column names for the features
+        :param target_cols:                 List of strings containing all column names identified as target
+        :param train_size:                  Float indicating the percentage of the pandas DataFrame that will be used
+                                            to train the calculator
+        :param train_stratify:              Boolean indicating whether target columns proportions will be taken into
+                                            account when splitting the data (if train_size > 0.0)
+        """
+        super(TefShap, self).__init__(df=df, sample_ids_mask_2_explain=sample_ids_mask_2_explain,
+                                      feature_cols=feature_cols, target_cols=target_cols, train_size=train_size,
+                                      train_stratify=train_stratify)
         self.explainer_params: Dict = explainer_params
 
-    def train(self, df: pd.DataFrame, target_cols: List[str]) -> Dict[str, Dict[str,
-                                                                                Union[Dict, Union[np.ndarray,
-                                                                                                  List[List[str]],
-                                                                                                  List[float]]]]]:
+    def train(self) -> Dict[str, Dict[str, Union[Dict, Union[np.ndarray, List[List[str]], List[float]]]]]:
         """
         This function trains a model by kind of "memorizing" dataset examples, for this reason, df parameter (which
         represents the dataset) must accurately represent the problem domain. It also takes care of generating the list
          of possible coalitions and computing the corresponding weight for each
 
-        :param: df:            A pandas DataFrame used as importance estimator
-        :param: target_cols:   List of strings containing all column names identified as target
         :return:               Dictionary with the following structure and keys:
                                - model: Dictionary with the model column names as keys and the feature values as values
                                - coalitions: Dictionary with the column names as keys and their corresponding lists of
@@ -43,12 +59,14 @@ class TefShap(Explainer):
         """
         start = time.time()
 
-        if target_cols is None:
-            target_cols = Explainer._DEFAULT_TARGET_COLS
+        if self.target_cols is None:
+            target_cols = ImportanceCalculator._DEFAULT_TARGET_COLS
+        else:
+            target_cols = self.target_cols
 
         # The given DataFrame is grouped by its features, COUNT is calculated on the first of the targets in order to
         # know the number of different feature combinations. MEAN is computed on each of the targets
-        model_df = (df.groupby([c for c in list(df.columns) if c not in target_cols])
+        model_df = (self.df_train.groupby([c for c in list(self.df_train.columns) if c not in target_cols])
                     .agg(
             {c: ([COUNT, MEAN] if i == 0 else [MEAN]) for i, c in enumerate(target_cols)})
                     .reset_index())
@@ -68,11 +86,11 @@ class TefShap(Explainer):
         # Now coalitions are computed
         coalitions = {}
         coalitions_weights = {}
-        cols_names = df.columns
+        cols_names = self.df_train.columns
         n_cols = len(cols_names)
 
         # To compute coalitions, only features are taken into account
-        for c in [tmp_c for tmp_c in df.columns if tmp_c not in target_cols]:
+        for c in [tmp_c for tmp_c in self.df_train.columns if tmp_c not in target_cols]:
 
             # In order to compute every possible coalition, for each feature, only the remaining features are taken
             # into account
@@ -82,7 +100,7 @@ class TefShap(Explainer):
             coalitions_weights[c] = [1 / (scipy.special.comb(n_cols - 1 - len(target_cols), len(coalition)) * (
                     n_cols - len(target_cols))) for coalition in coalitions[c]]
 
-        logging.info('Training time: {}'.format(time.time() - start))
+        print('Training time: {}'.format(time.time() - start))
 
         return {
             self._MODEL: model,
@@ -91,8 +109,7 @@ class TefShap(Explainer):
             self._RES_DICT: {}
         }
 
-    def calculate_shapley_values(self, df_aggregated: pd.DataFrame, target_cols: List[str],
-                                 **params) -> Dict[str, np.ndarray]:
+    def calculate_importance_values(self, df_aggregated: pd.DataFrame, **params) -> Dict[str, np.ndarray]:
         """
         This function takes care of calculating the Shapley values. Note that it will do it locally. This means that
         for every row in the aggregated DataFrame, it will calculate the Shapley Values for each of its features.
@@ -106,19 +123,20 @@ class TefShap(Explainer):
         :return:
         """
 
-        if target_cols is None:
-            target_cols = Explainer._DEFAULT_TARGET_COLS
-
+        if self.target_cols is None:
+            target_cols = ImportanceCalculator._DEFAULT_TARGET_COLS
+        else:
+            target_cols = self.target_cols
         res_dict = params[self._RES_DICT]
 
         start = time.time()
 
         shap_values_list = []
-        n_features_combinations = df_aggregated.shape[0]
+        n_rows = df_aggregated.shape[0]
         feature_columns = [col for col in df_aggregated.columns if col not in target_cols]
 
         # For each of the aggregated DataFrame rows
-        pbar = tqdm(range(n_features_combinations))
+        pbar = tqdm(range(n_rows))
         for i in pbar:
             if (i > 0) and (i % 100 == 0):
                 pbar.set_description('Progress: row {}'.format(i))
@@ -144,7 +162,7 @@ class TefShap(Explainer):
             # Shapley values for all the rows
             shap_values_list.append(shap_values)
 
-        logging.info('Computation time: {}'.format(time.time() - start))
+        print('Computation time: {}'.format(time.time() - start))
 
         shapley_values = np.array(shap_values_list)
 
@@ -155,19 +173,13 @@ class TefShap(Explainer):
         # Data is formatted for the sanity check
         y_hat_reduced = res_dict[str({})] + np.sum(shapley_values, axis=1)
         y = df_aggregated[target_cols].values
-        Explainer.sanity_check(ground_truth=y, prediction=y_hat_reduced, target_cols=target_cols, scope='aggregated')
+        ImportanceCalculator.sanity_check(ground_truth=y, prediction=y_hat_reduced, target_cols=target_cols,
+                                          scope='aggregated')
 
         return {
             TefShap._PHI0: res_dict[str({})],
-            TefShap._SHAPLEY_VALUES: shapley_values,
+            TefShap._IMPORTANCE_VALUES: shapley_values,
         }
-
-    def global_explain(self, feature_cols: List[str], target_cols: List[str], **params):
-        df_global_explain = np.abs(params[TefShap._SHAPLEY_VALUES]).mean(axis=0)
-        save_global_target_explained_info(df_shapley_values=params[TefShap._SHAPLEY_VALUES], feature_cols=feature_cols,
-                                          target_cols=target_cols, top1_targets=params[TefShap._TOP1_TARGET].tolist())
-
-        return df_global_explain
 
     @staticmethod
     def __get_coalitions(columns: List[str]) -> List[List[str]]:
@@ -209,6 +221,7 @@ class TefShap(Explainer):
         #  del target (probabilidad del target sobre el dataset). ¿Sería mejor hacer un blend que tenga en cuenta el
         #  a priori y el a posterori? Esto cubriría todas las casuísticas
         counts = model[COUNT][cond]
+        np.seterr('raise')
         return np.array([np.sum(counts * model[target_col][cond]) / np.sum(counts) for target_col in target_cols])
 
     @staticmethod
@@ -258,7 +271,7 @@ class TefShap(Explainer):
                              univocally represents a coalition and value a float representing the coalition worth
         :param: target_cols: String representing the name of the target column
 
-        :return:             Float representing the contribution to the Shapley Value of the current coalition
+        :return:             Numpy arrau representing the contribution to the Shapley Value of the current coalition
         """
         return weight * (TefShap.__coalition_worth(x=x, coalition=coalition + [col], model=model, res_dict=res_dict,
                                                    target_cols=target_cols) -

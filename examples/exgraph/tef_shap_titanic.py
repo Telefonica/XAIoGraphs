@@ -1,10 +1,7 @@
-import itertools
-
 from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
-from absl import logging
 from sklearn.compose import ColumnTransformer
 from sklearn.datasets import fetch_openml
 from sklearn.ensemble import RandomForestClassifier
@@ -13,20 +10,14 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
-from xaiographs.common.constants import BIN_WIDTH_EDGE_WEIGHT, COUNT, EDGE_WEIGHT, ID, MIN_EDGE_WEIGHT, MAX_EDGE_WEIGHT,\
-    N_BINS_EDGE_WEIGHT, NODE_1, NODE_2, TARGET
-from xaiographs.common.data_access import persist_sample, sample_by_target
-from xaiographs.exgraph.tef_shap import TefShap
+from xaiographs.common.constants import ID, TARGET
+from xaiographs.exgraph.explainer.explainer import Explainer
+
 
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
 CONT_COLUMN_NAMES = ['age', 'fare']
 QUANTILE_SIZE = 10
 TAR_COLUMN_NAMES = [TARGET]
-
-"""
-This process illustrates the end to end usage of XAIoGraphs from the bare Titanic dataset to the exportation of the 
-retrieved explainability information so that it can be displayed 
-"""
 
 
 def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
@@ -39,8 +30,8 @@ def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
     :return:             Pandas DataFrame containing the preprocessed data so that it's suitable for training a Machine
                          Learning model
                          List of strings providing the names of the definitive categorical features, which may be
-                         recalculated depending on which categorical feature will be considered as target (defaul target
-                          is 'survived')
+                         recalculated depending on which categorical feature will be considered as target (default
+                          target is 'survived')
     """
     # A random seed is fixed so that results are reproducible from one execution to another
     np.random.seed(42)
@@ -95,7 +86,7 @@ def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
     else:
         new_cat_column_names = CAT_COLUMN_NAMES.copy()
 
-    logging.info('Target to be predicted for Titanic example: {}'.format(target_col))
+    print('INFO: Target to be predicted for Titanic example: {}'.format(target_col))
     df_train = pd.DataFrame(df_train[CONT_COLUMN_NAMES + new_cat_column_names + TAR_COLUMN_NAMES].values,
                             columns=CONT_COLUMN_NAMES + new_cat_column_names + TAR_COLUMN_NAMES)
 
@@ -106,13 +97,13 @@ def discretize_titanic(titanic_prediction: pd.DataFrame, target_cols: List[str],
                        cat_col_names: List[str]) -> pd.DataFrame:
     """
     This functions takes care of discretizing all continuous variables within the dataset of analyze, to fulfill
-    the Explainer requirements
+    the ImportanceCalculator requirements
 
     :param: titanic_prediction:  A pandas DataFrame to be explained. Its continuous features are not discretized
     :param: target_cols:         List of strings containing all column names identified as target
     :param: cat_col_names:       List of strings containing all column names to be considered categorical
     :return:                     Pandas DataFrame to be explained. But now its continuous features have been
-                                 discretized and the DataFrame is ready for the Explainer
+                                 discretized and the DataFrame is ready for the ImportanceCalculator
     """
 
     # Continuous features are retrieved
@@ -185,7 +176,7 @@ def random_forest_titanic(titanic_cooked: pd.DataFrame, cat_col_names: List[str]
     model = RandomForestClassifier()
     model.fit(df_train_features.values, df_train_target.values)
     pre_prediction = model.predict(df_train_features.values)
-    logging.info('Train accuracy: {:.4f}'.format(accuracy_score(df_train_target.values, pre_prediction)))
+    print('INFO: Train accuracy: {:.4f}'.format(accuracy_score(df_train_target.values, pre_prediction)))
 
     # Target column is replaced in the ORIGINAL dataset (not the one with the dummy variables) by the prediction column
     rf_predict = titanic_cooked.drop([TARGET], axis=1)
@@ -235,7 +226,6 @@ def prepare_titanic(target_col: str = 'survived') -> Tuple[pd.DataFrame, List[st
 
 
 def main():
-    logging.set_verbosity(logging.INFO)
     df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic(target_col='pclass')
 
     # This next step consists on;
@@ -243,77 +233,14 @@ def main():
     # - Categorical feature cleansing/dimensionality reduction (neither os these are necessary for Titanic dataset)
     # Right now, this step falls also on the user's side. However at some point the library might also take care of it
     # Right now, it is necessary that headers consist only of strings
-    titanic_2_explain = discretize_titanic(titanic_prediction=df_titanic_cooked, target_cols=target_cols,
-                                           cat_col_names=final_cat_col_names)
+    df_titanic = discretize_titanic(titanic_prediction=df_titanic_cooked, target_cols=target_cols,
+                                    cat_col_names=final_cat_col_names)
 
-    ######################################################################################################
-    # Cálculo de estadísticos
-    # Sobre df_2_explain: target_distribution.csv group by count por target_cols
-    # if target_distribution.csv must be generated the following steps must be followed
-    df_2_explain = titanic_2_explain.copy()
-    pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1),
-                                 np.sum(df_2_explain[target_cols].values, axis=0).reshape(-1, 1)) , axis=1),
-                 columns=[TARGET, COUNT]).to_csv(
-        '/home/cx02747/Utils/global_target_distribution.csv', sep=',', index=False)
+    # The desired explainer is created
+    explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', destination_path='/home/cx02747/Utils/')
 
-    # if global_graph_edges.csv must be generated the following steps must be followed
-    float_feature_cols = df_2_explain[feature_cols].select_dtypes(include='float')
-    for feature_col in feature_cols:
-        if feature_col in float_feature_cols:
-            df_2_explain[feature_col] = feature_col + '_' + df_2_explain[feature_col].apply(
-                "{:.02f}".format).map(str)
-        else:
-            df_2_explain[feature_col] = feature_col + '_' + df_2_explain[feature_col].map(str)
-
-    top1_argmax = np.argmax(df_2_explain[target_cols].values, axis=1)
-    top1_target = np.array([target_cols[am] for am in top1_argmax])
-    target_probs = np.round(np.sum(df_2_explain[target_cols].values, axis=0) / len(df_2_explain), decimals=2)
-    sample_ids = sample_by_target(df_2_explain[ID].values, top1_target, num_samples=100, target_probs=target_probs,
-                                  target_cols=target_cols)
-    df_2_explain[TARGET] = top1_target
-    feature_cols_combinations = itertools.combinations(feature_cols, 2)
-    df_global_graph_edges_list = []
-    df_local_graph_edges_list = []
-    for feature_cols_tuple in feature_cols_combinations:
-        feature_cols_pair = list(feature_cols_tuple)
-        df_local_graph_edges_list.append(df_2_explain[[ID, TARGET] + feature_cols_pair].rename(
-                columns={feature_cols_pair[0]: NODE_1, feature_cols_pair[1]: NODE_2}))
-        df_global_graph_edges_list.append(
-            df_2_explain[[TARGET] + feature_cols_pair].value_counts().reset_index(name=COUNT).rename(
-                columns={feature_cols_pair[0]: NODE_1, feature_cols_pair[1]: NODE_2}))
-
-    df_global_graph_edges = pd.concat(df_global_graph_edges_list).sort_values(by=[TARGET, NODE_1, NODE_2]).reset_index(
-        drop=True)
-    df_global_graph_edges[EDGE_WEIGHT] = pd.cut(df_global_graph_edges[COUNT], bins=N_BINS_EDGE_WEIGHT,
-                                                labels=range(MIN_EDGE_WEIGHT, MAX_EDGE_WEIGHT + BIN_WIDTH_EDGE_WEIGHT))
-    df_global_graph_edges.to_csv('/home/cx02747/Utils/global_graph_edges.csv', sep=',',
-                                 index=False)
-    df_local_graph_edges_wo_weight = pd.concat(df_local_graph_edges_list).sort_values(
-        by=[ID, NODE_1, NODE_2]).reset_index(drop=True)
-    df_local_graph_edges = df_local_graph_edges_wo_weight.merge(df_global_graph_edges, how='left', on=[TARGET, NODE_1,
-                                                                                                       NODE_2])
-    persist_sample(df=df_local_graph_edges, sample_ids=sample_ids, path='/home/cx02747/Utils/local_graph_edges.csv')
-    ######################################################################################################
-    # From here, the Explainer main flow starts
-    # TEF_SHAP explainer is instantiated
-    explainer = TefShap(explainer_params={})
-
-    # Explainer is trained here. Just like in Machine Learning, the dataset must accurately represent the problem domain
-    # to obtain valid results
-    explainer_trained = explainer.train(titanic_2_explain.drop(ID, axis=1), target_cols=target_cols)
-
-    # The trained Explainer is used to provide local explainability. In this case the dataset to train and to explain
-    # are identical. However, this isn't always the case. They can be different
-    local_explanation = explainer.local_explain(df_2_explain=titanic_2_explain, target_cols=target_cols,
-                                                sample_ids=sample_ids,  **explainer_trained)
-
-    # Usamos el explainer para generar la información global (tantos números como features)
-    global_explanation = explainer.global_explain(feature_cols=feature_cols, target_cols=target_cols,
-                                                  **local_explanation)
-    ####################################################################################################################
-    # EXPORTACIÓN DE LOS DATOS CALCULADOS PARA SU VISUALIZACIÓN WEB
-    ####################################################################################################################
-    # TODO: Exportar toda la información generado a CSV para su visualización web
+    # Explaining process is triggered
+    explainer.explain(feature_cols=feature_cols, target_cols=target_cols)
 
 
 if __name__ == '__main__':
