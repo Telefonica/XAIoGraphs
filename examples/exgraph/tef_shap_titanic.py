@@ -11,7 +11,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
 from xaiographs.common.constants import ID, TARGET
+from xaiographs.common.utils import get_common_info
 from xaiographs.exgraph.explainer.explainer import Explainer
+from xaiographs.exgraph.feature_selector.feature_selector import FeatureSelector
 
 
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
@@ -235,6 +237,14 @@ def main():
     # Right now, it is necessary that headers consist only of strings
     df_titanic = discretize_titanic(titanic_prediction=df_titanic_cooked, target_cols=target_cols,
                                     cat_col_names=final_cat_col_names)
+
+    # Common information relative features and target is collected. This will be used all through the execution flow
+    features_info, target_info = get_common_info(df=df_titanic, feature_cols=feature_cols, target_cols=target_cols)
+
+    selector = FeatureSelector(df=df_titanic, feature_cols=features_info.feature_columns,
+                               target_info=target_info, number_of_features=4)
+    selector.select_topk()
+    exit(0)
 
     # The desired explainer is created
     explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', destination_path='/home/cx02747/Utils/')
