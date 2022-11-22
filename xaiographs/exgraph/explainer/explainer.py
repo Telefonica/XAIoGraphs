@@ -59,7 +59,6 @@ class Explainer(object):
                                                                              sample_ids_mask_2_explain=sample_ids_mask,
                                                                              feature_cols=features_info.feature_columns,
                                                                              target_cols=target_info.target_columns,
-                                                                             train_size=0.8,
                                                                              train_stratify=True)
 
         top1_importance_features, global_explainability, global_nodes_importance, df_explanation_sample = (
