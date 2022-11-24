@@ -1,5 +1,3 @@
-from typing import Dict
-
 from xaiographs.exgraph.importance.tef_shap import TefShap
 
 
@@ -20,8 +18,8 @@ class ImportanceCalculatorFactory(object):
         :return:                             ImportanceCalculator object of the requested type
         """
         if name == self.TEF_SHAP:
-            print('INFO:  {} importance calculator will be instantiated'.format(name))
+            print('INFO: {} importance calculator will be instantiated'.format(name))
             return TefShap(**importance_calculator_params)
         else:
-            print('ERROR: {} is not a valid importance calculator!!'.format(name))
+            print('ERROR:{} is not a valid importance calculator!!'.format(name))
             return None

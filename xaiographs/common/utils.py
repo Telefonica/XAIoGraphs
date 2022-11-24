@@ -106,7 +106,7 @@ def get_features_info(df: pd.DataFrame, feature_cols: List[str], target_cols: Li
 
     #   List of strings names with float type is necessary since a special preprocessing is required in order
     # to generate there associated 'feature_value' node names
-    float_feature_cols = list(df.select_dtypes(include='float').columns)
+    float_feature_cols = list(df[feature_cols].select_dtypes(include='float').columns)
 
     return FeaturesInfo(feature_columns=feature_cols, float_feature_columns=float_feature_cols,
                         importance_columns=importance_columns, quality_measure_columns=quality_measure_columns)
@@ -185,9 +185,9 @@ def sample_by_target(ids: np.ndarray, top1_targets: np.ndarray, num_samples: int
     for target_prob, target_col_value in zip(target_probs, target_cols):
         n_samples_by_target = int(num_samples * target_prob)
         sample_ids += df_ids_target[df_ids_target[target_col] == target_col_value][ID].sample(
-            n=n_samples_by_target).values.tolist()
+            n=n_samples_by_target, random_state=42).values.tolist()
 
     # IDs which will be used as sample are turned into a boolean mask
     sample_ids_mask = np.isin(df_ids_target[ID].values, sample_ids)
-
+    print(sample_ids)
     return sample_ids_mask, sample_ids
