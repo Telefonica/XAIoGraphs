@@ -1,0 +1,77 @@
+target,feature,reason
+non-survivors,sex_male,han muerto muchos hombres
+non-survivors,sex_female,ser mujer
+non-survivors,pclass_1.00,pocos viajar en 1ª clase
+non-survivors,pclass_2.00,algunos viajar en 2ª clase
+non-survivors,pclass_3.00,muchos viajar en 3ª clase
+non-survivors,embarked_S,muchos embarcaron en Southampton
+non-survivors,embarked_Q,algunos embarcaron en Queenstown
+non-survivors,embarked_C,pocos embarcaron en Cherbourg
+non-survivors,fare_0.05,pagaron poco por el billete
+non-survivors,fare_0.15,pagaron poco por el billete
+non-survivors,fare_0.25,pagaron poco por el billete
+non-survivors,fare_0.35,pagaron un billete de coste intermedio
+non-survivors,fare_0.45,pagaron un billete de coste intermedio
+non-survivors,fare_0.55,pagaron un billete de coste intermedio
+non-survivors,fare_0.65,pagaron un billete de coste intermedio
+non-survivors,fare_0.75,pagaron mucho por el billete
+non-survivors,fare_0.85,pagaron mucho por el billete
+non-survivors,fare_0.95,pagaron mucho por el billete
+non-survivors,family_size_1.00,eran de una familia de pocos miembros
+non-survivors,family_size_2.00,eran de una familia de pocos miembros
+non-survivors,family_size_3.00,eran de familia numerosa
+non-survivors,family_size_4.00,eran de familia numerosa
+non-survivors,family_size_5.00,eran de familia numerosa
+non-survivors,family_size_6.00,eran de una familia de muchos miembros
+non-survivors,family_size_7.00,eran de una familia de muchos miembros
+non-survivors,family_size_10.00,eran de una familia de muchos miembros
+non-survivors,age_0.05,eran niños
+non-survivors,age_0.15,eran adolescentes
+non-survivors,age_0.25,eran jovenes
+non-survivors,age_0.35,eran jovenes
+non-survivors,age_0.45,eran adultos
+non-survivors,age_0.55,eran adultos
+non-survivors,age_0.65,eran mayores
+non-survivors,age_0.75,eran mayores
+non-survivors,age_0.85,eran muy mayores
+non-survivors,age_0.95,eran muy mayores
+non-survivors,age_1.05,eran excepcionalmente mayores
+non-survivors,is_alone_1.00,viajaban solos
+survivors,sex_male,sobrevivieron pocos hombres
+survivors,sex_female,sobrevivieron muchas mujeres
+survivors,pclass_1.00,muchos viajaban en 1ª clase
+survivors,pclass_2.00,algunos viajaban en 2ª clase
+survivors,pclass_3.00,pocos viajaban en 3ª clase
+survivors,embarked_S,pocos embarcaron en Southampton
+survivors,embarked_Q,algunos embarcaron en Queenstown
+survivors,embarked_C,muchos embarcaron en Cherbourg
+survivors,fare_0.05,pagaron poco por el billete
+survivors,fare_0.15,pagaron poco por el billete
+survivors,fare_0.25,pagaron poco por el billete
+survivors,fare_0.35,pagaron un billete de coste intermedio
+survivors,fare_0.45,pagaron un billete de coste intermedio
+survivors,fare_0.55,pagaron un billete de coste intermedio
+survivors,fare_0.65,pagaron un billete de coste intermedio
+survivors,fare_0.75,pagaron mucho por el billete
+survivors,fare_0.85,pagaron mucho por el billete
+survivors,fare_0.95,pagaron mucho por el billete
+survivors,family_size_1.00,eran de una familia de pocos miembros
+survivors,family_size_2.00,eran de una familia de pocos miembros
+survivors,family_size_3.00,eran de familia numerosa
+survivors,family_size_4.00,eran de familia numerosa
+survivors,family_size_5.00,eran de familia numerosa
+survivors,family_size_6.00,eran de una familia de muchos miembros
+survivors,family_size_7.00,eran de una familia de muchos miembros
+survivors,family_size_10.00,eran de una familia de muchos miembros
+survivors,age_0.05,eran niños
+survivors,age_0.15,eran adolescentes
+survivors,age_0.25,eran jovenes
+survivors,age_0.35,eran jovenes
+survivors,age_0.45,eran adultos
+survivors,age_0.55,eran adultos
+survivors,age_0.65,eran mayores
+survivors,age_0.75,eran mayores
+survivors,age_0.85,eran muy mayores
+survivors,age_0.95,eran muy mayores
+survivors,age_1.05,eran excepcionalmente mayores
+survivors,is_alone_1.00,viajaba solo
