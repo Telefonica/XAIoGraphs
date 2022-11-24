@@ -10,11 +10,10 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
-from xaiographs.common.constants import ID, TARGET
-from xaiographs.common.utils import get_common_info
+from xaiographs.common.constants import ID, TARGET, RCAT, RNUM
+from xaiographs.common.utils import get_common_info, get_features_info
 from xaiographs.exgraph.explainer.explainer import Explainer
 from xaiographs.exgraph.feature_selector.feature_selector import FeatureSelector
-
 
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
 CONT_COLUMN_NAMES = ['age', 'fare']
@@ -96,16 +95,18 @@ def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
 
 
 def discretize_titanic(titanic_prediction: pd.DataFrame, target_cols: List[str],
-                       cat_col_names: List[str]) -> pd.DataFrame:
+                       cat_col_names: List[str], include_random_features: bool = False) -> pd.DataFrame:
     """
     This functions takes care of discretizing all continuous variables within the dataset of analyze, to fulfill
     the ImportanceCalculator requirements
 
-    :param: titanic_prediction:  A pandas DataFrame to be explained. Its continuous features are not discretized
-    :param: target_cols:         List of strings containing all column names identified as target
-    :param: cat_col_names:       List of strings containing all column names to be considered categorical
-    :return:                     Pandas DataFrame to be explained. But now its continuous features have been
-                                 discretized and the DataFrame is ready for the ImportanceCalculator
+    :param titanic_prediction:      A pandas DataFrame to be explained. Its continuous features are not discretized
+    :param target_cols:             List of strings containing all column names identified as target
+    :param cat_col_names:           List of strings containing all column names to be considered categorical
+    :param include_random_features: Boolean flag indicating whether two random features (one categorical and one
+                                    continuous) are created to test topk feature selection
+    :return:                        Pandas DataFrame to be explained. But now its continuous features have been
+                                    discretized and the DataFrame is ready for the ImportanceCalculator
     """
 
     # Continuous features are retrieved
@@ -129,9 +130,15 @@ def discretize_titanic(titanic_prediction: pd.DataFrame, target_cols: List[str],
 
     # A DataFrame with the continuous features discretized is returned. Typing is coerced for certain features
     # The provided dataset it is assumed to have an ID, so here the index is used to simulate that ID
-    return df_2_explain.astype(
+    df_2_explain = df_2_explain.astype(
         {**{'is_alone': 'float'}, **{target_col: 'float' for target_col in target_cols}}).reset_index().rename(
         columns={'index': ID})
+
+    if include_random_features:
+        df_2_explain[RCAT] = np.random.randint(3, size=df_2_explain.shape[0]).astype(dtype=np.float32)
+        df_2_explain[RNUM] = np.random.randint(50, size=df_2_explain.shape[0]).astype(dtype=np.float32)
+
+    return df_2_explain
 
 
 def random_forest_titanic(titanic_cooked: pd.DataFrame, cat_col_names: List[str]):
@@ -228,29 +235,41 @@ def prepare_titanic(target_col: str = 'survived') -> Tuple[pd.DataFrame, List[st
 
 
 def main():
+    # This is a temporary flag to test feature selection. When True, two random features are created expecting them to
+    # be later discardes by the topk feature selector
+    include_random_features = False
     df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic(target_col='pclass')
 
-    # This next step consists on;
+    # This next step consists on:
     # - Continuous features discretization
     # - Categorical feature cleansing/dimensionality reduction (neither os these are necessary for Titanic dataset)
     # Right now, this step falls also on the user's side. However at some point the library might also take care of it
     # Right now, it is necessary that headers consist only of strings
     df_titanic = discretize_titanic(titanic_prediction=df_titanic_cooked, target_cols=target_cols,
-                                    cat_col_names=final_cat_col_names)
+                                    cat_col_names=final_cat_col_names, include_random_features=include_random_features)
+
+    if include_random_features:
+        print("INFO: Two random variables 'rcat' y 'rnum' are computed to test the FeatureSelector")
+        feature_cols.extend([RCAT, RNUM])
 
     # Common information relative features and target is collected. This will be used all through the execution flow
     features_info, target_info = get_common_info(df=df_titanic, feature_cols=feature_cols, target_cols=target_cols)
 
     selector = FeatureSelector(df=df_titanic, feature_cols=features_info.feature_columns,
-                               target_info=target_info, number_of_features=4)
-    selector.select_topk()
-    exit(0)
+                               target_info=target_info, number_of_features=8)
+    topk_features = selector.select_topk()
+
+    # Dataset must be rebuild by selecting the topk features, the ID and the target columns
+    df_titanic = df_titanic[[ID] + topk_features + target_cols]
+
+    # Since feature columns have changed, information related to features must be generated again
+    features_info = get_features_info(df=df_titanic, feature_cols=topk_features, target_cols=target_cols)
 
     # The desired explainer is created
     explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', destination_path='/home/cx02747/Utils/')
 
     # Explaining process is triggered
-    explainer.explain(feature_cols=feature_cols, target_cols=target_cols)
+    explainer.explain(feature_cols=features_info.feature_columns, target_cols=target_cols)
 
 
 if __name__ == '__main__':
