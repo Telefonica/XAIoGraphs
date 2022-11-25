@@ -237,8 +237,8 @@ def prepare_titanic(target_col: str = 'survived') -> Tuple[pd.DataFrame, List[st
 def main():
     # This is a temporary flag to test feature selection. When True, two random features are created expecting them to
     # be later discardes by the topk feature selector
-    include_random_features = False
-    df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic(target_col='pclass')
+    include_random_features = True
+    df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic()
 
     # This next step consists on:
     # - Continuous features discretization

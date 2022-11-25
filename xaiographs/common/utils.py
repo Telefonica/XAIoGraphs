@@ -189,5 +189,5 @@ def sample_by_target(ids: np.ndarray, top1_targets: np.ndarray, num_samples: int
 
     # IDs which will be used as sample are turned into a boolean mask
     sample_ids_mask = np.isin(df_ids_target[ID].values, sample_ids)
-    print(sample_ids)
+
     return sample_ids_mask, sample_ids
