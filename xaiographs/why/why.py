@@ -4,7 +4,7 @@ from string import Template
 from typing import Any, List, Tuple, Union
 
 from xaiographs.common.constants import FEATURE, LANG_EN, LANG_ES, NODE_IMPORTANCE, NODE_NAME, QUALITY_MEASURE, RAND
-from xaiographs.common.constants import REASON, TARGET
+from xaiographs.common.constants import RANK, REASON, TARGET, WHY
 
 
 class Why(object):
@@ -66,9 +66,12 @@ class Why(object):
         i_list = [Template.delimiter + i for i in (items if isinstance(items, list) else list(items))]
         return (sep.join(i_list[:-1]) + sep_last + i_list[-1]) if len(i_list) > 1 else i_list[0]
 
-    def get_reason_why(self, key_column: str, key_value: Any, template_index: Union[str, int] = RAND) -> str:
+    def build_why(self, key_column: str, key_value: Any = None, template_index: Union[str, int] = RAND) -> Union[
+                  pd.DataFrame, str]:
         """
-        Get the sentence with the reason why a given case has been assigned a label
+        In case the argument `key_value` id None, builds a DataFrame with the sentences of the reason why each case has
+        been assigned a label; otherwise, simply gets the sentence with the reason why a given case has been assigned a
+        label
 
         :param key_column: Name of the column that holds the primary key
         :param key_value: Value to select from the column specified in argument `key_column`
@@ -76,49 +79,66 @@ class Why(object):
             in `why_templates` attribute; please note that: (1) index 0 is reserved for the default template, (2) if the
             requested index is greater than the last available one, the latter will be provided. Defaults to 'rand'
             (random selection excluding index 0)
-        :return: String with the final sentence for the requested case
+        :return: Either a Pandas DataFrame with one sentence per case or a string with the final sentence for the
+            requested case
         :raises ValueError: Raises an exception either when the requested key does not exist or when there are more
             than one row for the requested key
         """
-        # Check case existence
-        qm_row = self.quality_measure[self.quality_measure[key_column] == key_value]
-        if qm_row.shape[0] == 0:
-            raise ValueError("Value {} does not exist in column \'{}\'".format(key_value, key_column))
-        elif qm_row.shape[0] > 1:
-            raise ValueError("More than one row with value {} in column \'{}\'".format(key_value, key_column))
-
-        # Check the quality of the explainability values
-        quality = qm_row[QUALITY_MEASURE].loc[0]
-        if quality < self.min_quality:
-            # First non-commented line of the templates file must be the default sentence when the quality measure
-            # is below the given threshold
-            return self.why_templates.iloc[0, 0]
+        # Check case existence if a single case is requested
+        if key_value is None:
+            local_expl = self.local_expl
+        else:
+            local_expl = self.local_expl[self.local_expl[key_column] == key_value]
+            if local_expl.shape[0] == 0:
+                raise ValueError("Value {} does not exist in column \'{}\'".format(key_value, key_column))
+            elif local_expl.shape[0] > 1:
+                raise ValueError("More than one row with value {} in column \'{}\'".format(key_value, key_column))
 
         # Build a dataframe with all the case information
-        df = (self.local_expl[self.local_expl[key_column] == key_value][[key_column, TARGET]]
-              .merge(self.local_nodes[self.local_nodes[key_column] == key_value]
-                                     [[key_column, NODE_NAME, NODE_IMPORTANCE]],
-                     on=key_column, how='inner')
+        df = (local_expl[[key_column, TARGET]]
+              .merge(self.local_nodes[[key_column, NODE_NAME, NODE_IMPORTANCE]], on=key_column, how='inner')
               .merge(self.why_elements.rename(columns={FEATURE: NODE_NAME}), on=NODE_NAME, how='inner')
               .merge(self.why_target.rename(columns={FEATURE: NODE_NAME}),
                      on=[TARGET, NODE_NAME], how='inner', suffixes=['_' + self._LOCAL, '_' + self._GLOBAL])
-              .sort_values(by=NODE_IMPORTANCE, ascending=False))
+              .merge(self.quality_measure[[key_column, QUALITY_MEASURE]], on=key_column, how='left'))
+        df[RANK] = df.groupby(key_column)[NODE_IMPORTANCE].rank(method='dense', ascending=False).astype(int)
 
-        # Build why sentence
-        kw_local = dict([('v_' + self._LOCAL + '_' + str(i), v) for i, v in
-                         enumerate(df[REASON + '_' + self._LOCAL].iloc[:self.n_local_features])])
-        kw_global = dict([('v_' + self._GLOBAL + '_' + str(i), v) for i, v in
-                          enumerate(df[REASON + '_' + self._GLOBAL].iloc[:self.n_global_features])])
-        temp_local_explain = self.__build_template(items=list(kw_local))
-        temp_global_explain = self.__build_template(items=list(kw_global))
+        max_n_features = max(self.n_local_features, self.n_global_features)
+        df_rank = df[df[RANK] <= max_n_features]
 
-        temp_idx_max = self.why_templates.shape[0] - 1
-        temp_idx = random.randint(1, temp_idx_max) if template_index == RAND else min(template_index, temp_idx_max)
-        temp_why_str = (Template(Template(self.why_templates.iloc[temp_idx, 0])
-                                 .substitute(temp_local_explain=temp_local_explain,
-                                             temp_global_explain=temp_global_explain,
-                                             target=df[TARGET].iloc[0]))
-                        .substitute(**kw_local, **kw_global)
-                        .capitalize())
+        def get_single_why(df_single: pd.DataFrame) -> str:
+            """
+            Builds a sentence with the reason why a single case has been assigned a label
 
-        return temp_why_str
+            :param df_single: Pandas DataFrame with the nodes associated to the selected case
+            :return: String with the final sentence for the requested case
+            """
+            # Check the quality of the explainability values
+            r = df_single.head(1)
+            quality = r[QUALITY_MEASURE].values[0]
+            if quality < self.min_quality:
+                return self.why_templates.iloc[0, 0]
+
+            # Build why sentence
+            kw_local = dict([('v_' + self._LOCAL + '_' + str(i), v) for i, v in
+                             enumerate(df_single[REASON + '_' + self._LOCAL].iloc[:self.n_local_features])])
+            kw_global = dict([('v_' + self._GLOBAL + '_' + str(i), v) for i, v in
+                              enumerate(df_single[REASON + '_' + self._GLOBAL].iloc[:self.n_global_features])])
+            temp_local_explain = self.__build_template(items=list(kw_local))
+            temp_global_explain = self.__build_template(items=list(kw_global))
+
+            temp_idx_max = self.why_templates.shape[0] - 1
+            temp_idx = random.randint(1, temp_idx_max) if template_index == RAND else min(template_index, temp_idx_max)
+            temp_why_str = (Template(Template(self.why_templates.iloc[temp_idx, 0])
+                                     .substitute(temp_local_explain=temp_local_explain,
+                                                 temp_global_explain=temp_global_explain,
+                                                 target=df[TARGET].iloc[0]))
+                            .substitute(**kw_local, **kw_global)
+                            .capitalize())
+            return temp_why_str
+
+        df_final = df_rank.groupby(key_column).apply(get_single_why).to_frame(WHY).reset_index()
+        if key_value is None:
+            return df_final
+        else:
+            return df_final[WHY].values[0]
