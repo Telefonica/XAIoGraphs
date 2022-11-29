@@ -118,4 +118,4 @@ jobs:
         - name: Clean up workspace
           run: |
             rm -rf "${{ github.workspace }}"
-            rm -r /home/$USER/*
+#            rm -r /home/$USER/*
