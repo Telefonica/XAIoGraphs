@@ -103,3 +103,19 @@ jobs:
             echo "Documentation Test Failed.";
             exit 1;
           fi
+
+  clean_environment:
+
+      name: "Clean environment"
+
+      if: ${{ always() }}
+
+      needs: [ test_library_matrix, test_doc_ci ]
+
+      runs-on: cdorunner-aipro-cicd
+
+      steps:
+        - name: Clean up workspace
+          run: |
+            rm -rf "${{ github.workspace }}"
+#            rm -r /home/$USER/*
