@@ -4,7 +4,7 @@ from string import Template
 from typing import Any, List, Tuple, Union
 
 from xaiographs.common.constants import FEATURE, LANG_EN, LANG_ES, NODE_IMPORTANCE, NODE_NAME, QUALITY_MEASURE, RAND
-from xaiographs.common.constants import RANK, REASON, TARGET, WHY
+from xaiographs.common.constants import RANK, REASON, TARGET
 
 
 class Why(object):
@@ -132,13 +132,13 @@ class Why(object):
             temp_why_str = (Template(Template(self.why_templates.iloc[temp_idx, 0])
                                      .substitute(temp_local_explain=temp_local_explain,
                                                  temp_global_explain=temp_global_explain,
-                                                 target=df[TARGET].iloc[0]))
+                                                 target=df_single[TARGET].iloc[0]))
                             .substitute(**kw_local, **kw_global)
                             .capitalize())
             return temp_why_str
 
-        df_final = df_rank.groupby(key_column).apply(get_single_why).to_frame(WHY).reset_index()
+        df_final = df_rank.groupby(key_column).apply(get_single_why).to_frame(REASON).reset_index()
         if key_value is None:
             return df_final
         else:
-            return df_final[WHY].values[0]
+            return df_final[REASON].values[0]

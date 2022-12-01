@@ -1,0 +1,39 @@
+feature,reason
+sex_male,ser hombre
+sex_female,ser mujer
+pclass_1.00,viajar en 1ª clase
+pclass_2.00,viajar en 2ª clase
+pclass_3.00,viajar en 3ª clase
+embarked_S,embarcar en un pueblo de clase baja
+embarked_Q,embarcar en un pueblo de clase media
+embarked_C,embarcar en un pueblo de clase alta
+fare_0.05,pagar poco por el billete
+fare_0.15,pagar poco por el billete
+fare_0.25,pagar poco por el billete
+fare_0.35,pagar un billete de coste intermedio
+fare_0.45,pagar un billete de coste intermedio
+fare_0.55,pagar un billete de coste intermedio
+fare_0.65,pagar un billete de coste intermedio
+fare_0.75,pagar mucho por el billete
+fare_0.85,pagar mucho por el billete
+fare_0.95,pagar mucho por el billete
+family_size_1.00,ser una familia de pocos miembros
+family_size_2.00,ser una familia de pocos miembros
+family_size_3.00,ser familia numerosa
+family_size_4.00,ser familia numerosa
+family_size_5.00,ser familia numerosa
+family_size_6.00,ser una familia de muchos miembros
+family_size_7.00,ser una familia de muchos miembros
+family_size_10.00,ser una familia de muchos miembros
+age_0.05,ser un niño
+age_0.15,ser un adolescente
+age_0.25,ser joven
+age_0.35,ser joven
+age_0.45,ser adulto
+age_0.55,ser adulto
+age_0.65,ser una persona mayor
+age_0.75,ser una persona mayor
+age_0.85,ser una persona muy mayor
+age_0.95,ser una persona muy mayor
+age_1.05,ser una persona muy mayor
+is_alone_1.00,viajar solo
