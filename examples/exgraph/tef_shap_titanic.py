@@ -252,24 +252,11 @@ def main():
         print("INFO: Two random variables 'rcat' y 'rnum' are computed to test the FeatureSelector")
         feature_cols.extend([RCAT, RNUM])
 
-    # Common information relative features and target is collected. This will be used all through the execution flow
-    features_info, target_info = get_common_info(df=df_titanic, feature_cols=feature_cols, target_cols=target_cols)
-
-    selector = FeatureSelector(df=df_titanic, feature_cols=features_info.feature_columns,
-                               target_info=target_info, number_of_features=8)
-    topk_features = selector.select_topk()
-
-    # Dataset must be rebuild by selecting the topk features, the ID and the target columns
-    df_titanic = df_titanic[[ID] + topk_features + target_cols]
-
-    # Since feature columns have changed, information related to features must be generated again
-    features_info = get_features_info(df=df_titanic, feature_cols=topk_features, target_cols=target_cols)
-
     # The desired explainer is created
     explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', destination_path='/home/cx02747/Utils/')
 
     # Explaining process is triggered
-    explainer.explain(feature_cols=features_info.feature_columns, target_cols=target_cols)
+    explainer.explain(feature_cols=feature_cols, target_cols=target_cols)
 
 
 if __name__ == '__main__':
