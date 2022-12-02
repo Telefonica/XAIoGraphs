@@ -224,10 +224,11 @@ class TefShap(ImportanceCalculator):
         #  del target (probabilidad del target sobre el dataset). ¿Sería mejor hacer un blend que tenga en cuenta el
         #  a priori y el a posterori? Esto cubriría todas las casuísticas
         counts = model[COUNT][cond]
+        sum_counts = np.sum(counts)
         np.seterr('raise')
-        try:
-            return np.array([np.sum(counts * model[target_col][cond]) / np.sum(counts) for target_col in target_cols])
-        except FloatingPointError:
+        if sum_counts:
+            return np.array([np.sum(counts * model[target_col][cond]) / sum_counts for target_col in target_cols])
+        else:
             return default_worth
 
     @staticmethod
