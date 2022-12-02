@@ -136,8 +136,6 @@ class StatsCalculator(object):
         # For the moment this is all the information for the local graph nodes statistics. This will be used later,
         # combined with the Importance calculation part
         df_local_graph_nodes = pd.DataFrame(graph_nodes_info, columns=[ID, NODE_NAME, FEATURE_NAME, TARGET])
-        print("df_local_graph_nodes.shape")
-        print(df_local_graph_nodes.shape)
 
         # For the global part, feature_value frequencies are computed. Note that thw whole local nodes information is
         # taken into account

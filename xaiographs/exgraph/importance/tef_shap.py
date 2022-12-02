@@ -122,7 +122,6 @@ class TefShap(ImportanceCalculator):
                                 - shapley_value:
         :return:
         """
-
         if self.target_cols is None:
             target_cols = ImportanceCalculator._DEFAULT_TARGET_COLS
         else:
@@ -134,6 +133,8 @@ class TefShap(ImportanceCalculator):
         shap_values_list = []
         n_rows = df_aggregated.shape[0]
         feature_columns = [col for col in df_aggregated.columns if col not in target_cols]
+        res_dict[str({})] = TefShap.__get_worth(coalition_features={}, model=params[self._MODEL],
+                                                target_cols=target_cols)
 
         # For each of the aggregated DataFrame rows
         pbar = tqdm(range(n_rows))
@@ -196,18 +197,20 @@ class TefShap(ImportanceCalculator):
         return coalitions_list
 
     @staticmethod
-    def __get_worth(coalition_features: Dict, model: Dict, target_cols: List[str]) -> np.ndarray:
+    def __get_worth(coalition_features: Dict, model: Dict, target_cols: List[str],
+                    default_worth: np.ndarray = None) -> np.ndarray:
         """
         This function takes care of computing the coalition worth (\nu(S))
 
-        :param: coalition_features: Dictionary with the coalition features for which "worth" will be estimated. For each
-                                    element, the key represents the column name and the value...the corresponding value
-        :param: model:              Dictionary representing model to use for the coalition "worth" estimation. For each
-                                    element, the key is the feature name and the value, the corresponding numpy array
-                                    of values for that feature
-        :param: targets_col:        List of strings containing the names of the target columns, by default ['target']
+        :param coalition_features: Dictionary with the coalition features for which "worth" will be estimated. For each
+                                   element, the key represents the column name and the value...the corresponding value
+        :param model:              Dictionary representing model to use for the coalition "worth" estimation. For each
+                                   element, the key is the feature name and the value, the corresponding numpy array
+                                   of values for that feature
+        :param target_cols:        List of strings containing the names of the target columns, by default ['target']
+        :param default_worth:      Numpy array containing the worth which will be assigned to an "unknown" coalition
 
-        :return:                    Numpy array containing the "worth" of the current coalition for each target
+        :return:                   Numpy array containing the "worth" of the current coalition for each target
         """
 
         cond = np.ones_like(list(model.values())[0], dtype=np.bool8)
@@ -221,8 +224,12 @@ class TefShap(ImportanceCalculator):
         #  del target (probabilidad del target sobre el dataset). ¿Sería mejor hacer un blend que tenga en cuenta el
         #  a priori y el a posterori? Esto cubriría todas las casuísticas
         counts = model[COUNT][cond]
+        sum_counts = np.sum(counts)
         np.seterr('raise')
-        return np.array([np.sum(counts * model[target_col][cond]) / np.sum(counts) for target_col in target_cols])
+        if sum_counts:
+            return np.array([np.sum(counts * model[target_col][cond]) / sum_counts for target_col in target_cols])
+        else:
+            return default_worth
 
     @staticmethod
     def __coalition_worth(x: pd.Series, coalition: List[str], model: Dict, res_dict: Dict,
@@ -248,8 +255,10 @@ class TefShap(ImportanceCalculator):
         str_cf: str = str(coalition_features)
         if res_dict.get(str_cf, None) is not None:
             return res_dict[str_cf]
-
-        to_ret = TefShap.__get_worth(coalition_features=coalition_features, model=model, target_cols=target_cols)
+        if len(coalition_features) < 1:
+            print(coalition_features)
+        to_ret = TefShap.__get_worth(coalition_features=coalition_features, model=model, target_cols=target_cols,
+                                     default_worth=res_dict[str({})])
         # TODO Solucionar mutabilidad diccionario res_dict = res_dict.copy()
         res_dict.update({str_cf: to_ret})
 
@@ -271,7 +280,7 @@ class TefShap(ImportanceCalculator):
                              univocally represents a coalition and value a float representing the coalition worth
         :param: target_cols: String representing the name of the target column
 
-        :return:             Numpy arrau representing the contribution to the Shapley Value of the current coalition
+        :return:             Numpy array representing the contribution to the Shapley Value of the current coalition
         """
         return weight * (TefShap.__coalition_worth(x=x, coalition=coalition + [col], model=model, res_dict=res_dict,
                                                    target_cols=target_cols) -
