@@ -20,8 +20,10 @@ class Explainer(object):
 
     def __init__(self, dataset: pd.DataFrame, importance_engine: str, destination_path: str):
         """
-        Constructor method for Explainer. An additional property `top_features_` has been included. This will provide
-        distance and rank information for each feature and target value, so that results can be understood
+        Constructor method for Explainer.
+        - Property `top_features_target_` provides distance and rank information for each feature and target value, so
+        that results can be understood
+        - Property `top_features_` provides a list with the all the original features ranked
 
         :param dataset:                  Pandas DataFrame containing the whole dataset
         :param importance_engine:        String representing the name of the method use to compute feature importance
@@ -31,7 +33,8 @@ class Explainer(object):
         self.df = dataset
         self.path = destination_path
         self.engine = importance_engine
-        self.top_features_ = None
+        self.top_features_ = []
+        self.top_features_target_ = {}
 
     def explain(self, feature_cols: List[str], target_cols: List[str]):
         # This section is intended to retrieve information which will be used throughout the execution flow:
@@ -46,7 +49,8 @@ class Explainer(object):
 
         # Then it's used to select the top K features
         topk_features = selector.select_topk()
-        self.top_features_ = selector.distance_rank_info_
+        self.top_features_ = selector.top_features_
+        self.top_features_target_ = selector.top_features_target_
 
         # Dataset must be rebuilt by selecting the topk features, the ID and the target columns
         self.df = self.df[[ID] + topk_features + target_cols]
@@ -81,7 +85,6 @@ class Explainer(object):
                                                                              sample_ids_mask_2_explain=sample_ids_mask,
                                                                              feature_cols=features_info.feature_columns,
                                                                              target_cols=target_info.target_columns,
-                                                                             train_size=0.8,
                                                                              train_stratify=True)
 
         top1_importance_features, global_explainability, global_nodes_importance, df_explanation_sample = (
@@ -99,7 +102,6 @@ class Explainer(object):
         # TODO: Al igual que un hipotético fichero con IDs, o un número de samples...habría que meter como parámetro
         #  el path donde se quieren guardar los ficheros
         exporter = Exporter(df_explanation_sample=df_explanation_sample, path=self.path)
-        # TODO: Aligerar la parametrización del método export sin perder inteligibilidad
         exporter.export(features_info=features_info, target_info=target_info, sample_ids_mask=sample_ids_mask,
                         global_target_explainability=top1_importance_features,
                         global_explainability=global_explainability,
