@@ -15,9 +15,12 @@ class FeatureSelector(object):
 
     def __init__(self, df: pd.DataFrame, feature_cols: List[str], target_info: TargetInfo, number_of_features: int):
         """
-        Constructor method for FeatureSelector class. An additional property `distance_rank_info_` has been included
-        so that the FeatureSelector object can be inspected after method `select_topk` is invoked. This will provide
-        distance and rank information for each feature and target value, so that results can be understood
+        Constructor method for FeatureSelector class.
+        - Property `top_features_target_` has been included so that the FeatureSelector object can be
+        inspected after method `select_topk` is invoked. This will provide distance and rank information for each
+        feature and target value, so that results can be understood
+        - Property `top_features_` has been included. After invoking method `select_topk`, this property will provide
+        a list with the all the original features ranked
 
         :param df:                  Pandas DataFrame containing the whole dataset
         :param feature_cols:        List of strings containing the column names for the features
@@ -31,7 +34,8 @@ class FeatureSelector(object):
         self.feature_cols = feature_cols
         self.k = number_of_features
         self.target_values = target_info.target_columns
-        self.distance_rank_info_ = {}
+        self.top_features_target_ = {}
+        self.top_features_ = []
 
     @staticmethod
     def __compute_jensen_shannon(dist1: np.ndarray, dist2: np.ndarray, axis: int = 0, keepdims=True,
@@ -136,7 +140,7 @@ class FeatureSelector(object):
             # there's no need to compute distances for the two values, one is enough
             if len(self.target_values) == 2:
                 break
-        self.distance_rank_info_ = distance_rank_info
+        self.top_features_target_ = distance_rank_info
 
         # Finally, all obtained ranks for the different target values are aggregated for each feature. The largest rank
         # will cause that feature to be the first of the topk (note that, when talking about ranks, 1 is greater than 2)
@@ -144,5 +148,6 @@ class FeatureSelector(object):
         for feature_col in self.feature_cols:
             topk_features[feature_col] = sum(
                 [rank for rank, feature in enumerate(feature_ranks) if feature == feature_col])
+        self.top_features_ = sorted(topk_features, key=topk_features.get)
 
-        return sorted(topk_features, key=topk_features.get)[:self.k]
+        return self.top_features_[:self.k]

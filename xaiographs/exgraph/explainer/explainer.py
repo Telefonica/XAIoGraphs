@@ -4,8 +4,9 @@ from typing import List
 import pandas as pd
 
 from xaiographs.common.constants import ID
-from xaiographs.common.utils import filter_by_ids, get_common_info, sample_by_target
+from xaiographs.common.utils import filter_by_ids, get_common_info, get_features_info, sample_by_target
 from xaiographs.exgraph.exporter.exporter import Exporter
+from xaiographs.exgraph.feature_selector.feature_selector import FeatureSelector
 from xaiographs.exgraph.importance.importance_calculator_factory import ImportanceCalculatorFactory
 from xaiographs.exgraph.statistics.stats_calculator import StatsCalculator
 
@@ -19,11 +20,21 @@ class Explainer(object):
 
     def __init__(self, dataset: pd.DataFrame, importance_engine: str, destination_path: str):
         """
-        Constructor method for Explainer
+        Constructor method for Explainer.
+        - Property `top_features_target_` provides distance and rank information for each feature and target value, so
+        that results can be understood
+        - Property `top_features_` provides a list with the all the original features ranked
+
+        :param dataset:                  Pandas DataFrame containing the whole dataset
+        :param importance_engine:        String representing the name of the method use to compute feature importance
+        :param destination_path:         String representing the path where output files will be stored
+
         """
         self.df = dataset
         self.path = destination_path
         self.engine = importance_engine
+        self.top_features_ = []
+        self.top_features_target_ = {}
 
     def explain(self, feature_cols: List[str], target_cols: List[str]):
         # This section is intended to retrieve information which will be used throughout the execution flow:
@@ -31,6 +42,21 @@ class Explainer(object):
         #   Target related information: top1_targets (ground truths) for each row, target_probs (probability for each
         #   target), top1_argmax (the indexes version of the top1_targets) and target columns names
         features_info, target_info = get_common_info(df=self.df, feature_cols=feature_cols, target_cols=target_cols)
+
+        # Feature selector is instantiated
+        selector = FeatureSelector(df=self.df, feature_cols=features_info.feature_columns,
+                                   target_info=target_info, number_of_features=8)
+
+        # Then it's used to select the top K features
+        topk_features = selector.select_topk()
+        self.top_features_ = selector.top_features_
+        self.top_features_target_ = selector.top_features_target_
+
+        # Dataset must be rebuilt by selecting the topk features, the ID and the target columns
+        self.df = self.df[[ID] + topk_features + target_cols]
+
+        # Since feature columns have changed, information related to features must be generated again
+        features_info = get_features_info(df=self.df, feature_cols=topk_features, target_cols=target_cols)
 
         # Here, the row IDs to be sampled for explanation are generated. A sample ids mask will be used for id
         # filtering, (the list of sample ids is retrieved too to perform consistency checks)
@@ -76,7 +102,6 @@ class Explainer(object):
         # TODO: Al igual que un hipotético fichero con IDs, o un número de samples...habría que meter como parámetro
         #  el path donde se quieren guardar los ficheros
         exporter = Exporter(df_explanation_sample=df_explanation_sample, path=self.path)
-        # TODO: Aligerar la parametrización del método export sin perder inteligibilidad
         exporter.export(features_info=features_info, target_info=target_info, sample_ids_mask=sample_ids_mask,
                         global_target_explainability=top1_importance_features,
                         global_explainability=global_explainability,
