@@ -1,4 +1,4 @@
-Sensitive_feature,Sensitive_value,Target_label,Independence_score,Independence_category
+sensitive_feature,sensitive_value,target_label,independence_score,independence_category
 gender,M | F,A,0.09753737624627651,C
 gender,M | F,B,0.051648992307120944,B
 gender,M | F,D,0.02041433242699406,A
