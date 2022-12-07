@@ -1,4 +1,4 @@
-Sensitive_feature,Sensitive_value,Target_label,Sufficience_score,Sufficience_category
+sensitive_feature,sensitive_value,target_label,sufficiency_score,sufficiency_category
 gender,M | F,A,0.025110884294171076,A
 gender,M | F,B,0.04032646343918789,A
 gender,M | F,D,0.004255225743331814,A+
