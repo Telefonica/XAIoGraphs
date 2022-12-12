@@ -23,7 +23,7 @@ class FairnessUnitTest(unittest.TestCase):
     def check_dataset_values_unit_test(self):
         """
         """
-        print("\nDataset to test:\n{}".format(self.df_dataset))
+        print("\nDataset to test check_dataset_values_unit_test:\n{}".format(self.df_dataset))
         # Column (sensitive_col) does not exist
         with self.assertRaises(AttributeError):
             Fairness._Fairness__check_dataset_values(df=self.df_dataset,
@@ -69,7 +69,7 @@ class FairnessUnitTest(unittest.TestCase):
                                                      target_label='YES',
                                                      sensitive_value='ERROR_SENSITIVE_VALUE')
 
-    def fit_independence_unit_test(self):
+    def calculate_independence_unit_test(self):
         """ Test: Calculate Independence Criteria for 'Gender' sensitive Feature and Prediction value equals as 1.
 
         A-> sensitive Feature
@@ -81,18 +81,18 @@ class FairnessUnitTest(unittest.TestCase):
         P(Y = 'YES' | A = 'WOMAN') = 1 / 4 = 0.25
         independence score = |0.66 - 0.25| = 0.41
         """
-        print("\nDataset to test:\n{}".format(self.df_dataset))
+        print("\nDataset to test calculate_independence_unit_test:\n{}".format(self.df_dataset))
 
         # Independence Score Calculation OK
         f = Fairness(destination_path='./')
-        independence_value_ok = f.fit_independence(df=self.df_dataset,
-                                                   sensitive_col='Gender',
-                                                   predict_col='y_predict',
-                                                   target_label='YES',
-                                                   sensitive_value='MEN')
+        independence_value_ok = f.calculate_independence(df=self.df_dataset,
+                                                         sensitive_col='Gender',
+                                                         predict_col='y_predict',
+                                                         target_label='YES',
+                                                         sensitive_value='MEN')
         assert round(independence_value_ok, 4) == 0.4167
 
-    def fit_separation_unit_test(self):
+    def calculate_separation_unit_test(self):
         """ Test: Calculate Separation Criteria for 'Gender' sensitive Feature and Prediction value equals as 1.
 
         A-> sensitive Feature
@@ -104,17 +104,19 @@ class FairnessUnitTest(unittest.TestCase):
         P(Y = 'YES' | T = 'YES', A = 'WOMAN') = 1 / 2 = 0.5
         separation score = |0.75 - 0.5| = 0.25
         """
+        print("\nDataset to test calculate_separation_unit_test:\n{}".format(self.df_dataset))
+
         # Independence Score Calculation OK
         f = Fairness(destination_path='./')
-        separation_value = f.fit_separation(df=self.df_dataset,
-                                            sensitive_col='Gender',
-                                            target_col='y_true',
-                                            predict_col='y_predict',
-                                            target_label='YES',
-                                            sensitive_value='MEN')
+        separation_value = f.calculate_separation(df=self.df_dataset,
+                                                  sensitive_col='Gender',
+                                                  target_col='y_true',
+                                                  predict_col='y_predict',
+                                                  target_label='YES',
+                                                  sensitive_value='MEN')
         assert round(separation_value, 2) == 0.25
 
-    def fit_sufficiency_unit_test(self):
+    def calculate_sufficiency_unit_test(self):
         """ Test: Calculate Separation Criteria for 'Gender' sensitive Feature and Prediction value equals as 1.
 
         A-> sensitive Feature
@@ -126,19 +128,19 @@ class FairnessUnitTest(unittest.TestCase):
         P(T = 'YES' | Y = 'YES', A = 'WOMAN') = 1 / 1 = 1.0
         sufficiency score = |0.75 - 1.0| = 0.25
         """
-        print("\nDataset to test:\n{}".format(self.df_dataset))
+        print("\nDataset to test calculate_sufficiency_unit_test:\n{}".format(self.df_dataset))
 
         # Independence Score Calculation OK
         f = Fairness(destination_path='./')
-        sufficiency_value = f.fit_sufficiency(df=self.df_dataset,
-                                              sensitive_col='Gender',
-                                              target_col='y_true',
-                                              predict_col='y_predict',
-                                              target_label='YES',
-                                              sensitive_value='MEN')
+        sufficiency_value = f.calculate_sufficiency(df=self.df_dataset,
+                                                    sensitive_col='Gender',
+                                                    target_col='y_true',
+                                                    predict_col='y_predict',
+                                                    target_label='YES',
+                                                    sensitive_value='MEN')
         assert round(sufficiency_value, 2) == 0.25
 
-    def fit_fairness_metrics_unit_test(self):
+    def calculate_fairness_metrics_unit_test(self):
         """ Test: Calculate Independence, Separation and Sufficiency Criterias for 'Gender' sensitive Feature
         and Prediction value equals as 1.
 
@@ -162,21 +164,49 @@ class FairnessUnitTest(unittest.TestCase):
         sufficiency score = |0.75 - 1.0| = 0.25
         ==============================================================
         """
-        print("\nDataset to test:\n{}".format(self.df_dataset))
+        print("\nDataset to test calculate_fairness_metrics_unit_test:\n{}".format(self.df_dataset))
 
         # Independence Score Calculation OK
         f = Fairness(destination_path='./')
-        fairness_scores = f.fit_fairness_metrics(df=self.df_dataset,
-                                                 sensitive_col='Gender',
-                                                 target_col='y_true',
-                                                 predict_col='y_predict',
-                                                 target_label='YES',
-                                                 sensitive_value='MEN')
+        fairness_scores = f.calculate_fairness_metrics(df=self.df_dataset,
+                                                       sensitive_col='Gender',
+                                                       target_col='y_true',
+                                                       predict_col='y_predict',
+                                                       target_label='YES',
+                                                       sensitive_value='MEN')
         assert round(fairness_scores[0], 2) == 0.42
         assert round(fairness_scores[1], 2) == 0.25
         assert round(fairness_scores[2], 2) == 0.25
 
-    def get_fairness_category_unit_test(self):
+    def score_weight_unit_test(self):
+        """ Test: Method to calculate weight of sensitive value vs target value
+        """
+        test_1 = Fairness._Fairness__score_weight(df=self.df_dataset,
+                                                  sensitive_col='Gender',
+                                                  sensitive_value='MEN',
+                                                  predict_col='y_predict',
+                                                  target_label='YES',
+                                                  groupby_cols=['y_predict'])
+        assert round(test_1, 1) == 0.5
+
+        test_2 = Fairness._Fairness__score_weight(df=self.df_dataset,
+                                                  sensitive_col='Color',
+                                                  sensitive_value='BLUE',
+                                                  predict_col='y_predict',
+                                                  target_label='YES',
+                                                  groupby_cols=['Color', 'y_predict'])
+        assert round(test_2, 1) == 0.3
+
+        test_3 = Fairness._Fairness__score_weight(df=self.df_dataset,
+                                                  sensitive_col='Color',
+                                                  sensitive_value='PINK',
+                                                  predict_col='y_true',
+                                                  target_label='NO',
+                                                  groupby_cols=['Color', 'y_true'])
+        assert round(test_3, 1) == 0.2
+
+    @staticmethod
+    def get_fairness_category_unit_test():
         """ Test: Calculate Fairness Category based on Score Category:
         A+ : score <= 0.02
         A  : 0.02 < score <= 0.05
@@ -282,12 +312,52 @@ class FairnessUnitTest(unittest.TestCase):
     def in_processing_unit_test(self):
         """ Test: Method to encoder not numeric features
         """
+        df_expected = pd.DataFrame({'sensitive_feature': ['Gender', 'Gender'],
+                                    'sensitive_value': ['MEN | WOMAN', 'MEN | WOMAN'],
+                                    'is_binary_sensitive_feature': [True, True],
+                                    'target_label': ['YES', 'NO'],
+                                    'independence_score': [0.42, 0.42],
+                                    'independence_category': ['E', 'E'],
+                                    'independence_score_weight': [0.5, 0.5],
+                                    'separation_score': [0.25, 0.5],
+                                    'separation_category': ['D', 'E'],
+                                    'separation_score_weight': [0.5, 0.5],
+                                    'sufficiency_score': [0.25, 0.17],
+                                    'sufficiency_category': ['D', 'D'],
+                                    'sufficiency_score_weight': [0.6, 0.4]},
+                                   columns=['sensitive_feature', 'sensitive_value', 'is_binary_sensitive_feature',
+                                            'target_label', 'independence_score', 'independence_category',
+                                            'independence_score_weight', 'separation_score', 'separation_category',
+                                            'separation_score_weight', 'sufficiency_score', 'sufficiency_category',
+                                            'sufficiency_score_weight'])
+
         f = Fairness(destination_path='./')
         f._Fairness__pre_processing(df=self.df_dataset,
                                     sensitive_cols=['Gender', 'Color'],
                                     target_col='y_true',
                                     predict_col='y_predict')
         f._Fairness__in_processing(df=self.df_dataset,
-                                   sensitive_cols=['Gender', 'Color'],
+                                   sensitive_cols=['Gender'],
                                    target_col='y_true',
                                    predict_col='y_predict')
+
+        # Check Fairness Metrics DataFrame
+        pd.testing.assert_frame_equal(f.fairness_metrics, df_expected, check_less_precise=2)
+
+        # Check Independence Metrics DataFrame
+        pd.testing.assert_frame_equal(f.independence_info,
+                                      df_expected[['sensitive_feature', 'sensitive_value', 'target_label',
+                                                   'independence_score', 'independence_category']],
+                                      check_less_precise=2)
+
+        # Check Separation Metrics DataFrame
+        pd.testing.assert_frame_equal(f.separation_info,
+                                      df_expected[['sensitive_feature', 'sensitive_value', 'target_label',
+                                                   'separation_score', 'separation_category']],
+                                      check_less_precise=2)
+
+        # Check Sufficiency Metrics DataFrame
+        pd.testing.assert_frame_equal(f.sufficiency_info,
+                                      df_expected[['sensitive_feature', 'sensitive_value', 'target_label',
+                                                   'sufficiency_score', 'sufficiency_category']],
+                                      check_less_precise=2)
