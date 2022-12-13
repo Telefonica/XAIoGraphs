@@ -61,7 +61,7 @@ class Fairness(object):
     # TODO
     """
 
-    def __init__(self, destination_path: str):
+    def __init__(self, destination_path: str = './xaiographs_web_files'):
         self.__destination_path = destination_path
         self.__target_values = None
         self.__confusion_matrix = None
@@ -583,7 +583,7 @@ class Fairness(object):
 
         result_dict = {SENSITIVE_FEATURE: sensitive_col,
                        SENSITIVE_VALUE: (" | ".join(sensitive_value) if is_sensitive_col_binary
-                                         else sensitive_value[0]),
+                                         else sensitive_value),
                        IS_BINARY_SENSITIVE_FEATURE: is_sensitive_col_binary,
                        TARGET_LABEL: target_label,
                        INDEPENDENCE_SCORE: independence,
