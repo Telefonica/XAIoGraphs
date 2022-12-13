@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -34,20 +34,17 @@ SUFFICIENCY_SCORE_WEIGHT = 'sufficiency_score_weight'
 TARGET_LABEL = 'target_label'
 
 # COLUMNS CONSTANTS
-FAIRNESS_METRICS_COLS = [SENSITIVE_FEATURE, SENSITIVE_VALUE, IS_BINARY_SENSITIVE_FEATURE, TARGET_LABEL,
-                         INDEPENDENCE_SCORE, INDEPENDENCE_CATEGORY, INDEPENDENCE_SCORE_WEIGHT, SEPARATION_SCORE,
-                         SEPARATION_CATEGORY, SEPARATION_SCORE_WEIGHT, SUFFICIENCY_SCORE, SUFFICIENCY_CATEGORY,
-                         SUFFICIENCY_SCORE_WEIGHT]
-FAIRNESS_GLOBAL_SCORES_COLS = [SENSITIVE_VALUE, INDEPENDENCE_GLOBAL_SCORE, INDEPENDENCE_CATEGORY,
+FAIRNESS_INFO_COLS = [SENSITIVE_FEATURE, SENSITIVE_VALUE, IS_BINARY_SENSITIVE_FEATURE, TARGET_LABEL,
+                      INDEPENDENCE_SCORE, INDEPENDENCE_CATEGORY, INDEPENDENCE_SCORE_WEIGHT, SEPARATION_SCORE,
+                      SEPARATION_CATEGORY, SEPARATION_SCORE_WEIGHT, SUFFICIENCY_SCORE, SUFFICIENCY_CATEGORY,
+                      SUFFICIENCY_SCORE_WEIGHT]
+FAIRNESS_GLOBAL_SCORES_COLS = [SENSITIVE_FEATURE, INDEPENDENCE_GLOBAL_SCORE, INDEPENDENCE_CATEGORY,
                                SEPARATION_GLOBAL_SCORE, SEPARATION_CATEGORY, SUFFICIENCY_GLOBAL_SCORE,
                                SUFFICIENCY_CATEGORY]
 FAIRNESS_INDEPENDENCE_COLS = [SENSITIVE_FEATURE, SENSITIVE_VALUE, TARGET_LABEL, INDEPENDENCE_SCORE,
                               INDEPENDENCE_CATEGORY]
-FAIRNESS_INDEPENDENCE_GLOBAL_SCORE_COLS = [SENSITIVE_VALUE, INDEPENDENCE_GLOBAL_SCORE, INDEPENDENCE_CATEGORY]
 FAIRNESS_SEPARATION_COLS = [SENSITIVE_FEATURE, SENSITIVE_VALUE, TARGET_LABEL, SEPARATION_SCORE, SEPARATION_CATEGORY]
-FAIRNESS_SEPARATION_GLOBAL_SCORE_COLS = [SENSITIVE_VALUE, SEPARATION_GLOBAL_SCORE, SEPARATION_CATEGORY]
 FAIRNESS_SUFFICIENCY_COLS = [SENSITIVE_FEATURE, SENSITIVE_VALUE, TARGET_LABEL, SUFFICIENCY_SCORE, SUFFICIENCY_CATEGORY]
-FAIRNESS_SUFFICIENCY_GLOBAL_SCORE_COLS = [SENSITIVE_VALUE, SUFFICIENCY_GLOBAL_SCORE, SUFFICIENCY_CATEGORY]
 FAIRNESS_CORRELATIONS_COLS = [FEATURE_1, FEATURE_2, CORRELATION_VALUE, IS_CORRELATION_SENSIBLE]
 
 # FILE CONSTANTS
@@ -65,19 +62,13 @@ class Fairness(object):
     """
 
     def __init__(self, destination_path: str):
-        self.destination_path = destination_path
+        self.__destination_path = destination_path
         self.__target_values = None
         self.__confusion_matrix = None
         self.__correlation_matrix = None
         self.__highest_correlation_features = None
-        self.__fairness_metrics = list()
-        self.__independence_info = list()
-        self.__separation_info = list()
-        self.__sufficiency_info = list()
-        self.__global_scores = list()
-        self.__independence_score = list()
-        self.__separation_score = list()
-        self.__sufficiency_score = list()
+        self.__fairness_info = list()
+        self.__global_scores_info = list()
 
     @property
     def target_values(self):
@@ -107,44 +98,32 @@ class Fairness(object):
                              'limit_score_pct': FAIRNESS_CATEGORIES_SCORE.values()})
 
     @property
-    def fairness_metrics(self):
-        return pd.DataFrame(self.__fairness_metrics)[FAIRNESS_METRICS_COLS]
+    def fairness_info(self):
+        return pd.DataFrame(self.__fairness_info)[FAIRNESS_INFO_COLS]
 
     @property
     def independence_info(self):
-        return pd.DataFrame(self.__independence_info)[FAIRNESS_INDEPENDENCE_COLS]
+        return pd.DataFrame(self.__fairness_info)[FAIRNESS_INDEPENDENCE_COLS]
 
     @property
     def separation_info(self):
-        return pd.DataFrame(self.__separation_info)[FAIRNESS_SEPARATION_COLS]
+        return pd.DataFrame(self.__fairness_info)[FAIRNESS_SEPARATION_COLS]
 
     @property
     def sufficiency_info(self):
-        return pd.DataFrame(self.__sufficiency_info)[FAIRNESS_SUFFICIENCY_COLS]
+        return pd.DataFrame(self.__fairness_info)[FAIRNESS_SUFFICIENCY_COLS]
 
     @property
-    def global_scores(self):
-        return pd.DataFrame(self.__global_scores)[FAIRNESS_GLOBAL_SCORES_COLS]
+    def fairness_global_info(self):
+        return pd.DataFrame(self.__global_scores_info)[FAIRNESS_GLOBAL_SCORES_COLS]
 
-    @property
-    def independence_score(self):
-        return pd.DataFrame(self.__independence_score)[FAIRNESS_INDEPENDENCE_GLOBAL_SCORE_COLS]
-
-    @property
-    def separation_score(self):
-        return pd.DataFrame(self.__separation_score)[FAIRNESS_SEPARATION_GLOBAL_SCORE_COLS]
-
-    @property
-    def sufficiency_score(self):
-        return pd.DataFrame(self.__sufficiency_score)[FAIRNESS_SUFFICIENCY_GLOBAL_SCORE_COLS]
-
-    def calculate_independence(self, df: pd.DataFrame, sensitive_col: str, predict_col: str, target_label: str,
-                               sensitive_value: str) -> float:
+    def independence(self, df: pd.DataFrame, sensitive_col: str, predict_col: str, target_label: str,
+                     sensitive_value: str) -> float:
         """ TODO
 
         A-> Sensitive Feature
         Y-> y_predict (Prediction)
-        independence score = | P(Y=y∣A=a) - P(Y=y∣A=b) |
+        independence = | P(Y=y∣A=a) - P(Y=y∣A=b) |
 
         :param df:
         :param sensitive_col:
@@ -178,15 +157,14 @@ class Fairness(object):
 
         return abs(prob_a - prob_b)
 
-    def calculate_separation(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
-                             target_label: str,
-                             sensitive_value: str) -> float:
+    def separation(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str, target_label: str,
+                   sensitive_value: str) -> float:
         """ TODO
 
         A-> Sensitive Feature
         Y-> y_predict (Prediction)
         T-> y_true (Target)
-        separation score = | P(Y=1∣T=1,A=a) - P(Y=1∣T=1,A=b) |
+        separation = | P(Y=1∣T=1,A=a) - P(Y=1∣T=1,A=b) |
 
         :param df:
         :param sensitive_col:
@@ -223,14 +201,14 @@ class Fairness(object):
 
         return abs(prob_a - prob_b)
 
-    def calculate_sufficiency(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
-                              target_label: str, sensitive_value: str) -> float:
+    def sufficiency(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str, target_label: str,
+                    sensitive_value: str) -> float:
         """ TODO
 
         A-> Sensitive Feature
         Y-> y_predict (Prediction)
         T-> y_true (Target)
-        sufficiency score = | P(T=1∣Y=1,A=a) - P(T=1∣Y=1,A=b) |
+        sufficiency = | P(T=1∣Y=1,A=a) - P(T=1∣Y=1,A=b) |
 
         :param df:
         :param sensitive_col:
@@ -267,8 +245,8 @@ class Fairness(object):
 
         return abs(prob_a - prob_b)
 
-    def calculate_fairness_metrics(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
-                                   target_label: str, sensitive_value: str) -> Tuple[float, float, float]:
+    def fairness_metrics(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
+                         target_label: str, sensitive_value: str) -> Tuple[float, float, float]:
         """ TODO
         Tested: fit_fairness_metrics_unit_test
 
@@ -280,23 +258,23 @@ class Fairness(object):
         :param sensitive_value:
         :return:
         """
-        independence = self.calculate_independence(df=df,
-                                                   sensitive_col=sensitive_col,
-                                                   predict_col=predict_col,
-                                                   target_label=target_label,
-                                                   sensitive_value=sensitive_value)
-        separation = self.calculate_separation(df=df,
-                                               sensitive_col=sensitive_col,
-                                               target_col=target_col,
-                                               predict_col=predict_col,
-                                               target_label=target_label,
-                                               sensitive_value=sensitive_value)
-        sufficiency = self.calculate_sufficiency(df=df,
-                                                 sensitive_col=sensitive_col,
-                                                 target_col=target_col,
-                                                 predict_col=predict_col,
-                                                 target_label=target_label,
-                                                 sensitive_value=sensitive_value)
+        independence = self.independence(df=df,
+                                         sensitive_col=sensitive_col,
+                                         predict_col=predict_col,
+                                         target_label=target_label,
+                                         sensitive_value=sensitive_value)
+        separation = self.separation(df=df,
+                                     sensitive_col=sensitive_col,
+                                     target_col=target_col,
+                                     predict_col=predict_col,
+                                     target_label=target_label,
+                                     sensitive_value=sensitive_value)
+        sufficiency = self.sufficiency(df=df,
+                                       sensitive_col=sensitive_col,
+                                       target_col=target_col,
+                                       predict_col=predict_col,
+                                       target_label=target_label,
+                                       sensitive_value=sensitive_value)
 
         return independence, separation, sufficiency
 
@@ -342,15 +320,17 @@ class Fairness(object):
                                          key=lambda item: item[1],
                                          reverse=False)
 
-        if fairness_category_score[-1][1] < score:
+        category = fairness_category_score[-1][0]
+        if float(fairness_category_score[-1][1]) < score:
             print('ERROR: The score passed by parameters is greater than the maximum value. '
                   'The highest category \"{}\" is returned by default'.format(fairness_category_score[-1][0]))
-            return fairness_category_score[-1][0]
+            return category
         else:
             for i in fairness_category_score:
-                if score <= i[1]:
-                    return i[0]
+                if score <= float(i[1]):
+                    category = i[0]
                     break
+            return category
 
     def fit_fairness(self, df: pd.DataFrame, sensitive_cols: List[str], target_col: str, predict_col: str) -> None:
         """ TODO
@@ -361,20 +341,9 @@ class Fairness(object):
         :param predict_col:
         :return:
         """
-        self.__pre_processing(df=df,
-                              sensitive_cols=sensitive_cols,
-                              target_col=target_col,
-                              predict_col=predict_col)
-
-        self.__in_processing(df=df,
-                             sensitive_cols=sensitive_cols,
-                             target_col=target_col,
-                             predict_col=predict_col)
-
-        self.__post_processing(df=df,
-                               sensitive_cols=sensitive_cols,
-                               target_col=target_col,
-                               predict_col=predict_col)
+        self.__pre_processing(df=df, sensitive_cols=sensitive_cols, target_col=target_col, predict_col=predict_col)
+        self.__in_processing(df=df, sensitive_cols=sensitive_cols, target_col=target_col, predict_col=predict_col)
+        self.__post_processing()
 
     @staticmethod
     def __check_dataset_values(df: pd.DataFrame, sensitive_col: str, target_col: Union[str, None], predict_col: str,
@@ -448,11 +417,11 @@ class Fairness(object):
         for sensitive_col in sensitive_cols:
             sensitive_values = df[sensitive_col].unique()
             for target_label in self.target_values:
-                for sensitive_value in sensitive_values:
-                    # TODO: ver como poner la barra de progreso
-                    #  https://stackoverflow.com/questions/23113494/double-progress-bar-in-python
-
-                    print('{} - {} - {} '.format(sensitive_col, sensitive_value, target_label))
+                pbar = tqdm(sensitive_values)
+                for sensitive_value in pbar:
+                    pbar.set_description('Processing: sensitive_col={}, sensitive_value={}, target_label={} '
+                                         .format(sensitive_col, sensitive_value, target_label))
+                    pbar.refresh()
                     self.__process_sensitive_column(df=df,
                                                     sensitive_col=sensitive_col,
                                                     target_col=target_col,
@@ -464,16 +433,46 @@ class Fairness(object):
                     if len(sensitive_values) == BINARY:
                         break
 
-    def __post_processing(self, df: pd.DataFrame, sensitive_cols: List[str], target_col: str, predict_col: str) -> None:
-        """ TODO
+    def __post_processing(self) -> None:
+        """
 
-        :param df:
-        :param sensitive_cols:
-        :param target_col:
-        :param predict_col:
         :return:
         """
-        pass
+
+        # Escribe los scores globales para cada una de las variables sensibles
+        self.__global_scores()
+
+        # Writing CSVs for the web interface
+        if not os.path.exists(self.__destination_path):
+            os.mkdir(self.__destination_path)
+
+        # 1.- Matriz de confusión "fairness_confusion_matrix.csv"
+        self.confusion_matrix.to_csv(os.path.join(self.__destination_path, FAIRNESS_CONFUSION_MATRIX_FILE),
+                                     index=True, header=True)
+
+        # 2.- Tabla resumen:
+        #     Por cada uno de los criterios y variables -> Score - Category_Score "fairness_sumarize_criterias.csv"
+        self.fairness_global_info.to_csv(os.path.join(self.__destination_path, FAIRNESS_SUMARIZE_CRITERIAS_FILE),
+                                         index=False, header=True)
+
+        # 3.- Tabla criterio de independencia:
+        #     Por cada Valor de las variables & Targets -> Score - Category_Score "fairness_independence.csv"
+        self.independence_info.to_csv(os.path.join(self.__destination_path, FAIRNESS_INDEPENDENCE_FILE),
+                                      index=False, header=True)
+
+        # 4.- Tabla criterio de separación:
+        #     Por cada Valor de las variables & Targets -> Score - Category_Score "fairness_separation.csv"
+        self.separation_info.to_csv(os.path.join(self.__destination_path, FAIRNESS_SEPARATION_FILE),
+                                    index=False, header=True)
+
+        # 5.- Tabla criterio de suficiencia:
+        #     Por cada Valor de las variables & Targets -> Score - Category_Score "fairness_sufficiency.csv"
+        self.sufficiency_info.to_csv(os.path.join(self.__destination_path, FAIRNESS_SUFFICIENCY_FILE),
+                                     index=False, header=True)
+
+        # 6.- Listado con pares de variables altamente correladas "fairness_highest_correlation.csv"
+        self.highest_correlation_features.to_csv(
+            os.path.join(self.__destination_path, FAIRNESS_HIGHEST_CORRELATION_FILE), index=False, header=True)
 
     def __fit_correlation_features(self, df: pd.DataFrame) -> None:
         """ TODO Función que calcule la matriz de correlaciones
@@ -542,8 +541,8 @@ class Fairness(object):
     def __process_sensitive_column(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
                                    target_label: str, sensitive_value: Union[str, List[str]],
                                    is_sensitive_col_binary: bool) -> None:
-        """TODO: Función que tiene que escribir en los atributos de la clase correspondientes los diferentes valores de los
-        criterios para cada par de valores "valorVariable-valorTarget"
+        """TODO: Función que tiene que escribir en los atributos de la clase correspondientes los diferentes valores de
+        los criterios para cada par de valores "valorVariable-valorTarget"
 
         :param df:
         :param sensitive_col:
@@ -555,12 +554,12 @@ class Fairness(object):
         :return:
         """
         sensitive_val = (sensitive_value[0] if is_sensitive_col_binary else sensitive_value)
-        independence, separation, sufficiency = self.calculate_fairness_metrics(df=df,
-                                                                                sensitive_col=sensitive_col,
-                                                                                target_col=target_col,
-                                                                                predict_col=predict_col,
-                                                                                target_label=target_label,
-                                                                                sensitive_value=sensitive_val)
+        independence, separation, sufficiency = self.fairness_metrics(df=df,
+                                                                      sensitive_col=sensitive_col,
+                                                                      target_col=target_col,
+                                                                      predict_col=predict_col,
+                                                                      target_label=target_label,
+                                                                      sensitive_value=sensitive_val)
 
         # Cálculo de los pesos que tienen cada uno de los Scores
         group_by_predict_cols = [predict_col] if is_sensitive_col_binary else [sensitive_col, predict_col]
@@ -582,25 +581,46 @@ class Fairness(object):
                                                   predict_col=target_col,
                                                   target_label=target_label)
 
-        common_dict = {SENSITIVE_FEATURE: sensitive_col,
+        result_dict = {SENSITIVE_FEATURE: sensitive_col,
                        SENSITIVE_VALUE: (" | ".join(sensitive_value) if is_sensitive_col_binary
                                          else sensitive_value[0]),
                        IS_BINARY_SENSITIVE_FEATURE: is_sensitive_col_binary,
-                       TARGET_LABEL: target_label}
+                       TARGET_LABEL: target_label,
+                       INDEPENDENCE_SCORE: independence,
+                       INDEPENDENCE_SCORE_WEIGHT: score_predict_weight,
+                       INDEPENDENCE_CATEGORY: self.get_fairness_category(score=independence),
+                       SEPARATION_SCORE: separation,
+                       SEPARATION_SCORE_WEIGHT: score_predict_weight,
+                       SEPARATION_CATEGORY: self.get_fairness_category(score=separation),
+                       SUFFICIENCY_SCORE: sufficiency,
+                       SUFFICIENCY_SCORE_WEIGHT: score_target_weight,
+                       SUFFICIENCY_CATEGORY: self.get_fairness_category(score=sufficiency)
+                       }
 
-        independence_dict = {INDEPENDENCE_SCORE: independence,
-                             INDEPENDENCE_SCORE_WEIGHT: score_predict_weight,
-                             INDEPENDENCE_CATEGORY: self.get_fairness_category(score=independence)}
+        self.__fairness_info.append(result_dict)
 
-        separation_dict = {SEPARATION_SCORE: separation,
-                           SEPARATION_SCORE_WEIGHT: score_predict_weight,
-                           SEPARATION_CATEGORY: self.get_fairness_category(score=separation)}
+    def __global_scores(self) -> None:
+        """Función que dados los scores de los criterios de fairness con sus respectivos pesos, calcula para
+        cada criterio su score (global) ponderado
 
-        sufficiency_dict = {SUFFICIENCY_SCORE: sufficiency,
-                            SUFFICIENCY_SCORE_WEIGHT: score_target_weight,
-                            SUFFICIENCY_CATEGORY: self.get_fairness_category(score=sufficiency)}
+        :return:
+        """
+        sensitive_cols = self.fairness_info[SENSITIVE_FEATURE].unique()
+        pbar = tqdm(sensitive_cols)
+        for sensitive_feature in pbar:
+            pbar.set_description('Processing Global Score \"{}\" Feature'.format(sensitive_feature))
+            pbar.refresh()
+            df = self.fairness_info[self.fairness_info[SENSITIVE_FEATURE] == sensitive_feature]
+            independence_score = np.average(a=df[INDEPENDENCE_SCORE], weights=df[INDEPENDENCE_SCORE_WEIGHT])
+            separation_score = np.average(a=df[SEPARATION_SCORE], weights=df[SEPARATION_SCORE_WEIGHT])
+            sufficiency_score = np.average(a=df[SUFFICIENCY_SCORE], weights=df[SUFFICIENCY_SCORE_WEIGHT])
 
-        self.__fairness_metrics.append({**common_dict, **independence_dict, **separation_dict, **sufficiency_dict})
-        self.__independence_info.append({**common_dict, **independence_dict})
-        self.__separation_info.append({**common_dict, **separation_dict})
-        self.__sufficiency_info.append({**common_dict, **sufficiency_dict})
+            result_dict = {SENSITIVE_FEATURE: sensitive_feature,
+                           INDEPENDENCE_GLOBAL_SCORE: independence_score,
+                           INDEPENDENCE_CATEGORY: self.get_fairness_category(score=independence_score),
+                           SEPARATION_GLOBAL_SCORE: separation_score,
+                           SEPARATION_CATEGORY: self.get_fairness_category(score=separation_score),
+                           SUFFICIENCY_GLOBAL_SCORE: sufficiency_score,
+                           SUFFICIENCY_CATEGORY: self.get_fairness_category(score=sufficiency_score)}
+
+            self.__global_scores_info.append(result_dict)
