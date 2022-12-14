@@ -55,6 +55,9 @@ FAIRNESS_SEPARATION_FILE = 'fairness_separation.csv'
 FAIRNESS_SUFFICIENCY_FILE = 'fairness_sufficiency.csv'
 FAIRNESS_SUMARIZE_CRITERIAS_FILE = 'fairness_sumarize_criterias.csv'
 
+# Warning message
+WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute fit_fairness() function to get results.'
+
 
 class Fairness(object):
     """
@@ -72,15 +75,24 @@ class Fairness(object):
 
     @property
     def target_values(self):
-        return self.__target_values
+        if self.__target_values is None:
+            print(WARN_MSG.format('\"target_values\"'))
+        else:
+            return self.__target_values
 
     @property
     def confusion_matrix(self):
-        return self.__confusion_matrix
+        if self.__confusion_matrix is None:
+            print(WARN_MSG.format('\"confusion_matrix\"'))
+        else:
+            return self.__confusion_matrix
 
     @property
     def correlation_matrix(self):
-        return self.__correlation_matrix
+        if self.__correlation_matrix is None:
+            print(WARN_MSG.format('\"correlation_matrix\"'))
+        else:
+            return self.__correlation_matrix
 
     @property
     def highest_correlation_features(self):
@@ -88,9 +100,12 @@ class Fairness(object):
 
         :return:
         """
-        return (pd.DataFrame.from_dict(self.__highest_correlation_features)[FAIRNESS_CORRELATIONS_COLS]
-                if len(self.__highest_correlation_features) > 0
-                else pd.DataFrame(columns=FAIRNESS_CORRELATIONS_COLS))
+        if self.__highest_correlation_features is None:
+            print(WARN_MSG.format('\"highest_correlation_features\"'))
+        else:
+            return (pd.DataFrame.from_dict(self.__highest_correlation_features)[FAIRNESS_CORRELATIONS_COLS]
+                    if len(self.__highest_correlation_features) > 0
+                    else pd.DataFrame(columns=FAIRNESS_CORRELATIONS_COLS))
 
     @property
     def fairness_categories_score(self):
@@ -99,23 +114,38 @@ class Fairness(object):
 
     @property
     def fairness_info(self):
-        return pd.DataFrame(self.__fairness_info)[FAIRNESS_INFO_COLS]
+        if len(self.__fairness_info) == 0:
+            print(WARN_MSG.format('\"fairness_info\"'))
+        else:
+            return pd.DataFrame(self.__fairness_info)[FAIRNESS_INFO_COLS]
 
     @property
     def independence_info(self):
-        return pd.DataFrame(self.__fairness_info)[FAIRNESS_INDEPENDENCE_COLS]
+        if len(self.__fairness_info) == 0:
+            print(WARN_MSG.format('\"independence_info\"'))
+        else:
+            return pd.DataFrame(self.__fairness_info)[FAIRNESS_INDEPENDENCE_COLS]
 
     @property
     def separation_info(self):
-        return pd.DataFrame(self.__fairness_info)[FAIRNESS_SEPARATION_COLS]
+        if len(self.__fairness_info) == 0:
+            print(WARN_MSG.format('\"separation_info\"'))
+        else:
+            return pd.DataFrame(self.__fairness_info)[FAIRNESS_SEPARATION_COLS]
 
     @property
     def sufficiency_info(self):
-        return pd.DataFrame(self.__fairness_info)[FAIRNESS_SUFFICIENCY_COLS]
+        if len(self.__fairness_info) == 0:
+            print(WARN_MSG.format('\"sufficiency_info\"'))
+        else:
+            return pd.DataFrame(self.__fairness_info)[FAIRNESS_SUFFICIENCY_COLS]
 
     @property
     def fairness_global_info(self):
-        return pd.DataFrame(self.__global_scores_info)[FAIRNESS_GLOBAL_SCORES_COLS]
+        if len(self.__global_scores_info) == 0:
+            print(WARN_MSG.format('\"fairness_global_info\"'))
+        else:
+            return pd.DataFrame(self.__global_scores_info)[FAIRNESS_GLOBAL_SCORES_COLS]
 
     def independence(self, df: pd.DataFrame, sensitive_col: str, predict_col: str, target_label: str,
                      sensitive_value: str) -> float:
