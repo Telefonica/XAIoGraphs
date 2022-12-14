@@ -95,11 +95,11 @@ jobs:
       - name: Run tests and collect coverage
         shell: bash
         run: |
-          mkdir -p ./docs/_build/doctest
+          mkdir -p ./docs/build/log
           cd docs
-          sphinx-apidoc -o . ../xaiographs
-          sphinx-build -b doctest . ../xaiographs | tee ./_build/doctest/output.txt
-          if [ $(cat ./_build/doctest/output.txt | grep -c "\*\*\*Test Failed\*\*\*") -gt 0 ]; then
+          sphinx-apidoc -o ./source ../xaiographs
+          sphinx-build -b doctest -c ./source ./source ../xaiographs | tee ./build/log/output.txt
+          if [ $(cat ./build/log/output.txt | grep -c "\*\*\*Test Failed\*\*\*") -gt 0 ]; then
             echo "Documentation Test Failed.";
             exit 1;
           fi
