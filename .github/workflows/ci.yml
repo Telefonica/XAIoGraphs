@@ -67,7 +67,12 @@ jobs:
 
     name: Test documentation
 
-    runs-on: [cdorunner-aipro-cicd]
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [cdorunner-aipro-cicd]
+        python: ['3.7', '3.8', '3.9']
 
     steps:
       - name: Checkout ${{ github.event.inputs.branch || inputs.branch }}
@@ -78,7 +83,7 @@ jobs:
       - name: Set up Python ${{ github.event.inputs.python || inputs.python }}
         uses: actions/setup-python@v3
         with:
-          python-version: ['3.7', '3.8', '3.9']
+          python-version: ${{ matrix.python }}
 
       - uses: actions/setup-java@v3
         with:
