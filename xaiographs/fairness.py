@@ -80,9 +80,39 @@ class Fairness(object):
 
     @property
     def target_values(self):
-        """TODO target_values
+        """Property that returns a list with the different values of the target of the dataset. \
+        If the main method "fit_fairness()" has not been executed, it will return a warning message.
 
-        :return:
+        :return: List[str], with target values
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'y_true', 'y_predict'])
+            >>> df
+              gender y_true y_predict
+            0    MAN    YES       YES
+            1    MAN    YES       YES
+            2  WOMAN     NO        NO
+            3    MAN     NO       YES
+            4  WOMAN    YES        NO
+            5    MAN    YES        NO
+            6    MAN    YES       YES
+            7  WOMAN    YES       YES
+            8    MAN     NO        NO
+            9  WOMAN     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.target_values
+            array(['YES', 'NO'], dtype=object)
         """
         if self.__target_values is None:
             print(WARN_MSG.format('\"target_values\"'))
@@ -91,9 +121,43 @@ class Fairness(object):
 
     @property
     def confusion_matrix(self):
-        """ confusion matrix
+        """Property that returns a confusion matrix. \
+        If the main method "fit_fairness()" has not been executed, it will return a warning message.
 
-        :return:
+        :return: pd.DataFrame, with Confusion Matrix
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'y_true', 'y_predict'])
+            >>> df
+              gender y_true y_predict
+            0    MAN    YES       YES
+            1    MAN    YES       YES
+            2  WOMAN     NO        NO
+            3    MAN     NO       YES
+            4  WOMAN    YES        NO
+            5    MAN    YES        NO
+            6    MAN    YES       YES
+            7  WOMAN    YES       YES
+            8    MAN     NO        NO
+            9  WOMAN     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.confusion_matrix
+            y_predict  NO  YES
+            y_true
+            NO          3    1
+            YES         2    4
+
         """
         if self.__confusion_matrix is None:
             print(WARN_MSG.format('\"confusion_matrix\"'))
@@ -102,9 +166,44 @@ class Fairness(object):
 
     @property
     def correlation_matrix(self):
-        """
-        correlation
-        :return:
+        """Property that returns correlation matrix (pearson correlation) between features. \
+        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+
+        :return: pd.DataFrame, with correlation matrix
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'gender2': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'gender2', 'color', 'y_true', 'y_predict'])
+            >>> df
+              gender gender2  color y_true y_predict
+            0    MAN     MAN   BLUE    YES       YES
+            1    MAN     MAN   BLUE    YES       YES
+            2  WOMAN   WOMAN  GREEN     NO        NO
+            3    MAN     MAN   BLUE     NO       YES
+            4  WOMAN   WOMAN   BLUE    YES        NO
+            5    MAN     MAN  GREEN    YES        NO
+            6    MAN     MAN    RED    YES       YES
+            7  WOMAN   WOMAN    RED    YES       YES
+            8    MAN     MAN    RED     NO        NO
+            9  WOMAN   WOMAN    RED     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.correlation_matrix
+                     gender  gender2     color
+            gender      NaN      1.0  0.228218
+            gender2     NaN      NaN  0.228218
+            color       NaN      NaN       NaN
         """
         if self.__correlation_matrix is None:
             print(WARN_MSG.format('\"correlation_matrix\"'))
@@ -113,9 +212,44 @@ class Fairness(object):
 
     @property
     def highest_correlation_features(self):
-        """TODO: devuelve un dataframe vacio con cabecera, en caso de que no haya variables altamente correladas
+        """Property that returns the pairs of features that have a pearson correlation value above a threshold (0.9). \
+        If one of these features is a sensitive features, it will be marked with a flag. In the event that there are \
+        no highly correlated features, an empty DataFrame will be returned. \
+        If the main method "fit_fairness()" has not been executed, it will return a warning message.
 
-        :return:
+        :return: pd.DataFrame, with highest correlation features
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'gender2': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'gender2', 'color', 'y_true', 'y_predict'])
+            >>> df
+              gender gender2  color y_true y_predict
+            0    MAN     MAN   BLUE    YES       YES
+            1    MAN     MAN   BLUE    YES       YES
+            2  WOMAN   WOMAN  GREEN     NO        NO
+            3    MAN     MAN   BLUE     NO       YES
+            4  WOMAN   WOMAN   BLUE    YES        NO
+            5    MAN     MAN  GREEN    YES        NO
+            6    MAN     MAN    RED    YES       YES
+            7  WOMAN   WOMAN    RED    YES       YES
+            8    MAN     MAN    RED     NO        NO
+            9  WOMAN   WOMAN    RED     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.highest_correlation_features
+              feature_1 feature_2  correlation_value  is_correlation_sensible
+            0   gender2    gender                1.0                     True
         """
         if self.__highest_correlation_features is None:
             print(WARN_MSG.format('\"highest_correlation_features\"'))
@@ -126,9 +260,39 @@ class Fairness(object):
 
     @property
     def fairness_categories_score(self):
-        """
-        fairness categories
-        :return:
+        """Property that returns a DataFrame with the categories that are assigned to the Fairness criteria based \
+        on their score. The categories and ranges of scores are the following:
+
+        +--------+--------------------+
+        |Category|Range Score         |
+        +========+====================+
+        |A+      |0,0 <= score <= 0,02|
+        +--------+--------------------+
+        |A       |0,02 < score <= 0,05|
+        +--------+--------------------+
+        |B       |0,05 < score <= 0,08|
+        +--------+--------------------+
+        |C       |0,08 < score <= 0,15|
+        +--------+--------------------+
+        |D       |0,15 < score <= 0,25|
+        +--------+--------------------+
+        |E       |0,25 < score <= 1,0 |
+        +--------+--------------------+
+
+        :return: pd.DataFrame, with categories based on scores
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> from xaiographs import Fairness
+            >>> Fairness().fairness_categories_score
+              category  limit_score_pct
+            0       A+             0.02
+            1        A             0.05
+            2        B             0.08
+            3        C             0.15
+            4        D             0.25
+            5        E             1.00
         """
         return pd.DataFrame({'category': FAIRNESS_CATEGORIES_SCORE.keys(),
                              'limit_score_pct': FAIRNESS_CATEGORIES_SCORE.values()})
@@ -137,7 +301,45 @@ class Fairness(object):
     def fairness_info(self):
         """
         fairness info
-        :return:
+        :return: pd.DataFrame
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            >>> df
+              gender  color y_true y_predict
+            0    MAN   BLUE    YES       YES
+            1    MAN   BLUE    YES       YES
+            2  WOMAN  GREEN     NO        NO
+            3    MAN   BLUE     NO       YES
+            4  WOMAN   BLUE    YES        NO
+            5    MAN  GREEN    YES        NO
+            6    MAN    RED    YES       YES
+            7  WOMAN    RED    YES       YES
+            8    MAN    RED     NO        NO
+            9  WOMAN    RED     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender', 'color'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.fairness_info
+               sensitive_feature  sensitive_value  is_binary_sensitive_feature  target_label  independence_score  independence_category  independence_score_weight  separation_score  separation_category  separation_score_weight  sufficiency_score  sufficiency_category  sufficiency_score_weight
+            0             gender      MAN | WOMAN                         True           YES            0.416667                      E                        0.5              0.25                    D                      0.5               0.25                     D                       0.6
+            1             gender      MAN | WOMAN                         True            NO            0.416667                      E                        0.5               0.5                    E                      0.5           0.166667                     D                       0.4
+            2              color             BLUE                        False           YES            0.416667                      E                        0.3                 0                   A+                      0.3           0.333333                     E                       0.3
+            3              color            GREEN                        False           YES               0.625                      E                          0               0.8                    E                        0                0.8                     E                       0.1
+            4              color              RED                        False           YES                   0                     A+                        0.2               0.5                    E                      0.2           0.333333                     E                       0.2
+            5              color             BLUE                        False            NO            0.416667                      E                        0.1                 1                    E                      0.1               0.75                     E                       0.1
+            6              color            GREEN                        False            NO               0.625                      E                        0.2          0.333333                    E                      0.2           0.166667                     D                       0.1
+            7              color              RED                        False            NO                   0                     A+                        0.2               0.5                    E                      0.2           0.666667                     E                       0.2
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"fairness_info\"'))
@@ -148,7 +350,46 @@ class Fairness(object):
     def independence_info(self):
         """
         independence info
-        :return:
+        :return: pd.DataFrame
+
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            >>> df
+              gender  color y_true y_predict
+            0    MAN   BLUE    YES       YES
+            1    MAN   BLUE    YES       YES
+            2  WOMAN  GREEN     NO        NO
+            3    MAN   BLUE     NO       YES
+            4  WOMAN   BLUE    YES        NO
+            5    MAN  GREEN    YES        NO
+            6    MAN    RED    YES       YES
+            7  WOMAN    RED    YES       YES
+            8    MAN    RED     NO        NO
+            9  WOMAN    RED     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender', 'color'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.independence_info
+               sensitive_feature   sensitive_value   target_label    independence_score    independence_category
+            0             gender       MAN | WOMAN            YES              0.416667                        E
+            1             gender       MAN | WOMAN             NO              0.416667                        E
+            2              color              BLUE            YES              0.416667                        E
+            3              color             GREEN            YES                 0.625                        E
+            4              color               RED            YES                     0                       A+
+            5              color              BLUE             NO              0.416667                        E
+            6              color             GREEN             NO                 0.625                        E
+            7              color               RED             NO                     0                       A+
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"independence_info\"'))
@@ -159,7 +400,46 @@ class Fairness(object):
     def separation_info(self):
         """
         separation info
-        :return:
+        :return: pd.DataFrame
+
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            >>> df
+              gender  color y_true y_predict
+            0    MAN   BLUE    YES       YES
+            1    MAN   BLUE    YES       YES
+            2  WOMAN  GREEN     NO        NO
+            3    MAN   BLUE     NO       YES
+            4  WOMAN   BLUE    YES        NO
+            5    MAN  GREEN    YES        NO
+            6    MAN    RED    YES       YES
+            7  WOMAN    RED    YES       YES
+            8    MAN    RED     NO        NO
+            9  WOMAN    RED     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender', 'color'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.separation_info
+                sensitive_feature   sensitive_value   target_label   separation_score   separation_category
+            0              gender       MAN | WOMAN            YES               0.25                     D
+            1              gender       MAN | WOMAN             NO                0.5                     E
+            2               color              BLUE            YES                  0                    A+
+            3               color             GREEN            YES                0.8                     E
+            4               color               RED            YES                0.5                     E
+            5               color              BLUE             NO                  1                     E
+            6               color             GREEN             NO           0.333333                     E
+            7               color               RED             NO                0.5                     E
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"separation_info\"'))
@@ -170,7 +450,45 @@ class Fairness(object):
     def sufficiency_info(self):
         """sufficience info
 
-        :return:
+        :return: pd.DataFrame
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            >>> df
+              gender  color y_true y_predict
+            0    MAN   BLUE    YES       YES
+            1    MAN   BLUE    YES       YES
+            2  WOMAN  GREEN     NO        NO
+            3    MAN   BLUE     NO       YES
+            4  WOMAN   BLUE    YES        NO
+            5    MAN  GREEN    YES        NO
+            6    MAN    RED    YES       YES
+            7  WOMAN    RED    YES       YES
+            8    MAN    RED     NO        NO
+            9  WOMAN    RED     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender', 'color'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.sufficiency_info
+               sensitive_feature   sensitive_value   target_label   sufficiency_score   sufficiency_category
+            0             gender       MAN | WOMAN            YES                0.25                      D
+            1             gender       MAN | WOMAN             NO            0.166667                      D
+            2              color              BLUE            YES            0.333333                      E
+            3              color             GREEN            YES                 0.8                      E
+            4              color               RED            YES            0.333333                      E
+            5              color              BLUE             NO                0.75                      E
+            6              color             GREEN             NO            0.166667                      D
+            7              color               RED             NO            0.666667                      E
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"sufficiency_info\"'))
@@ -181,7 +499,40 @@ class Fairness(object):
     def fairness_global_info(self):
         """fairness global score
 
-        :return:
+        :return: pd.DataFrame
+
+
+        .. testsetup::
+            from xaiographs import Fairness
+        Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            >>> df
+              gender  color y_true y_predict
+            0    MAN   BLUE    YES       YES
+            1    MAN   BLUE    YES       YES
+            2  WOMAN  GREEN     NO        NO
+            3    MAN   BLUE     NO       YES
+            4  WOMAN   BLUE    YES        NO
+            5    MAN  GREEN    YES        NO
+            6    MAN    RED    YES       YES
+            7  WOMAN    RED    YES       YES
+            8    MAN    RED     NO        NO
+            9  WOMAN    RED     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender', 'color'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.fairness_global_info
+                sensitive_feature   independence_global_score   independence_category   separation_global_score   separation_category   sufficiency_global_score   sufficiency_category
+            0   gender                               0.416667   E                                      0.375      E                                     0.216667   D
+            1   color                                0.291667   E                                      0.366667   E                                     0.471667   E
         """
         if len(self.__global_scores_info) == 0:
             print(WARN_MSG.format('\"fairness_global_info\"'))
@@ -277,7 +628,7 @@ class Fairness(object):
         difference (in absolute value) of the probabilities:
 
         .. math::
-            separation\ score = | P(Y=1∣T=1,A=a) - P(Y=1∣T=1,A=b) |
+            separation\ score = | P(Y=y∣T=t,A=a) - P(Y=y∣T=t,A=b) |
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
@@ -360,6 +711,9 @@ class Fairness(object):
         We say the random variables (Y,A,T) satisfy sufficiency if the sensitive characteristics 'A' are
         statistically independent of the target value 'T' given the prediction 'Y'. We define the score as the
         difference (in absolute value) of the probabilities:
+
+        .. math::
+            sufficiency\ score = | P(T=t∣Y=y,A=a) - P(T=t∣Y=y,A=b) |
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
@@ -550,8 +904,6 @@ class Fairness(object):
 
         :param score: float, value of the score of the Fairness criterion
         :return:
-
-
         """
         fairness_category_score = sorted(FAIRNESS_CATEGORIES_SCORE.items(),
                                          key=lambda item: item[1],
