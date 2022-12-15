@@ -85,8 +85,6 @@ class Fairness(object):
 
         :return: List[str], with target values
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -126,8 +124,6 @@ class Fairness(object):
 
         :return: pd.DataFrame, with Confusion Matrix
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -171,8 +167,6 @@ class Fairness(object):
 
         :return: pd.DataFrame, with correlation matrix
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -219,8 +213,6 @@ class Fairness(object):
 
         :return: pd.DataFrame, with highest correlation features
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -281,8 +273,6 @@ class Fairness(object):
 
         :return: pd.DataFrame, with categories based on scores
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> from xaiographs import Fairness
             >>> Fairness().fairness_categories_score
@@ -303,8 +293,6 @@ class Fairness(object):
         fairness info
         :return: pd.DataFrame
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -352,9 +340,6 @@ class Fairness(object):
         independence info
         :return: pd.DataFrame
 
-
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -402,9 +387,6 @@ class Fairness(object):
         separation info
         :return: pd.DataFrame
 
-
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -452,8 +434,6 @@ class Fairness(object):
 
         :return: pd.DataFrame
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -501,9 +481,6 @@ class Fairness(object):
 
         :return: pd.DataFrame
 
-
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -558,8 +535,6 @@ class Fairness(object):
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, independence score value
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN', 'MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN'],
@@ -640,8 +615,6 @@ class Fairness(object):
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, separation score value
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -725,8 +698,6 @@ class Fairness(object):
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, sufficiency score value
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -813,8 +784,6 @@ class Fairness(object):
         :return: Tuple[float, float, float], fairness score metrics (independence score, separation score, \
         sufficiency score)
 
-        .. testsetup::
-            from xaiographs import Fairness
         Example:
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
