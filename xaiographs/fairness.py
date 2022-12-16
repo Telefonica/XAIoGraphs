@@ -153,7 +153,6 @@ class Fairness(object):
             y_true
             NO          3    1
             YES         2    4
-
         """
         if self.__confusion_matrix is None:
             print(WARN_MSG.format('\"confusion_matrix\"'))
