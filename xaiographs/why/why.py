@@ -1,10 +1,10 @@
 import pandas as pd
 import random
 from string import Template
-from typing import Any, List, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
-from xaiographs.common.constants import FEATURE, LANG_EN, LANG_ES, NODE_IMPORTANCE, NODE_NAME, QUALITY_MEASURE, RAND
-from xaiographs.common.constants import RANK, REASON, TARGET
+from xaiographs.common.constants import COMMA_SEP, FEATURE, LANG_EN, LANG_ES, NODE_IMPORTANCE, NODE_NAME
+from xaiographs.common.constants import QUALITY_MEASURE, RAND, RANK, REASON, TARGET
 
 
 class Why(object):
@@ -142,3 +142,39 @@ class Why(object):
             return df_final
         else:
             return df_final[REASON].values[0]
+
+    @staticmethod
+    def build_semantic_templates(global_nodes: pd.DataFrame, save_path_element: Optional[str] = None,
+                                 save_path_target: Optional[str] = None,
+                                 sep: Optional[str] = COMMA_SEP) -> List[pd.DataFrame]:
+        """
+        Builds and saves (when requested) the template files for semantic information; the resulting files must be
+        filled up by the user and moved to the corresponding language folder.
+
+        :param global_nodes: Pandas DataFrame with the global nodes' explainability
+        :param save_path_element: Path to save the element template file in CSV format
+        :param save_path_target: Path to save the target template file in CSV format
+        :param sep: Separator string
+        :return: List of two Pandas DataFrame, being the first one the element template data and the second one the
+            target template data
+        """
+        # Build element template DataFrame
+        df_element = (global_nodes[[NODE_NAME]]
+                      .rename(columns={NODE_NAME: FEATURE})
+                      .drop_duplicates()
+                      .sort_values(by=FEATURE))
+        df_element[REASON] = ''
+
+        # Build target template DataFrame
+        df_target = (global_nodes[[TARGET]]
+                     .drop_duplicates()
+                     .merge(df_element, how='cross')
+                     .sort_values(by=[TARGET, FEATURE]))
+
+        # Save to CSV if requested
+        if save_path_element is not None:
+            df_element.to_csv(path_or_buf=save_path_element, index=False, sep=sep)
+        if save_path_target is not None:
+            df_target.to_csv(path_or_buf=save_path_target, index=False, sep=sep)
+
+        return [df_element, df_target]
