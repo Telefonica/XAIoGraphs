@@ -257,17 +257,17 @@ class Fairness(object):
         +--------+--------------------+
         |Category|Range Score         |
         +========+====================+
-        |A+      |0,0 <= score <= 0,02|
+        |A+      |0.0 <= score <= 0.02|
         +--------+--------------------+
-        |A       |0,02 < score <= 0,05|
+        |A       |0.02 < score <= 0.05|
         +--------+--------------------+
-        |B       |0,05 < score <= 0,08|
+        |B       |0.05 < score <= 0.08|
         +--------+--------------------+
-        |C       |0,08 < score <= 0,15|
+        |C       |0.08 < score <= 0.15|
         +--------+--------------------+
-        |D       |0,15 < score <= 0,25|
+        |D       |0.15 < score <= 0.25|
         +--------+--------------------+
-        |E       |0,25 < score <= 1,0 |
+        |E       |0.25 < score <= 1.0 |
         +--------+--------------------+
 
         :return: pd.DataFrame, with categories based on scores
@@ -288,9 +288,30 @@ class Fairness(object):
 
     @property
     def fairness_info(self):
-        """
-        fairness info
-        :return: pd.DataFrame
+        """Returns a DataFrame with all information of fairness criterias. For each sensitive feature, for each \
+        value of the sensitive feature and for each value of the target, returns (for each fairness criterion) \
+        its Score, its Category and its Weight (percentage of the value of the variable and the value target). \
+        The datadrame contains the following columns:
+
+            + **sensitive_feature:** sensitive feature name
+            + **sensitive_value:** value of sensitive feature
+            + **is_binary_sensitive_feature:** indicates whether or not the sensitive feature is binary \
+            (if it has two values or more)
+            + **target_label:** value of prediction (y_predict)
+            + **independence_score:** Independence criterion score
+            + **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence \
+             criterion score
+            + **independence_score_weight:** Percentage (sensitive_value & predict_label)/all_rows_dataset
+            + **separation_score:** Separation criterion score
+            + **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation \
+            criterion score
+            + **separation_score_weight:** Percentage (sensitive_value & predict_label)/all_rows_dataset
+            + **sufficiency_score:** Sufficiency criterion score
+            + **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency \
+            criterion score
+            + **sufficiency_score_weight:** Percentage (sensitive_value & target_label)/all_rows_dataset
+
+        :return: pd.DataFrame, with all information of fairness criterias
 
         Example:
             >>> import pandas as pd
@@ -335,9 +356,18 @@ class Fairness(object):
 
     @property
     def independence_info(self):
-        """
-        independence info
-        :return: pd.DataFrame
+        """Returns a DataFrame with all information of Independence criterion. For each sensitive feature, for each \
+        value of the sensitive feature and for each value of the target, returns (for Independence criterion) \
+        its Score and its Category. The datadrame contains the following columns:
+
+            + **sensitive_feature:** sensitive feature name
+            + **sensitive_value:** value of sensitive feature
+            + **target_label:** value of prediction (y_predict)
+            + **independence_score:** Independence criterion score
+            + **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence \
+             criterion score
+
+        :return: pd.DataFrame, with all information of Independence criterion
 
         Example:
             >>> import pandas as pd
@@ -382,9 +412,18 @@ class Fairness(object):
 
     @property
     def separation_info(self):
-        """
-        separation info
-        :return: pd.DataFrame
+        """Returns a DataFrame with all information of Separation criterion. For each sensitive feature, for each \
+        value of the sensitive feature and for each value of the target, returns (for Separation criterion) \
+        its Score and its Category. The datadrame contains the following columns:
+
+            + **sensitive_feature:** sensitive feature name
+            + **sensitive_value:** value of sensitive feature
+            + **target_label:** value of prediction (y_predict)
+            + **separation_score:** Separation criterion score
+            + **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation \
+            criterion score
+
+        :return: pd.DataFrame, with all information of Separation criterion
 
         Example:
             >>> import pandas as pd
@@ -429,9 +468,18 @@ class Fairness(object):
 
     @property
     def sufficiency_info(self):
-        """sufficience info
+        """Returns a DataFrame with all information of Sufficiency criterion. For each sensitive feature, for each \
+        value of the sensitive feature and for each value of the target, returns (for Sufficiency criterion) \
+        its Score and its Category. The datadrame contains the following columns:
 
-        :return: pd.DataFrame
+            + **sensitive_feature:** sensitive feature name
+            + **sensitive_value:** value of sensitive feature
+            + **target_label:** value of prediction (y_predict)
+            + **sufficiency_score:** Sufficiency criterion score
+            + **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency \
+            criterion score
+
+        :return: pd.DataFrame, with all information of Sufficiency criterion
 
         Example:
             >>> import pandas as pd
@@ -476,9 +524,22 @@ class Fairness(object):
 
     @property
     def fairness_global_info(self):
-        """fairness global score
+        """Returns a DataFrame with "Global Scores" (weighted aggregation of the scores for each fairness criteria) \
+        for each sensitive feature and assigns it a category *{A+, A, B, C, D, E}*. \
+        The datadrame contains the following columns:
 
-        :return: pd.DataFrame
+            + **sensitive_feature:** sensitive feature name
+            + **independence_global_score:** Independence global criterion score
+            + **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence global \
+             criterion score
+            + **separation_global_score:** Separation global criterion score
+            + **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation global \
+            criterion score
+            + **sufficiency_global_score:** Sufficiency global criterion score
+            + **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency global \
+            criterion score
+
+        :return: pd.DataFrame, with "Global Scores"
 
         Example:
             >>> import pandas as pd
@@ -507,8 +568,8 @@ class Fairness(object):
             ...                predict_col='y_predict')
             >>> f.fairness_global_info
                 sensitive_feature   independence_global_score   independence_category   separation_global_score   separation_category   sufficiency_global_score   sufficiency_category
-            0   gender                               0.416667   E                                      0.375      E                                     0.216667   D
-            1   color                                0.291667   E                                      0.366667   E                                     0.471667   E
+            0              gender                    0.416667                       E                     0.375                     E                   0.216667                      D
+            1               color                    0.291667                       E                  0.366667                     E                   0.471667                      E
         """
         if len(self.__global_scores_info) == 0:
             print(WARN_MSG.format('\"fairness_global_info\"'))
