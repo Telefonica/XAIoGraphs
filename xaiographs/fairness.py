@@ -60,9 +60,49 @@ WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute fi
 
 
 class Fairness(object):
-    """
-    TODO
+    """The Fairness class offers functionalities to explain how fair or unfair are the classifications made by a \
+    (Deep) Machine Learning model on a set of features that we consider sensitive (gender, \
+    ethnic group, religion, age, etc.).
 
+    These explanations are based on the 3 fairness criteria (Independence, Separation, and Sufficiency) to assess if \
+    a classification model is fair. It will be considered fair if its predictions are not influenced by any \
+    of the sensitive features.
+
+    Based on definitions of each fairness criteria, fairness Scores and Categories are calculated in order to \
+    explain and identify what class and what value of the sensitive feature is committing a possible \
+    injustice in classification.
+
+    To be able to carry out these calculations, the dataset (pandas DataFrame) with features, target (y_true) and \
+    predictions (y_predict) of the model are mandatory. From a list with sensitive features to be evaluated, \
+    the fairness calculations are made. Here is a simple example of using this class:
+
+    Example:
+            >>> import pandas as pd
+            >>> df = pd.DataFrame({'gender': ['MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN', 'MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN'],
+            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+            ...                   columns=['gender', 'y_true', 'y_predict'])
+            >>> df
+              gender y_true y_predict
+            0    MEN    YES       YES
+            1    MEN    YES       YES
+            2  WOMAN     NO        NO
+            3    MEN     NO       YES
+            4  WOMAN    YES        NO
+            5    MEN    YES        NO
+            6    MEN    YES       YES
+            7  WOMAN    YES       YES
+            8    MEN     NO        NO
+            9  WOMAN     NO        NO
+            >>> from xaiographs import Fairness
+            >>> f = Fairness()
+            >>> f.fit_fairness(df=df,
+            ...                sensitive_cols=['gender'],
+            ...                target_col='y_true',
+            ...                predict_col='y_predict')
+            >>> f.fairness_global_info
+                sensitive_feature   independence_global_score   independence_category   separation_global_score   separation_category   sufficiency_global_score   sufficiency_category
+            0              gender                    0.416667                       E                     0.375                     E                   0.216667                      D
     """
 
     def __init__(self, destination_path: str = './xaiographs_web_files'):
@@ -927,12 +967,27 @@ class Fairness(object):
 
     @staticmethod
     def get_fairness_category(score: float) -> str:
-        """TODO: Función que devuelve una categorías (A+, A, B, C, D, E) en función del score de un criterio
-        de fairness
-        Tested: get_fairness_category_unit_test
+        """Given a Score for any Fairness criteria, it assigns a Category to it. The relationship between \
+        Score and Category is shown in the following table:
+
+        +--------+--------------------+
+        |Category|Range Score         |
+        +========+====================+
+        |A+      |0.0 <= score <= 0.02|
+        +--------+--------------------+
+        |A       |0.02 < score <= 0.05|
+        +--------+--------------------+
+        |B       |0.05 < score <= 0.08|
+        +--------+--------------------+
+        |C       |0.08 < score <= 0.15|
+        +--------+--------------------+
+        |D       |0.15 < score <= 0.25|
+        +--------+--------------------+
+        |E       |0.25 < score <= 1.0 |
+        +--------+--------------------+
 
         :param score: float, value of the score of the Fairness criterion
-        :return:
+        :return: str, category assigned to the score
         """
         fairness_category_score = sorted(FAIRNESS_CATEGORIES_SCORE.items(),
                                          key=lambda item: item[1],
@@ -968,7 +1023,11 @@ class Fairness(object):
     @staticmethod
     def __check_dataset_values(df: pd.DataFrame, sensitive_col: str, target_col: Union[str, None], predict_col: str,
                                target_label: str, sensitive_value: str) -> None:
-        """ TODO
+        """Method that verifies:
+
+            + if sensitive value exists in column dataset
+            + if sensitive value exists in column dataset
+            + if sensitive value exists in column dataset
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
@@ -977,7 +1036,7 @@ class Fairness(object):
         :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
-        :return:
+        :return: None
         """
         # Check if sensitive_col, predict_col or target_col column is in dataframe
         columns_df = df.columns
