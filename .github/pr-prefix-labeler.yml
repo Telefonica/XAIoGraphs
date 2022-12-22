@@ -1,0 +1,6 @@
+"[ci]": "ci"
+"[doc]": "documentation"
+"[feature]": "enhancement"
+"[fix]": "bug"
+"[refactor]": "enhancement"
+"[ui]": "User Interface"
