@@ -219,7 +219,7 @@ def check_deploy_web() -> bool:
 
 def clean_csv_public_folder():
     """
-    This function remove all csv files used previously
+    This function remove all csv files used previously.
     """
     pathlib.Path(BACKEND_PUBLIC_FOLDER).mkdir(parents=True, exist_ok=True)
     for filename in os.listdir(BACKEND_PUBLIC_FOLDER):
@@ -234,6 +234,8 @@ def process_csv_files(path: str):
     """
     This function prepare the backend publish folder used to store and read the csv files.
     Once the folder is clean, copy all the files from the location indicated in the path parameter to the public folder.
+
+    :param path: Path where the CSV files are stored
     """
     clean_csv_public_folder()
 
@@ -255,7 +257,8 @@ def process_csv_files(path: str):
 def deploy_web(force: bool = False) -> None:
     """
     Build web structure, copying it directly from the `egg` file.
-    :return: None
+
+    :param force: Force building the web from scratch, overwriting the existing one
     """
     if force or (not os.path.exists(os.path.join(os.getcwd(), MY_HTML_FOLDER_PATH))):
         for d in os.listdir(SRC_DIR):
