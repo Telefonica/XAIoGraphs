@@ -1,3 +1,7 @@
+
+from xaiographs.common.constants import WEB_ENTRY_POINT
+
+import argparse
 import http.server
 import os
 import pathlib
@@ -6,26 +10,28 @@ import subprocess
 import socketserver
 import webbrowser
 
-from absl import app, flags
+from copy import deepcopy
 
 # CONSTANTS
 BACKEND_NODE_PACKAGE = 'Backend node package'
-BACKEND_PUBLIC_FOLDER = 'backend/public'
 COL_HEIGHT_LEFT = 50
 COL_HEIGHT_RIGHT = 20
 FRONTEND_NODE_PACKAGE = 'Frontend node package'
+HIDDEN_DIR = '.{}'.format(WEB_ENTRY_POINT)
 MY_PROTOCOL = 'http://'
 MY_HOST_NAME = 'localhost'
 MY_HTML_FOLDER_PATH = 'XAIoWeb/'
 MY_HOME_PAGE_FILE_PATH = 'index.html'
 NODE_BACKEND = 'backend'
 NODE_FRONTEND = 'frontend'
-NODE_MODULES_BACKEND = 'backend/node_modules'
-NODE_MODULES_FRONTEND = 'frontend/node_modules'
+NODE_MODULES_BACKEND = os.path.join(NODE_BACKEND, 'node_modules')
+NODE_MODULES_FRONTEND = os.path.join(NODE_FRONTEND, 'node_modules')
+BACKEND_PUBLIC_FOLDER = os.path.join(NODE_BACKEND, 'public')
 TEXT_COLOR_WHITE = '\033[0m'
 TEXT_COLOR_RED = '\033[91m'
 TEXT_COLOR_GREEN = '\033[92m'
 XAIOWEB_DISTRIBUTION = 'XAIoWeb distribution'
+SRC_DIR = os.path.dirname(os.path.realpath(__file__))
 
 CSV_FILES = ["global_explainability.csv",
              "global_target_distribution.csv",
@@ -41,12 +47,7 @@ CSV_FILES = ["global_explainability.csv",
              "[DEPRECATED]_input_dataset_discretized.csv",
              "[DEPRECATED]_global_target_explainability.csv",
              "[DEPRECATED]_local_explainability.csv",
-            ]
-
-# Parameters definition
-flags.DEFINE_integer(name='port', default=8080, help='Web server port', required=False)
-flags.DEFINE_string(name='path', default=None, help='CSV files path', required=True)
-FLAGS = flags.FLAGS
+             ]
 
 
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -251,26 +252,59 @@ def process_csv_files(path: str):
             print_message_line(csv, 'File Not Found', TEXT_COLOR_RED)
 
 
-def main(argv: list):
+def deploy_web(force: bool = False) -> None:
     """
-    Function with main program
+    Build web structure, copying it directly from the `egg` file.
+    :return: None
+    """
+    if force or (not os.path.exists(os.path.join(os.getcwd(), MY_HTML_FOLDER_PATH))):
+        for d in os.listdir(SRC_DIR):
+            if not (d.startswith('__') or d.endswith('.py')):
+                src = os.path.join(SRC_DIR, d)
+                dst = os.path.join(os.getcwd(), d)
+                if force:
+                    rmfunct = shutil.rmtree if os.path.isdir(dst) else os.remove
+                    rmfunct(dst)
+                copyfunct = shutil.copytree if os.path.isdir(src) else shutil.copy
+                copyfunct(src, dst)
+    else:
+        print("Apparently the web is already deployed")
 
-    :param argv: List non-empty of the command line arguments including program name, sys.argv is used if None.
+
+def main():
     """
-    del (argv)
+    Function with main program.
+    """
+    # Handle input arguments
+    parser = argparse.ArgumentParser(description='XAIoGraphs')
+    parser.add_argument('-p', '--port', default=8080, help='Web server port', type=int, required=True)
+    parser.add_argument('-d', '--data', default=None, help='CSV files path', type=str, required=True)
+    parser.add_argument('-f', '--force', action='store_true',
+                        help='Force building the web from scratch, overwriting the existing one', required=False)
+    parser.add_argument('-o', '--open', action='store_true', help='Open web in browser', required=False)
+    args = deepcopy(parser.parse_args().__dict__)
+
+    # Deploy web into a hidden directory inside the current one
+    os.makedirs(HIDDEN_DIR, exist_ok=True)
+    os.chdir(HIDDEN_DIR)
+    deploy_web(force=args.get('force'))
 
     my_handler = MyHttpRequestHandler
 
     if check_npm_requirements():
         if check_node_backend() * check_node_frontend() * check_deploy_web():
-            process_csv_files(path=FLAGS.path)
+            process_csv_files(path=args.get('data'))
 
-            with socketserver.TCPServer(("", FLAGS.port), my_handler) as httpd:
+            with socketserver.TCPServer(("", args.get('port')), my_handler) as httpd:
                 subprocess.run('pm2 start pm2-XAIoWeb.json', shell=True)
 
-                print("Http Server Serving at port", FLAGS.port)
-                url_domain = '{}{}:{}'.format(MY_PROTOCOL, MY_HOST_NAME, str(FLAGS.port))
-                webbrowser.open('{}/{}'.format(url_domain, MY_HTML_FOLDER_PATH), new=2)
+                print("Http Server Serving at port", args.get('port'))
+                url_domain = '{}{}:{}'.format(MY_PROTOCOL, MY_HOST_NAME, str(args.get('port')))
+                web_url = '{}/{}'.format(url_domain, MY_HTML_FOLDER_PATH)
+                if args.get('open'):
+                    webbrowser.open(web_url, new=2)
+                else:
+                    print("Web published in URL {}".format(web_url))
 
                 try:
                     httpd.serve_forever()
@@ -285,4 +319,4 @@ def main(argv: list):
 
 
 if __name__ == '__main__':
-    app.run(main=main)
+    main()
