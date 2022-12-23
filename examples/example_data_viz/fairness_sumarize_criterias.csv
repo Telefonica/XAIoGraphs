@@ -1,3 +1,3 @@
-sensitive_value,sndependence_global_score,sndependence_category,separation_global_score,separation_category,sufficiency_global_score,sufficiency_category
-gender,0.0530200978163159,B,0.03603951785214125,A,0.02046061929185477,A
-rango_edad,0.052446854768895566,B,0.06052515623015064,B,0.029291484805300434,A
+sensitive_feature,independence_global_score,independence_category,separation_global_score,separation_category,sufficiency_global_score,sufficiency_category
+age_range,0.05481846350833148,B,0.06342057643552299,B,0.030163298600253092,A
+gender,0.05084334081865242,B,0.03709438677004814,A,0.017007403986221685,A+
