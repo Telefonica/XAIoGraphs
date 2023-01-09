@@ -11,9 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
 from xaiographs.common.constants import ID, TARGET, RCAT, RNUM
-from xaiographs.common.utils import get_common_info, get_features_info
 from xaiographs.exgraph.explainer.explainer import Explainer
-from xaiographs.exgraph.feature_selector.feature_selector import FeatureSelector
 
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
 CONT_COLUMN_NAMES = ['age', 'fare']

@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, NamedTuple, Tuple
+from typing import Any, List, NamedTuple, Tuple
 
 import numpy as np
 import pandas as pd
@@ -43,48 +43,6 @@ def filter_by_ids(df: pd.DataFrame, sample_id_mask: np.ndarray, n_repetitions: i
         return df[sample_id_mask]
     else:
         return df[np.repeat(sample_id_mask, n_repetitions)]
-
-
-def get_adapted_importance_mask(target_cols: List[str], importance_cols: List[str]) -> Dict[str, List[bool]]:
-    """
-    This function builds a dictionary containing a mask for each target. These masks are set to True for those
-    importance features associated to the corresponding target and False for those importance features related to the
-    other targets
-
-    :param target_cols:     List of strings containing the possible targets
-    :param importance_cols: List of strings containing the importance columns names
-    :return:                Dictionary with as many elements as target values, each mask value consists of a list of
-                            boolean values set to True for those importance features associated to that target and False
-                            for the rest
-    """
-    adapted_importance_mask = {}
-    for target_col in target_cols:
-        target_mask = []
-        for importance_col in importance_cols:
-            if not importance_col.startswith(target_col):
-                target_mask.append(False)
-            else:
-                target_mask.append(True)
-        adapted_importance_mask[target_col] = target_mask
-    return adapted_importance_mask
-
-
-def get_common_info(df: pd.DataFrame, feature_cols: List[str],
-                    target_cols: List[str]) -> Tuple[FeaturesInfo, TargetInfo]:
-    """
-    This function orchestrates the generation of both, features columns information and target information
-
-    :param df:           Pandas DataFrame containing the given dataset
-    :param feature_cols: List of strings containing the column names for the features
-    :param target_cols:  List of strings containing the possible targets
-    :return:             NamedTuple containing all the feature column names lists which will be used all through the
-                         execution flow and another NamedTuple containing target related info
-    """
-
-    features_info = get_features_info(df=df, feature_cols=feature_cols, target_cols=target_cols)
-    target_info = get_target_info(df=df, target_cols=target_cols)
-
-    return features_info, target_info
 
 
 def get_features_info(df: pd.DataFrame, feature_cols: List[str], target_cols: List[str]) -> FeaturesInfo:
@@ -149,7 +107,7 @@ def get_target_info(df: pd.DataFrame, target_cols: List[str]) -> TargetInfo:
     """
     top1_argmax = np.argmax(df[target_cols].values, axis=1)
     top1_targets = np.array([target_cols[am] for am in top1_argmax])
-    target_probs = np.round(np.sum(df[target_cols].values, axis=0) / len(df), decimals=2)
+    target_probs = np.unique(top1_targets, return_counts=True)[1] / len(df)
 
     return TargetInfo(target_columns=target_cols, target_probs=target_probs, top1_argmax=top1_argmax,
                       top1_targets=top1_targets)
@@ -174,6 +132,10 @@ def sample_by_target(ids: np.ndarray, top1_targets: np.ndarray, num_samples: int
     :return:                Tuple containing both, a numpy array containing boolean values which will be used to
                             filter any given DataFrame and a list containing the ids used as sample
     """
+    # Before proceeding, the requested sample size can't be greater nor equal than the size of the DataFrame from which
+    # samples will be taken
+    assert len(ids) > num_samples, "requested local sample size can't be greater nor equal than the global size"
+
     # A Pandas DataFrame containing a first column representing the id and a second column with the top1 target for that
     # row
     df_ids_target = pd.DataFrame(np.concatenate((ids.reshape(-1, 1), top1_targets.reshape(-1, 1)), axis=1),
