@@ -38,25 +38,21 @@ class FeatureSelector(object):
         self.top_features_ = []
 
     @staticmethod
-    def __compute_jensen_shannon(dist1: np.ndarray, dist2: np.ndarray, axis: int = 0, keepdims=True,
-                                 agg_function='median'):
+    def __compute_jensen_shannon(dist1: np.ndarray, dist2: np.ndarray, axis: int = 0, keepdims=True) -> np.ndarray:
         """
         This is an alternative version of the Jensen Shannon distance,
         (https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html)
-        An aggregation function is used to prevent those categorical features with high cardinality, to "eclipse"
-        others just because their high cardinality
+        Multiple aggregation functions are used to balance their individual pros and cons
 
-        :param dist1:           Numpy array containing a probability distribution
-        :param dist2:           Numpy array containing another probability distribution
-        :param axis:            Integer representing the axis along which the Jensen-Shannon distances are computed
-                                (default 0)
-        :param keepdims:        Boolean, if set to True, the reduced axes are left in the result as dimensions with size
-                                one. With this option, the result will broadcast correctly against the input array.
-                                (default False)
+        :param dist1:     Numpy array containing a probability distribution
+        :param dist2:     Numpy array containing another probability distribution
+        :param axis:      Integer representing the axis along which the Jensen-Shannon distances are computed
+                          (default 0)
+        :param keepdims:  Boolean, if set to True, the reduced axes are left in the result as dimensions with size
+                          one. With this option, the result will broadcast correctly against the input array.
+                          (default False)
 
-        :param agg_function:    The function used to aggregate the averaged distances before applying square root to the
-                                final result
-        :return:                Float or np.ndarray (depending on the input shape) containing the calculated distance/s
+        :return:          Float or np.ndarray (depending on the input shape) containing the calculated statistics
         """
         dist1 = dist1 if isinstance(dist1, np.ndarray) else np.asarray(dist1)
         dist2 = dist2 if isinstance(dist2, np.ndarray) else np.asarray(dist2)
@@ -66,13 +62,11 @@ class FeatureSelector(object):
         left = rel_entr(dist1, m)
         right = rel_entr(dist2, m)
         js_msa = (left + right) / 2.0
-        if agg_function == 'median':
-            res = np.median(js_msa)
-        elif agg_function == 'mean':
-            res = np.mean(js_msa)
-        else:
-            res = np.sum(js_msa)
-        return np.sqrt(res)
+
+        return np.array([np.sqrt(np.median(js_msa)),
+                         np.sqrt(np.mean(js_msa)),
+                         np.sqrt(np.max(js_msa)),
+                         np.sqrt(np.sum(js_msa))])
 
     @staticmethod
     def __compute_probabilities(feature_by_target: pd.Series, unique_values: np.ndarray) -> np.ndarray:
@@ -115,6 +109,7 @@ class FeatureSelector(object):
         # For each feature, its unique values are retrieved
         unique_values = self.get_feature_unique_values()
         for target_value in self.target_values:
+            unorm_stats_by_feature = []
             distance_by_feature = {}
 
             # For each feature, unique values are retrieved to compute probabilities
@@ -128,8 +123,23 @@ class FeatureSelector(object):
                     self.df.loc[self.df[TARGET] != target_value][feature_col], unique_values[feature_col])
 
                 # Modified Jensen-Shannon distance is computed between the two distributions
-                distance_by_feature[feature_col] = FeatureSelector.__compute_jensen_shannon(probs_feature_target,
-                                                                                            probs_feature_no_target)
+                unorm_stats_by_feature.append(FeatureSelector.__compute_jensen_shannon(probs_feature_target,
+                                                                                       probs_feature_no_target))
+
+            # Statistics (mean, median, max and sum) are computed by feature
+            unorm_stats_by_feature = np.stack(unorm_stats_by_feature)
+
+            # Statistics for each feature are normalized
+            norm_stats_by_feature = unorm_stats_by_feature/unorm_stats_by_feature.sum(axis=0)
+
+            # Normalized statistics are added for each feature
+            unorm_distance_by_feature = np.sum(norm_stats_by_feature, axis=1)
+
+            # The addition results are normalized
+            norm_distance_by_feature = unorm_distance_by_feature/np.sum(unorm_distance_by_feature)
+
+            # A dictionary (feature: distance) is built
+            distance_by_feature = dict(zip(self.feature_cols, norm_distance_by_feature))
 
             # Once distance has been computed for all the features related to a given target value, features are
             # ranked so that the larger the distance, the higher the rank (1 is greater than 2 in rank terms)

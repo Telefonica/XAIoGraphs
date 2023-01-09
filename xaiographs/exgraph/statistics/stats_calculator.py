@@ -129,7 +129,7 @@ class StatsCalculator(object):
                     #  valores de ese tipo
                     feature_value = '_'.join([feature_col, "{:.02f}".format(feature_value_raw)])
                 else:
-                    feature_value = '_'.join([feature_col, feature_value_raw])
+                    feature_value = '_'.join([feature_col, str(feature_value_raw)])
 
                 graph_nodes_info.append([row[0], feature_value, feature_col, self.top1_targets[i]])
 
