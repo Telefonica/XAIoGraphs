@@ -1,10 +1,8 @@
 from xaiographs.exgraph.importance.tef_shap import TefShap
-from xaiographs.exgraph.importance.tef_weighted_shap import TefWeightedShap
 
 
 class ImportanceCalculatorFactory(object):
     TEF_SHAP = 'TEF_SHAP'
-    TEF_WEIGHTED_SHAP = 'TEF_WEIGHTED_SHAP'
 
     def __init__(self):
         """Importance Calculator factory class
@@ -25,9 +23,6 @@ class ImportanceCalculatorFactory(object):
         if name == self.TEF_SHAP:
             print('INFO: {} importance calculator will be instantiated'.format(name))
             return TefShap(**importance_calculator_params)
-        elif name == self.TEF_WEIGHTED_SHAP:
-            print('INFO: {} importance calculator will be instantiated'.format(name))
-            return TefWeightedShap(**importance_calculator_params)
         else:
             print('ERROR:{} is not a valid importance calculator!!'.format(name))
             return None

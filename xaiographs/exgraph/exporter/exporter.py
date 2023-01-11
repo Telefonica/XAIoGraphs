@@ -8,7 +8,7 @@ from xaiographs.common.constants import BIN_WIDTH_EDGE_WEIGHT, BIN_WIDTH_FEATURE
     IMPORTANCE_SUFFIX, MAX_EDGE_WEIGHT, MAX_FEATURE_WEIGHT, MIN_EDGE_WEIGHT, MIN_FEATURE_WEIGHT, MAX_NODE_WEIGHT, \
     MIN_NODE_WEIGHT, N_BINS_EDGE_WEIGHT, N_BINS_FEATURE_WEIGHT, N_BINS_NODE_WEIGHT, NODE_COUNT, NODE_IMPORTANCE, \
     NODE_NAME, NODE_NAME_RATIO, NODE_NAME_RATIO_RANK, NODE_NAME_RATIO_WEIGHT, NODE_WEIGHT, NUM_FEATURES, \
-    QUALITY_MEASURE, RANK, TARGET, TOTAL_COUNT
+    RELIABILITY, RANK, TARGET, TOTAL_COUNT
 from xaiographs.common.utils import FeaturesInfo, TargetInfo
 from xaiographs.exgraph.statistics.stats_calculator import StatsResults
 
@@ -143,7 +143,7 @@ class Exporter(object):
                                            sample_ids_mask: np.ndarray,
                                            filename: str = 'local_dataset_reliability.csv'):
         """
-        This function collects the quality measure for each row and for its correspondent top1 target, then, information
+        This function collects the reliability for each row and for its correspondent top1 target, then, information
         is persisted
 
         :param features_info:       NamedTuple containing all the feature column names lists which will be used all
@@ -164,14 +164,14 @@ class Exporter(object):
                 df_local_feature_values[:, i + 1] = np.around(df_local_feature_values[:, i + 1].astype('float'),
                                                               decimals=2)
 
-        df_local_quality_measure_values = self.df_explanation_sample[features_info.quality_measure_columns].values
+        df_local_reliability_values = self.df_explanation_sample[features_info.reliability_columns].values
         pd.DataFrame(np.concatenate((df_local_feature_values, target_info.top1_targets[sample_ids_mask].reshape(-1, 1),
-                                     np.round(df_local_quality_measure_values[
-                                                  np.arange(
-                                                      df_local_quality_measure_values.shape[
-                                                          0]), target_info.top1_argmax[sample_ids_mask]],
-                                              decimals=2).reshape(-1, 1)), axis=1),
-                     columns=[ID] + features_info.feature_columns + [TARGET] + [QUALITY_MEASURE]).to_csv(
+                                     np.abs(1 - np.round(df_local_reliability_values[
+                                                             np.arange(
+                                                                 df_local_reliability_values.shape[
+                                                                     0]), target_info.top1_argmax[sample_ids_mask]],
+                                                         decimals=2)).reshape(-1, 1)), axis=1),
+                     columns=[ID] + features_info.feature_columns + [TARGET] + [RELIABILITY]).to_csv(
             path_or_buf=os.path.join(self.path, filename),
             sep=self.sep, index=self.keep_index)
 

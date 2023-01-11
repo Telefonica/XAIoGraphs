@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from torch_geometric import nn as pyg_nn
 from tqdm import tqdm
 
-from xaiographs.common.constants import ID, IMPORTANCE_SUFFIX
+from xaiographs.common.constants import ID, IMPORTANCE_SUFFIX, RELIABILITY
 from xaiographs.common.utils import TargetInfo
 from xaiographs.exgraph.importance.importance_calculator import ImportanceCalculator
 
@@ -314,11 +314,11 @@ class TefShap(ImportanceCalculator):
         """
         This method takes care of computing importance for the dataset to be explained (sampled during the train
         process). The core of importance calculation is the `__graph_importance` method. The calculated importance
-        obtained from it, is adjusted to the ground truth, obtaining the so-called quality measure. This quality measure
-         is distributed among the considered features and added to the calculated importance resulting in the adapted
-        importance which will populate the importance columns of the "explained" DataFrame . The quality measure is
-        stored in the quality measure columns of the "explained" DataFrame too.
-        There will be an importance column per feature and per target and a quality measure column per target.
+        obtained from it, is adjusted to the ground truth, obtaining the so-called reliability. This sort of error
+        called reliability, is distributed among the considered features and added to the calculated importance
+        resulting in the adapted importance which will populate the importance columns of the "explained" DataFrame .
+         The reliability is stored in the reliability columns of the "explained" DataFrame too.
+        There will be an importance column per feature and per target and a reliability column per target.
 
         :param batch_size:  Integer representing the size of the batches (chunks) on which importance will be calculated
         :param params:      Dictionary containing four elements:
@@ -354,11 +354,11 @@ class TefShap(ImportanceCalculator):
         y: np.ndarray = params[TefShap._DF_TO_EXPLAIN][self.target_info.target_columns].values
 
         # Difference between ground truth and predictions
-        quality_measure: np.ndarray = (y - y_hat)
+        reliability: np.ndarray = (y - y_hat)
 
-        # Adapted importance results from adding the calculated importance plus the quality measure divided by the
+        # Adapted importance results from adding the calculated importance plus the reliability divided by the
         # number of features
-        adapted_importance: np.ndarray = calculated_importance + np.expand_dims(quality_measure /
+        adapted_importance: np.ndarray = calculated_importance + np.expand_dims(reliability /
                                                                                 calculated_importance.shape[1], axis=1)
         reshaped_adapted_importance = adapted_importance.reshape(adapted_importance.shape[0], -1)
 
@@ -376,8 +376,8 @@ class TefShap(ImportanceCalculator):
             df_explanation[c] = reshaped_adapted_importance[:, i]
 
         for j, target_col in enumerate(self.target_info.target_columns):
-            quality_measure_column = '{}_{}'.format(target_col, ImportanceCalculator._QUALITY_MEASURE)
-            df_explanation[quality_measure_column] = quality_measure[:, j]
+            reliability_column = '{}_{}'.format(target_col, RELIABILITY)
+            df_explanation[reliability_column] = reliability[:, j]
 
         # Data is formatted for the sanity check
         y_hat_reduced = phi0 + np.sum(df_explanation[importance_columns].values.reshape(-1, adapted_importance.shape[1],
@@ -424,6 +424,7 @@ class TefShap(ImportanceCalculator):
         df_train.drop(ID, axis=1, inplace=True)
 
         # First step consists of retrieving the number of samples to be globally explained
+        print('INFO:    sampling the dataset to be explained ...')
         df_2_explain = ImportanceCalculator.sample_global(df=df.copy(), top1_targets=self.target_info.top1_targets,
                                                           num_samples=num_samples_to_explain,
                                                           target_probs=self.target_info.target_probs,
@@ -449,9 +450,6 @@ class TefShap(ImportanceCalculator):
         df_2_explain = df_2_explain.rename(columns={v: str(k) for k, v in enumerate(self.feature_cols)})
         coalitions_worth = self.__build_features_graph(df_2_explain, df_train, self.target_info.target_columns,
                                                        coalition_names)
-
-        print('coalitions_worth')
-        print(coalitions_worth.shape)
 
         return {
             TefShap._DF_TO_EXPLAIN: df_2_explain,

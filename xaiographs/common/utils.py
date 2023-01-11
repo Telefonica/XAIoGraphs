@@ -3,18 +3,18 @@ from typing import Any, List, NamedTuple, Tuple
 import numpy as np
 import pandas as pd
 
-from xaiographs.common.constants import ID, IMPORTANCE_SUFFIX, QUALITY_MEASURE, TARGET
+from xaiographs.common.constants import ID, IMPORTANCE_SUFFIX, RELIABILITY, TARGET
 
 
 class FeaturesInfo(NamedTuple):
     """FeaturesInfo provides the structure to store the column names of different features families: features columns
-    names, float type features columns names, importance related features columns names and quality measure features
+    names, float type features columns names, importance related features columns names and reliability features
     columns names
     """
     feature_columns: List[str]
     float_feature_columns: List[str]
     importance_columns: List[str]
-    quality_measure_columns: List[str]
+    reliability_columns: List[str]
 
 
 class TargetInfo(NamedTuple):
@@ -56,8 +56,8 @@ def get_features_info(df: pd.DataFrame, feature_cols: List[str], target_cols: Li
     :return:                NamedTuple containing all the feature column names lists which will be used all through the
                             execution flow
     """
-    #   List of strings containing the quality measure columns names
-    quality_measure_columns = get_quality_measure_columns(target_cols=target_cols)
+    #   List of strings containing the reliability columns names
+    reliability_columns = get_reliability_columns(target_cols=target_cols)
 
     #   List of strings containing the importance columns names
     importance_columns = get_importance_columns(feature_cols=feature_cols, target_cols=target_cols)
@@ -67,7 +67,7 @@ def get_features_info(df: pd.DataFrame, feature_cols: List[str], target_cols: Li
     float_feature_cols = list(df[feature_cols].select_dtypes(include='float').columns)
 
     return FeaturesInfo(feature_columns=feature_cols, float_feature_columns=float_feature_cols,
-                        importance_columns=importance_columns, quality_measure_columns=quality_measure_columns)
+                        importance_columns=importance_columns, reliability_columns=reliability_columns)
 
 
 def get_importance_columns(feature_cols: List[str], target_cols: List[str]) -> List[str]:
@@ -82,14 +82,14 @@ def get_importance_columns(feature_cols: List[str], target_cols: List[str]) -> L
             in target_cols]
 
 
-def get_quality_measure_columns(target_cols: List[str]) -> List[str]:
+def get_reliability_columns(target_cols: List[str]) -> List[str]:
     """
-    This function builds the names of those columns containing the quality measure values for all possible targets
+    This function builds the names of those columns containing the reliability values for all possible targets
 
     :param target_cols:     List of strings containing the possible targets
-    :return:                List of strings containing the quality measure columns names
+    :return:                List of strings containing the reliability columns names
     """
-    return ['{}_{}'.format(target_col, QUALITY_MEASURE) for target_col in target_cols]
+    return ['{}_{}'.format(target_col, RELIABILITY) for target_col in target_cols]
 
 
 def get_target_info(df: pd.DataFrame, target_cols: List[str]) -> TargetInfo:
