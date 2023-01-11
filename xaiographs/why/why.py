@@ -4,7 +4,7 @@ from string import Template
 from typing import Any, List, Optional, Tuple, Union
 
 from xaiographs.common.constants import COMMA_SEP, FEATURE, LANG_EN, LANG_ES, NODE_IMPORTANCE, NODE_NAME
-from xaiographs.common.constants import QUALITY_MEASURE, RAND, RANK, REASON, TARGET
+from xaiographs.common.constants import RELIABILITY, RAND, RANK, REASON, TARGET
 
 
 class Why(object):
@@ -21,8 +21,8 @@ class Why(object):
     }
 
     def __init__(self, language: str, local_expl: pd.DataFrame, local_nodes: pd.DataFrame, why_elements: pd.DataFrame,
-                 why_target: pd.DataFrame, why_templates: pd.DataFrame, quality_measure: pd.DataFrame,
-                 n_local_features: int = 2, n_global_features: int = 2, min_quality: float = 0.0):
+                 why_target: pd.DataFrame, why_templates: pd.DataFrame, reliability: pd.DataFrame,
+                 n_local_features: int = 2, n_global_features: int = 2, min_reliability: float = 0.0):
         """
         Constructor method for Why
 
@@ -34,11 +34,11 @@ class Why(object):
             value
         :param why_templates: Pandas DataFrame with the templates (following Python Template module) of the sentences
             with the explanation
-        :param quality_measure: Pandas DataFrame with the quality measure (a kind of confidence level) for each case
+        :param reliability: Pandas DataFrame with the reliability (a kind of confidence level) for each case
         :param n_local_features: Number of local features to take into account for the explanation
         :param n_global_features: Number of global features to take into account for the explanation
-        :param min_quality: Minimum quality value to give an explanation; for the cases with an associated quality
-            measure below this value, a default sentence will be provided
+        :param min_reliability: Minimum reliability value to give an explanation; for the cases with an associated
+            reliability below this value, a default sentence will be provided
         :raises NameError: Raises an exception when the chosen language is not available
         """
         self.language = language
@@ -49,10 +49,10 @@ class Why(object):
         self.why_elements = why_elements
         self.why_target = why_target
         self.why_templates = why_templates
-        self.quality_measure = quality_measure
+        self.reliability = reliability
         self.n_local_features = n_local_features
         self.n_global_features = n_global_features
-        self.min_quality = min_quality
+        self.min_reliability = min_reliability
 
     def __build_template(self, items: Union[List, Tuple], sep=', ') -> str:
         """
@@ -100,7 +100,7 @@ class Why(object):
               .merge(self.why_elements.rename(columns={FEATURE: NODE_NAME}), on=NODE_NAME, how='inner')
               .merge(self.why_target.rename(columns={FEATURE: NODE_NAME}),
                      on=[TARGET, NODE_NAME], how='inner', suffixes=['_' + self._LOCAL, '_' + self._GLOBAL])
-              .merge(self.quality_measure[[key_column, QUALITY_MEASURE]], on=key_column, how='left'))
+              .merge(self.reliability[[key_column, RELIABILITY]], on=key_column, how='left'))
         df[RANK] = df.groupby(key_column)[NODE_IMPORTANCE].rank(method='dense', ascending=False).astype(int)
 
         max_n_features = max(self.n_local_features, self.n_global_features)
@@ -113,10 +113,10 @@ class Why(object):
             :param df_single: Pandas DataFrame with the nodes associated to the selected case
             :return: String with the final sentence for the requested case
             """
-            # Check the quality of the explainability values
+            # Check the reliability of the explainability values
             r = df_single.head(1)
-            quality = r[QUALITY_MEASURE].values[0]
-            if quality < self.min_quality:
+            reliability = r[RELIABILITY].values[0]
+            if reliability < self.min_reliability:
                 return self.why_templates.iloc[0, 0]
 
             # Build why sentence

@@ -19,7 +19,6 @@ class ImportanceCalculator(metaclass=ABCMeta):
     _DF_EXPLANATION = 'df_explanation'
     _EPS_ERROR = 0.000001
     _PHI0 = 'phi0'
-    _QUALITY_MEASURE = 'quality_measure'
     _IMPORTANCE_VALUES = 'importance_values'
     _TOP1_TARGET = 'top1_target'
 
@@ -196,6 +195,14 @@ class ImportanceCalculator(metaclass=ABCMeta):
         :param target_col:      String representing the target col name (default: 'target')
         :return:                Pandas DataFrame containing the requested number of samples
         """
+        # If the number of samples to be globally explained is greater or equal than the dataset size, there's no need
+        # for sampling, the whole dataset is taken into account
+        if num_samples >= len(df):
+            print('WARN:           requested number of samples for global explanation ({}) is greater than dataset size'
+                  ' ({}) ...'.format(num_samples, len(df)))
+            print('INFO:           the whole dataset will taken as dataset to be explained')
+            return df
+
         # A target column is included in the given pandas DataFrame, this column will contain the top1 target
         # for each row
         df[target_col] = top1_targets
@@ -208,7 +215,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
             df_agg_per_target.append(df[df[target_col] == target_col_value].sample(
                 n=n_samples_by_target, random_state=42))
 
-        return pd.concat(df_agg_per_target).drop(target_col, axis=1)
+        return pd.concat(df_agg_per_target).drop(target_col, axis=1).sort_values(by=[ID])
 
     def __global_explain(self, float_features: List[str], target_cols: List[str],
                          **params) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:

@@ -57,6 +57,12 @@ class Explainer(object):
 
     def explain(self, feature_cols: List[str], target_cols: List[str], num_samples_local_expl: int = 100,
                 num_samples_global_expl: int = 50000, batch_size_expl: int = 5000):
+        if num_samples_global_expl < num_samples_local_expl:
+            print('ERROR: num_samples_global_expl ({}) < num_samples_local_exp ({}): Number of samples for global '
+                  'explainability must be larger than the number of samples for local explainability'
+                  .format(num_samples_global_expl, num_samples_local_expl))
+            exit(255)
+
         # This section is intended to retrieve information which will be used throughout the execution flow:
         #   Feature related information: different features columns names lists
         #   Target related information: top1_targets (ground truths) for each row, target_probs (probability for each
