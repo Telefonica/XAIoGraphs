@@ -107,7 +107,9 @@ def get_target_info(df: pd.DataFrame, target_cols: List[str]) -> TargetInfo:
     """
     top1_argmax = np.argmax(df[target_cols].values, axis=1)
     top1_targets = np.array([target_cols[am] for am in top1_argmax])
-    target_probs = np.unique(top1_targets, return_counts=True)[1] / len(df)
+    target_unique_values, target_unique_counts = np.unique(top1_targets, return_counts=True)
+    target_probs_dict = dict(zip(target_unique_values, target_unique_counts / len(df)))
+    target_probs = np.array([target_probs_dict[t] for t in target_cols])
 
     return TargetInfo(target_columns=target_cols, target_probs=target_probs, top1_argmax=top1_argmax,
                       top1_targets=top1_targets)

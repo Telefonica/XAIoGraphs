@@ -137,7 +137,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
         target_mask = np.repeat(pd.get_dummies(pd.Series(top1_targets)).values,
                                 len(feature_cols), axis=0).reshape(-1, len(feature_cols),
                                                                    len(target_cols)).astype('bool')
-        top1_importance = df_importance_values[target_mask].reshape(-1, len(feature_cols))
+        top1_importance = np.abs(df_importance_values[target_mask]).reshape(-1, len(feature_cols))
 
         # Pandas DataFrame is built from the matrix and an additional column with the target names is prepended
         top1_importance_features = pd.DataFrame(np.concatenate((top1_targets.reshape(-1, 1), top1_importance), axis=1),
