@@ -23,7 +23,7 @@ class Why(object):
     def __init__(self, language: str, local_expl: pd.DataFrame, local_nodes: pd.DataFrame, why_elements: pd.DataFrame,
                  why_target: pd.DataFrame, why_templates: pd.DataFrame, reliability: pd.DataFrame,
                  n_local_features: int = 2, n_global_features: int = 2, min_reliability: float = 0.0,
-                 verbose: int = False):
+                 verbose: int = 0):
         """
         Constructor method for Why
 

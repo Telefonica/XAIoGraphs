@@ -155,7 +155,7 @@ def sample_by_target(ids: np.ndarray, top1_targets: np.ndarray, num_samples: int
     return sample_ids_mask, sample_ids
 
 
-def xgprint(verbose: int = False, *args, **kwargs) -> None:
+def xgprint(verbose: int = 0, *args, **kwargs) -> None:
     """
     Wrapper for the builtin `print` function
 
