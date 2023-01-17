@@ -153,3 +153,15 @@ def sample_by_target(ids: np.ndarray, top1_targets: np.ndarray, num_samples: int
     sample_ids_mask = np.isin(df_ids_target[ID].values, sample_ids)
 
     return sample_ids_mask, sample_ids
+
+
+def xgprint(verbose: int = 0, *args, **kwargs) -> None:
+    """
+    Wrapper for the builtin `print` function
+
+    :param verbose: Verbosity level, where any value greater than 0 means the message is printed
+    :param args: Positional arguments of the builtin `print` function
+    :param kwargs: Named arguments of the builtin `print` function
+    """
+    if verbose > 0:
+        print(*args, **kwargs)
