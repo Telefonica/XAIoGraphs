@@ -22,7 +22,8 @@ class Why(object):
 
     def __init__(self, language: str, local_expl: pd.DataFrame, local_nodes: pd.DataFrame, why_elements: pd.DataFrame,
                  why_target: pd.DataFrame, why_templates: pd.DataFrame, reliability: pd.DataFrame,
-                 n_local_features: int = 2, n_global_features: int = 2, min_reliability: float = 0.0):
+                 n_local_features: int = 2, n_global_features: int = 2, min_reliability: float = 0.0,
+                 verbose: int = 0):
         """
         Constructor method for Why
 
@@ -39,6 +40,7 @@ class Why(object):
         :param n_global_features: Number of global features to take into account for the explanation
         :param min_reliability: Minimum reliability value to give an explanation; for the cases with an associated
             reliability below this value, a default sentence will be provided
+        :param verbose: Verbosity level, where any value greater than 0 means the message is printed
         :raises NameError: Raises an exception when the chosen language is not available
         """
         self.language = language
@@ -53,6 +55,7 @@ class Why(object):
         self.n_local_features = n_local_features
         self.n_global_features = n_global_features
         self.min_reliability = min_reliability
+        self.verbose = verbose
 
     def __build_template(self, items: Union[List, Tuple], sep=', ') -> str:
         """
