@@ -95,13 +95,6 @@ def build_conditionbinmap_dict(df: pd.DataFrame, dataset_name: str) -> Dict[str,
                                                                                   df[feature] >= 8],
                                                                       bins=[OTHER, LOW, MID_LOW, MID, MID_TOP, TOP],
                                                                       default_value=0)})
-    for feature in ['cls_cnt_act_myhandy', 'prt_ctr_cnt_myhandy']:
-        feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] < 0,
-                                                                                  df[feature] == 0,
-                                                                                  df[feature] == 1,
-                                                                                  df[feature] >= 2],
-                                                                      bins=[UNKNOWN, LOW, MID, TOP],
-                                                                      default_value=0)})
     if dataset_name == WHAT:
         for feature in ['sms_out_num', 'cls_age']:
             feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] < 0,
@@ -131,6 +124,14 @@ def build_conditionbinmap_dict(df: pd.DataFrame, dataset_name: str) -> Dict[str,
                                                                                   df[feature] >= 1],
                                                                       bins=[UNKNOWN, LOW, TOP],
                                                                       default_value=0)})
+        for feature in ['cls_cnt_act_myhandy', 'prt_ctr_cnt_myhandy']:
+            feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] < 0,
+                                                                                      df[feature] == 0,
+                                                                                      df[feature] == 1,
+                                                                                      df[feature] >= 2],
+                                                                          bins=[UNKNOWN, LOW, MID, TOP],
+                                                                          default_value=0)})
+
     if dataset_name == WHEN:
         feature = 'months_from_launch'
         feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] < 0,
@@ -163,7 +164,8 @@ def build_conditionbinmap_dict(df: pd.DataFrame, dataset_name: str) -> Dict[str,
                                                                                   (df[feature] >= 16) & (
                                                                                           df[feature] <= 50),
                                                                                   df[feature] >= 50],
-                                                                      bins=[OTHER, LOW, MID_LOW, MID, MID_TOP, TOP],
+                                                                      bins=[UNKNOWN, '0', '1-5', '6-15', '16-50',
+                                                                            '+50'],
                                                                       default_value=0)})
         feature = 'acdp_cnt_6m'
         feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] < 0,
@@ -172,8 +174,7 @@ def build_conditionbinmap_dict(df: pd.DataFrame, dataset_name: str) -> Dict[str,
                                                                                   (df[feature] >= 2) & (
                                                                                           df[feature] <= 5),
                                                                                   df[feature] > 5],
-                                                                      bins=[UNKNOWN, LOW, MID_LOW, MID_TOP,
-                                                                            TOP],
+                                                                      bins=[UNKNOWN, '0', '1', '2-5', '+5'],
                                                                       default_value=0)})
         feature = 'cls_age'
         feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] <= 0,
@@ -186,17 +187,18 @@ def build_conditionbinmap_dict(df: pd.DataFrame, dataset_name: str) -> Dict[str,
                                                                                   (df[feature] >= 61) & (
                                                                                           df[feature] <= 80),
                                                                                   df[feature] > 80],
-                                                                      bins=[OTHER, LOW, MID_LOW, MID, MID_TOP, TOP],
+                                                                      bins=[UNKNOWN, '-25', '26-45', '46-60', '61-80',
+                                                                            '+80'],
                                                                       default_value=0)})
-        feature = 'cls_cnt_act_myhandy'
-        feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] < 0,
-                                                                                  df[feature] == 0,
-                                                                                  (df[feature] >= 1) & (
-                                                                                          df[feature] <= 2),
-                                                                                  df[feature] > 2],
-                                                                      bins=[UNKNOWN, LOW, MID, TOP],
-                                                                      default_value=0)})
-        for feature in ['acc_ctr_cnt_tot', 'cls_cnt_ctr_tot']:
+        for feature in ['cls_cnt_act_myhandy', 'ctr_cnt_cancellations']:
+            feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] < 0,
+                                                                                      df[feature] == 0,
+                                                                                      (df[feature] >= 1) & (
+                                                                                              df[feature] <= 2),
+                                                                                      df[feature] > 2],
+                                                                          bins=[UNKNOWN, '0', '1-2', '+2'],
+                                                                          default_value=0)})
+        for feature in ['prt_ctr_cnt_myhandy', 'acc_ctr_cnt_tot', 'cls_cnt_ctr_tot']:
             feature_conditionbinmap_dict.update({feature: ConditionBinmap(conditions=[df[feature] < 0,
                                                                                       df[feature] == 0,
                                                                                       (df[feature] >= 1) & (
@@ -265,7 +267,7 @@ def build_featurevaluemap_dict(dataset_name: str) -> Dict[str, FeatureValuemap]:
         feature_valuemap_dict.update({'technology_5g_cd': FeatureValuemap(ori_values=['yes', 'no'],
                                                                           dest_values=[Y, N], default_value=UNKNOWN)})
         feature_valuemap_dict.update({'form_factor_des': FeatureValuemap(ori_values=['foldable', 'unknown'],
-                                                                         dest_values=[Y], default_value=N)})
+                                                                         dest_values=[Y, N], default_value=N)})
         feature_valuemap_dict.update(
             {'device_value_des_purchase_enrich': FeatureValuemap(ori_values=[ULTRALOW, FLAGSHIP,
                                                                              TOP.lower(),
@@ -556,21 +558,17 @@ def target_transform(df: pd.DataFrame, dataset_name: str) -> Tuple[pd.DataFrame,
 def main():
     # Dataset path is specified here
     path = '../../datasets/'
-    df_devrec_cooked, feature_cols, target_cols = prepare_devrec(dataset_path=path, dataset_name=WHAT)
+    df_devrec_cooked, feature_cols, target_cols = prepare_devrec(dataset_path=path, dataset_name=WHEN)
     if df_devrec_cooked is None:
         exit(255)
+
     df_devrec_cooked.info()
     print(feature_cols)
     print(target_cols)
-    """
-    df_devrec_cooked = pd.read_csv('../../datasets/when_dr_all_2M_cooked.csv', sep=',', low_memory=False,
-                                   nrows=100000).rename(columns={'elem_id': 'id'})
-    feature_cols = [feat for feat in df_devrec_cooked.columns if feat not in ['target_0',  'target_1', 'id']]
-    target_cols = ['target_0', 'target_1']
-    """
+
     # The desired explainer is created
     explainer = Explainer(dataset=df_devrec_cooked, importance_engine='TEF_SHAP',
-                          destination_path='/home/cx02747/Utils/', number_of_features=11)
+                          destination_path='/home/cx02747/Utils/', number_of_features=12)
 
     # Explaining process is triggered
     explainer.explain(feature_cols=feature_cols, target_cols=target_cols, num_samples_global_expl=50000)
