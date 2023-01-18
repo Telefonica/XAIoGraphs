@@ -14,6 +14,9 @@ router.post('/readLocalNodesWeights', controller.readLocalNodesWeights);
 router.post('/readLocalEdgesWeights', controller.readLocalEdgesWeights);
 router.post('/readLocalReasonWhy', controller.readLocalReasonWhy);
 
+router.post('/readFairnessCorrelation', controller.readFairnessCorrelation);
+router.post('/readFairnessFeature', controller.readFairnessFeature);
+
 router.post('/listDatasetHeaders', controller.listDatasetHeaders);
 router.post('/readDatasetSelected', controller.readDatasetSelected);
 

@@ -47,6 +47,13 @@ export class ReaderService {
         return this.http.post(`${this.apiUrl}/readLocalReasonWhy`, body);
     }
 
+    readFairnessCorrelation(body: any) {
+        return this.http.post(`${this.apiUrl}/readFairnessCorrelation`, body);
+    }
+
+    readFairnessFeature(body: any) {
+        return this.http.post(`${this.apiUrl}/readFairnessFeature`, body);
+    }
 
     listDatasetHeaders(body: any) {
         return this.http.post(`${this.apiUrl}/listDatasetHeaders`, body);

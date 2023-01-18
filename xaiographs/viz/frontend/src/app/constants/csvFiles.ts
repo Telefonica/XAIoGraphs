@@ -12,4 +12,10 @@ export const ctsFiles = {
     input_dataset_discretized: '[DEPRECATED]_input_dataset_discretized.csv',
     global_target_explainability: '[DEPRECATED]_global_target_explainability.csv',
     local_explainability:'[DEPRECATED]_local_explainability.csv',
+    fairness_sumarize_criterias: 'fairness_sumarize_criterias.csv',
+    fairness_confusion_matrix: 'fairness_confusion_matrix.csv',
+    fairness_highest_correlation: 'fairness_highest_correlation.csv',
+    fairness_independence: 'fairness_independence.csv',
+    fairness_separation: 'fairness_separation.csv',
+    fairness_sufficience: 'fairness_sufficience.csv',
 };

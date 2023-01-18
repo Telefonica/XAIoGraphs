@@ -3,6 +3,11 @@
         <label>Fairness explainability</label>
     </div>
     <div fxFlex fxLayout="column" fxLayoutGap="20px" class="fairnessBody">
+        <div fxFlex fxLayout="row" fxLayoutGap="20px">
+            <app-fairness-criterias fxFlex class="fairnessCard"></app-fairness-criterias>
+            <app-fairness-conf-matrix fxFlex class="fairnessCard"></app-fairness-conf-matrix>
+        </div>
 
+        <app-fairness-criteria-feature fxFlex class="fairnessCard"></app-fairness-criteria-feature>
     </div>
 </div>

@@ -268,6 +268,46 @@ exports.readDatasetSelected = async (req, res) => {
 };
 
 
+exports.readFairnessCorrelation = async (req, res) => {
+    if (!req.body.fileName || !req.body.feature) {
+        const msg = 'Missing parameters';
+        console.log('ERROR - readFairnessCorrelation', msg);
+        return res.status(404).json({ msg: msg });
+    } else {
+        await getData(req.body.fileName)
+            .then((response) => {
+                return res.status(200).json(
+                    response.data.filter((row) => {
+                        return row.feature_1 == req.body.feature || row.feature_2 == req.body.feature;
+                    })
+                );
+            })
+            .catch((error) => {
+                console.log('ERROR - readFairnessCorrelation', error);
+                return res.status(400).json({ msg: error })
+            });
+    }
+};
+exports.readFairnessFeature = async (req, res) => {
+    if (!req.body.fileName || !req.body.feature) {
+        const msg = 'Missing parameters';
+        console.log('ERROR - readFairnessFeature', msg);
+        return res.status(404).json({ msg: msg });
+    } else {
+        await getData(req.body.fileName)
+            .then((response) => {
+                return res.status(200).json(
+                    response.data.filter((row) => {
+                        return row.sensitive_feature == req.body.feature;
+                    })
+                );
+            })
+            .catch((error) => {
+                console.log('ERROR - readFairnessFeature', error);
+                return res.status(400).json({ msg: error })
+            });
+    }
+};
 
 
 const getData = async (fileName) => {

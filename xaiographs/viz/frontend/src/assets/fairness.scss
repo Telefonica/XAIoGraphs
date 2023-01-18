@@ -17,3 +17,220 @@
     @extend .brdGrey3;
     @extend .bgWhite;
 }
+
+.fairnessCriteriasTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 18px;
+}
+
+.criterias_value {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.criterias_value_class{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.criterias_title {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+    color: rgb(214, 198, 218);
+    background-color: rgb(75, 15, 85);
+}
+
+.criterias_feature {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+    color: Black;
+    background-color: rgb(214, 198, 218);
+    border: 1px solid rgb(214, 198, 218);
+}
+
+.criterias_help {
+    vertical-align: middle !important;
+    color: rgb(214, 198, 218);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.criteriasAP {
+    @extend .criterias_value;
+    @extend .colorAP;
+    color: white;
+}
+.criteriasA {
+    @extend .criterias_value;
+    @extend .colorA;
+    color: black;
+}
+.criteriasB {
+    @extend .criterias_value;
+    @extend .colorB;
+    color: black
+}
+.criteriasC {
+    @extend .criterias_value;
+    @extend .colorC;
+    color: black
+}
+.criteriasD {
+    @extend .criterias_value;
+    @extend .colorD;
+    color: black
+}
+.criteriasE {
+    @extend .criterias_value;
+    @extend .colorE;
+    color: white;
+}
+
+.fairnessConfMatrixTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 18px;
+}
+.matrix_value {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.matrix_title {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: rgb(75, 15, 85);
+    color: rgb(214, 198, 218);
+}
+
+.dialog_title {
+    font-size: 21px;
+}
+
+.brdGrey3_bottom {
+    border-bottom: 1px solid #b0b6c0;
+}
+
+.fairnessCriteriaFeatureTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 18px;
+}
+
+.criterias_help_contrast {
+    color: rgb(75, 15, 85);
+    cursor: pointer;
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+}
+
+
+
+
+
+
+
+@mixin border-radius($radius) {
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	border-radius: $radius;
+}
+
+@mixin rotate($deg) {
+	-webkit-transform: rotate($deg);
+	-moz-transform: rotate($deg);
+	-ms-transform: rotate($deg);
+	-o-transform: rotate($deg);
+	transform: rotate($deg);
+}
+
+.arrow-wrapper {
+    position: relative;
+	.arrow-cover {
+		position: absolute;
+		overflow: hidden;
+		width: 30px;
+		height: 60px;
+		.arrow {
+			position: absolute;
+			left: -34px;
+			z-index: 2;
+			width: 50px;
+			height: 53px;
+			border: 2px solid white;
+			background: transparent;
+			@include border-radius(6px);
+			@include rotate(45deg);
+		}
+	}
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.colorAP {
+    background-color: #0d964e !important;
+}
+.colorA {
+    background-color: #98c98a !important;
+}
+.colorB {
+    background-color: #ece824 !important;
+}
+.colorC {
+    background-color: #f1b519 !important;
+}
+.colorD {
+    background-color: #e17628 !important;
+}
+.colorE {
+    background-color: #e62f2b !important;
+}
+
+.ap {
+    color: White;
+    padding: 10px;
+    @extend .colorAP;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+.a {
+    color: Black;
+    padding: 10px 10px 10px 30px;
+    @extend .colorA;
+}
+.b {
+    color: Black;
+    padding: 10px 10px 10px 30px;
+    @extend .colorB;
+}
+.c {
+    color: Black;
+    padding: 10px 10px 10px 30px;
+    @extend .colorC;
+}
+.d {
+    color: White;
+    padding: 10px 10px 10px 30px;
+    @extend .colorD;
+}
+.e {
+    color: White;
+    padding: 10px 10px 10px 30px;
+    @extend .colorE;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}

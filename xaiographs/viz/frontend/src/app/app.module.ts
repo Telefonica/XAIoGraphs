@@ -26,6 +26,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { GoogleChartsModule } from 'angular-google-charts';
 import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
@@ -48,6 +49,17 @@ import { LocalReasonComponent } from './components/local/details/reason.componen
 import { LocalGraphComponent } from './components/local/details/graph.component';
 import { LocalFeaturesComponent } from './components/local/details/features.component';
 import { DataDatasetComponent } from './components/data/details/dataset.component';
+import { CriteriasComponent } from './components/fairness/details/criterias.component';
+import { CriteriaFeatureComponent } from './components/fairness/details/criteria-feature.component';
+import { ConfMatrixComponent } from './components/fairness/details/conf-matrix.component';
+import { DefIndependenceComponent } from './components/fairness/definitions/independence.component';
+import { DefSeparationComponent } from './components/fairness/definitions/separation.component';
+import { DefSufficienceComponent } from './components/fairness/definitions/sufficience.component';
+import { FeatureSufficienceComponent } from './components/fairness/details/feature-sufficience.component';
+import { FeatureSeparationComponent } from './components/fairness/details/feature-separation.component';
+import { FeatureIndependenceComponent } from './components/fairness/details/feature-independence.component';
+import { FeatureCorrelationComponent } from './components/fairness/details/feature-correlation.component';
+import { LegendComponent } from './components/fairness/details/legend.component';
 
 @NgModule({
     declarations: [
@@ -67,6 +79,17 @@ import { DataDatasetComponent } from './components/data/details/dataset.componen
         LocalGraphComponent,
         LocalFeaturesComponent,
         DataDatasetComponent,
+        CriteriasComponent,
+        CriteriaFeatureComponent,
+        ConfMatrixComponent,
+        DefIndependenceComponent,
+        DefSeparationComponent,
+        DefSufficienceComponent,
+        FeatureSufficienceComponent,
+        FeatureSeparationComponent,
+        FeatureIndependenceComponent,
+        FeatureCorrelationComponent,
+        LegendComponent,
     ],
     imports: [
         BrowserModule,
@@ -97,6 +120,7 @@ import { DataDatasetComponent } from './components/data/details/dataset.componen
         MatTableModule,
         MatCheckboxModule,
         MatRadioModule,
+        MatGridListModule,
         GoogleChartsModule,
         TableVirtualScrollModule,
     ],

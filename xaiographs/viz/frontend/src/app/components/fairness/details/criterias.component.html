@@ -1,0 +1,47 @@
+<div fxFlex fxLayout="column" fxLayoutGap="25px">
+    <label class="fairnessCriteriasTitle">Fairness Criterias Score</label>
+    <mat-grid-list cols="4" rowHeight="50px">
+        <mat-grid-tile><label class="criterias_title" style="border:1px solid  rgb(75, 15, 85)">Feature</label></mat-grid-tile>
+        <mat-grid-tile>
+            <div fxLayout="row" fxLayoutGap="5px" class="criterias_title" fxLayoutAlign="center center">
+                <label >Independence</label>
+                <mat-icon class="criterias_help" (click)="openIndependence()">help</mat-icon>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <div fxLayout="row" fxLayoutGap="5px" class="criterias_title" fxLayoutAlign="center center">
+                <label >Separation</label>
+                <mat-icon class="criterias_help" (click)="openSeparation()">help</mat-icon>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <div fxLayout="row" fxLayoutGap="5px" class="criterias_title" fxLayoutAlign="center center">
+                <label >Sufficience</label>
+                <mat-icon class="criterias_help" (click)="openSufficience()">help</mat-icon>
+            </div>
+        </mat-grid-tile>
+        <ng-container *ngFor="let criteria of listCriterias">
+            <mat-grid-tile><label class="criterias_feature">{{ criteria[headers[0]] }}</label></mat-grid-tile>
+            <mat-grid-tile>
+                <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[2]]">
+                    <label class="criterias_value_class">{{ criteria[headers[2]] }}</label>
+                    <label>{{ criteria[headers[1]] }}</label>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[4]]">
+                    <label class="criterias_value_class">{{ criteria[headers[4]] }}</label>
+                    <label>{{ criteria[headers[3]] }}</label>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[6]]">
+                    <label class="criterias_value_class">{{ criteria[headers[6]] }}</label>
+                    <label>{{ criteria[headers[5]] }}</label>
+                </div>
+            </mat-grid-tile>
+        </ng-container>
+
+    </mat-grid-list>
+    <app-legend></app-legend>
+</div>
