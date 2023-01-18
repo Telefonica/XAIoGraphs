@@ -5,7 +5,7 @@ import pandas as pd
 from scipy.special import rel_entr
 
 from xaiographs.common.constants import TARGET
-from xaiographs.common.utils import TargetInfo
+from xaiographs.common.utils import TargetInfo, xgprint
 
 
 class FeatureSelector(object):
@@ -13,7 +13,8 @@ class FeatureSelector(object):
     This class implements the functionality of selecting the top k most relevant features
     """
 
-    def __init__(self, df: pd.DataFrame, feature_cols: List[str], target_info: TargetInfo, number_of_features: int):
+    def __init__(self, df: pd.DataFrame, feature_cols: List[str], target_info: TargetInfo, number_of_features: int,
+                 verbose: int = 0):
         """
         Constructor method for FeatureSelector class.
         - Property `top_features_target_` has been included so that the FeatureSelector object can be
@@ -28,6 +29,7 @@ class FeatureSelector(object):
                                     another numpy array listing a probability for each possible target value and a third
                                     numpy array showing the top1 targets indexes
         :param number_of_features:  Integer representing the number of features to be selected
+        :param verbose:             Verbosity level, where any value greater than 0 means the message is printed
         """
         self.df = df[feature_cols].copy()
         self.df[TARGET] = target_info.top1_targets
@@ -36,6 +38,8 @@ class FeatureSelector(object):
         self.target_values = target_info.target_columns
         self.top_features_target_ = {}
         self.top_features_ = []
+        self.verbose = verbose
+        xgprint(self.verbose, 'INFO: Instantiating FeatureSelector to select the top {} features:'.format(self.k))
 
     @staticmethod
     def __compute_jensen_shannon(dist1: np.ndarray, dist2: np.ndarray, axis: int = 0, keepdims=True) -> np.ndarray:
@@ -110,7 +114,6 @@ class FeatureSelector(object):
         unique_values = self.get_feature_unique_values()
         for target_value in self.target_values:
             unorm_stats_by_feature = []
-            distance_by_feature = {}
 
             # For each feature, unique values are retrieved to compute probabilities
             for feature_col in self.feature_cols:
@@ -159,5 +162,11 @@ class FeatureSelector(object):
             topk_features[feature_col] = sum(
                 [rank for rank, feature in enumerate(feature_ranks) if feature == feature_col])
         self.top_features_ = sorted(topk_features, key=topk_features.get)
+        xgprint(self.verbose,
+                'INFO:     FeatureSelector top {} features selected: {}'.format(self.k, self.top_features_[:self.k]))
+        xgprint(self.verbose,
+                'INFO:     FeatureSelector global feature rank: {}'.format(self.top_features_))
+        xgprint(self.verbose,
+                'INFO:     FeatureSelector feature rank by target: {}'.format(self.top_features_target_))
 
         return self.top_features_[:self.k]

@@ -1,3 +1,4 @@
+from xaiographs.common.utils import xgprint
 from xaiographs.exgraph.importance.tef_shap import TefShap
 
 
@@ -21,7 +22,8 @@ class ImportanceCalculatorFactory(object):
         :return:                             ImportanceCalculator object of the requested type
         """
         if name == self.TEF_SHAP:
-            print('INFO: {} importance calculator will be instantiated'.format(name))
+            xgprint(importance_calculator_params['verbose'],
+                    'INFO: {} importance calculator will be instantiated'.format(name))
             return TefShap(**importance_calculator_params)
         else:
             print('ERROR:{} is not a valid importance calculator!!'.format(name))

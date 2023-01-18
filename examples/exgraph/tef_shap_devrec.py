@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
 
+from xaiographs.common.utils import xgprint
 from xaiographs.exgraph.explainer.explainer import Explainer
 
 FLAGSHIP = 'Flagship'
@@ -286,7 +287,8 @@ def build_featurevaluemap_dict(dataset_name: str) -> Dict[str, FeatureValuemap]:
 
 
 def prepare_devrec(dataset_path: str, dataset_name: str = WHAT, dataset_filename: str = '', sep: str = ',',
-                   when_threshold: float = 0.85) -> Tuple[Union[pd.DataFrame, None], List[str], List[str]]:
+                   when_threshold: float = 0.85, verbose: int = 0) -> Tuple[Union[pd.DataFrame, None], List[str],
+                                                                            List[str]]:
     """
     This function is intended to preprocess (cook) Device Recommender related datasets, so far WHEN and WHAT
     (observations only) dataset preprocessing have been implemented
@@ -300,6 +302,7 @@ def prepare_devrec(dataset_path: str, dataset_name: str = WHAT, dataset_filename
                              datasets (default is comma ',')
     :param when_threshold:   Float representing the value for which, every score greater than that, will be considered
                              to be associated to a renewal in WHEN dataset
+    :param verbose:          Verbosity level, where any value greater than 0 means the message is printed
     :return:                 Tuple containing:
                              - Pandas DataFrame containing the preprocessed dataset
                              - List of strings containing the features names
@@ -309,7 +312,7 @@ def prepare_devrec(dataset_path: str, dataset_name: str = WHAT, dataset_filename
         print('ERROR: dataset name {}, not recognized!'.format(dataset_name))
         return None, [], []
 
-    print('INFO: Preprocessing devrec {} dataset'.format(dataset_name))
+    xgprint(verbose, 'INFO: Preprocessing devrec {} dataset'.format(dataset_name))
 
     # Preparing FeatureMap dictionary
     featvalmap_dict = build_featurevaluemap_dict(dataset_name=dataset_name)
@@ -320,7 +323,9 @@ def prepare_devrec(dataset_path: str, dataset_name: str = WHAT, dataset_filename
             dataset_filename = 'what_dr_100K.csv'
         if dataset_name == WHEN:
             dataset_filename = 'when_dr_all_2M.csv'
-    df = pd.read_csv(filepath_or_buffer=os.path.join(dataset_path, dataset_filename), sep=sep)
+    dataset_filepath = os.path.join(dataset_path, dataset_filename)
+    xgprint(verbose, 'INFO:     Reading {}'.format(dataset_filepath))
+    df = pd.read_csv(filepath_or_buffer=dataset_filepath, sep=sep)
 
     # Target preprocessing
     if dataset_name == WHAT:
@@ -328,18 +333,18 @@ def prepare_devrec(dataset_path: str, dataset_name: str = WHAT, dataset_filename
                                    sort_criteria=[True, False])
     if dataset_name == WHEN:
         df = set_target_from_threshold(df=df, threshold=when_threshold)
-    print('    INFO: Targets are distributed as follows:')
-    print(df[TARGET].value_counts())
+    xgprint(verbose, 'INFO:     Targets are distributed as follows:')
+    xgprint(verbose, df[TARGET].value_counts())
 
     # Feature preprocessing
     if dataset_name == WHEN:
-        print('    INFO: Preprocessing features (value_discretization):')
-        df = value_discretization(df=df)
-    print('    INFO: Preprocessing features (condition2bin_transform):')
+        xgprint(verbose, 'INFO:     Preprocessing features (value_discretization):')
+        df = value_discretization(df=df, verbose=verbose)
+    xgprint(verbose, 'INFO:     Preprocessing features (condition2bin_transform):')
     featcondbinmap_dict = build_conditionbinmap_dict(df=df, dataset_name=dataset_name)
-    df = condition2bin_transform(df=df, feature_conditionbinmap_dict=featcondbinmap_dict)
-    print('    INFO: Preprocessing features (valuemap_transform):')
-    df = valuemap_transform(df=df, feature_valuemap_dict=featvalmap_dict)
+    df = condition2bin_transform(df=df, feature_conditionbinmap_dict=featcondbinmap_dict, verbose=verbose)
+    xgprint(verbose, 'INFO:     Preprocessing features (valuemap_transform):')
+    df = valuemap_transform(df=df, feature_valuemap_dict=featvalmap_dict, verbose=verbose)
 
     # Drop unused/constant features
     features_to_drop = []
@@ -348,21 +353,22 @@ def prepare_devrec(dataset_path: str, dataset_name: str = WHAT, dataset_filename
     if dataset_name == WHEN:
         features_to_drop = ['target_nm', 'tac_id_next_renewal', 'brand_des_renewal', 'brand_id', 'future_renewal',
                             'past_renewal', 'score']
-    print('    INFO: Dropping unused/constant features: {}'.format(features_to_drop))
+    xgprint(verbose, 'INFO:     Dropping unused/constant features: {}'.format(features_to_drop))
     df.drop(features_to_drop, axis=1, inplace=True)
 
     # Rename features
-    print('    INFO: Renaming features:')
+    xgprint(verbose, 'INFO:     Renaming features:')
     df, feature_cols = rename_header(df=df, dataset_name=dataset_name)
 
     # Target postprocessing
-    print('    INFO: Processing target:')
+    xgprint(verbose, 'INFO:     Processing target:')
     df, target_cols = target_transform(df=df, dataset_name=dataset_name)
 
     return df, feature_cols, target_cols
 
 
-def condition2bin_transform(df: pd.DataFrame, feature_conditionbinmap_dict: Dict[str, ConditionBinmap]) -> pd.DataFrame:
+def condition2bin_transform(df: pd.DataFrame, feature_conditionbinmap_dict: Dict[str, ConditionBinmap],
+                            verbose: int = 0) -> pd.DataFrame:
     """
     This function takes care of transforming those feature which requires mapping all values inside a given interval
     to a certain value. There mechanics are as follows: if the current value of the feature fulfills a certain condition
@@ -371,6 +377,8 @@ def condition2bin_transform(df: pd.DataFrame, feature_conditionbinmap_dict: Dict
     :param df:                               Pandas DataFrame whose features will be transformed
     :param feature_conditionbinmap_dict:     Dictionary providing the necessary metadata for each feature which requires
                                              to be processed by the `condition2bin_transform` function
+    :param verbose:                          Verbosity level, where any value greater than 0 means the message is
+                                             printed
     :return:                                 Pandas DataFrame with those features transformed
     """
     for feature, conditionbinmap in feature_conditionbinmap_dict.items():
@@ -379,10 +387,10 @@ def condition2bin_transform(df: pd.DataFrame, feature_conditionbinmap_dict: Dict
         condlist = conditionbinmap.conditions
         choices = conditionbinmap.bins
         default_value = conditionbinmap.default_value
-        print('         ========{}========'.format(feature))
-        print(df[feature].value_counts())
+        xgprint(verbose, 'INFO:          ========{}========'.format(feature))
+        xgprint(verbose, df[feature].value_counts())
         df[feature] = np.select(condlist=condlist, choicelist=choices, default=default_value)
-        print(df[feature].value_counts())
+        xgprint(verbose, df[feature].value_counts())
 
     return df
 
@@ -403,7 +411,7 @@ def set_target_from_threshold(df: pd.DataFrame, threshold: float) -> pd.DataFram
     return df_score
 
 
-def value_discretization(df: pd.DataFrame, nbins=10) -> pd.DataFrame:
+def value_discretization(df: pd.DataFrame, nbins=10, verbose: int = 0) -> pd.DataFrame:
     """
     This function splits in `nbins` similar width the continuous features. This way, each original values is replaced by
     the bin in which it falls (from 0 to nbins - 1). Further processing is later applied to this variables so that their
@@ -411,6 +419,7 @@ def value_discretization(df: pd.DataFrame, nbins=10) -> pd.DataFrame:
 
     :param df:      Pandas DataFrame containing the features to be discretized
     :param nbins:   Number of bins among which the feature values will be distributed
+    :param verbose: Verbosity level, where any value greater than 0 means the message is printed
     :return:        Pandas DataFrame whose features to discretize have been discretized
     """
     for feature in ['num_months_ext_age', 'num_months_renewal_duration_hist', 'months_from_launch', 'mb_total_qt',
@@ -422,12 +431,14 @@ def value_discretization(df: pd.DataFrame, nbins=10) -> pd.DataFrame:
         df.loc[df[feature] < 0, feature] = None
         df[feature] = pd.qcut(df[feature], q=nbins, labels=np.arange(nbins)).astype('float').fillna(value=-1).astype(
             'int')
-        print(df[feature].value_counts())
+        xgprint(verbose, 'INFO:          ========{}========'.format(feature))
+        xgprint(verbose, df[feature].value_counts())
 
     return df
 
 
-def valuemap_transform(df: pd.DataFrame, feature_valuemap_dict: Dict[str, FeatureValuemap]) -> pd.DataFrame:
+def valuemap_transform(df: pd.DataFrame, feature_valuemap_dict: Dict[str, FeatureValuemap],
+                       verbose: int = 0) -> pd.DataFrame:
     """
     This function takes care of those features which require one-to-one direct mapping and/or case transformations.
     A dataclass FeatureValuemap has been created to store metadata related to the transformations to be done
@@ -435,6 +446,7 @@ def valuemap_transform(df: pd.DataFrame, feature_valuemap_dict: Dict[str, Featur
     :param df:                      Pandas DataFrame whose features will be transformed
     :param feature_valuemap_dict:   Dictionary providing for each feature, its values mapping instructions in the form
                                     of a FeatureValueMap dataclass object
+    :param verbose:                 Verbosity level, where any value greater than 0 means the message is printed
     :return:                        Pandas DataFrame with those features transformed
     """
     for feature, valuemap in feature_valuemap_dict.items():
@@ -443,8 +455,8 @@ def valuemap_transform(df: pd.DataFrame, feature_valuemap_dict: Dict[str, Featur
         ori_values = valuemap.ori_values
         dest_values = valuemap.dest_values
         default_value = valuemap.default_value
-        print('         ========{}========'.format(feature))
-        print(df[feature].value_counts())
+        xgprint(verbose, 'INFO:          ========{}========'.format(feature))
+        xgprint(verbose, df[feature].value_counts())
 
         if default_value is not None:
             df.loc[~df[feature].isin(ori_values), feature] = default_value
@@ -458,7 +470,7 @@ def valuemap_transform(df: pd.DataFrame, feature_valuemap_dict: Dict[str, Featur
                 df.loc[df[feature] != upper_except, feature] = df.loc[df[feature] != upper_except, feature].str.upper()
             else:
                 df[feature] = df[feature].str.upper()
-        print(df[feature].value_counts())
+        xgprint(verbose, df[feature].value_counts())
 
     return df
 
@@ -548,27 +560,35 @@ def target_transform(df: pd.DataFrame, dataset_name: str) -> Tuple[pd.DataFrame,
                               prefix=TARGET,
                               columns=[TARGET]).rename(columns=dict(zip(target_ori_names,
                                                                         target_new_names))), target_new_names
-    elif dataset_name == WHEN:
+    if dataset_name == WHEN:
         return pd.get_dummies(df, prefix=TARGET, columns=[TARGET]), ['_'.join([TARGET, str(val)]) for val in
                                                                      np.unique(df[TARGET].values)]
-    else:
-        print('         INFO: Preprocessing features (valuemap_transform):')
 
 
 def main():
+    # Device recommender dataset to be used is specified here (WHAT or WHEN)
+    # Dataset filename can be parametrized by using prepare_devrec_dataset_filename parameter otherwise,
+    # 'what_dr_100K.csv' will be used for WHAT and 'when_dr_all_2M.csv' for WHEN
+    dataset_name = WHAT
+
     # Dataset path is specified here
     path = '../../datasets/'
-    df_devrec_cooked, feature_cols, target_cols = prepare_devrec(dataset_path=path, dataset_name=WHEN)
+
+    # Verbosity level: 0 or 1
+    verbosity = 1
+    df_devrec_cooked, feature_cols, target_cols = prepare_devrec(dataset_path=path, dataset_name=dataset_name,
+                                                                 verbose=verbosity)
     if df_devrec_cooked is None:
         exit(255)
-
-    df_devrec_cooked.info()
-    print(feature_cols)
-    print(target_cols)
+    xgprint(verbosity, 'INFO: "{}" summary:'.format(dataset_name))
+    if verbosity:
+        df_devrec_cooked.info()
+    xgprint(verbosity, 'INFO: "{}" features names {}:'.format(dataset_name, feature_cols))
+    xgprint(verbosity, 'INFO: "{}" targets {}:'.format(dataset_name, target_cols))
 
     # The desired explainer is created
     explainer = Explainer(dataset=df_devrec_cooked, importance_engine='TEF_SHAP',
-                          destination_path='/home/cx02747/Utils/', number_of_features=12)
+                          destination_path='/home/cx02747/Utils/', number_of_features=11, verbose=verbosity)
 
     # Explaining process is triggered
     explainer.explain(feature_cols=feature_cols, target_cols=target_cols, num_samples_global_expl=50000)
