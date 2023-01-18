@@ -9,7 +9,7 @@ from xaiographs.common.constants import BIN_WIDTH_EDGE_WEIGHT, BIN_WIDTH_FEATURE
     MIN_NODE_WEIGHT, N_BINS_EDGE_WEIGHT, N_BINS_FEATURE_WEIGHT, N_BINS_NODE_WEIGHT, NODE_COUNT, NODE_IMPORTANCE, \
     NODE_NAME, NODE_NAME_RATIO, NODE_NAME_RATIO_RANK, NODE_NAME_RATIO_WEIGHT, NODE_WEIGHT, NUM_FEATURES, \
     RELIABILITY, RANK, TARGET, TOTAL_COUNT
-from xaiographs.common.utils import FeaturesInfo, TargetInfo
+from xaiographs.common.utils import FeaturesInfo, TargetInfo, xgprint
 from xaiographs.exgraph.statistics.stats_calculator import StatsResults
 
 
@@ -23,7 +23,8 @@ class Exporter(object):
     - Create additional columns related to graphical representation (like weight in pixels for each row) when needed
     """
 
-    def __init__(self, df_explanation_sample: pd.DataFrame, path: str, sep: str = COMMA_SEP, keep_index: bool = False):
+    def __init__(self, df_explanation_sample: pd.DataFrame, path: str, sep: str = COMMA_SEP, keep_index: bool = False,
+                 verbose: int = 0):
         """
         Constructor method for Exporter
 
@@ -31,11 +32,15 @@ class Exporter(object):
         :param path:                  String representing the path where data will be persisted
         :param sep:                   String representing the field separator (default ',')
         :param keep_index:            Boolean representing whether index must be stored or not
+        :param verbose:               Verbosity level, where any value greater than 0 means the message is printed
+
         """
         self.df_explanation_sample = df_explanation_sample
         self.path = path
         self.sep = sep
         self.keep_index = keep_index
+        self.verbose = verbose
+        xgprint(self.verbose, 'INFO: Instantiating Exporter:')
 
     def __export_edges(self, df_stats: pd.DataFrame, filename: str):
         """
@@ -264,6 +269,7 @@ class Exporter(object):
                global_nodes_importance: pd.DataFrame, nodes_info: StatsResults, edges_info: StatsResults,
                target_distribution: pd.DataFrame, reason_why: pd.DataFrame):
 
+        xgprint(self.verbose, 'INFO:     Exporting data in CSV format to {}'.format(self.path))
         self.__export_local_explainability(features_info=features_info, target_info=target_info,
                                            sample_ids_mask=sample_ids_mask)
 

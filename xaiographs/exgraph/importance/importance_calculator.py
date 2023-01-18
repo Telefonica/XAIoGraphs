@@ -6,7 +6,7 @@ import pandas as pd
 
 from xaiographs.common.constants import FEATURE_IMPORTANCE, FEATURE_NAME, ID, IMPORTANCE_SUFFIX, NODE_IMPORTANCE, \
     NODE_NAME, RANK, TARGET
-from xaiographs.common.utils import FeaturesInfo, TargetInfo, filter_by_ids, get_target_info
+from xaiographs.common.utils import FeaturesInfo, TargetInfo, filter_by_ids, get_target_info, xgprint
 
 
 class ImportanceCalculator(metaclass=ABCMeta):
@@ -22,7 +22,8 @@ class ImportanceCalculator(metaclass=ABCMeta):
     _IMPORTANCE_VALUES = 'importance_values'
     _TOP1_TARGET = 'top1_target'
 
-    def __init__(self, feature_cols: List[str], target_info: TargetInfo, train_size: float, train_stratify: bool):
+    def __init__(self, feature_cols: List[str], target_info: TargetInfo, train_size: float, train_stratify: bool,
+                 verbose: int = 0):
         """
         Constructor method for ImportanceCalculator
 
@@ -35,12 +36,15 @@ class ImportanceCalculator(metaclass=ABCMeta):
                                             to train the calculator
         :param train_stratify:              Boolean indicating whether target columns proportions will be taken into
                                             account when splitting the data (if train_size > 0.0)
+        :param verbose:                     Verbosity level, where any value greater than 0 means the message is printed
+
         """
-        print("INFO: Instantiating ImportanceCalculator:")
         self.feature_cols = feature_cols
         self.target_info = target_info
         self.train_size = train_size
         self.train_stratify = train_stratify
+        self.verbose = verbose
+        xgprint(self.verbose, 'INFO:     Instantiating ImportanceCalculator:')
 
     @abstractmethod
     def local_explain(self, batch_size: int, **params) -> Dict[str, Union[pd.DataFrame, np.ndarray]]:
@@ -137,7 +141,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
         target_mask = np.repeat(pd.get_dummies(pd.Series(top1_targets)).values,
                                 len(feature_cols), axis=0).reshape(-1, len(feature_cols),
                                                                    len(target_cols)).astype('bool')
-        top1_importance = df_importance_values[target_mask].reshape(-1, len(feature_cols))
+        top1_importance = np.abs(df_importance_values[target_mask]).reshape(-1, len(feature_cols))
 
         # Pandas DataFrame is built from the matrix and an additional column with the target names is prepended
         top1_importance_features = pd.DataFrame(np.concatenate((top1_targets.reshape(-1, 1), top1_importance), axis=1),
@@ -175,8 +179,8 @@ class ImportanceCalculator(metaclass=ABCMeta):
         """
         error = np.abs(ground_truth - prediction) > ImportanceCalculator._EPS_ERROR
         for i, target_col in enumerate(target_cols):
-            print('Number of detected discrepancies (original model prediction != SHAP prediction) '
-                  'for target {} in the {} dataset: {}'.format(target_col, scope, sum(error[:, i])))
+            print('INFO:     ImportanceCalculator: Number of detected discrepancies (original model prediction != SHAP '
+                  'prediction) for target {} in the {} dataset: {}'.format(target_col, scope, sum(error[:, i])))
 
     @staticmethod
     def sample_global(df: pd.DataFrame, top1_targets: np.ndarray, num_samples: int,

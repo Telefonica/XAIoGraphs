@@ -6,7 +6,7 @@ import pandas as pd
 
 from xaiographs.common.constants import COUNT, FEATURE_NAME, ID, NODE_1, NODE_2, NODE_COUNT, NODE_NAME, \
     NODE_NAME_RATIO, NODE_NAME_RATIO_RANK, TARGET, TOTAL_COUNT
-from xaiographs.common.utils import filter_by_ids
+from xaiographs.common.utils import filter_by_ids, xgprint
 
 
 class StatsResults(NamedTuple):
@@ -23,7 +23,7 @@ class StatsCalculator(object):
     """
     def __init__(self, df: pd.DataFrame, top1_targets: np.ndarray, feature_cols: List[str],
                  float_feature_cols: List[str],  target_cols: List[str], sample_ids_mask: np.ndarray,
-                 sample_ids: List[Any]):
+                 sample_ids: List[Any], verbose: int = 0):
         """
         Constructor method for StatsCalculator
 
@@ -35,6 +35,7 @@ class StatsCalculator(object):
                                     DataFrame
         :param target_cols:         List of strings containing the column names for the target/s
         :param sample_ids:          List of ids which will be part of the sample
+        :param verbose:             Verbosity level, where any value greater than 0 means the message is printed
         """
         self.df = df
         self.top1_targets = top1_targets
@@ -43,6 +44,8 @@ class StatsCalculator(object):
         self.target_cols = target_cols
         self.sample_ids_mask = sample_ids_mask
         self.sample_ids = sample_ids
+        self.verbose = verbose
+        xgprint(self.verbose, 'INFO: Instantiating StatsCalculator:')
 
     def __calculate_edges_stats(self) -> StatsResults:
         """
@@ -53,6 +56,7 @@ class StatsCalculator(object):
 
         :return:    StatsResult object comprising both, the local and the global information related to the graph edges
         """
+        xgprint(self.verbose, 'INFO:     StatsCalculator: calculating edges stats ...')
         # A copy is done to avoid mutation side effects
         df_example = self.df.copy()
 
@@ -114,6 +118,7 @@ class StatsCalculator(object):
 
         :return:    StatsResult object comprising both, the local and the global information related to the graph nodes
         """
+        xgprint(self.verbose, 'INFO:     StatsCalculator: calculating nodes stats ...')
         all_columns = list(self.df.columns)
         df_values = self.df.values
         graph_nodes_info = []
