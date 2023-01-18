@@ -11,6 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
 from xaiographs.common.constants import ID, TARGET, RCAT, RNUM
+from xaiographs.common.utils import xgprint
 from xaiographs.exgraph.explainer.explainer import Explainer
 
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
@@ -19,29 +20,30 @@ QUANTILE_SIZE = 10
 TAR_COLUMN_NAMES = [TARGET]
 
 
-def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
+def titanic_cooking(target_col: str, verbose: int = 0) -> Tuple[pd.DataFrame, List[str]]:
     """
     This function takes care of loading and preprocessing the Titanic dataset so that the resulting DataFrame can
     be used to train a Machine Learning model. Optionally, the column to be predicted can be changed (default is
     'survived')
 
-    :param: target_col:  String representing the column name to be considered as target (defaul is 'survived')
+    :param target_col:   String representing the column name to be considered as target (default is 'survived')
+    :param verbose:      Verbosity level, where any value greater than 0 means the message is printed
     :return:             Pandas DataFrame containing the preprocessed data so that it's suitable for training a Machine
                          Learning model
                          List of strings providing the names of the definitive categorical features, which may be
                          recalculated depending on which categorical feature will be considered as target (default
                           target is 'survived')
     """
+
     # A random seed is fixed so that results are reproducible from one execution to another
     np.random.seed(42)
 
     # Features and labels are retrieved for Titanic dataset
+    xgprint(verbose, 'INFO:     Fetching dataset from OpenML')
     x_train, y_train = fetch_openml("titanic", version=1, as_frame=True, return_X_y=True)
 
-    # Some features considered irrelevant are dropped from the beginning
-    x_train.drop(['boat', 'body', 'home.dest'], axis=1, inplace=True)
-
     # Synthetic features are calculated out of the given ones
+    xgprint(verbose, "INFO:     Computing synthetic features: 'family_size', 'is_alone' y 'title'")
     x_train['family_size'] = x_train['parch'] + x_train['sibsp']
     x_train['is_alone'] = np.where(x_train['family_size'] > 1, 0, 1)
 
@@ -53,14 +55,18 @@ def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
     x_train.loc[x_train['title'] == 'Master', 'title'] = 'Mr'
     x_train.loc[(x_train['title'] != 'Mrs') & (x_train['title'] != 'Mr'), 'title'] = 'rare'
 
-    # Some other original feature won't be taken into account
-    x_train = x_train.drop(['cabin', 'ticket', 'parch', 'sibsp', 'name'], axis=1)
+    # Some original features won't be taken into account
+    features_to_drop = ['cabin', 'ticket', 'parch', 'sibsp', 'name', 'boat', 'body', 'home.dest']
+    xgprint(verbose, 'INFO:     Dropping unused/constant features: {}'.format(features_to_drop))
+    x_train.drop(features_to_drop, axis=1, inplace=True)
 
     # Mode is imputed for categorical features
+    xgprint(verbose, 'INFO:     Simple Imputer is applied on categorical features ... ')
     cat_transformer = Pipeline(steps=[('imputer', SimpleImputer(strategy='most_frequent'))])
 
     # K nearest neighbors imputation will be used, together with the Robust Scaler, to impute and standardize
     # the numerical features
+    xgprint(verbose, 'INFO:     KNN Imputer and Robust Scaler are applied on numerical features ... ')
     num_transformer = Pipeline(steps=[('imputer', KNNImputer(n_neighbors=5)), ('scaler', RobustScaler())])
 
     # Transformation Pipelines will be put into a ColumnTransformer so that they can be all run sequentially
@@ -85,7 +91,7 @@ def titanic_cooking(target_col: str) -> Tuple[pd.DataFrame, List[str]]:
     else:
         new_cat_column_names = CAT_COLUMN_NAMES.copy()
 
-    print('INFO: Target to be predicted for Titanic example: {}'.format(target_col))
+    xgprint(verbose, 'INFO:     Target to be predicted for Titanic example: {}'.format(target_col))
     df_train = pd.DataFrame(df_train[CONT_COLUMN_NAMES + new_cat_column_names + TAR_COLUMN_NAMES].values,
                             columns=CONT_COLUMN_NAMES + new_cat_column_names + TAR_COLUMN_NAMES)
 
@@ -139,16 +145,17 @@ def discretize_titanic(titanic_prediction: pd.DataFrame, target_cols: List[str],
     return df_2_explain
 
 
-def random_forest_titanic(titanic_cooked: pd.DataFrame, cat_col_names: List[str]):
+def random_forest_titanic(titanic_cooked: pd.DataFrame, cat_col_names: List[str], verbose: int = 0):
     """
     This function takes care of encoding categorical variables and set dummy variable names accordingly. It also uses
     the resulting dataset for training and prediction. Once predictions have been obtained, the original target in the
     dataset provided as parameter, is replaced by that prediction. The model of choice is a Random Forest Classifier
 
-    :param: titanic_cooked: Pandas DataFrame on which basic imputing and scaling operations have been performed
-    :param: cat_col_names:  List of strings containing all column names to be considered categorical
-    :return:                Pandas DataFrame which is identical to the aforementioned parameter but its target
-                            has been replaced by the prediction of the trained model
+    :param titanic_cooked: Pandas DataFrame on which basic imputing and scaling operations have been performed
+    :param cat_col_names:  List of strings containing all column names to be considered categorical
+    :param verbose:        Verbosity level, where any value greater than 0 means the message is printed
+    :return:               Pandas DataFrame which is identical to the aforementioned parameter but its target
+                           has been replaced by the prediction of the trained model
     """
 
     # Features and labels are separated in three different numpy structures: one for continuous features, one for
@@ -158,6 +165,7 @@ def random_forest_titanic(titanic_cooked: pd.DataFrame, cat_col_names: List[str]
     tar = titanic_cooked[TAR_COLUMN_NAMES].values
 
     # One Hot Encoding will be used to encode the categorical features
+    xgprint(verbose, 'INFO:     One Hot Encoding is applied to categorical features')
     enc = OneHotEncoder()
     enc.fit(cat)
     cat_enc = enc.transform(cat)
@@ -180,12 +188,15 @@ def random_forest_titanic(titanic_cooked: pd.DataFrame, cat_col_names: List[str]
 
     # With the aforementioned DataFrame, a new model is instantiated and trained. Prediction for the same DataFrame is
     # retrieved too
+    xgprint(verbose, 'INFO:     Random Forest Classifier is used for target prediction:')
     model = RandomForestClassifier()
     model.fit(df_train_features.values, df_train_target.values)
     pre_prediction = model.predict(df_train_features.values)
-    print('INFO: Train accuracy: {:.4f}'.format(accuracy_score(df_train_target.values, pre_prediction)))
+    xgprint(verbose, 'INFO:          Train accuracy: {:.4f}'.format(accuracy_score(df_train_target.values,
+                                                                                   pre_prediction)))
 
     # Target column is replaced in the ORIGINAL dataset (not the one with the dummy variables) by the prediction column
+    xgprint(verbose, 'INFO:          Random Forest Classifier prediction is used as new target')
     rf_predict = titanic_cooked.drop([TARGET], axis=1)
     rf_predict[TARGET] = pre_prediction
     rf_predict_targets = pd.get_dummies(rf_predict[TARGET], prefix=TARGET)
@@ -196,31 +207,36 @@ def random_forest_titanic(titanic_cooked: pd.DataFrame, cat_col_names: List[str]
     return rf_predict[CONT_COLUMN_NAMES + cat_col_names + list(rf_predict_targets.columns)]
 
 
-def prepare_titanic(target_col: str = 'survived') -> Tuple[pd.DataFrame, List[str], List[str], List[str]]:
+def prepare_titanic(target_col: str = 'survived', verbose: int = 0) -> Tuple[pd.DataFrame, List[str], List[str],
+                                                                             List[str]]:
     """
     This function is intended to coordinate the Titanic dataset load and preprocess together with the use of a Machine
     Learning model to predict the target column
 
-    :param:     target_col: String representing the column to be considered as target (default: 'survived'). For a
-                two-target problem default can be used, for a more than two targets problem, 'pclass' feature is the
-                one that has been used so far. Please bear in mind, binary problems have been modeled as multi target
-                (instead of target being 1 or 0, there're target_0 and target_1)
-    :return:    Pandas DataFrame properly preprocessed. Its target may have result from the prediction of a Machine
-                Learning model
-                List of columns containing the features of the resulting Pandas DataFrame
-                List of columns used as target
-                List of columns to be considered categorical
+    :param target_col: String representing the column to be considered as target (default: 'survived'). For a two-target
+                       problem default can be used, for a more than two targets problem, 'pclass' feature is the one
+                       that has been used so far. Please bear in mind, binary problems have been modeled as multi target
+                       (instead of target being 1 or 0, there're target_0 and target_1)
+    :param verbose:    Verbosity level, where any value greater than 0 means the message is printed
+    :return:           Pandas DataFrame properly preprocessed. Its target may have result from the prediction of a
+                       Machine Learning model
+                       - List of columns containing the features of the resulting Pandas DataFrame
+                       - List of columns used as target
+                       - List of columns to be considered categorical
     """
+
+    xgprint(verbose, 'INFO: Preprocessing Titanic dataset')
 
     # This first step represents the dataset preprocessing, in other words: all that is needed to do to the dataset
     # so that the predictive model will successfully train from it. It's important to remark that it is the user who
     # is responsible for this step
-    df_titanic_cooked, final_cat_col_names = titanic_cooking(target_col=target_col)
+    df_titanic_cooked, final_cat_col_names = titanic_cooking(target_col=target_col, verbose=verbose)
 
     # A predictive model (in this case a Random Forest Classifier) is used to train and predict. These predictions
     # replace the original target in the dataset provided as parameter. Then, the resulting DataFrame is returned. Again
     # it is the user who is responsible for this step too
-    df_titanic_prediction = random_forest_titanic(titanic_cooked=df_titanic_cooked, cat_col_names=final_cat_col_names)
+    df_titanic_prediction = random_forest_titanic(titanic_cooked=df_titanic_cooked, cat_col_names=final_cat_col_names,
+                                                  verbose=verbose)
     feature_cols = []
     target_cols = []
     for col in df_titanic_prediction.columns:
@@ -236,7 +252,15 @@ def main():
     # This is a temporary flag to test feature selection. When True, two random features are created expecting them to
     # be later discardes by the topk feature selector
     include_random_features = True
-    df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic()
+
+    # Verbosity level: 0 or 1
+    verbosity = 1
+    df_titanic_cooked, feature_cols, target_cols, final_cat_col_names = prepare_titanic(verbose=verbosity)
+    xgprint(verbosity, 'INFO: "Titanic" summary:')
+    if verbosity:
+        df_titanic_cooked.info()
+    xgprint(verbosity, 'INFO: "Titanic" dataset features names {}:'.format(feature_cols))
+    xgprint(verbosity, 'INFO: "Titanic" targets {}:'.format(target_cols))
 
     # This next step consists on:
     # - Continuous features discretization
@@ -251,7 +275,8 @@ def main():
         feature_cols.extend([RCAT, RNUM])
 
     # The desired explainer is created
-    explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', destination_path='/home/cx02747/Utils/')
+    explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', destination_path='/home/cx02747/Utils/',
+                          verbose=verbosity)
 
     # Explaining process is triggered
     explainer.explain(feature_cols=feature_cols, target_cols=target_cols)

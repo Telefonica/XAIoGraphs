@@ -202,9 +202,9 @@ class ImportanceCalculator(metaclass=ABCMeta):
         # If the number of samples to be globally explained is greater or equal than the dataset size, there's no need
         # for sampling, the whole dataset is taken into account
         if num_samples >= len(df):
-            print('WARN:           requested number of samples for global explanation ({}) is greater than dataset size'
-                  ' ({}) ...'.format(num_samples, len(df)))
-            print('INFO:           the whole dataset will taken as dataset to be explained')
+            print('WARN:               requested number of samples for global explanation ({}) is greater than dataset'
+                  ' size ({}) ...'.format(num_samples, len(df)))
+            print('INFO:               the whole dataset will taken as dataset to be explained')
             return df
 
         # A target column is included in the given pandas DataFrame, this column will contain the top1 target

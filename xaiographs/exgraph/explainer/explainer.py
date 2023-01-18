@@ -111,7 +111,7 @@ class Explainer(object):
 
         # Once global explanation related information is calculated. The explanation DataFrame is sampled, so that only
         # some rows will be taken into account when generating the local output for visualization
-        xgprint(self.verbose, 'INFO:     sampling the dataset to be locally explained: {} samples will be used ...'.
+        xgprint(self.verbose, 'INFO:     Sampling the dataset to be locally explained: {} samples will be used ...'.
                 format(num_samples_local_expl))
         df_explanation_sample = ImportanceCalculator.sample_explanation(df_explanation=df_explanation_global,
                                                                         sample_ids_mask_2_explain=sample_ids_mask)
