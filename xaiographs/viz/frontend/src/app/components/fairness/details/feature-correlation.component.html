@@ -1,0 +1,3 @@
+<div fxFlex fxLayout="column" fxLayoutGap="10px">
+    <label *ngFor="let correlation of listCorrelation">{{ correlation.feature_1 }} is highly correlated (Pearson={{ correlation.correlation_value }}) with the {{ correlation.feature_2 }} feature</label>
+</div>

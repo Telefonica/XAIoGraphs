@@ -112,19 +112,3 @@ $PROJECT-warn: mat-palette($mat-customized-third, A700, A700, A700);
 $PROJECT-theme: mat-light-theme($PROJECT-primary, $PROJECT-accent, $PROJECT-warn);
 
 @include angular-material-theme($PROJECT-theme);
-
-// @font-face {
-//     font-family: "telefonica_sans_regular";
-//     src: url("assets/fonts/Telefonica_Sans_Regular.eot"),
-//          url("assets/fonts/Telefonica_Sans_Regular.otf") format("opentype");
-//     font-weight: normal;
-//     font-style: normal;
-// }
-
-// $custom-typography: mat-typography-config(
-//     $font-family: "telefonica_sans_regular",
-//     $headline: mat-typography-level(32px, 48px, 700),
-//     $body-1: mat-typography-level(16px, 24px, 500),
-// );
-
-// @include angular-material-typography($custom-typography);

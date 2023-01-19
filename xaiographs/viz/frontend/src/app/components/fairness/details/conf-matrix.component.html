@@ -1,0 +1,36 @@
+<div fxFlex fxLayout="column" fxLayoutGap="25px">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <label class="fairnessConfMatrixTitle">Confussion Matrix</label>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+            <label>Display percentaje values</label>
+            <mat-slide-toggle [(ngModel)]="displayPercent">%</mat-slide-toggle>
+        </div>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+        <label>PREDICT</label>
+        <div fxLayout="row" fxLayoutAlign="center center" style="width: 100%;" fxLayoutGap="15px">
+            <label style="writing-mode: vertical-rl; text-orientation: upright;">ACTUAL</label>
+            <mat-grid-list cols="{{ listLabels.length + 1 }}" rowHeight="50px" *ngIf="!displayPercent" style="width: 100%;">
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile *ngFor="let item of listLabels"><label class="matrix_title">{{ item }}</label></mat-grid-tile>
+                <ng-container *ngFor="let itemRow of listLabels">
+                    <mat-grid-tile><label class="matrix_title">{{ itemRow }}</label></mat-grid-tile>
+                    <mat-grid-tile *ngFor="let itemColumn of listLabels">
+                        <label class="matrix_value" [ngStyle]="getBGColor(itemRow, itemColumn)"> {{ matrixValues[itemRow][itemColumn] }} </label>
+                    </mat-grid-tile>
+                </ng-container>
+            </mat-grid-list>
+            <mat-grid-list cols="{{ listLabels.length + 1 }}" rowHeight="50px" *ngIf="displayPercent" style="width: 100%;">
+                <mat-grid-tile></mat-grid-tile>
+                <mat-grid-tile *ngFor="let item of listLabels"><label class="matrix_title">{{ item }}</label></mat-grid-tile>
+                <ng-container *ngFor="let itemRow of listLabels">
+                    <mat-grid-tile><label class="matrix_title">{{ itemRow }}</label></mat-grid-tile>
+                    <mat-grid-tile *ngFor="let itemColumn of listLabels">
+                        <label class="matrix_value" [ngStyle]="getBGColor(itemRow, itemColumn)"> {{ (matrixPercent[itemRow][itemColumn]* 100).toFixed(1) }} % </label>
+                    </mat-grid-tile>
+                </ng-container>
+            </mat-grid-list>
+        </div>
+    </div>
+
+</div>
