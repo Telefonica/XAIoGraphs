@@ -15,7 +15,6 @@ class ImportanceCalculator(metaclass=ABCMeta):
     methods are abstract, so that they must be implemented depending on the strategy used to calculate importance and
     some other are given, representing those tasks which stay always the same, independently of the strategy
     """
-    _DEFAULT_TARGET_COLS = ['target']
     _DF_EXPLANATION = 'df_explanation'
     _EPS_ERROR = 0.000001
     _PHI0 = 'phi0'
