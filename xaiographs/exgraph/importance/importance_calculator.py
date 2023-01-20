@@ -56,14 +56,13 @@ class ImportanceCalculator(metaclass=ABCMeta):
 
     @staticmethod
     def __compute_global_explainability(global_target_explainability: pd.DataFrame, feature_cols: List[str],
-                                        target_cols: List[str], top1_targets: np.ndarray) -> pd.DataFrame:
+                                        top1_targets: np.ndarray) -> pd.DataFrame:
         """
         This function computes the mean of each feature importance throughout all the targets
 
         :param global_target_explainability: Pandas DataFrame containing the mean of each feature importance for each
                                              target
         :param feature_cols:                 List of strings containing the column names for the features
-        :param target_cols:                  List of strings containing the column names for the target/s
         :param top1_targets:                 Numpy array containing the top1_target for each row
         :return:                             Pandas DataFrame containing the mean of each feature importance throughout
                                              all the targets
@@ -71,16 +70,14 @@ class ImportanceCalculator(metaclass=ABCMeta):
         # To generate global_explainability.csv, the targets probabilities are computed and each of the rows of the
         # previous DataFrame is multiplied by the corresponding probability. Finally, mean is computed for the resulting
         # columns
-        target_probs = np.array([top1_targets.tolist().count(target) for target in target_cols]) / len(
-            top1_targets)
+        target_probs = np.array([top1_targets.tolist().count(target) for target in
+                                 global_target_explainability[TARGET].values]) / len(top1_targets)
 
         return pd.DataFrame(np.concatenate((np.array(feature_cols).reshape(-1, 1),
-                                            (target_probs.reshape(-1,
-                                                                  1) * global_target_explainability.drop(
-                                                TARGET, axis=1).values).mean(axis=0).reshape(
-                                                -1, 1)), axis=1),
-                            columns=[FEATURE_NAME, FEATURE_IMPORTANCE]).sort_values(
-            by=[FEATURE_IMPORTANCE], ascending=False)
+                                            (target_probs.reshape(-1, 1) * global_target_explainability.drop(
+                                                TARGET, axis=1).values).sum(axis=0).reshape(-1, 1)), axis=1),
+                            columns=[FEATURE_NAME, FEATURE_IMPORTANCE]).sort_values(by=[FEATURE_IMPORTANCE],
+                                                                                    ascending=False)
 
     @staticmethod
     def __compute_global_graph_nodes_importance(df_explained: pd.DataFrame, feature_cols: List[str],
@@ -216,6 +213,10 @@ class ImportanceCalculator(metaclass=ABCMeta):
         df_agg_per_target = []
         for target_prob, target_col_value in zip(target_probs, target_cols):
             n_samples_by_target = int(num_samples * target_prob)
+            print("===========================")
+            print(target_col_value)
+            print(target_prob)
+            print(n_samples_by_target)
             df_agg_per_target.append(df[df[target_col] == target_col_value].sample(
                 n=n_samples_by_target, random_state=42))
 
@@ -248,7 +249,6 @@ class ImportanceCalculator(metaclass=ABCMeta):
         global_explainability = ImportanceCalculator.__compute_global_explainability(
             global_target_explainability=top1_importance_features,
             feature_cols=self.feature_cols,
-            target_cols=target_cols,
             top1_targets=target_info.top1_targets)
 
         global_graph_nodes = ImportanceCalculator.__compute_global_graph_nodes_importance(
