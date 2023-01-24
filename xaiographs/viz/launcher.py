@@ -1,4 +1,3 @@
-
 from xaiographs.common.constants import WEB_ENTRY_POINT
 
 import argparse
@@ -43,10 +42,12 @@ CSV_FILES = ["global_explainability.csv",
              "local_graph_nodes.csv",
              "local_graph_edges.csv",
              "data_correlation_matrix_dataset.csv",
-             "[DEPRECATED]_input_dataset.csv",
-             "[DEPRECATED]_input_dataset_discretized.csv",
-             "[DEPRECATED]_global_target_explainability.csv",
-             "[DEPRECATED]_local_explainability.csv",
+             "fairness_confusion_matrix.csv",
+             "fairness_highest_correlation.csv",
+             "fairness_independence.csv",
+             "fairness_separation.csv",
+             "fairness_sufficiency.csv",
+             "fairness_sumarize_criterias.csv"
              ]
 
 
@@ -280,8 +281,8 @@ def main():
     """
     # Handle input arguments
     parser = argparse.ArgumentParser(description='XAIoGraphs')
-    parser.add_argument('-p', '--port', default=8080, help='Web server port', type=int, required=True)
     parser.add_argument('-d', '--data', default=None, help='CSV files path', type=str, required=True)
+    parser.add_argument('-p', '--port', default=8080, help='Web server port', type=int, required=False)
     parser.add_argument('-f', '--force', action='store_true',
                         help='Force building the web from scratch, overwriting the existing one', required=False)
     parser.add_argument('-o', '--open', action='store_true', help='Open web in browser', required=False)
