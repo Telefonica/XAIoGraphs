@@ -555,7 +555,7 @@ def target_transform(df: pd.DataFrame, dataset_name: str) -> Tuple[pd.DataFrame,
         target_ori_names = ['{}_Galaxy A51'.format(TARGET), '{}_Galaxy S21'.format(TARGET),
                             '{}_iPhone 11'.format(TARGET), '{}_Mi 10T'.format(TARGET),
                             '{}_iPhone SE 2020'.format(TARGET)]
-        target_new_names = ['a51', 's21', 'mi10t', 'ip11', 'ipse2020']
+        target_new_names = ['a51', 's21', 'ip11', 'mi10t', 'ipse2020']
         return pd.get_dummies(df,
                               prefix=TARGET,
                               columns=[TARGET]).rename(columns=dict(zip(target_ori_names,
