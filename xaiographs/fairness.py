@@ -596,6 +596,7 @@ class Fairness(object):
 
         Example:
             >>> import pandas as pd
+            >>> pd.set_option('display.max_columns', None)
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
