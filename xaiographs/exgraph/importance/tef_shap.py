@@ -4,42 +4,12 @@ from typing import Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
 import scipy
-import torch
-import torch_scatter
 from sklearn.model_selection import train_test_split
-from torch_geometric import nn as pyg_nn
 from tqdm import tqdm
 
 from xaiographs.common.constants import ID, IMPORTANCE_SUFFIX, RELIABILITY
 from xaiographs.common.utils import TargetInfo, xgprint
 from xaiographs.exgraph.importance.importance_calculator import ImportanceCalculator
-
-
-class ShapConv(pyg_nn.MessagePassing):
-    """
-    This class implements a message passing graph neural network. This kind of networks do automatically take
-    care of message propagation. In this particular case, constructor aggregation parameter will delegate its tasks to
-     the specific `aggregate`method defined below.
-     - The `forward` method invokes `propagate` which receives as parameters the coalitions worth, the weights and the
-    edges information.
-     - The `propagate` method, internally invokes `message`, `aggregate` and `update` methods.
-     - In this case, the `message` method will just construct the message for the only neighbor node without further
-      processing, just considering what has been received from the (only) input node.
-      - The `aggregate` method must feature a permutation invariant aggregation method, `add` has been used, however
-       there won't be any actual adding, since there's only one message to aggregate
-    """
-    def __init__(self):
-        super().__init__()
-
-    def forward(self, x, w, edge_index):
-        aggr = self.propagate(edge_index, x=x)
-        return (x - aggr) * w
-
-    def aggregate(self, inputs, index, dim_size=None):
-        return torch_scatter.scatter(inputs, index, dim=self.node_dim, dim_size=dim_size, reduce="sum")
-
-    def message(self, x_j):
-        return x_j
 
 
 class TefShap(ImportanceCalculator):
@@ -173,7 +143,7 @@ class TefShap(ImportanceCalculator):
     def __build_computational_graph(features_num: int,
                                     coalition_names: List[str],
                                     coalition_lengths: List[List[int]],
-                                    verbose: int = 0) -> Tuple[torch.tensor, torch.tensor]:
+                                    verbose: int = 0) -> Tuple[np.ndarray, np.ndarray]:
         """
         This method builds the computational graph for each feature. It requires the list of coalition names and the
         lists of coalitions ids grouped by their length in order to calculate the graph edges.
@@ -183,35 +153,56 @@ class TefShap(ImportanceCalculator):
         :param coalition_lengths:   List of lists of integers containing for each possible coalition length, the
                                     coalitions ids for those coalitions with the given length
         :param verbose:             Verbosity level, where any value greater than 0 means the message is printed
-        :return:                    Tuple of torch tensors in returned:
-                                    - Torch tensor containing the edges for each feature. Edges are represented by a
+        :return:                    Tuple of numpy arrays in returned:
+                                    - Numpy array containing the edges for each feature. Edges are represented by a
                                     list of output nodes and a list of input nodes (both per feature)
-                                    - Torch tensor containing the weights for each coalition
+                                    - Numpy array containing the result of dividing the weights for each coalition by
+                                    the computed degree for the input coalitions
         """
+        # A weight is computed for each coalition
+        weights = np.expand_dims(np.expand_dims([1 if j == 0
+                                                 else 1 / (scipy.special.comb(features_num - 1,
+                                                                              len(name.split(
+                                                                                  TefShap._COALITION_NAME_SEP)) - 2) * (
+                                                               features_num)) for j, name in
+                                                 enumerate(coalition_names)], axis=0), axis=2)
         edges_list = []
+        weights_list = []
         pbar = tqdm(range(features_num), disable=not verbose)
         pbar.set_description('INFO:     Computational graph')
         for pi in pbar:
-            c = str(pi)
+            f = str(pi)
             edges = [[], []]
             for i in range(1, len(coalition_lengths)):
+
+                # A list of the output (origin) nodes and another list with their corresponding input (destination)
+                # nodes are obtained for all the coalitions of the given length `i` and involving the given feature `f`
+                # For every output/input coalition pair, the output coalition won't contain the given feature `f` but
+                # the input coalition will
                 input_nodes, output_nodes = TefShap.__compute_edges(coalition_lengths=coalition_lengths,
                                                                     coalition_names=coalition_names,
-                                                                    coalition_length=i, feature=c)
+                                                                    coalition_length=i, feature=f)
                 if len(input_nodes):
                     edges[1].extend(input_nodes)
                 if len(output_nodes):
                     edges[0].extend(output_nodes)
             edges_list.append(edges)
 
-        # A weight is computed for each coalition
-        weights = torch.tensor([1 if j == 0
-                                else 1 / (scipy.special.comb(features_num - 1,
-                                                             len(name.split(TefShap._COALITION_NAME_SEP)) - 2) * (
-                                                             features_num)) for j, name in
-                                enumerate(coalition_names)]).unsqueeze(dim=0).unsqueeze(dim=2)
+            # Weights are stored for the input nodes
+            weights_list.append(weights.squeeze()[edges[1]].tolist())
+        edges = np.array(edges_list)
 
-        return torch.tensor(edges_list), weights
+        degrees = []
+
+        # Degrees are computed for the input nodes
+        for i in range(edges.shape[0]):
+            degrees.append(TefShap.__get_degree(edges[i, 1, :]))
+        degrees = np.stack(degrees, axis=0)
+        filtered_degrees = []
+        for i in range(edges.shape[0]):
+            filtered_degrees.append(degrees[i, edges[i, 1, :]])
+        filtered_degrees = np.stack(filtered_degrees, axis=0)
+        return edges, np.array(weights_list)/filtered_degrees
 
     @staticmethod
     def __build_features_graph(df_2_explain: pd.DataFrame, df_train: pd.DataFrame,
@@ -261,9 +252,16 @@ class TefShap(ImportanceCalculator):
         return coalitions_worth
 
     @staticmethod
+    def __get_degree(a: np.ndarray) -> np.ndarray:
+        values, counts = np.unique(a, return_counts=True)
+        degrees = np.zeros(np.max(a) + 1)
+        np.put(degrees, values, counts)
+        return degrees
+
+    @staticmethod
     def __graph_importance(features: np.ndarray,
-                           graph_edges: torch.tensor,
-                           weights: torch.tensor,
+                           graph_edges: np.ndarray,
+                           weights: np.ndarray,
                            batch_size: int,
                            verbose: int) -> np.ndarray:
         """
@@ -271,9 +269,9 @@ class TefShap(ImportanceCalculator):
 
         :param features:    Numpy matrix containing the coalitions worth. For each sample to be explained a worth is
                             calculated per coalition and per target
-        :param graph_edges: Torch tensor containing the edges for each feature. Edges are represented by a list of
+        :param graph_edges: Numpy array containing the edges for each feature. Edges are represented by a list of
                             output nodes and a list of input nodes (both per feature)
-        :param weights:     Torch tensor containing the weights for each coalition
+        :param weights:     Numpy array containing the weights for each coalition
         :param batch_size:  Integer representing the batch size to be used during importance calculation
         :param verbose:     Verbosity level, where any value greater than 0 means the message is printed
         :return:            Numpy matrix containing the calculated importance. For each row of the DataFrame to explain
@@ -285,35 +283,25 @@ class TefShap(ImportanceCalculator):
         batch_num = features.shape[0] // batch_size
         if features.shape[0] % batch_size > 0:
             batch_num += 1
-        with torch.no_grad():
+        pbar = tqdm(range(batch_num), disable=not verbose)
+        pbar.set_description('Explanation')
+        for n_batch in pbar:
+            shap_values = []
+            for f in range(weights.shape[0]):
+                # Batch shape is (batch_size x number of coalitions x number of target values)
+                batch = features[batch_size * n_batch:batch_size * (n_batch + 1), :, :]
 
-            # ShapConv is instantiated
-            shap = ShapConv()
-            pbar = tqdm(range(batch_num), disable=not verbose)
-            pbar.set_description('INFO:     Explanation')
-            for n_batch in pbar:
-                shap_values = []
-                for i, edges in enumerate(graph_edges):
+                # Shap value shape is (batch_size x number of target values)
+                shap_value = ((batch[:, graph_edges[f, 1, :], :] - batch[:, graph_edges[f, 0, :], :])
+                              * np.expand_dims(np.expand_dims(weights[f, :], axis=0), axis=2)).sum(axis=1)
+                shap_values.append(shap_value)
 
-                    # Chunk shape is (batch_size x number of coalitions x number of target values)
-                    batch = torch.tensor(features[batch_size*n_batch:batch_size*(n_batch + 1), :, :])
-                    shap_detailed = shap.forward(batch, weights, edges)
+            # Shap values shape is (batch_size x number of features to explain x number of target values)
+            shap_values = np.stack(shap_values, axis=0).transpose(1, 0, 2)
+            tot_shap_values.append(shap_values)
 
-                    # Shap values shape is (batch_size x number of target values)
-                    shap_value = (shap_detailed
-                                  .gather(1, edges[1, :].repeat(batch.shape[0], batch.shape[2], 1).permute(0, 2, 1))
-                                  .sum(dim=1))
-                    shap_values.append(shap_value)
-
-                # Shap values shape is (batch_size x number of features to explain x number of target values)
-                shap_values = torch.stack(shap_values, dim=0).permute(1, 0, 2)
-                tot_shap_values.append(shap_values)
-
-            # Tot shap values shape is (num_samples_global_expl x number of features to explain x
-            # number of target values)
-            tot_shap_values = torch.cat(tot_shap_values, dim=0)
-
-        return tot_shap_values.cpu().numpy()
+        # Tot shap values shape is (num_samples_global_expl x number of features to explain x number of target values)
+        return np.concatenate(tot_shap_values, axis=0)
 
     def local_explain(self, batch_size: int, **params) -> Dict[str, Union[pd.DataFrame, np.ndarray]]:
         """
@@ -331,11 +319,15 @@ class TefShap(ImportanceCalculator):
                             - coalitions_worth: Numpy matrix containing the coalitions worth. For each sample to be
                                                 explained a worth is calculated per coalition and per target
                                                 (n_samples x n_coalitions x n_target_cols)
-                            - edges:            Torch tensor containing the edges for each feature. Edges are
+                            - edges:            Numpy array containing the edges for each feature. Edges are
                                                 represented by a list of output nodes and a list of input nodes (both
                                                  per feature)
-                            - weights:          Torch tensor containing the weights for each coalition
-        :return:
+                            - weights:          Numpy array containing the result of dividing the weights for each
+                                                coalition by the computed degree for the input coalitions (nodes)
+
+        :return:            Dictionary containing two elements:
+                            - df_explanation:
+                            - importance_values:
         """
         # Fifth step (continuing from train method), in this step importance is calculated. The result does have the
         # following shape (rows to explain x features x targets)
@@ -397,7 +389,7 @@ class TefShap(ImportanceCalculator):
         }
 
     def train(self, df: pd.DataFrame,
-              num_samples_to_explain: int) -> Dict[str, Union[pd.DataFrame, np.ndarray, torch.Tensor]]:
+              num_samples_to_explain: int) -> Dict[str, Union[pd.DataFrame, np.ndarray]]:
         """
         This method takes care of the train part which ends up in the coalitions worth being calculated. Before this,
         the coalitions template and the computational graph are built.
@@ -411,10 +403,10 @@ class TefShap(ImportanceCalculator):
                                         - coalitions_worth: Numpy matrix containing the coalitions worth. For each
                                                             sample to be explained a worth is calculated per coalition
                                                              and per target (n_samples x n_coalitions x n_target_cols)
-                                        - edges:            Torch tensor containing the edges for each feature. Edges
+                                        - edges:            Numpy array containing the edges for each feature. Edges
                                                             are represented by a list of output nodes and a list of
                                                             input nodes (both per feature)
-                                        - weights:          Torch tensor containing the weights for each coalition
+                                        - weights:          Numpy array containing the weights for each coalition
         """
         if self.train_size > 0.0:
             xgprint(self.verbose, 'INFO:          train_size: {}'.format(self.train_size))
