@@ -16,7 +16,7 @@ from xaiographs.exgraph.statistics.stats_calculator import StatsCalculator
 class Explainer(object):
     """
     This class is intended to provide an abstract layer which encapsulates everything related to the explanation process
-    from statistics calculatio, importance calculation (using the engine chosen by the user) and information export for
+    from statistics calculation, importance calculation (using the engine chosen by the user) and information export for
     visualization tasks
     """
 

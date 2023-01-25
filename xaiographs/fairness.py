@@ -8,6 +8,8 @@ from copy import deepcopy
 from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
 
+from xaiographs.common.utils import xgprint
+
 # CONSTANTS
 BINARY = 2
 CORRELATION_VALUE = 'correlation_value'
@@ -105,10 +107,11 @@ class Fairness(object):
             0              gender                    0.416667                       E                     0.375                     E                   0.216667                      D
     """
 
-    def __init__(self, destination_path: str = './xaiographs_web_files'):
+    def __init__(self, destination_path: str = './xaiographs_web_files', verbose: int = 0):
         """
 
-        :param destination_path:
+        :param destination_path: String, representing the path where output files will be stored
+        :param verbose:          Verbosity level, where any value greater than 0 means the message is printed
         """
         self.__destination_path = destination_path
         self.__target_values = None
@@ -117,6 +120,7 @@ class Fairness(object):
         self.__highest_correlation_features = None
         self.__fairness_info = list()
         self.__global_scores_info = list()
+        self.verbose = verbose
 
     @property
     def target_values(self):
@@ -1101,7 +1105,7 @@ class Fairness(object):
         for sensitive_col in sensitive_cols:
             sensitive_values = df[sensitive_col].unique()
             for target_label in self.target_values:
-                pbar = tqdm(sensitive_values)
+                pbar = tqdm(sensitive_values, disable=not self.verbose)
                 for sensitive_value in pbar:
                     pbar.set_description('Processing: sensitive_col={}, sensitive_value={}, target_label={} '
                                          .format(sensitive_col, sensitive_value, target_label))
@@ -1167,8 +1171,7 @@ class Fairness(object):
         df_corr = df.corr(method='pearson').abs()
         self.__correlation_matrix = df_corr.where(np.triu(np.ones(df_corr.shape), k=1).astype(np.bool))
 
-    @staticmethod
-    def __encoder_dataset(df: pd.DataFrame) -> pd.DataFrame:
+    def __encoder_dataset(self, df: pd.DataFrame) -> pd.DataFrame:
         """Function that given a DataFrame, pass all its non-numeric columns to the labelEncoder
 
         :param df: pd.DataFrame, with dataset to labelEncoder non-numeric columns
@@ -1176,7 +1179,7 @@ class Fairness(object):
         """
         numeric_columns = df.select_dtypes(include=np.number).columns.tolist()
         all_columns = df.columns.tolist()
-        pbar = tqdm(all_columns)
+        pbar = tqdm(all_columns, disable=not self.verbose)
         for column in pbar:
             if column not in numeric_columns:
                 pbar.set_description('Enconding \"{}\" column'.format(column))
@@ -1200,7 +1203,7 @@ class Fairness(object):
         :return: None
         """
         correlations_list = list()
-        pbar = tqdm(df_correlations.columns)
+        pbar = tqdm(df_correlations.columns, disable=not self.verbose)
         for column in pbar:
             pbar.set_description('Checking \"{}\" column'.format(column))
             pbar.refresh()
@@ -1216,10 +1219,10 @@ class Fairness(object):
         self.__highest_correlation_features = correlations_list
 
         if len(correlations_list) == 0:
-            print('There are no correlated variables above the {} threshold'.format(threshold))
+            xgprint(self.verbose, 'There are no correlated variables above the {} threshold'.format(threshold))
         else:
-            print('Highly correlated variables above the {} Threshold'.format(threshold))
-            print(self.highest_correlation_features)
+            xgprint(self.verbose, 'Highly correlated variables above the {} Threshold'.format(threshold))
+            xgprint(self.verbose, self.highest_correlation_features)
 
     def __process_sensitive_column(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
                                    target_label: str, sensitive_value: Union[str, List[str]],
@@ -1292,7 +1295,7 @@ class Fairness(object):
         :return: None
         """
         sensitive_cols = self.fairness_info[SENSITIVE_FEATURE].unique()
-        pbar = tqdm(sensitive_cols)
+        pbar = tqdm(sensitive_cols, disable=not self.verbose)
         for sensitive_feature in pbar:
             pbar.set_description('Processing Global Score \"{}\" Feature'.format(sensitive_feature))
             pbar.refresh()
