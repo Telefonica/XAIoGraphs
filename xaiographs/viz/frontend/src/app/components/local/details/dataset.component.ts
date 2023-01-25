@@ -20,9 +20,6 @@ export class LocalDatasetComponent implements OnInit {
     csvDataset: any;
     dataReady: boolean = false;
 
-    maxFeatures = 0;
-    numFeatures = 0;
-
     currentID = 1;
 
     private sort!: MatSort;
@@ -42,11 +39,10 @@ export class LocalDatasetComponent implements OnInit {
             next: (response: any) => {
                 this.csvDataset = response.data;
                 this.displayedColumns = response.headers;
-                this.maxFeatures = response.headers.length - 1;
             },
             complete: () => {
-                this.numFeatures = this.maxFeatures;
-                this._apiEmitter.setBothLocal(this.csvDataset[0].id, this.numFeatures);
+                this.currentID = this.csvDataset[0].id;
+                this._apiEmitter.setLocalTarget(this.csvDataset[0]);
                 this.dataSource = new MatTableDataSource(this.csvDataset);
                 this.setDataSourceAttributes();
                 this.dataReady = true;
@@ -68,13 +64,8 @@ export class LocalDatasetComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    updateFeatures(event) {
-        this._apiEmitter.setLocalFeatures(event.value);
-    }
-
     radioSelected(row: any) {
-        this.currentID = row.id;
-        this._apiEmitter.setLocalTarget(this.currentID.toString());
+        this._apiEmitter.setLocalTarget(row);
     }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
@@ -12,9 +12,9 @@ import { ctsFiles } from '../../../constants/csvFiles';
     styles: [
     ]
 })
-export class LocalReasonComponent implements OnInit {
+export class LocalReasonComponent implements OnDestroy {
 
-    currentTarget = '';
+    currentTarget: any;
 
     targetSubscription: any;
 
@@ -31,28 +31,29 @@ export class LocalReasonComponent implements OnInit {
         });
     }
 
-    ngOnInit(): void { }
-
     getData() {
         this.currentTarget = this._apiEmitter.getLocalTarget();
+        this.reasonWhy = ''
 
         const body = {
             fileName: ctsFiles.local_reason_why,
-            target: this.currentTarget,
+            target: this.currentTarget.id,
         }
 
         this._apiReader.readLocalReasonWhy(body).subscribe({
             next: (response: any) => {
-                if (response)
+                if (response.length > 0)
                     this.reasonWhy = response[0].reason;
             },
-            complete: () => {
-                this.display = true;
-            },
+            complete: () => { },
             error: (err) => {
                 this._apiSnackBar.openSnackBar(JSON.stringify(err));
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.targetSubscription.unsubscribe();
     }
 
 }

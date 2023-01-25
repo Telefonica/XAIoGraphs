@@ -2,7 +2,7 @@
     <label class="fairnessCriteriaFeatureTitle">Features Fairness Criterias</label>
     <div fxLayout="row" fxLayoutGap="50px" style="padding: 0px 20px;">
         <div fxFlex="20" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
-            <label class="fairnessCriteriaFeatureTitle">Feature</label>
+            <label class="fairnessCriteriaSelect">Feature</label>
             <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
                 <mat-select placeholder="Feature" [formControl]="filterFeature" (selectionChange)="updateFeature()" style="min-width: 150px;">
                     <mat-option [value]="index" *ngFor="let feature of listFeatures; let index = index">{{ feature }}</mat-option>

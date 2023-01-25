@@ -84,15 +84,15 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
         this.dataGraph = [];
         this.options = {
             legend: 'none',
-            bar: { groupWidth: "90%" },
-            chartArea: { width: '70%', height: '80%' },
+            bar: { groupWidth: '90%' },
+            chartArea:{right:20,top:20,width:'75%',height:'90%'},
             series: {
                 0: { targetAxisIndex: 0 },
                 1: { targetAxisIndex: 1 }
             },
             yAxes: {
-                0: { title: 'parsecs' },
-                1: { title: 'apparent magnitude' }
+                0: { title: 'importance' },
+                1: { title: 'frecuency' }
             },
             tooltip: { type: 'string', isHtml: true },
         };

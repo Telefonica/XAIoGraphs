@@ -4,7 +4,7 @@
     @extend .fontBold;
     height: 60px;
     padding-left: 25px;
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .fairnessBody {
@@ -18,10 +18,14 @@
     @extend .bgWhite;
 }
 
-.fairnessCriteriasTitle {
+.fairnessCriteriasTitle,
+.fairnessConfMatrixTitle,
+.fairnessCriteriaFeatureTitle {
     @extend .fontGrey5;
     @extend .fontBold;
-    font-size: 18px;
+    font-size: 25px;
+    padding: 10px;
+    border-bottom: 1px solid gray;
 }
 
 .criterias_value {
@@ -62,6 +66,12 @@
     font-size: 14px;
 }
 
+.fairnessCriteriaConcept {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 20px;
+}
+
 .criteriasAP {
     @extend .criterias_value;
     @extend .colorAP;
@@ -93,11 +103,13 @@
     color: white;
 }
 
-.fairnessConfMatrixTitle {
-    @extend .fontGrey5;
+.fairnesConfMatrixMode,
+.fairnessCriteriaSelect {
+    @extend .fontGrey4;
     @extend .fontBold;
-    font-size: 18px;
+    font-size: 15px !important;
 }
+
 .matrix_value {
     width: 100%;
     padding: 15px;
@@ -110,7 +122,7 @@
     padding: 15px;
     text-align: center;
     vertical-align: middle;
-    background-color: rgb(75, 15, 85);
+    background-color: #4b0f55;
     color: rgb(214, 198, 218);
 }
 
@@ -120,12 +132,6 @@
 
 .brdGrey3_bottom {
     border-bottom: 1px solid #b0b6c0;
-}
-
-.fairnessCriteriaFeatureTitle {
-    @extend .fontGrey5;
-    @extend .fontBold;
-    font-size: 18px;
 }
 
 .criterias_help_contrast {

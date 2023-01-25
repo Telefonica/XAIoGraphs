@@ -44,14 +44,14 @@ export class EmitterService {
         return this.currentGlobalFrencuency;
     }
 
-    setAllGlobal(target: string, features: number, frecuency: number) {
+    setAllGlobal(target: any, features: number, frecuency: number) {
         this.currentGlobalTarget = target;
         this.currentGlobalFeatures = features;
         this.currentGlobalFrencuency = frecuency;
         this.globalTargetChangeEmitter.emit();
     }
 
-    setLocalTarget(target: string) {
+    setLocalTarget(target: any) {
         this.currentLocalTarget = target;
         this.localTargetChangeEmitter.emit();
     }
