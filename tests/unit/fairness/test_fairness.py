@@ -244,7 +244,8 @@ class FairnessUnitTest(unittest.TestCase):
                                    columns=['Gender', 'Color', 'y_true', 'y_predict'],
                                    dtype='int64')
 
-        df = Fairness._Fairness__encoder_dataset(df=self.df_dataset).astype(np.int64)
+        f = Fairness(destination_path='./', verbose=0)
+        df = f._Fairness__encoder_dataset(df=self.df_dataset).astype(np.int64)
 
         print("\nDataset to Encoder:\n{}".format(self.df_dataset.head(5)))
         print("encoder_dataset_unit_test -> Result DataFrame:\n{}".format(df.head(5)))
