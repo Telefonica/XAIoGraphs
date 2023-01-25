@@ -103,7 +103,8 @@ jobs:
           mkdir -p ./docs/build/log
           cd docs
           sphinx-apidoc -o ./source ../xaiographs
-          sphinx-build -c ./source ./source ../xaiographs | tee ./build/log/output.txt
+#          sphinx-build -c ./source ./source ../xaiographs | tee ./build/log/output.txt
+          sphinx-build -b doctest -c ./source ./source ../xaiographs | tee ./build/log/output.txt
           if [ $(cat ./build/log/output.txt | grep -c "\*\*\*Test Failed\*\*\*") -gt 0 ]; then
             echo "Documentation Test Failed.";
             exit 1;
