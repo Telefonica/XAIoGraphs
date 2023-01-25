@@ -103,8 +103,8 @@ class Fairness(object):
             ...                target_col='y_true',
             ...                predict_col='y_predict')
             >>> f.fairness_global_info
-                sensitive_feature   independence_global_score   independence_category   separation_global_score   separation_category   sufficiency_global_score   sufficiency_category
-            0              gender                    0.416667                       E                     0.375                     E                   0.216667                      D
+              sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
+            0            gender                   0.416667                     E                    0.375                   E                  0.216667                    D
     """
 
     def __init__(self, destination_path: str = './xaiographs_web_files', verbose: int = 0):
@@ -131,21 +131,21 @@ class Fairness(object):
 
         Example:
             >>> import pandas as pd
-            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            >>> df = pd.DataFrame({'gender': ['MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN', 'MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
             ...                   columns=['gender', 'y_true', 'y_predict'])
             >>> df
               gender y_true y_predict
-            0    MAN    YES       YES
-            1    MAN    YES       YES
+            0    MEN    YES       YES
+            1    MEN    YES       YES
             2  WOMAN     NO        NO
-            3    MAN     NO       YES
+            3    MEN     NO       YES
             4  WOMAN    YES        NO
-            5    MAN    YES        NO
-            6    MAN    YES       YES
+            5    MEN    YES        NO
+            6    MEN    YES       YES
             7  WOMAN    YES       YES
-            8    MAN     NO        NO
+            8    MEN     NO        NO
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
@@ -170,21 +170,21 @@ class Fairness(object):
 
         Example:
             >>> import pandas as pd
-            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+            >>> df = pd.DataFrame({'gender': ['MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN', 'MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
             ...                   columns=['gender', 'y_true', 'y_predict'])
             >>> df
               gender y_true y_predict
-            0    MAN    YES       YES
-            1    MAN    YES       YES
+            0    MEN    YES       YES
+            1    MEN    YES       YES
             2  WOMAN     NO        NO
-            3    MAN     NO       YES
+            3    MEN     NO       YES
             4  WOMAN    YES        NO
-            5    MAN    YES        NO
-            6    MAN    YES       YES
+            5    MEN    YES        NO
+            6    MEN    YES       YES
             7  WOMAN    YES       YES
-            8    MAN     NO        NO
+            8    MEN     NO        NO
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
@@ -217,7 +217,7 @@ class Fairness(object):
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-            ...                   columns=['gender', 'gender2', 'color', 'y_true', 'y_predict'])
+            ...                  columns=['gender', 'gender2', 'color', 'y_true', 'y_predict'])
             >>> df
               gender gender2  color y_true y_predict
             0    MAN     MAN   BLUE    YES       YES
@@ -263,7 +263,7 @@ class Fairness(object):
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-            ...                   columns=['gender', 'gender2', 'color', 'y_true', 'y_predict'])
+            ...                  columns=['gender', 'gender2', 'color', 'y_true', 'y_predict'])
             >>> df
               gender gender2  color y_true y_predict
             0    MAN     MAN   BLUE    YES       YES
@@ -363,7 +363,7 @@ class Fairness(object):
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            ...                  columns=['gender', 'color', 'y_true', 'y_predict'])
             >>> df
               gender  color y_true y_predict
             0    MAN   BLUE    YES       YES
@@ -382,16 +382,17 @@ class Fairness(object):
             ...                sensitive_cols=['gender', 'color'],
             ...                target_col='y_true',
             ...                predict_col='y_predict')
+            WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.fairness_info
-               sensitive_feature  sensitive_value  is_binary_sensitive_feature  target_label  independence_score  independence_category  independence_score_weight  separation_score  separation_category  separation_score_weight  sufficiency_score  sufficiency_category  sufficiency_score_weight
-            0             gender      MAN | WOMAN                         True           YES            0.416667                      E                        0.5              0.25                    D                      0.5               0.25                     D                       0.6
-            1             gender      MAN | WOMAN                         True            NO            0.416667                      E                        0.5               0.5                    E                      0.5           0.166667                     D                       0.4
-            2              color             BLUE                        False           YES            0.416667                      E                        0.3                 0                   A+                      0.3           0.333333                     E                       0.3
-            3              color            GREEN                        False           YES               0.625                      E                          0               0.8                    E                        0                0.8                     E                       0.1
-            4              color              RED                        False           YES                   0                     A+                        0.2               0.5                    E                      0.2           0.333333                     E                       0.2
-            5              color             BLUE                        False            NO            0.416667                      E                        0.1                 1                    E                      0.1               0.75                     E                       0.1
-            6              color            GREEN                        False            NO               0.625                      E                        0.2          0.333333                    E                      0.2           0.166667                     D                       0.1
-            7              color              RED                        False            NO                   0                     A+                        0.2               0.5                    E                      0.2           0.666667                     E                       0.2
+              sensitive_feature sensitive_value  is_binary_sensitive_feature target_label  independence_score  ... separation_category  separation_score_weight  sufficiency_score sufficiency_category  sufficiency_score_weight
+            0            gender     MAN | WOMAN                         True          YES            0.416667  ...                   D                      0.5           0.250000                    D                       0.6
+            1            gender     MAN | WOMAN                         True           NO            0.416667  ...                   E                      0.5           0.166667                    D                       0.4
+            2             color            BLUE                        False          YES            0.416667  ...                  A+                      0.3           0.333333                    E                       0.3
+            3             color           GREEN                        False          YES            0.625000  ...                   E                      0.0           0.800000                    E                       0.1
+            4             color             RED                        False          YES            0.000000  ...                   E                      0.2           0.333333                    E                       0.2
+            5             color            BLUE                        False           NO            0.416667  ...                   E                      0.1           0.750000                    E                       0.1
+            6             color           GREEN                        False           NO            0.625000  ...                   E                      0.2           0.166667                    D                       0.1
+            7             color             RED                        False           NO            0.000000  ...                   E                      0.2           0.666667                    E                       0.2
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"fairness_info\"'))
@@ -419,7 +420,7 @@ class Fairness(object):
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            ...                  columns=['gender', 'color', 'y_true', 'y_predict'])
             >>> df
               gender  color y_true y_predict
             0    MAN   BLUE    YES       YES
@@ -438,16 +439,17 @@ class Fairness(object):
             ...                sensitive_cols=['gender', 'color'],
             ...                target_col='y_true',
             ...                predict_col='y_predict')
+            WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.independence_info
-               sensitive_feature   sensitive_value   target_label    independence_score    independence_category
-            0             gender       MAN | WOMAN            YES              0.416667                        E
-            1             gender       MAN | WOMAN             NO              0.416667                        E
-            2              color              BLUE            YES              0.416667                        E
-            3              color             GREEN            YES                 0.625                        E
-            4              color               RED            YES                     0                       A+
-            5              color              BLUE             NO              0.416667                        E
-            6              color             GREEN             NO                 0.625                        E
-            7              color               RED             NO                     0                       A+
+              sensitive_feature sensitive_value target_label  independence_score independence_category
+            0            gender     MAN | WOMAN          YES            0.416667                     E
+            1            gender     MAN | WOMAN           NO            0.416667                     E
+            2             color            BLUE          YES            0.416667                     E
+            3             color           GREEN          YES            0.625000                     E
+            4             color             RED          YES            0.000000                    A+
+            5             color            BLUE           NO            0.416667                     E
+            6             color           GREEN           NO            0.625000                     E
+            7             color             RED           NO            0.000000                    A+
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"independence_info\"'))
@@ -475,7 +477,7 @@ class Fairness(object):
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            ...                  columns=['gender', 'color', 'y_true', 'y_predict'])
             >>> df
               gender  color y_true y_predict
             0    MAN   BLUE    YES       YES
@@ -494,16 +496,17 @@ class Fairness(object):
             ...                sensitive_cols=['gender', 'color'],
             ...                target_col='y_true',
             ...                predict_col='y_predict')
+            WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.separation_info
-                sensitive_feature   sensitive_value   target_label   separation_score   separation_category
-            0              gender       MAN | WOMAN            YES               0.25                     D
-            1              gender       MAN | WOMAN             NO                0.5                     E
-            2               color              BLUE            YES                  0                    A+
-            3               color             GREEN            YES                0.8                     E
-            4               color               RED            YES                0.5                     E
-            5               color              BLUE             NO                  1                     E
-            6               color             GREEN             NO           0.333333                     E
-            7               color               RED             NO                0.5                     E
+              sensitive_feature sensitive_value target_label  separation_score separation_category
+            0            gender     MAN | WOMAN          YES          0.250000                   D
+            1            gender     MAN | WOMAN           NO          0.500000                   E
+            2             color            BLUE          YES          0.000000                  A+
+            3             color           GREEN          YES          0.800000                   E
+            4             color             RED          YES          0.500000                   E
+            5             color            BLUE           NO          1.000000                   E
+            6             color           GREEN           NO          0.333333                   E
+            7             color             RED           NO          0.500000                   E
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"separation_info\"'))
@@ -531,7 +534,7 @@ class Fairness(object):
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            ...                  columns=['gender', 'color', 'y_true', 'y_predict'])
             >>> df
               gender  color y_true y_predict
             0    MAN   BLUE    YES       YES
@@ -550,16 +553,17 @@ class Fairness(object):
             ...                sensitive_cols=['gender', 'color'],
             ...                target_col='y_true',
             ...                predict_col='y_predict')
+            WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.sufficiency_info
-               sensitive_feature   sensitive_value   target_label   sufficiency_score   sufficiency_category
-            0             gender       MAN | WOMAN            YES                0.25                      D
-            1             gender       MAN | WOMAN             NO            0.166667                      D
-            2              color              BLUE            YES            0.333333                      E
-            3              color             GREEN            YES                 0.8                      E
-            4              color               RED            YES            0.333333                      E
-            5              color              BLUE             NO                0.75                      E
-            6              color             GREEN             NO            0.166667                      D
-            7              color               RED             NO            0.666667                      E
+              sensitive_feature sensitive_value target_label  sufficiency_score sufficiency_category
+            0            gender     MAN | WOMAN          YES           0.250000                    D
+            1            gender     MAN | WOMAN           NO           0.166667                    D
+            2             color            BLUE          YES           0.333333                    E
+            3             color           GREEN          YES           0.800000                    E
+            4             color             RED          YES           0.333333                    E
+            5             color            BLUE           NO           0.750000                    E
+            6             color           GREEN           NO           0.166667                    D
+            7             color             RED           NO           0.666667                    E
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"sufficiency_info\"'))
@@ -591,7 +595,7 @@ class Fairness(object):
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-            ...                   columns=['gender', 'color', 'y_true', 'y_predict'])
+            ...                  columns=['gender', 'color', 'y_true', 'y_predict'])
             >>> df
               gender  color y_true y_predict
             0    MAN   BLUE    YES       YES
@@ -610,10 +614,11 @@ class Fairness(object):
             ...                sensitive_cols=['gender', 'color'],
             ...                target_col='y_true',
             ...                predict_col='y_predict')
+            WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.fairness_global_info
-                sensitive_feature   independence_global_score   independence_category   separation_global_score   separation_category   sufficiency_global_score   sufficiency_category
-            0              gender                    0.416667                       E                     0.375                     E                   0.216667                      D
-            1               color                    0.291667                       E                  0.366667                     E                   0.471667                      E
+              sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
+            0            gender                   0.416667                     E                 0.375000                   E                  0.216667                    D
+            1             color                   0.291667                     E                 0.366667                   E                  0.471667                    E
         """
         if len(self.__global_scores_info) == 0:
             print(WARN_MSG.format('\"fairness_global_info\"'))
@@ -641,21 +646,21 @@ class Fairness(object):
 
         Example:
             >>> import pandas as pd
-            >>> df = pd.DataFrame({'gender': ['MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN', 'MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN'],
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
             ...                   columns=['gender', 'y_true', 'y_predict'])
             >>> df
               gender y_true y_predict
-            0    MEN    YES       YES
-            1    MEN    YES       YES
+            0    MAN    YES       YES
+            1    MAN    YES       YES
             2  WOMAN     NO        NO
-            3    MEN     NO       YES
+            3    MAN     NO       YES
             4  WOMAN    YES        NO
-            5    MEN    YES        NO
-            6    MEN    YES       YES
+            5    MAN    YES        NO
+            6    MAN    YES       YES
             7  WOMAN    YES       YES
-            8    MEN     NO        NO
+            8    MAN     NO        NO
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
@@ -663,7 +668,7 @@ class Fairness(object):
             ...                      sensitive_col='gender',
             ...                      predict_col='y_predict',
             ...                      target_label='YES',
-            ...                      sensitive_value='MEN')
+            ...                      sensitive_value='MAN')
             0.41666666666666663
         Detail calculations:
 
