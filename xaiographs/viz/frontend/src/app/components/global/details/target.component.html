@@ -1,5 +1,5 @@
-<div fxFlex fxLayout="row" fxLayoutGap="10px">
-    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="globalCard">
+<div fxFlex fxLayout="row" fxLayoutGap="40px" style="padding: 0px 40px;">
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
         <label class="globalTargetTitle">Target filter</label>
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="" fxLayoutGap="10px">
             <mat-select placeholder="Target" [formControl]="filterTarget" (selectionChange)="updateTarget()">
@@ -7,14 +7,14 @@
             </mat-select>
         </div>
     </div>
-    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="globalCard">
-        <label class="globalTargetTitle">Features selection</label>
-        <mat-slider fxFlex min=5 step=1 max="{{ maxFeatures }}" thumbLabel='true' [(ngModel)]="numFeatures" (input)="updateFeatures($event)"></mat-slider>
-        <label>{{ numFeatures }} / {{ maxFeatures }}</label>
-    </div>
-    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px" class="globalCard">
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
         <label class="globalTargetTitle">Frecuency selection</label>
         <mat-slider fxFlex min=5 step=1 max="{{ maxFrecuency }}" thumbLabel='true' [(ngModel)]="numFrecuency" (input)="updateFrecuency($event)"></mat-slider>
         <label>{{ numFrecuency }} / {{ maxFrecuency }}</label>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+        <label class="globalTargetTitle">Features selection</label>
+        <mat-slider fxFlex min=5 step=1 max="{{ maxFeatures }}" thumbLabel='true' [(ngModel)]="numFeatures" (input)="updateFeatures($event)"></mat-slider>
+        <label>{{ numFeatures }} / {{ maxFeatures }}</label>
     </div>
 </div>

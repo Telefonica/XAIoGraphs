@@ -4,7 +4,7 @@
     @extend .fontBold;
     height: 60px;
     padding-left: 25px;
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .localBody {
@@ -18,6 +18,14 @@
     @extend .bgWhite;
 }
 
+.localExplanationTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 25px;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+}
+
 .localDataset {
     @extend .brdGrey3;
     @extend .bgWhite;
@@ -26,17 +34,21 @@
     overflow-y: auto;
 }
 
-.localFeatureTitle, .localDistributionTitle, .localFeatureTargetTitle, .localNetGraphTitle, .localDatasetTitle {
-    @extend .fontGrey5;
+.localExplanationFilter {
+    @extend .fontGrey4;
     @extend .fontBold;
-    font-size: 18px;
+    font-size: 15px !important;
 }
 
-.localFeatureChart, .localDistributionChart {
-    @extend .width100;
-    height: 300px;
+.globalNetGraphTitle,
+.localDistributionTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 24px;
 }
-.localNetGraphChart, .localFeatureTargetChart {
+
+.localNetGraphChart,
+.localDistributionChart {
     @extend .width100;
     height: 500px;
 }

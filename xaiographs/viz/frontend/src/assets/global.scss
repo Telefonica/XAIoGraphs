@@ -4,7 +4,7 @@
     @extend .fontBold;
     height: 60px;
     padding-left: 25px;
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .globalBody {
@@ -20,12 +20,24 @@
 
 .globalFeatureTitle,
 .globalDistributionTitle,
-.globalFeatureTargetTitle,
-.globalNetGraphTitle,
-.globalTargetTitle {
+.globalFeatByTarget {
     @extend .fontGrey5;
     @extend .fontBold;
-    font-size: 18px;
+    font-size: 25px;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+}
+
+.globalFeatureTargetTitle,
+.globalNetGraphTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 24px;
+}
+
+.globalTargetTitle {
+    @extend .fontGrey4;
+    @extend .fontBold;
 }
 
 .globalFeatureChart,
@@ -44,4 +56,31 @@
     margin-left: auto;
     margin-right: auto;
     width: 50%;
+}
+
+.mat-slider.mat-slider-horizontal .mat-slider-wrapper {
+    top: 18px;
+}
+.mat-slider.mat-slider-horizontal .mat-slider-track-wrapper {
+    height: 12px;
+    border-radius: 10px;
+}
+.mat-slider.mat-slider-horizontal .mat-slider-track-background,
+.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
+    height: 100%;
+    background-color: #7A99D3 !important;
+}
+.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
+    background-color: #15459D !important;
+}
+.mat-accent .mat-slider-thumb {
+    height: 30px;
+    width: 30px;
+    background-color: white !important;
+    border: 2px solid gray !important;
+    bottom: -20px;
+    right: -20px;
+}
+.mat-slider-min-value:not(.mat-slider-thumb-label-showing) .mat-slider-thumb {
+    background-color: white !important;
 }

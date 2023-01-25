@@ -15,7 +15,7 @@ import { positiveFeaturesGraphStyle, negativeFeaturesGraphStyle } from '../../..
 })
 export class LocalFeaturesComponent implements OnDestroy {
 
-    currentTarget = '';
+    currentTarget: any;
     currentFeatures = 0;
 
     targetSubscription: any;
@@ -48,7 +48,7 @@ export class LocalFeaturesComponent implements OnDestroy {
 
         const bodyNodes = {
             fileName: ctsFiles.local_graph_nodes,
-            target: this.currentTarget,
+            target: this.currentTarget.id,
             numFeatures: this.currentFeatures,
         }
 
@@ -76,8 +76,8 @@ export class LocalFeaturesComponent implements OnDestroy {
         this.dataGraph = [];
         this.options = {
             legend: 'none',
-            bar: { groupWidth: "90%" },
-            chartArea: { width: '70%', height: '80%' },
+            bar: { groupWidth: '90%' },
+            chartArea:{right:20,top:20,width:'75%',height:'90%'},
             tooltip: { type: 'string', isHtml: true },
         };
     }

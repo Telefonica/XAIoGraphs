@@ -49,12 +49,12 @@ exports.readGlobalNodesWeights = async (req, res) => {
     } else {
         await getData(req.body.fileName)
             .then((response) => {
-                return res.status(200).json(
-                    response.data.filter((row) => {
-                        return row.target == req.body.target
-                            && parseInt(row.rank) <= parseInt(req.body.numFeatures)
+                const frecuencyFiltered = response.data.filter((row) => {
+                    return row.target == req.body.target
                             && parseInt(row.node_name_ratio_rank) <= parseInt(req.body.numFrecuency);
-                    })
+                })
+                return res.status(200).json(
+                    frecuencyFiltered.slice(0, parseInt(req.body.numFeatures))
                 );
             })
             .catch((error) => {
@@ -96,9 +96,9 @@ exports.readGlobalGraphDetails = async (req, res) => {
             .then((responseEdges) => {
                 const edgesList = responseEdges.data.filter((row) => {
                     return row.target == req.body.target && (
-                            row.node_1 == req.body.feature ||
-                            row.node_2 == req.body.feature
-                        );
+                        row.node_1 == req.body.feature ||
+                        row.node_2 == req.body.feature
+                    );
                 })
                 console.log(edgesList);
             })

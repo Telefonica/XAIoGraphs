@@ -52,8 +52,8 @@ export class GlobalFeaturesComponent implements OnInit {
         this.dataGraph = [];
         this.options = {
             legend: 'none',
-            bar: { groupWidth: "90%" },
-            chartArea: { width: '70%', height: '80%' },
+            bar: { groupWidth: '90%' },
+            chartArea:{right:20,top:20,width:'75%',height:'85%'},
             tooltip: { type: 'string', isHtml: true },
         };
     }

@@ -1,0 +1,10 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" class="localExplanationTitle">
+    <label>Local explanation</label>
+    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" class="localExplanationFilter">
+        <label>Features selection</label>
+        <div fxFlex="300px" fxLayout="row" fxLayoutAlign="start center" class="" fxLayoutGap="20px">
+            <mat-slider min=1 step=1 max="{{ maxFeatures }}" thumbLabel='true' [(ngModel)]="numFeatures" style="width: 100%;" (input)="updateFeatures($event)"></mat-slider>
+            <label>{{ numFeatures }}</label>
+        </div>
+    </div>
+</div>

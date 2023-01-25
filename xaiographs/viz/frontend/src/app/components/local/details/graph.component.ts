@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
@@ -15,9 +15,9 @@ import { positiveNodeGraphStyle, negativeNodeGraphStyle, edgeGraphStyle } from '
     styles: [
     ]
 })
-export class LocalGraphComponent implements OnInit, OnDestroy {
+export class LocalGraphComponent implements OnDestroy {
 
-    currentTarget = '';
+    currentTarget: any;
     currentFeatures = 0;
 
     targetSubscription: any;
@@ -40,15 +40,13 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnInit(): void { }
-
     getData() {
         this.currentTarget = this._apiEmitter.getLocalTarget();
         this.currentFeatures = this._apiEmitter.getLocalFeatures();
 
         const bodyNodes = {
             fileName: ctsFiles.local_graph_nodes,
-            target: this.currentTarget,
+            target: this.currentTarget.id,
             numFeatures: this.currentFeatures,
         }
 
@@ -62,13 +60,15 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
             complete: () => {
                 const bodyEdges = {
                     fileName: ctsFiles.local_graph_edges,
-                    target: this.currentTarget,
+                    target: this.currentTarget.id,
                     nodeNames: this.nodeNames,
                 }
 
                 this._apiReader.readLocalEdgesWeights(bodyEdges).subscribe({
                     next: (responseEdges: any) => {
                         this.edgeList = responseEdges;
+                        console.log(this.nodeList);
+                        console.log(this.edgeList);
                     },
                     complete: () => {
                         this.generateGraph();
@@ -116,6 +116,7 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
 
         this.edgeList.forEach((edge: any) => {
             const weight = parseFloat(edge.edge_weight);
+            const weightIndex = (Math.trunc(weight / 2)) % edgeGraphStyle.length;
             elements.push({
                 data: {
                     id: edge.node_1 + '-' + edge.node_2,
@@ -124,7 +125,8 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
                 },
                 style: {
                     width: weight,
-                    'line-color': edgeGraphStyle[Math.trunc(weight / 2)],
+                    'line-color': edgeGraphStyle[weightIndex],
+
                 }
             });
         });

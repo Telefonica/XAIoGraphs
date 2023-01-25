@@ -34,6 +34,7 @@ export class GlobalDistributionComponent implements OnInit {
             },
             complete: () => {
                 if(this.serviceResponse.data.length > 0) {
+                    this.serviceResponse.data.sort((element1, element2) => parseInt(element2.count) - parseInt(element1.count) );
                     this.initGraph();
                     this.createGraph();
                     this.displayGraph = true;
@@ -54,8 +55,9 @@ export class GlobalDistributionComponent implements OnInit {
             is3D: distributionGraph3D,
             pieHole: distributionGraphPieHole,
             slices: distributionGraphStyle,
-            chartArea: { width: '90%', height: '80%' },
+            chartArea: { top: 15, width: '90%', height: '80%' },
             tooltip: { type: 'string', isHtml: true },
+            legend:{position: 'bottom'},
         };
     }
 

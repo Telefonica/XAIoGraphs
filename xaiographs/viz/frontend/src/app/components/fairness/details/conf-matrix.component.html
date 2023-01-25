@@ -1,7 +1,7 @@
 <div fxFlex fxLayout="column" fxLayoutGap="25px">
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-        <label class="fairnessConfMatrixTitle">Confussion Matrix</label>
-        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="fairnessConfMatrixTitle">
+        <label>Confussion Matrix</label>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" class="fairnesConfMatrixMode">
             <label>Display percentaje values</label>
             <mat-slide-toggle [(ngModel)]="displayPercent">%</mat-slide-toggle>
         </div>
