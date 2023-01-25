@@ -622,9 +622,14 @@ class Fairness(object):
             ...                predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.fairness_global_info
-              sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
-            0            gender                   0.416667                     E                 0.375000                   E                  0.216667                    D
-            1             color                   0.291667                     E                 0.366667                   E                  0.471667                    E
+              sensitive_feature  independence_global_score independence_category  \
+            0            gender                   0.416667                     E
+            1             color                   0.291667                     E
+            <BLANKLINE>
+               separation_global_score separation_category  sufficiency_global_score  \
+            0                 0.375000                   E                  0.216667
+            1                 0.366667                   E                  0.471667
+            <BLANKLINE>
         """
         if len(self.__global_scores_info) == 0:
             print(WARN_MSG.format('\"fairness_global_info\"'))
