@@ -105,6 +105,7 @@ class Fairness(object):
             >>> f.fairness_global_info
               sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
             0            gender                   0.416667                     E                    0.375                   E                  0.216667                    D
+            <BLANKLINE>
     """
 
     def __init__(self, destination_path: str = './xaiographs_web_files', verbose: int = 0):
@@ -393,6 +394,7 @@ class Fairness(object):
             5             color            BLUE                        False           NO            0.416667  ...                   E                      0.1           0.750000                    E                       0.1
             6             color           GREEN                        False           NO            0.625000  ...                   E                      0.2           0.166667                    D                       0.1
             7             color             RED                        False           NO            0.000000  ...                   E                      0.2           0.666667                    E                       0.2
+            <BLANKLINE>
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"fairness_info\"'))
@@ -450,6 +452,7 @@ class Fairness(object):
             5             color            BLUE           NO            0.416667                     E
             6             color           GREEN           NO            0.625000                     E
             7             color             RED           NO            0.000000                    A+
+            <BLANKLINE>
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"independence_info\"'))
@@ -507,6 +510,7 @@ class Fairness(object):
             5             color            BLUE           NO          1.000000                   E
             6             color           GREEN           NO          0.333333                   E
             7             color             RED           NO          0.500000                   E
+            <BLANKLINE>
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"separation_info\"'))
@@ -564,6 +568,7 @@ class Fairness(object):
             5             color            BLUE           NO           0.750000                    E
             6             color           GREEN           NO           0.166667                    D
             7             color             RED           NO           0.666667                    E
+            <BLANKLINE>
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"sufficiency_info\"'))
