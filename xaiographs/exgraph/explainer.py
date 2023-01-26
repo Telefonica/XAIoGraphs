@@ -6,11 +6,11 @@ import pandas as pd
 from xaiographs.common.constants import ID
 from xaiographs.common.utils import FeaturesInfo, TargetInfo, get_features_info, get_target_info, sample_by_target, \
     xgprint
-from xaiographs.exgraph.exporter.exporter import Exporter
-from xaiographs.exgraph.feature_selector.feature_selector import FeatureSelector
+from xaiographs.exgraph.exporter import Exporter
+from xaiographs.exgraph.feature_selector import FeatureSelector
 from xaiographs.exgraph.importance.importance_calculator import ImportanceCalculator
 from xaiographs.exgraph.importance.importance_calculator_factory import ImportanceCalculatorFactory
-from xaiographs.exgraph.statistics.stats_calculator import StatsCalculator
+from xaiographs.exgraph.stats_calculator import StatsCalculator
 
 
 class Explainer(object):
