@@ -212,10 +212,6 @@ class ImportanceCalculator(metaclass=ABCMeta):
         df_agg_per_target = []
         for target_prob, target_col_value in zip(target_probs, target_cols):
             n_samples_by_target = int(num_samples * target_prob)
-            print("===========================")
-            print(target_col_value)
-            print(target_prob)
-            print(n_samples_by_target)
             df_agg_per_target.append(df[df[target_col] == target_col_value].sample(
                 n=n_samples_by_target, random_state=42))
 
