@@ -9,8 +9,7 @@ import { ctsFiles } from '../../../constants/csvFiles';
 @Component({
     selector: 'app-local-reason',
     templateUrl: './reason.component.html',
-    styles: [
-    ]
+    styleUrls: ['../local.component.scss']
 })
 export class LocalReasonComponent implements OnDestroy {
 

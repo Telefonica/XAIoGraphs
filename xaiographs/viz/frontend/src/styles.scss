@@ -1,10 +1,4 @@
 @import "~@angular/material/theming";
-@import "assets/XAIoWeb.scss";
-@import "assets/header.scss";
-@import "assets/global.scss";
-@import "assets/local.scss";
-@import "assets/fairness.scss";
-@import "assets/data.scss";
 @include mat-core();
 
 $mat-customized: (
@@ -112,3 +106,394 @@ $PROJECT-warn: mat-palette($mat-customized-third, A700, A700, A700);
 $PROJECT-theme: mat-light-theme($PROJECT-primary, $PROJECT-accent, $PROJECT-warn);
 
 @include angular-material-theme($PROJECT-theme);
+
+$bgTefBlue: #0066ff;
+$bgSnackBarMessage: #009966;
+$bgSnackBarError: #ff4a4a;
+$bgSnackBarMessage50: #00996650;
+$bgSnackBarError50: #ff4a4a50;
+$bgGrey1: #f2f4ff;
+$bgGrey2: #d1d5e4;
+$bgGrey3: #b0b6c0;
+$bgGrey4: #8f97af;
+$bgGrey5: #6e7894;
+$bgGrey6: #58617a;
+$bgGrey7: #414b61;
+$bgGrey8: #2b3447;
+$bgGrey9: #031a34;
+
+body {
+    margin: 0;
+    font-family: telefonica_sans_regular, sans-serif;
+    color: $bgGrey6;
+    background: $bgGrey1;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.bgWhite {
+    background-color: #fff;
+}
+.bgGrey1 {
+    background-color: $bgGrey1;
+}
+.bgGrey2 {
+    background-color: $bgGrey2;
+}
+.bgGrey3 {
+    background-color: $bgGrey3;
+}
+.bgGrey4 {
+    background-color: $bgGrey4;
+}
+.bgGrey5 {
+    background-color: $bgGrey5;
+}
+.bgGrey6 {
+    background-color: $bgGrey6;
+}
+.bgGrey7 {
+    background-color: $bgGrey7;
+}
+.bgGrey8 {
+    background-color: $bgGrey8;
+}
+.bgGrey9 {
+    background-color: $bgGrey9;
+}
+.bgTefBlue {
+    background-color: $bgTefBlue;
+}
+.bgSBMessage {
+    background-color: $bgSnackBarMessage50;
+}
+.bgSBError {
+    background-color: $bgSnackBarError50;
+}
+
+.fontWhite {
+    color: #fff !important;
+}
+.fontBlack {
+    color: #000 !important;
+}
+.fontTefBlue {
+    color: $bgTefBlue;
+}
+.fontGrey1 {
+    color: $bgGrey1;
+}
+.fontGrey2 {
+    color: $bgGrey2;
+}
+.fontGrey3 {
+    color: $bgGrey3;
+}
+.fontGrey4 {
+    color: $bgGrey4;
+}
+.fontGrey5 {
+    color: $bgGrey5;
+}
+.fontGrey6 {
+    color: $bgGrey6;
+}
+.fontGrey7 {
+    color: $bgGrey7;
+}
+.fontGrey8 {
+    color: $bgGrey8;
+}
+.fontGrey9 {
+    color: $bgGrey9;
+}
+.fontSBMessage {
+    color: $bgSnackBarMessage;
+}
+.fontSBError {
+    color: $bgSnackBarError;
+}
+
+.fontBold {
+    font-weight: bold !important;
+}
+
+.brdRed {
+    border: 1px solid red;
+}
+.brdNavy {
+    border: 1px solid navy;
+}
+.brdGreen {
+    border: 1px solid green;
+}
+.brdBlack {
+    border: 1px solid black;
+}
+.brdTefBlue {
+    border: 1px solid $bgTefBlue;
+}
+.brdGrey1 {
+    border: 1px solid $bgGrey1;
+}
+.brdGrey2 {
+    border: 1px solid $bgGrey2;
+}
+.brdGrey3 {
+    border: 1px solid $bgGrey3;
+}
+.brdGrey4 {
+    border: 1px solid $bgGrey4;
+}
+.brdGrey5 {
+    border: 1px solid $bgGrey5;
+}
+.brdGrey6 {
+    border: 1px solid $bgGrey6;
+}
+.brdGrey7 {
+    border: 1px solid $bgGrey7;
+}
+.brdGrey8 {
+    border: 1px solid $bgGrey8;
+}
+.brdGrey9 {
+    border: 1px solid $bgGrey9;
+}
+
+.brdGrey3_bottom {
+    border-bottom: 1px solid $bgGrey3;
+}
+
+.snackBarBody {
+    animation: party 5000ms infinite;
+}
+
+.snackBarMessage {
+    background: $bgSnackBarMessage !important;
+}
+
+.snackBarError {
+    background: $bgSnackBarError !important;
+}
+
+.bodyComponent {
+    padding: 30px 40px;
+}
+
+.logoApp {
+    height: 30px;
+    width: 30px;
+}
+
+.titleApp {
+    font-size: 18px;
+    letter-spacing: 5px;
+}
+
+.titleBack {
+    font-size: 18px;
+}
+
+.titleComponentSection {
+    padding-bottom: 5px;
+}
+
+.titleComponent {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.titleButtom {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.roundBtn {
+    height: 35px;
+    width: 35px;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+.contentComponent {
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.formTitle {
+    font-size: 12px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.formField {
+    border-radius: 5px;
+    min-height: 45px;
+    max-height: 45px;
+}
+
+.formIcon {
+    padding: 10px 0px 10px 10px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    background-color: #fff;
+    color: $bgGrey6;
+}
+
+.formTextArea {
+    padding-left: 10px;
+    height: 38px;
+    // width: 100%;
+    font-size: 13px;
+    outline: none;
+    border: none;
+    color: $bgGrey6;
+}
+
+.formSelect {
+    padding: 0px 10px;
+    // width: 100%;
+    font-size: 13px;
+    outline: none;
+    border: none;
+    color: $bgGrey6;
+}
+
+.componentTable {
+    overflow: scroll;
+    margin-bottom: 15px;
+}
+
+.tabHeader {
+    border-radius: 5px;
+    width: 150px;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.tabBodySection {
+    padding: 20px;
+    border-radius: 5px;
+    // height: 100%;
+}
+
+.tabBodyTitle {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.mat-header-cell {
+    font-family: telefonica_sans_regular, sans-serif;
+    font-weight: bold;
+}
+.mat-cell {
+    font-family: telefonica_sans_regular, sans-serif;
+    color: $bgGrey6 !important;
+}
+
+.round_header_btn {
+    font-size: 14px;
+    width: 45px;
+    border-radius: 15px;
+}
+
+.dialog_title {
+    font-size: 21px;
+}
+
+.dialog_message {
+    font-size: 18px;
+}
+
+.height100 {
+    height: 100% !important;
+}
+
+.width100 {
+    width: 100% !important;
+}
+
+.filter_value_name {
+    font-size: 12px;
+    font-weight: bold;
+    color: #4a4a4a;
+    padding-bottom: 5px;
+}
+
+.filter_area_text {
+    border-radius: 5px;
+    color: #4a4a4a;
+    border: 1px solid #d8d8d8;
+}
+
+.filter_value_text {
+    width: 90%;
+    height: 90%;
+    font-size: 13px;
+    color: #4a4a4a;
+    border: none;
+    outline: none;
+}
+
+.filter_area_date {
+    border-radius: 5px;
+    color: #929292;
+    border: 1px solid #d8d8d8;
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
+
+.filter_value_date {
+    width: 90%;
+    height: 90%;
+    padding-left: 10px;
+    font-size: 13px;
+    color: #929292;
+    border: none;
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
+
+.filter_value_select {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    color: #929292;
+    background-color: white;
+    border: 1px solid #d8d8d8;
+}
+
+.mat-slider.mat-slider-horizontal .mat-slider-wrapper {
+    top: 18px;
+}
+.mat-slider.mat-slider-horizontal .mat-slider-track-wrapper {
+    height: 12px;
+    border-radius: 10px;
+}
+.mat-slider.mat-slider-horizontal .mat-slider-track-background,
+.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
+    height: 100%;
+    background-color: #7a99d3 !important;
+}
+.mat-slider.mat-slider-horizontal .mat-slider-track-fill {
+    background-color: #15459d !important;
+}
+.mat-accent .mat-slider-thumb {
+    height: 30px;
+    width: 30px;
+    background-color: white !important;
+    border: 2px solid gray !important;
+    bottom: -20px;
+    right: -20px;
+}
+.mat-slider-min-value:not(.mat-slider-thumb-label-showing) .mat-slider-thumb {
+    background-color: white !important;
+}

@@ -1,24 +1,32 @@
-.localTitle {
+@import "../../../styles.scss";
+
+.globalTitle {
     @extend .bgGrey4;
     @extend .fontWhite;
     @extend .fontBold;
     height: 60px;
-    padding-left: 25px;
+    padding: 0px 25px;
     font-size: 30px;
 }
 
-.localBody {
+.globalTheme {
+    font-size: 15px;
+}
+
+.globalBody {
     @extend .bodyComponent;
     overflow: auto;
 }
 
-.localCard {
+.globalCard {
     @extend .contentComponent;
     @extend .brdGrey3;
     @extend .bgWhite;
 }
 
-.localExplanationTitle {
+.globalFeatureTitle,
+.globalDistributionTitle,
+.globalFeatByTarget {
     @extend .fontGrey5;
     @extend .fontBold;
     font-size: 25px;
@@ -26,34 +34,37 @@
     border-bottom: 1px solid gray;
 }
 
-.localDataset {
-    @extend .brdGrey3;
-    @extend .bgWhite;
-    border-radius: 8px;
-    height: 400px;
-    overflow-y: auto;
-}
-
-.localExplanationFilter {
+.globalFeatureTargetSubTitle,
+.globalNetGraphSubTitle {
     @extend .fontGrey4;
     @extend .fontBold;
     font-size: 15px !important;
 }
 
-.globalNetGraphTitle,
-.localDistributionTitle {
+.globalFeatureTargetTitle,
+.globalNetGraphTitle {
     @extend .fontGrey5;
     @extend .fontBold;
     font-size: 24px;
 }
 
-.localNetGraphChart,
-.localDistributionChart {
+.globalTargetTitle {
+    @extend .fontGrey4;
+    @extend .fontBold;
+}
+
+.globalFeatureChart,
+.globalDistributionChart {
+    @extend .width100;
+    height: 300px;
+}
+.globalNetGraphChart,
+.globalFeatureTargetChart {
     @extend .width100;
     height: 500px;
 }
 
-.localNoData {
+.globalNoData {
     display: block;
     margin-left: auto;
     margin-right: auto;

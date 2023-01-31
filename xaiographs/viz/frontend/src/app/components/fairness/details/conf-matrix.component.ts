@@ -8,7 +8,8 @@ import { ctsFairness } from '../../../constants/fairness'
 
 @Component({
     selector: 'app-fairness-conf-matrix',
-    templateUrl: './conf-matrix.component.html'
+    templateUrl: './conf-matrix.component.html',
+    styleUrls: ['../fairness.component.scss']
 })
 export class ConfMatrixComponent implements OnInit {
 

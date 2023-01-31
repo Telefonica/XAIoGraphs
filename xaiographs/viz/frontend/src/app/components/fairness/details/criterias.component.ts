@@ -12,7 +12,8 @@ import { DefSufficienceComponent } from '../definitions/sufficience.component';
 
 @Component({
     selector: 'app-fairness-criterias',
-    templateUrl: './criterias.component.html'
+    templateUrl: './criterias.component.html',
+    styleUrls: ['../fairness.component.scss']
 })
 export class CriteriasComponent implements OnInit {
 

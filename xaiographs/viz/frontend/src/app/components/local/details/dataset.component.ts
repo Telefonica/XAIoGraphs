@@ -11,6 +11,7 @@ import { ctsFiles } from '../../../constants/csvFiles';
 @Component({
     selector: 'app-local-dataset',
     templateUrl: './dataset.component.html',
+    styleUrls: ['../local.component.scss']
 })
 export class LocalDatasetComponent implements OnInit {
 
