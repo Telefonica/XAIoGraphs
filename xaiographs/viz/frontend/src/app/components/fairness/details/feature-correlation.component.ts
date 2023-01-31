@@ -8,8 +8,7 @@ import { ctsFiles } from '../../../constants/csvFiles'
 @Component({
     selector: 'app-feature-correlation',
     templateUrl: './feature-correlation.component.html',
-    styles: [
-    ]
+    styleUrls: ['../fairness.component.scss']
 })
 export class FeatureCorrelationComponent implements OnChanges {
 

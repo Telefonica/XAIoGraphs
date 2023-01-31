@@ -7,11 +7,13 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ChartType } from 'angular-google-charts';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { featuresImportanceTargetGraphStyle, featuresFrecuencyTargetGraphStyle } from '../../../../assets/global';
+import { featuresImportanceTargetGraphStyle0, featuresFrecuencyTargetGraphStyle0 } from '../themes/global0';
+import { featuresImportanceTargetGraphStyle1, featuresFrecuencyTargetGraphStyle1 } from '../themes/global1';
 
 @Component({
     selector: 'app-global-target-features',
     templateUrl: './features_target.component.html',
+    styleUrls: ['../global.component.scss']
 })
 export class GlobalFeaturesTargetComponent implements OnDestroy {
 
@@ -19,6 +21,7 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
     currentFeatures = 0;
     currentFrecuency = 0;
 
+    themeSubscription:any;
     targetSubscription: any;
     featuresSubscription: any;
     frecuencySubscription: any;
@@ -30,6 +33,9 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
     columnNames: any[] = [];
     options: any = {};
     displayGraph: boolean = false;
+
+    featuresImportanceTargetGraphStyle: any;
+    featuresFrecuencyTargetGraphStyle: any;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -44,6 +50,11 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
         });
         this.frecuencySubscription = this._apiEmitter.globalFrecuencyChangeEmitter.subscribe(() => {
             this.getData();
+        });
+        this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
+            this.prepareTheme();
+            this.initGraph();
+            this.generateGraph();
         });
     }
 
@@ -66,6 +77,7 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
             },
             complete: () => {
                 if (this.serviceResponse.length > 0) {
+                    this.prepareTheme();
                     this.initGraph();
                     this.generateGraph();
                     this.displayGraph = true;
@@ -78,6 +90,16 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
                 this._apiSnackBar.openSnackBar(JSON.stringify(err));
             }
         });
+    }
+
+    prepareTheme() {
+        if(!this._apiEmitter.getTheme()) {
+            this.featuresImportanceTargetGraphStyle = featuresImportanceTargetGraphStyle0
+            this.featuresFrecuencyTargetGraphStyle = featuresFrecuencyTargetGraphStyle0
+        } else {
+            this.featuresImportanceTargetGraphStyle = featuresImportanceTargetGraphStyle1
+            this.featuresFrecuencyTargetGraphStyle = featuresFrecuencyTargetGraphStyle1
+        }
     }
 
     initGraph() {
@@ -116,11 +138,11 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
             const count = parseInt(data.node_count);
             const frecuency = parseFloat(data.node_name_ratio);
 
-            const barStyleIMPIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % featuresImportanceTargetGraphStyle.length;
-            const barStyleFRECIndex = (Math.trunc(parseFloat(data.node_name_ratio_weight) / 10) - 1) % featuresFrecuencyTargetGraphStyle.length;
+            const barStyleIMPIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.featuresImportanceTargetGraphStyle.length;
+            const barStyleFRECIndex = (Math.trunc(parseFloat(data.node_name_ratio_weight) / 10) - 1) % this.featuresFrecuencyTargetGraphStyle.length;
 
-            const barStyleIMP = this.JSONCleaner(featuresImportanceTargetGraphStyle[barStyleIMPIndex]);
-            const barStyleFREC = this.JSONCleaner(featuresFrecuencyTargetGraphStyle[barStyleFRECIndex]);
+            const barStyleIMP = this.JSONCleaner(this.featuresImportanceTargetGraphStyle[barStyleIMPIndex]);
+            const barStyleFREC = this.JSONCleaner(this.featuresFrecuencyTargetGraphStyle[barStyleFRECIndex]);
 
             transformDataSet.push([
                 data.node_name,
@@ -164,6 +186,8 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.targetSubscription.unsubscribe();
         this.featuresSubscription.unsubscribe();
+        this.frecuencySubscription.unsubscribe();
+        this.themeSubscription.unsubscribe();
     }
 
 }

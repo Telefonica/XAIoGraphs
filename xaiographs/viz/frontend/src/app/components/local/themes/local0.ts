@@ -1,4 +1,4 @@
-export const positiveFeaturesGraphStyle = [
+export const positiveFeaturesGraphStyle0 = [
     {
         "stroke-color": "#D07697",
         "stroke-width": 0,
@@ -8,7 +8,7 @@ export const positiveFeaturesGraphStyle = [
     }
 ];
 
-export const negativeFeaturesGraphStyle = [
+export const negativeFeaturesGraphStyle0 = [
     {
         "stroke-color": "#667989",
         "stroke-width": 0,
@@ -18,13 +18,13 @@ export const negativeFeaturesGraphStyle = [
     }
 ];
 
-export const positiveNodeGraphStyle = [
+export const positiveNodeGraphStyle0 = [
     "#D07697",
 ];
-export const negativeNodeGraphStyle = [
+export const negativeNodeGraphStyle0 = [
     "#667989",
 ];
-export const edgeGraphStyle = [
+export const edgeGraphStyle0 = [
     "#CDC1E0",
     "#A290C2",
     "#7B63A3",

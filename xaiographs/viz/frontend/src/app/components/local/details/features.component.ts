@@ -7,11 +7,13 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { positiveFeaturesGraphStyle, negativeFeaturesGraphStyle } from '../../../../assets/local';
+import { positiveFeaturesGraphStyle0, negativeFeaturesGraphStyle0 } from '../themes/local0';
+import { positiveFeaturesGraphStyle1, negativeFeaturesGraphStyle1 } from '../themes/local1';
 
 @Component({
     selector: 'app-local-features',
-    templateUrl: './features.component.html'
+    templateUrl: './features.component.html',
+    styleUrls: ['../local.component.scss']
 })
 export class LocalFeaturesComponent implements OnDestroy {
 
@@ -20,6 +22,7 @@ export class LocalFeaturesComponent implements OnDestroy {
 
     targetSubscription: any;
     featuresSubscription: any;
+    themeSubscription: any;
 
     serviceResponse: any;
 
@@ -28,6 +31,9 @@ export class LocalFeaturesComponent implements OnDestroy {
     columnNames: any[] = [];
     options: any = {};
     displayGraph: boolean = false;
+
+    positiveFeaturesGraphStyle: any;
+    negativeFeaturesGraphStyle: any;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -40,6 +46,11 @@ export class LocalFeaturesComponent implements OnDestroy {
         this.featuresSubscription = this._apiEmitter.localFeaturesChangeEmitter.subscribe(() => {
             this.getData();
         });
+        this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
+            this.prepareTheme();
+            this.initGraph();
+            this.generateGraph();
+        })
     }
 
     getData() {
@@ -58,6 +69,7 @@ export class LocalFeaturesComponent implements OnDestroy {
             },
             complete: () => {
                 if (this.serviceResponse.length > 0) {
+                    this.prepareTheme();
                     this.initGraph();
                     this.generateGraph();
                     this.displayGraph = true;
@@ -72,12 +84,22 @@ export class LocalFeaturesComponent implements OnDestroy {
         });
     }
 
+    prepareTheme() {
+        if(!this._apiEmitter.getTheme()) {
+            this.positiveFeaturesGraphStyle = positiveFeaturesGraphStyle0
+            this.negativeFeaturesGraphStyle = negativeFeaturesGraphStyle0
+        } else {
+            this.positiveFeaturesGraphStyle = positiveFeaturesGraphStyle1
+            this.negativeFeaturesGraphStyle = negativeFeaturesGraphStyle1
+        }
+    }
+
     initGraph() {
         this.dataGraph = [];
         this.options = {
             legend: 'none',
             bar: { groupWidth: '90%' },
-            chartArea:{right:20,top:20,width:'75%',height:'90%'},
+            chartArea: { right: 20, top: 20, width: '75%', height: '90%' },
             tooltip: { type: 'string', isHtml: true },
         };
     }
@@ -97,11 +119,11 @@ export class LocalFeaturesComponent implements OnDestroy {
             const nodeImportance = parseFloat(data.node_importance);
 
             if (nodeImportance > 0) {
-                const barStyleIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % positiveFeaturesGraphStyle.length;
-                barStyle = this.JSONCleaner(positiveFeaturesGraphStyle[barStyleIndex]);
+                const barStyleIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.positiveFeaturesGraphStyle.length;
+                barStyle = this.JSONCleaner(this.positiveFeaturesGraphStyle[barStyleIndex]);
             } else {
-                const barStyleIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % negativeFeaturesGraphStyle.length;
-                barStyle = this.JSONCleaner(negativeFeaturesGraphStyle[barStyleIndex]);
+                const barStyleIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.negativeFeaturesGraphStyle.length;
+                barStyle = this.JSONCleaner(this.negativeFeaturesGraphStyle[barStyleIndex]);
             }
             transformDataSet.push([
                 data.node_name,
@@ -132,6 +154,7 @@ export class LocalFeaturesComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.targetSubscription.unsubscribe();
         this.featuresSubscription.unsubscribe();
+        this.themeSubscription.unsubscribe();
     }
 
 }

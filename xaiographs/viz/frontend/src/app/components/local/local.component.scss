@@ -1,0 +1,75 @@
+@import "../../../styles.scss";
+
+.localTitle {
+    @extend .bgGrey4;
+    @extend .fontWhite;
+    @extend .fontBold;
+    height: 60px;
+    padding: 0px 25px;
+    font-size: 30px;
+}
+
+.localTheme {
+    font-size: 15px;
+}
+
+.localBody {
+    @extend .bodyComponent;
+    overflow: auto;
+}
+
+.localCard {
+    @extend .contentComponent;
+    @extend .brdGrey3;
+    @extend .bgWhite;
+}
+
+.localExplanationTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 25px;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+}
+
+.localDataset {
+    @extend .brdGrey3;
+    @extend .bgWhite;
+    border-radius: 8px;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.localExplanationFilter {
+    @extend .fontGrey4;
+    @extend .fontBold;
+    font-size: 15px !important;
+}
+
+.localNetGraphTitle,
+.localDistributionTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 24px;
+}
+
+.localNetGraphChart,
+.localDistributionChart {
+    @extend .width100;
+    height: 500px;
+}
+
+.localReasonTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 16px;
+}
+
+.localNoData {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+

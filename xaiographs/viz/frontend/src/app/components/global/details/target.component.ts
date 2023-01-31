@@ -11,6 +11,7 @@ import { ctsGlobal } from '../../../constants/global';
 @Component({
     selector: 'app-global-target',
     templateUrl: './target.component.html',
+    styleUrls: ['../global.component.scss']
 })
 export class GlobalTargetComponent implements OnInit {
 
@@ -76,8 +77,6 @@ export class GlobalTargetComponent implements OnInit {
             this.numFeatures = this.maxFeatures <= ctsGlobal.feature_limit ? this.maxFeatures : ctsGlobal.feature_limit;
         else
             this.numFeatures = this.maxFeatures
-
-        console.log(this.numFeatures);
 
         this._apiEmitter.setAllGlobal(this.listTarget[index], this.numFeatures, this.numFrecuency);
     }
