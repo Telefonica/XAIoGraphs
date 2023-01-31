@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 import pandas as pd
 
-from xaiographs.common.constants import ID
+from xaiographs.common.constants import ID, TARGET
 from xaiographs.common.utils import FeaturesInfo, TargetInfo, get_features_info, get_target_info, sample_by_target, \
     xgprint
 from xaiographs.exgraph.exporter.exporter import Exporter
@@ -11,6 +11,14 @@ from xaiographs.exgraph.feature_selector.feature_selector import FeatureSelector
 from xaiographs.exgraph.importance.importance_calculator import ImportanceCalculator
 from xaiographs.exgraph.importance.importance_calculator_factory import ImportanceCalculatorFactory
 from xaiographs.exgraph.statistics.stats_calculator import StatsCalculator
+
+# CONSTANTS
+DISTANCE = 'distance'
+FEATURE = 'feature'
+RANK = 'rank'
+
+# Warning message
+WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute explain() function to get results.'
 
 
 class Explainer(object):
@@ -24,24 +32,41 @@ class Explainer(object):
                  number_of_features: int = 8, verbose: int = 0):
         """
         Constructor method for Explainer.
-        - Property `top_features_target_` provides distance and rank information for each feature and target value, so
-        that results can be understood
-        - Property `top_features_` provides a list with the all the original features ranked
+        - Property `__top_features` provides a list with the all the original features ranked
+        - Property `__top_features_by_target` provides distance and rank information for each feature and target value,
+         so that results can be understood
 
-        :param dataset:                  Pandas DataFrame containing the whole dataset
-        :param importance_engine:        String representing the name of the method use to compute feature importance
-        :param destination_path:         String representing the path where output files will be stored
-        :param number_of_features:       Integer representing the number of features to be selected
+        :param dataset:                  Pandas DataFrame, containing the whole dataset
+        :param importance_engine:        String, representing the name of the method use to compute feature importance
+        :param destination_path:         String, representing the path where output files will be stored
+        :param number_of_features:       Integer, representing the number of features to be selected
         :param verbose:                  Verbosity level, where any value greater than 0 means the message is printed
 
         """
+        self.__top_features = list()
+        self.__top_features_by_target = dict()
         self.df = dataset
         self.path = destination_path
         self.engine = importance_engine
         self.number_of_features = number_of_features
-        self.top_features_ = []
-        self.top_features_target_ = {}
         self.verbose = verbose
+
+    @property
+    def top_features(self):
+        if self.__top_features is None:
+            print(WARN_MSG.format('\"top_features\"'))
+        else:
+            return pd.DataFrame(zip(self.__top_features, list(range(1, len(self.__top_features) + 1))),
+                                columns=[FEATURE, RANK])
+
+    @property
+    def top_features_by_target(self):
+        if self.__top_features_by_target is None:
+            print(WARN_MSG.format('\"top_features_by_target\"'))
+        else:
+            return pd.DataFrame(
+                [[target] + list(fd) for target, feat_dist in self.__top_features_by_target.items() for fd in
+                 feat_dist], columns=[TARGET, FEATURE, DISTANCE])
 
     def __get_common_info(self, feature_cols: List[str], target_cols: List[str]) -> Tuple[FeaturesInfo, TargetInfo]:
         """
@@ -64,7 +89,6 @@ class Explainer(object):
             print('ERROR: num_samples_global_expl ({}) < num_samples_local_exp ({}): Number of samples for global '
                   'explainability must be larger than the number of samples for local explainability'
                   .format(num_samples_global_expl, num_samples_local_expl))
-            exit(255)
 
         # This section is intended to retrieve information which will be used throughout the execution flow:
         #   Feature related information: different features columns names lists
@@ -78,8 +102,11 @@ class Explainer(object):
 
         # Then it's used to select the top K features
         topk_features = selector.select_topk()
-        self.top_features_ = selector.top_features_
-        self.top_features_target_ = selector.top_features_target_
+        print(selector.top_features)
+        print(selector.top_features_by_target)
+
+        self.__top_features = selector.top_features
+        self.__top_features_by_target = selector.top_features_by_target
 
         # Dataset must be rebuilt by selecting the topk features, the ID and the target columns
         self.df = self.df[[ID] + topk_features + target_cols]

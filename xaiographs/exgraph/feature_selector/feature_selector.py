@@ -17,7 +17,7 @@ class FeatureSelector(object):
                  verbose: int = 0):
         """
         Constructor method for FeatureSelector class.
-        - Property `top_features_target_` has been included so that the FeatureSelector object can be
+        - Property `top_features_by_target` has been included so that the FeatureSelector object can be
         inspected after method `select_topk` is invoked. This will provide distance and rank information for each
         feature and target value, so that results can be understood
         - Property `top_features_` has been included. After invoking method `select_topk`, this property will provide
@@ -36,8 +36,8 @@ class FeatureSelector(object):
         self.feature_cols = feature_cols
         self.k = number_of_features
         self.target_values = target_info.target_columns
-        self.top_features_target_ = {}
-        self.top_features_ = []
+        self.top_features_by_target = dict()
+        self.top_features = []
         self.verbose = verbose
         xgprint(self.verbose, 'INFO: Instantiating FeatureSelector to select the top {} features:'.format(self.k))
 
@@ -153,7 +153,7 @@ class FeatureSelector(object):
             # there's no need to compute distances for the two values, one is enough
             if len(self.target_values) == 2:
                 break
-        self.top_features_target_ = distance_rank_info
+        self.top_features_by_target = distance_rank_info
 
         # Finally, all obtained ranks for the different target values are aggregated for each feature. The largest rank
         # will cause that feature to be the first of the topk (note that, when talking about ranks, 1 is greater than 2)
@@ -161,12 +161,12 @@ class FeatureSelector(object):
         for feature_col in self.feature_cols:
             topk_features[feature_col] = sum(
                 [rank for rank, feature in enumerate(feature_ranks) if feature == feature_col])
-        self.top_features_ = sorted(topk_features, key=topk_features.get)
+        self.top_features = sorted(topk_features, key=topk_features.get)
         xgprint(self.verbose,
-                'INFO:     FeatureSelector top {} features selected: {}'.format(self.k, self.top_features_[:self.k]))
+                'INFO:     FeatureSelector top {} features selected: {}'.format(self.k, self.top_features[:self.k]))
         xgprint(self.verbose,
-                'INFO:     FeatureSelector global feature rank: {}'.format(self.top_features_))
+                'INFO:     FeatureSelector global feature rank: {}'.format(self.top_features))
         xgprint(self.verbose,
-                'INFO:     FeatureSelector feature rank by target: {}'.format(self.top_features_target_))
+                'INFO:     FeatureSelector feature rank by target: {}'.format(self.top_features_by_target))
 
-        return self.top_features_[:self.k]
+        return self.top_features[:self.k]

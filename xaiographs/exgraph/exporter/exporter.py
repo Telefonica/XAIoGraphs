@@ -53,10 +53,10 @@ class Exporter(object):
         df_stats[EDGE_WEIGHT] = pd.cut(df_stats[COUNT], bins=N_BINS_EDGE_WEIGHT,
                                        labels=range(MIN_EDGE_WEIGHT,
                                                     MAX_EDGE_WEIGHT + BIN_WIDTH_EDGE_WEIGHT))
-        df_stats.to_csv(path_or_buf=os.path.join(self.path, filename), sep=self.sep, index=self.keep_index)
+        df_stats.to_json(path_or_buf=os.path.join(self.path, filename), orient='records')
 
     def __export_global_description(self, df_global_nodes_info: pd.DataFrame,
-                                    filename: str = 'global_graph_description.csv'):
+                                    filename: str = 'global_graph_description.json'):
         """
         This function calculates the number of different feature - value pairs associated to each target value. It
         persist the resulting information
@@ -66,10 +66,9 @@ class Exporter(object):
         :param filename:                String representing the name of the file used to persist the information
         """
         df_global_nodes_info[[TARGET, RANK]].drop_duplicates(subset=[TARGET], keep='last').rename(
-            columns={RANK: NUM_FEATURES}).to_csv(path_or_buf=os.path.join(self.path, filename),
-                                                 columns=[TARGET, NUM_FEATURES], sep=COMMA_SEP, index=False)
+            columns={RANK: NUM_FEATURES}).to_json(path_or_buf=os.path.join(self.path, filename), orient='records')
 
-    def __export_global_explainability(self, df_importance: pd.DataFrame, filename: str = 'global_explainability.csv'):
+    def __export_global_explainability(self, df_importance: pd.DataFrame, filename: str = 'global_explainability.json'):
         """
         This function calculates the weight in pixels of each feature importance and persists the global explainability
         information
@@ -84,10 +83,10 @@ class Exporter(object):
                                                    MIN_FEATURE_WEIGHT,
                                                    MAX_FEATURE_WEIGHT + BIN_WIDTH_FEATURE_WEIGHT,
                                                    BIN_WIDTH_FEATURE_WEIGHT)))
-        df_importance.to_csv(path_or_buf=os.path.join(self.path, filename), sep=self.sep, index=self.keep_index)
+        df_importance.to_json(path_or_buf=os.path.join(self.path, filename), orient='records')
 
     def __export_global_nodes(self, df_stats: pd.DataFrame, df_importance: pd.DataFrame,
-                              filename='global_graph_nodes.csv') -> pd.DataFrame:
+                              filename='global_graph_nodes.json') -> pd.DataFrame:
         """
         This function combines the global node information resulting from statistic calculation and from importance
         calculation. It also calculates weights in pixels for the nodes importance and for the nodes frequency and
@@ -113,17 +112,12 @@ class Exporter(object):
                                                    MAX_NODE_WEIGHT + BIN_WIDTH_NODE_WEIGHT,
                                                    BIN_WIDTH_NODE_WEIGHT)))
         global_node_info.sort_values(by=[TARGET, RANK], inplace=True)
-        global_node_info.to_csv(path_or_buf=os.path.join(self.path, filename),
-                                columns=[TARGET, NODE_NAME, NODE_IMPORTANCE, NODE_WEIGHT,
-                                         RANK, NODE_COUNT, TOTAL_COUNT,
-                                         NODE_NAME_RATIO, NODE_NAME_RATIO_WEIGHT,
-                                         NODE_NAME_RATIO_RANK], sep=self.sep,
-                                index=self.keep_index)
+        global_node_info.to_json(path_or_buf=os.path.join(self.path, filename), orient='records')
 
         return global_node_info
 
     def __export_global_target_distribution(self, df_global_target_distribution: pd.DataFrame,
-                                            filename='global_target_distribution.csv'):
+                                            filename='global_target_distribution.json'):
         """
         This function persists the information related to the number of appearances of each possible target value
 
@@ -131,22 +125,21 @@ class Exporter(object):
                                                 appearances of each possible target value
         :param filename:                        String representing the name of the file used to persist the information
         """
-        df_global_target_distribution.to_csv(path_or_buf=os.path.join(self.path, filename), sep=self.sep,
-                                             index=self.keep_index)
+        df_global_target_distribution.to_json(path_or_buf=os.path.join(self.path, filename), orient='records')
 
     def __export_global_target_explainability(self, df_importance: pd.DataFrame,
-                                              filename: str = 'deprecated_global_target_explainability.csv'):
+                                              filename: str = 'deprecated_global_target_explainability.json'):
         """
         This function persists the global target explainability information. Note that his file will be deprecated
 
         :param df_importance:   Pandas DataFrame containing the mean of each feature importance for each target
         :param filename:        String representing the name of the file used to persist the information
         """
-        df_importance.to_csv(path_or_buf=os.path.join(self.path, filename), sep=self.sep, index=self.keep_index)
+        df_importance.to_json(path_or_buf=os.path.join(self.path, filename), orient='records')
 
     def __export_local_dataset_reliability(self, features_info: FeaturesInfo, target_info: TargetInfo,
                                            sample_ids_mask: np.ndarray,
-                                           filename: str = 'local_dataset_reliability.csv'):
+                                           filename: str = 'local_dataset_reliability.json'):
         """
         This function collects the reliability for each row and for its correspondent top1 target, then, information
         is persisted
@@ -176,12 +169,11 @@ class Exporter(object):
                                                                  df_local_reliability_values.shape[
                                                                      0]), target_info.top1_argmax[sample_ids_mask]],
                                                          decimals=2)).reshape(-1, 1)), axis=1),
-                     columns=[ID] + features_info.feature_columns + [TARGET] + [RELIABILITY]).to_csv(
-            path_or_buf=os.path.join(self.path, filename),
-            sep=self.sep, index=self.keep_index)
+                     columns=[ID] + features_info.feature_columns + [TARGET] + [RELIABILITY]).to_json(
+            path_or_buf=os.path.join(self.path, filename), orient='records')
 
     def __export_local_explainability(self, features_info: FeaturesInfo, target_info: TargetInfo,
-                                      sample_ids_mask: np.ndarray, filename: str = 'local_explainability.csv'):
+                                      sample_ids_mask: np.ndarray, filename: str = 'local_explainability.json'):
         """
         This function collects for each row the importance for each feature and for the top1 target. Then, this
         information is persisted
@@ -219,12 +211,11 @@ class Exporter(object):
                                          np.array(adapted_importance_by_target)].reshape(
                                          len(self.df_explanation_sample), -1),
                                      top1_targets.reshape(-1, 1)), axis=1),
-                     columns=[ID] + features_info.feature_columns + [TARGET]).to_csv(
-            path_or_buf=os.path.join(self.path, filename),
-            sep=self.sep, index=self.keep_index)
+                     columns=[ID] + features_info.feature_columns + [TARGET]).to_json(
+            path_or_buf=os.path.join(self.path, filename), orient='records')
 
     def __export_local_nodes(self, df_stats: pd.DataFrame, features_info: FeaturesInfo,
-                             filename='local_graph_nodes.csv'):
+                             filename='local_graph_nodes.json'):
         """
         This function combines the previously calculated local statistics for the nodes, with the calculated importance.
         It calculates the weight in pixels for the node importance too and, finally, persists the resulting information
@@ -243,18 +234,17 @@ class Exporter(object):
         local_nodes_info = df_stats[[ID, NODE_NAME, NODE_IMPORTANCE, TARGET]].copy()
         local_nodes_info[RANK] = local_nodes_info.groupby(ID)[NODE_IMPORTANCE].rank(method='dense',
                                                                                     ascending=False).astype(int)
-        local_nodes_info.to_csv(path_or_buf=os.path.join(self.path, filename), sep=self.sep, index=self.keep_index)
+        local_nodes_info.to_json(path_or_buf=os.path.join(self.path, filename), orient='records')
         local_nodes_info[NODE_WEIGHT] = pd.cut(local_nodes_info[NODE_IMPORTANCE].abs(),
                                                bins=N_BINS_NODE_WEIGHT,
                                                labels=list(range(
                                                    MIN_NODE_WEIGHT,
                                                    MAX_NODE_WEIGHT + BIN_WIDTH_NODE_WEIGHT,
                                                    BIN_WIDTH_NODE_WEIGHT)))
-        local_nodes_info.sort_values(by=[ID, RANK]).to_csv(path_or_buf=os.path.join(self.path, filename),
-                                                           columns=[ID, NODE_NAME, NODE_IMPORTANCE, NODE_WEIGHT, RANK,
-                                                                    TARGET], sep=self.sep, index=self.keep_index)
+        local_nodes_info.sort_values(by=[ID, RANK]).to_json(path_or_buf=os.path.join(self.path, filename),
+                                                            orient='records')
 
-    def __export_reason_why(self, df_why: pd.DataFrame, filename: str = 'local_reason_why.csv'):
+    def __export_reason_why(self, df_why: pd.DataFrame, filename: str = 'local_reason_why.json'):
         """
         This function persists the previously sampled reason why file. It's a temporary workaround until the 'why'
         module is available
@@ -262,7 +252,7 @@ class Exporter(object):
         :param df_why:          PandasDataFrame containing a number of Loren Ipsum excerpts
         :param filename:        String representing the name of the file used to persist the information
         """
-        df_why.to_csv(path_or_buf=os.path.join(self.path, filename), sep=self.sep, index=self.keep_index)
+        df_why.to_json(path_or_buf=os.path.join(self.path, filename), orient='records')
 
     def export(self, features_info: FeaturesInfo, target_info: TargetInfo, sample_ids_mask: np.ndarray,
                global_target_explainability: pd.DataFrame, global_explainability: pd.DataFrame,
@@ -278,7 +268,7 @@ class Exporter(object):
 
         self.__export_local_nodes(df_stats=nodes_info.local_stats, features_info=features_info)
 
-        self.__export_edges(df_stats=edges_info.local_stats, filename='local_graph_edges.csv')
+        self.__export_edges(df_stats=edges_info.local_stats, filename='local_graph_edges.json')
 
         self.__export_global_target_explainability(df_importance=global_target_explainability)
 
@@ -291,6 +281,6 @@ class Exporter(object):
 
         self.__export_global_target_distribution(df_global_target_distribution=target_distribution)
 
-        self.__export_edges(df_stats=edges_info.global_stats, filename='global_graph_edges.csv')
+        self.__export_edges(df_stats=edges_info.global_stats, filename='global_graph_edges.json')
 
         self.__export_reason_why(df_why=reason_why)
