@@ -5,8 +5,7 @@ import { EmitterService } from 'src/app/services/emitter.service';
 @Component({
     selector: 'app-local-filter',
     templateUrl: './filter.component.html',
-    styles: [
-    ]
+    styleUrls: ['../local.component.scss']
 })
 export class LocalFilterComponent implements OnDestroy {
 

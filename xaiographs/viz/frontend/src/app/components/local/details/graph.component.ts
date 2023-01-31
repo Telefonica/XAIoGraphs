@@ -7,13 +7,13 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import cytoscape from 'cytoscape';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { positiveNodeGraphStyle, negativeNodeGraphStyle, edgeGraphStyle } from '../../../../assets/local';
+import { positiveNodeGraphStyle0, negativeNodeGraphStyle0, edgeGraphStyle0 } from '../themes/local0';
+import { positiveNodeGraphStyle1, negativeNodeGraphStyle1, edgeGraphStyle1 } from '../themes/local1';
 
 @Component({
     selector: 'app-local-graph',
     templateUrl: './graph.component.html',
-    styles: [
-    ]
+    styleUrls: ['../local.component.scss']
 })
 export class LocalGraphComponent implements OnDestroy {
 
@@ -22,10 +22,15 @@ export class LocalGraphComponent implements OnDestroy {
 
     targetSubscription: any;
     featuresSubscription: any;
+    themeSubscription: any;
 
     nodeList = [];
     edgeList = [];
     nodeNames = [];
+
+    positiveNodeGraphStyle: any;
+    negativeNodeGraphStyle: any;
+    edgeGraphStyle: any;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -37,6 +42,10 @@ export class LocalGraphComponent implements OnDestroy {
         });
         this.featuresSubscription = this._apiEmitter.localFeaturesChangeEmitter.subscribe(() => {
             this.getData();
+        });
+        this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
+            this.prepareTheme();
+            this.generateGraph();
         });
     }
 
@@ -67,10 +76,9 @@ export class LocalGraphComponent implements OnDestroy {
                 this._apiReader.readLocalEdgesWeights(bodyEdges).subscribe({
                     next: (responseEdges: any) => {
                         this.edgeList = responseEdges;
-                        console.log(this.nodeList);
-                        console.log(this.edgeList);
                     },
                     complete: () => {
+                        this.prepareTheme();
                         this.generateGraph();
                     },
                     error: (err) => {
@@ -84,6 +92,18 @@ export class LocalGraphComponent implements OnDestroy {
         });
     }
 
+    prepareTheme() {
+        if (!this._apiEmitter.getTheme()) {
+            this.positiveNodeGraphStyle = positiveNodeGraphStyle0
+            this.negativeNodeGraphStyle = negativeNodeGraphStyle0
+            this.edgeGraphStyle = edgeGraphStyle0
+        } else {
+            this.positiveNodeGraphStyle = positiveNodeGraphStyle1
+            this.negativeNodeGraphStyle = negativeNodeGraphStyle1
+            this.edgeGraphStyle = edgeGraphStyle1
+        }
+    }
+
     generateGraph() {
         let elements: any[] = [];
 
@@ -94,11 +114,11 @@ export class LocalGraphComponent implements OnDestroy {
             let backgroundColor = '';
 
             if (importance > 0) {
-                const graphStyleIndex = (Math.trunc(weight / 10) - 1) % positiveNodeGraphStyle.length;
-                backgroundColor = positiveNodeGraphStyle[graphStyleIndex];
+                const graphStyleIndex = (Math.trunc(weight / 10) - 1) % this.positiveNodeGraphStyle.length;
+                backgroundColor = this.positiveNodeGraphStyle[graphStyleIndex];
             } else {
-                const graphStyleIndex = (Math.trunc(weight / 10) - 1) % negativeNodeGraphStyle.length;
-                backgroundColor = negativeNodeGraphStyle[graphStyleIndex]
+                const graphStyleIndex = (Math.trunc(weight / 10) - 1) % this.negativeNodeGraphStyle.length;
+                backgroundColor = this.negativeNodeGraphStyle[graphStyleIndex]
             }
 
             elements.push({
@@ -116,7 +136,7 @@ export class LocalGraphComponent implements OnDestroy {
 
         this.edgeList.forEach((edge: any) => {
             const weight = parseFloat(edge.edge_weight);
-            const weightIndex = (Math.trunc(weight / 2)) % edgeGraphStyle.length;
+            const weightIndex = (Math.trunc(weight / 2)) % this.edgeGraphStyle.length;
             elements.push({
                 data: {
                     id: edge.node_1 + '-' + edge.node_2,
@@ -125,7 +145,7 @@ export class LocalGraphComponent implements OnDestroy {
                 },
                 style: {
                     width: weight,
-                    'line-color': edgeGraphStyle[weightIndex],
+                    'line-color': this.edgeGraphStyle[weightIndex],
 
                 }
             });
@@ -158,6 +178,7 @@ export class LocalGraphComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.targetSubscription.unsubscribe();
         this.featuresSubscription.unsubscribe();
+        this.themeSubscription.unsubscribe();
     };
 
 }

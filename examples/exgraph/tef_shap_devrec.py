@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 from xaiographs.common.utils import xgprint
-from xaiographs.exgraph.explainer.explainer import Explainer
+from xaiographs.exgraph.explainer import Explainer
 
 FLAGSHIP = 'Flagship'
 ID = 'id'

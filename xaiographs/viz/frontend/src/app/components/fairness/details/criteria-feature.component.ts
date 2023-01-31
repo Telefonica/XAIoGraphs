@@ -9,7 +9,8 @@ import { ctsFiles } from '../../../constants/csvFiles';
 
 @Component({
     selector: 'app-fairness-criteria-feature',
-    templateUrl: './criteria-feature.component.html'
+    templateUrl: './criteria-feature.component.html',
+    styleUrls: ['../fairness.component.scss']
 })
 export class CriteriaFeatureComponent implements OnInit {
 

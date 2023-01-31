@@ -10,7 +10,7 @@ from xaiographs.common.constants import BIN_WIDTH_EDGE_WEIGHT, BIN_WIDTH_FEATURE
     NODE_NAME, NODE_NAME_RATIO, NODE_NAME_RATIO_RANK, NODE_NAME_RATIO_WEIGHT, NODE_WEIGHT, NUM_FEATURES, \
     RELIABILITY, RANK, TARGET, TOTAL_COUNT
 from xaiographs.common.utils import FeaturesInfo, TargetInfo, xgprint
-from xaiographs.exgraph.statistics.stats_calculator import StatsResults
+from xaiographs.exgraph.stats_calculator import StatsResults
 
 
 class Exporter(object):

@@ -7,11 +7,13 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import cytoscape from 'cytoscape';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { nodeGraphStyle, edgeGraphStyle } from '../../../../assets/global';
+import { nodeGraphStyle0, edgeGraphStyle0 } from '../themes/global0';
+import { nodeGraphStyle1, edgeGraphStyle1 } from '../themes/global1';
 
 @Component({
     selector: 'app-global-target-graph',
     templateUrl: './graph.component.html',
+    styleUrls: ['../global.component.scss']
 })
 export class GlobalGraphComponent implements OnDestroy {
 
@@ -22,10 +24,14 @@ export class GlobalGraphComponent implements OnDestroy {
     targetSubscription: any;
     featuresSubscription: any;
     frecuencySubscription: any;
+    themeSubscription: any;
 
     nodeList = [];
     edgeList = [];
     nodeNames = [];
+
+    nodeGraphStyle: any;
+    edgeGraphStyle: any;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -40,6 +46,10 @@ export class GlobalGraphComponent implements OnDestroy {
         });
         this.frecuencySubscription = this._apiEmitter.globalFrecuencyChangeEmitter.subscribe(() => {
             this.getData();
+        });
+        this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
+            this.prepareTheme();
+            this.generateGraph();
         });
     }
 
@@ -74,6 +84,7 @@ export class GlobalGraphComponent implements OnDestroy {
                         this.edgeList = responseEdges;
                     },
                     complete: () => {
+                        this.prepareTheme();
                         this.generateGraph();
                     },
                     error: (err) => {
@@ -87,12 +98,22 @@ export class GlobalGraphComponent implements OnDestroy {
         });
     }
 
+    prepareTheme() {
+        if(!this._apiEmitter.getTheme()) {
+            this.nodeGraphStyle = nodeGraphStyle0
+            this.edgeGraphStyle = edgeGraphStyle0
+        } else {
+            this.nodeGraphStyle = nodeGraphStyle1
+            this.edgeGraphStyle = edgeGraphStyle1
+        }
+    }
+
     generateGraph() {
         let elements: any[] = [];
 
         this.nodeList.forEach((node: any) => {
             const weightNode = parseFloat(node.node_weight);
-            const weightNodeIndex = (Math.trunc(weightNode / 10) - 1) % nodeGraphStyle.length;
+            const weightNodeIndex = (Math.trunc(weightNode / 10) - 1) % this.nodeGraphStyle.length;
 
             elements.push({
                 data: {
@@ -100,7 +121,7 @@ export class GlobalGraphComponent implements OnDestroy {
                     label: node.node_name,
                 },
                 style: {
-                    'background-color': nodeGraphStyle[weightNodeIndex],
+                    'background-color': this.nodeGraphStyle[weightNodeIndex],
                     height: weightNode,
                     width: weightNode,
                 }
@@ -110,7 +131,7 @@ export class GlobalGraphComponent implements OnDestroy {
 
         this.edgeList.forEach((edge: any) => {
             const weightEdge = parseFloat(edge.edge_weight);
-            const weightEdgeIndex = (Math.trunc(weightEdge / 2)) % edgeGraphStyle.length;
+            const weightEdgeIndex = (Math.trunc(weightEdge / 2)) % this.edgeGraphStyle.length;
 
             if (
                 (this.nodeList.filter((node: any) => node.node_name === edge.node_1).length > 0) &&
@@ -124,7 +145,7 @@ export class GlobalGraphComponent implements OnDestroy {
                     },
                     style: {
                         width: weightEdge,
-                        'line-color': edgeGraphStyle[weightEdgeIndex],
+                        'line-color': this.edgeGraphStyle[weightEdgeIndex],
                     }
                 });
             }
@@ -177,5 +198,7 @@ export class GlobalGraphComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.targetSubscription.unsubscribe();
         this.featuresSubscription.unsubscribe();
+        this.frecuencySubscription.unsubscribe();
+        this.themeSubscription.unsubscribe();
     }
 }
