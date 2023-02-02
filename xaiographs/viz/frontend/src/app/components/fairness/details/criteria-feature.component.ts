@@ -5,7 +5,7 @@ import { ctsFairness } from 'src/app/constants/fairness';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { jsonFiles } from '../../../constants/jsonFiles';
 
 @Component({
     selector: 'app-fairness-criteria-feature',
@@ -25,9 +25,9 @@ export class CriteriaFeatureComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this._apiReader.readCSV({ fileName: ctsFiles.fairness_sumarize_criterias }).subscribe({
+        this._apiReader.readJSON(jsonFiles.fairness_sumarize_criterias).subscribe({
             next: (response: any) => {
-                response.data.forEach(row => {
+                response.forEach(row => {
                     this.listFeatures.push(row[ctsFairness.sensitive_value])
                 });
             },

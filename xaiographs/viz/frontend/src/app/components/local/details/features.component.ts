@@ -1,12 +1,12 @@
-import { Component, OnDestroy } from '@angular/core';
-
-import { ChartType } from 'angular-google-charts';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { ChartType } from 'angular-google-charts';
+
+import { jsonFiles } from '../../../constants/jsonFiles';
 import { positiveFeaturesGraphStyle0, negativeFeaturesGraphStyle0 } from '../themes/local0';
 import { positiveFeaturesGraphStyle1, negativeFeaturesGraphStyle1 } from '../themes/local1';
 
@@ -15,7 +15,7 @@ import { positiveFeaturesGraphStyle1, negativeFeaturesGraphStyle1 } from '../the
     templateUrl: './features.component.html',
     styleUrls: ['../local.component.scss']
 })
-export class LocalFeaturesComponent implements OnDestroy {
+export class LocalFeaturesComponent implements OnInit, OnDestroy {
 
     currentTarget: any;
     currentFeatures = 0;
@@ -24,7 +24,8 @@ export class LocalFeaturesComponent implements OnDestroy {
     featuresSubscription: any;
     themeSubscription: any;
 
-    serviceResponse: any;
+    serviceResponse = [];
+    dataSource = []
 
     type = ChartType.BarChart;
     dataGraph: any[] = [];
@@ -41,10 +42,12 @@ export class LocalFeaturesComponent implements OnDestroy {
         private _apiSnackBar: SnackbarService,
     ) {
         this.targetSubscription = this._apiEmitter.localTargetChangeEmitter.subscribe(() => {
-            this.getData();
+            this.filterData();
+            this.generateGraph();
         });
         this.featuresSubscription = this._apiEmitter.localFeaturesChangeEmitter.subscribe(() => {
-            this.getData();
+            this.filterData();
+            this.generateGraph();
         });
         this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
             this.prepareTheme();
@@ -53,17 +56,8 @@ export class LocalFeaturesComponent implements OnDestroy {
         })
     }
 
-    getData() {
-        this.currentTarget = this._apiEmitter.getLocalTarget();
-        this.currentFeatures = this._apiEmitter.getLocalFeatures();
-
-        const bodyNodes = {
-            fileName: ctsFiles.local_graph_nodes,
-            target: this.currentTarget.id,
-            numFeatures: this.currentFeatures,
-        }
-
-        this._apiReader.readLocalNodesWeights(bodyNodes).subscribe({
+    ngOnInit() {
+        this._apiReader.readJSON(jsonFiles.local_graph_nodes).subscribe({
             next: (response: any) => {
                 this.serviceResponse = response;
             },
@@ -71,6 +65,7 @@ export class LocalFeaturesComponent implements OnDestroy {
                 if (this.serviceResponse.length > 0) {
                     this.prepareTheme();
                     this.initGraph();
+                    this.filterData();
                     this.generateGraph();
                     this.displayGraph = true;
                 } else {
@@ -85,7 +80,7 @@ export class LocalFeaturesComponent implements OnDestroy {
     }
 
     prepareTheme() {
-        if(!this._apiEmitter.getTheme()) {
+        if (!this._apiEmitter.getTheme()) {
             this.positiveFeaturesGraphStyle = positiveFeaturesGraphStyle0
             this.negativeFeaturesGraphStyle = negativeFeaturesGraphStyle0
         } else {
@@ -104,6 +99,15 @@ export class LocalFeaturesComponent implements OnDestroy {
         };
     }
 
+    filterData() {
+        this.currentTarget = this._apiEmitter.getLocalTarget();
+        this.currentFeatures = this._apiEmitter.getLocalFeatures();
+
+        this.dataSource = this.serviceResponse.filter((row: any) => {
+            return row.id == this.currentTarget.id;
+        }).slice(0, this.currentFeatures);
+    }
+
     generateGraph() {
         let transformDataSet: any[] = [];
 
@@ -114,7 +118,7 @@ export class LocalFeaturesComponent implements OnDestroy {
             { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
         ];
 
-        this.serviceResponse.forEach((data: any, index: number) => {
+        this.dataSource.forEach((data: any, index: number) => {
             let barStyle = '';
             const nodeImportance = parseFloat(data.node_importance);
 

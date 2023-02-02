@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { ReaderService } from 'src/app/services/reader.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 
-import { ctsFiles } from '../../../constants/csvFiles'
+import { jsonFiles } from '../../../constants/jsonFiles'
 import { ctsFairness } from '../../../constants/fairness'
 
 @Component({
@@ -14,6 +14,7 @@ import { ctsFairness } from '../../../constants/fairness'
 export class ConfMatrixComponent implements OnInit {
 
     listLabels: string[] = []
+    dataSource: any[] = []
     matrixValues = {}
     matrixPercent = {}
     matrixOpacity = {}
@@ -30,13 +31,16 @@ export class ConfMatrixComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this._apiReader.readCSV({ fileName: ctsFiles.fairness_confusion_matrix }).subscribe({
+        this._apiReader.readJSON(jsonFiles.fairness_confusion_matrix).subscribe({
             next: (response: any) => {
-                this.listLabels = response.headers.splice(1)
+                this.listLabels = Object.keys(response[0]).splice(1)
+                this.dataSource = response
+            },
+            complete: () => {
                 this.listLabels.forEach((label: string) => {
                     this.sumRows[label] = 0
                 })
-                response.data.forEach((matrixRow) => {
+                this.dataSource.forEach((matrixRow) => {
                     const matrixElement = {}
                     this.listLabels.forEach((label: string) => {
                         matrixElement[label] = 0
@@ -59,8 +63,7 @@ export class ConfMatrixComponent implements OnInit {
                         this.matrixOpacity[matrixRow[ctsFairness.confMatrixIndex]][label] = parseInt(matrixRow[label])
                     })
                 })
-            },
-            complete: () => {
+
                 const maxValue = Math.max(...this.maxList)
                 const minValue = Math.min(...this.minList)
                 this.listLabels.forEach((labelRow) => {

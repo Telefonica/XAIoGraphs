@@ -1,18 +1,8 @@
-<div fxLayout="row" class="dataDataset">
-    <table mat-table [dataSource]="dataSource" matSort class="width100" *ngIf="display">
+<div fxFlex fxLayout="column" fxLayoutGap="10px" class="dataDataset">
+    <table fxFlex mat-table [dataSource]="dataSource" matSort>
         <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">
-                <div fxFlex fxLayout="column" fxLayoutAlign="center center">
-                    <div *ngIf="column != 'id'">
-                        <google-chart class="width100 height100" #chart [type]="type" [data]="csvDistribution[column]" [columns]="graphColumnNames" [options]="options"> </google-chart>
-                    </div>
-                    <label style="padding-bottom: 10px;">{{ column }}</label>
-                </div>
-            </th>
-            <td mat-cell *matCellDef="let row">
-                <div style="text-align: center;" *ngIf="column == 'id'">{{ row[column] }}</div>
-                <div style="width: 200px; text-align: center;" *ngIf="column != 'id'">{{ row[column] }}</div>
-            </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
+            <td mat-cell *matCellDef="let row">{{ row[column] }}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
