@@ -56,4 +56,3 @@ class DatasetsUnitTest(unittest.TestCase):
         self.assertListEqual(target_cols, TARGET_COLS_TITANIC)
         self.assertEqual(y_true, TARGET_COL)
         self.assertEqual(y_predict, PREDICT_COL)
-
