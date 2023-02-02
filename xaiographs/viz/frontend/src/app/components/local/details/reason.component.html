@@ -1,5 +1,6 @@
-<div fxFlex fxLayout="row">
-    <div fxFlex fxLayout="column" *ngIf="display">
-        <label>{{reasonWhy}}</label>
+<div fxFlex fxLayout="row" class="localCard" *ngIf="reasonWhy">
+    <div fxFlex fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <label class="localReasonTitle">Reason why:</label>
+        <label>{{ reasonWhy }}</label>
     </div>
 </div>

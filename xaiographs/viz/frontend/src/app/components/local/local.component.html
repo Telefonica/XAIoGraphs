@@ -1,15 +1,25 @@
 <div fxFlex fxLayout="column" style="height: 100vh;">
-    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="start center" class="localTitle">
+    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="space-between center" class="localTitle">
         <label>Local explainability</label>
+        <div fxLayout="column" fxLayoutAlign="center center" class="localTheme">
+            <label>Theme</label>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+                <label>1</label>
+                <mat-slide-toggle [(ngModel)]="theme" (change)="changeTheme()"></mat-slide-toggle>
+                <label>2</label>
+            </div>
+        </div>
     </div>
     <div fxFlex fxLayout="column" fxLayoutGap="20px" class="localBody">
         <app-local-dataset fxFlex class=""></app-local-dataset>
 
-        <app-local-reason fxFlex class="localCard"></app-local-reason>
-
-        <div fxFlex fxLayout="row" fxLayoutGap="20px">
-            <app-local-graph fxFlex class="localCard"></app-local-graph>
-            <app-local-features fxFlex class="localCard"></app-local-features>
+        <div fxFlex fxLayout="column" fxLayoutGap="20px" class="localCard">
+            <app-local-filter fxFlex></app-local-filter>
+            <app-local-reason fxFlex style="padding: 0px 35px"></app-local-reason>
+            <div fxFlex fxLayout="row" fxLayoutGap="20px" style="padding: 0px 35px">
+                <app-local-graph fxFlex class="localCard"></app-local-graph>
+                <app-local-features fxFlex class="localCard"></app-local-features>
+            </div>
         </div>
     </div>
 </div>

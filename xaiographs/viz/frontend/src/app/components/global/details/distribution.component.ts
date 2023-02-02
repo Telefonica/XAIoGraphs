@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { ChartType } from 'angular-google-charts';
 
+import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { distributionGraphStyle, distributionGraph3D, distributionGraphPieHole } from '../../../../assets/global';
+import { distributionGraphStyle0, distributionGraph3D0, distributionGraphPieHole0 } from '../themes/global0';
+import { distributionGraphStyle1, distributionGraph3D1, distributionGraphPieHole1 } from '../themes/global1';
 
 @Component({
     selector: 'app-global-distribution',
     templateUrl: './distribution.component.html',
+    styleUrls: ['../global.component.scss']
 })
-export class GlobalDistributionComponent implements OnInit {
+export class GlobalDistributionComponent implements OnInit, OnDestroy {
 
     type = ChartType.PieChart;
     dataGraph: any[] = [];
@@ -22,10 +25,22 @@ export class GlobalDistributionComponent implements OnInit {
 
     serviceResponse: any;
 
+    distributionGraphStyle
+    distributionGraph3D
+    distributionGraphPieHole
+    themeSubscription
+
     constructor(
+        private _apiEmitter: EmitterService,
         private _apiReader: ReaderService,
         private _apiSnackBar: SnackbarService,
-    ) { }
+    ) {
+        this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
+            this.prepareTheme();
+            this.initGraph();
+            this.createGraph();
+        });
+    }
 
     ngOnInit(): void {
         this._apiReader.readCSV({ fileName: ctsFiles.global_target_distribution }).subscribe({
@@ -33,7 +48,9 @@ export class GlobalDistributionComponent implements OnInit {
                 this.serviceResponse = response;
             },
             complete: () => {
-                if(this.serviceResponse.data.length > 0) {
+                if (this.serviceResponse.data.length > 0) {
+                    this.serviceResponse.data.sort((element1, element2) => parseInt(element2.count) - parseInt(element1.count));
+                    this.prepareTheme();
                     this.initGraph();
                     this.createGraph();
                     this.displayGraph = true;
@@ -48,14 +65,27 @@ export class GlobalDistributionComponent implements OnInit {
         });
     }
 
+    prepareTheme() {
+        if (!this._apiEmitter.getTheme()) {
+            this.distributionGraphStyle = distributionGraphStyle0
+            this.distributionGraph3D = distributionGraph3D0
+            this.distributionGraphPieHole = distributionGraphPieHole0
+        } else {
+            this.distributionGraphStyle = distributionGraphStyle1
+            this.distributionGraph3D = distributionGraph3D1
+            this.distributionGraphPieHole = distributionGraphPieHole1
+        }
+    }
+
     initGraph() {
         this.dataGraph = [];
         this.options = {
-            is3D: distributionGraph3D,
-            pieHole: distributionGraphPieHole,
-            slices: distributionGraphStyle,
-            chartArea: { width: '90%', height: '80%' },
+            is3D: this.distributionGraph3D,
+            pieHole: this.distributionGraphPieHole,
+            slices: this.distributionGraphStyle,
+            chartArea: { top: 15, width: '90%', height: '80%' },
             tooltip: { type: 'string', isHtml: true },
+            legend: { position: 'bottom' },
         };
     }
 
@@ -92,6 +122,10 @@ export class GlobalDistributionComponent implements OnInit {
         });
 
         this.dataGraph = transformDataSet;
+    }
+
+    ngOnDestroy(): void {
+        this.themeSubscription.unsubscribe()
     }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
@@ -7,13 +7,15 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import cytoscape from 'cytoscape';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { nodeGraphStyle, edgeGraphStyle } from '../../../../assets/global';
+import { nodeGraphStyle0, edgeGraphStyle0 } from '../themes/global0';
+import { nodeGraphStyle1, edgeGraphStyle1 } from '../themes/global1';
 
 @Component({
     selector: 'app-global-target-graph',
     templateUrl: './graph.component.html',
+    styleUrls: ['../global.component.scss']
 })
-export class GlobalGraphComponent implements OnInit, OnDestroy {
+export class GlobalGraphComponent implements OnDestroy {
 
     currentTarget = '';
     currentFeatures = 0;
@@ -22,10 +24,14 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
     targetSubscription: any;
     featuresSubscription: any;
     frecuencySubscription: any;
+    themeSubscription: any;
 
     nodeList = [];
     edgeList = [];
     nodeNames = [];
+
+    nodeGraphStyle: any;
+    edgeGraphStyle: any;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -41,9 +47,11 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
         this.frecuencySubscription = this._apiEmitter.globalFrecuencyChangeEmitter.subscribe(() => {
             this.getData();
         });
+        this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
+            this.prepareTheme();
+            this.generateGraph();
+        });
     }
-
-    ngOnInit(): void { }
 
     getData() {
         this.currentTarget = this._apiEmitter.getGlobalTarget();
@@ -76,6 +84,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
                         this.edgeList = responseEdges;
                     },
                     complete: () => {
+                        this.prepareTheme();
                         this.generateGraph();
                     },
                     error: (err) => {
@@ -89,12 +98,22 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
         });
     }
 
+    prepareTheme() {
+        if(!this._apiEmitter.getTheme()) {
+            this.nodeGraphStyle = nodeGraphStyle0
+            this.edgeGraphStyle = edgeGraphStyle0
+        } else {
+            this.nodeGraphStyle = nodeGraphStyle1
+            this.edgeGraphStyle = edgeGraphStyle1
+        }
+    }
+
     generateGraph() {
         let elements: any[] = [];
 
         this.nodeList.forEach((node: any) => {
-            const weight = parseFloat(node.node_weight);
-            const weightIndex = (Math.trunc(weight / 10) - 1) % nodeGraphStyle.length;
+            const weightNode = parseFloat(node.node_weight);
+            const weightNodeIndex = (Math.trunc(weightNode / 10) - 1) % this.nodeGraphStyle.length;
 
             elements.push({
                 data: {
@@ -102,28 +121,34 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
                     label: node.node_name,
                 },
                 style: {
-                    'background-color': nodeGraphStyle[weightIndex],
-                    height: weight,
-                    width: weight,
+                    'background-color': this.nodeGraphStyle[weightNodeIndex],
+                    height: weightNode,
+                    width: weightNode,
                 }
             });
         });
 
-        this.edgeList.forEach((edge: any) => {
-            const weight = parseFloat(edge.edge_weight);
-            const weightIndex = (Math.trunc(weight / 2)) % edgeGraphStyle.length;
 
-            elements.push({
-                data: {
-                    id: edge.node_1 + '-' + edge.node_2,
-                    source: edge.node_1,
-                    target: edge.node_2,
-                },
-                style: {
-                    width: weight,
-                    'line-color': edgeGraphStyle[weightIndex],
-                }
-            });
+        this.edgeList.forEach((edge: any) => {
+            const weightEdge = parseFloat(edge.edge_weight);
+            const weightEdgeIndex = (Math.trunc(weightEdge / 2)) % this.edgeGraphStyle.length;
+
+            if (
+                (this.nodeList.filter((node: any) => node.node_name === edge.node_1).length > 0) &&
+                (this.nodeList.filter((node: any) => node.node_name === edge.node_2).length > 0)
+            ) {
+                elements.push({
+                    data: {
+                        id: edge.node_1 + '-' + edge.node_2,
+                        source: edge.node_1,
+                        target: edge.node_2,
+                    },
+                    style: {
+                        width: weightEdge,
+                        'line-color': this.edgeGraphStyle[weightEdgeIndex],
+                    }
+                });
+            }
         });
 
         const style = [
@@ -173,5 +198,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.targetSubscription.unsubscribe();
         this.featuresSubscription.unsubscribe();
+        this.frecuencySubscription.unsubscribe();
+        this.themeSubscription.unsubscribe();
     }
 }

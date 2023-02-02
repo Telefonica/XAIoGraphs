@@ -1,10 +1,16 @@
+@import "../../../styles.scss";
+
 .globalTitle {
     @extend .bgGrey4;
     @extend .fontWhite;
     @extend .fontBold;
     height: 60px;
-    padding-left: 25px;
-    font-size: 25px;
+    padding: 0px 25px;
+    font-size: 30px;
+}
+
+.globalTheme {
+    font-size: 15px;
 }
 
 .globalBody {
@@ -20,12 +26,31 @@
 
 .globalFeatureTitle,
 .globalDistributionTitle,
-.globalFeatureTargetTitle,
-.globalNetGraphTitle,
-.globalTargetTitle {
+.globalFeatByTarget {
     @extend .fontGrey5;
     @extend .fontBold;
-    font-size: 18px;
+    font-size: 25px;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+}
+
+.globalFeatureTargetSubTitle,
+.globalNetGraphSubTitle {
+    @extend .fontGrey4;
+    @extend .fontBold;
+    font-size: 15px !important;
+}
+
+.globalFeatureTargetTitle,
+.globalNetGraphTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 24px;
+}
+
+.globalTargetTitle {
+    @extend .fontGrey4;
+    @extend .fontBold;
 }
 
 .globalFeatureChart,
@@ -45,3 +70,4 @@
     margin-right: auto;
     width: 50%;
 }
+

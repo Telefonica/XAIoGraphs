@@ -13,8 +13,7 @@ import { DefSufficienceComponent } from '../definitions/sufficience.component';
 @Component({
     selector: 'app-feature-independence',
     templateUrl: './feature-independence.component.html',
-    styles: [
-    ]
+    styleUrls: ['../fairness.component.scss']
 })
 export class FeatureIndependenceComponent implements OnChanges {
 

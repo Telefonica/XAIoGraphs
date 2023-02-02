@@ -1,4 +1,7 @@
-<div fxFlex fxLayout="column" fxLayoutGap="25px">
-    <label class="globalNetGraphTitle">Local Features relations</label>
-    <div id="divGraph" class="localNetGraphChart" ></div>
+<div fxFlex fxLayout="column" fxLayoutGap="25px" *ngIf="currentTarget">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+        <label class="localNetGraphTitle">Features relations</label>
+        <label class="localExplanationFilter">target selected: {{ currentTarget.target }}</label>
+    </div>
+    <div id="divGraph" class="localNetGraphChart"></div>
 </div>

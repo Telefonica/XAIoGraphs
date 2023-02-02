@@ -11,6 +11,7 @@ import { ctsGlobal } from '../../../constants/global';
 @Component({
     selector: 'app-global-target',
     templateUrl: './target.component.html',
+    styleUrls: ['../global.component.scss']
 })
 export class GlobalTargetComponent implements OnInit {
 
@@ -57,19 +58,26 @@ export class GlobalTargetComponent implements OnInit {
 
     updateFrecuency(event) {
         this._apiEmitter.setGlobalFrecuency(event.value);
+        this.maxFeatures = event.value;
+        if(this.numFeatures > this.maxFeatures) {
+            this.numFeatures = this.maxFeatures
+        }
     }
 
     setValueLimits(index) {
         this.maxFeatures = this.listFeatures[index];
         this.maxFrecuency = this.listFeatures[index];
-        if (ctsGlobal.feature_limit > 0)
-            this.numFeatures = this.maxFeatures <= ctsGlobal.feature_limit ? this.maxFeatures : ctsGlobal.feature_limit;
-        else
-            this.numFeatures = this.maxFeatures
+
         if (ctsGlobal.frecuency_limit > 0)
             this.numFrecuency = this.maxFrecuency <= ctsGlobal.frecuency_limit ? this.maxFrecuency : ctsGlobal.frecuency_limit;
         else
             this.numFrecuency = this.maxFrecuency
+
+        if (ctsGlobal.feature_limit > 0)
+            this.numFeatures = this.maxFeatures <= ctsGlobal.feature_limit ? this.maxFeatures : ctsGlobal.feature_limit;
+        else
+            this.numFeatures = this.maxFeatures
+
         this._apiEmitter.setAllGlobal(this.listTarget[index], this.numFeatures, this.numFrecuency);
     }
 }

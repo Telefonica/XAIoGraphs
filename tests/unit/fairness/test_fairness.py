@@ -84,7 +84,7 @@ class FairnessUnitTest(unittest.TestCase):
         print("\nDataset to test calculate_independence_score_unit_test:\n{}".format(self.df_dataset))
 
         # Independence Score Calculation OK
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         independence_value_ok = f.independence_score(df=self.df_dataset,
                                                      sensitive_col='Gender',
                                                      predict_col='y_predict',
@@ -107,7 +107,7 @@ class FairnessUnitTest(unittest.TestCase):
         print("\nDataset to test calculate_separation_score_unit_test:\n{}".format(self.df_dataset))
 
         # Independence Score Calculation OK
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         separation_value = f.separation_score(df=self.df_dataset,
                                               sensitive_col='Gender',
                                               target_col='y_true',
@@ -131,7 +131,7 @@ class FairnessUnitTest(unittest.TestCase):
         print("\nDataset to test calculate_sufficiency_score_unit_test:\n{}".format(self.df_dataset))
 
         # Independence Score Calculation OK
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         sufficiency_value = f.sufficiency_score(df=self.df_dataset,
                                                 sensitive_col='Gender',
                                                 target_col='y_true',
@@ -167,7 +167,7 @@ class FairnessUnitTest(unittest.TestCase):
         print("\nDataset to test calculate_fairness_metrics_unit_test:\n{}".format(self.df_dataset))
 
         # Independence Score Calculation OK
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         fairness_scores = f.fairness_metrics(df=self.df_dataset,
                                              sensitive_col='Gender',
                                              target_col='y_true',
@@ -244,7 +244,8 @@ class FairnessUnitTest(unittest.TestCase):
                                    columns=['Gender', 'Color', 'y_true', 'y_predict'],
                                    dtype='int64')
 
-        df = Fairness._Fairness__encoder_dataset(df=self.df_dataset).astype(np.int64)
+        f = Fairness(destination_path='./', verbose=0)
+        df = f._Fairness__encoder_dataset(df=self.df_dataset).astype(np.int64)
 
         print("\nDataset to Encoder:\n{}".format(self.df_dataset.head(5)))
         print("encoder_dataset_unit_test -> Result DataFrame:\n{}".format(df.head(5)))
@@ -265,7 +266,7 @@ class FairnessUnitTest(unittest.TestCase):
         self.df_dataset['Gender2'] = self.df_dataset['Gender']
         print("\nDataset to test:\n{}".format(self.df_dataset[['Gender', 'Gender2']]))
 
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         f._Fairness__fit_correlation_features(df=self.df_dataset[['Gender', 'Gender2']])
 
         print("fit_correlation_features_unit_test -> Result DataFrame:\n{}".format(f.correlation_matrix))
@@ -289,7 +290,7 @@ class FairnessUnitTest(unittest.TestCase):
                                     'is_correlation_sensible': [True]},
                                    columns=['feature_1', 'feature_2', 'correlation_value', 'is_correlation_sensible'])
 
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         print("CASE 1: There are 1 highest pair correlation features")
         f._Fairness__find_highest_correlation_features(df_correlations=df_test,
                                                        threshold=0.9,
@@ -301,7 +302,7 @@ class FairnessUnitTest(unittest.TestCase):
         pd.testing.assert_frame_equal(f.highest_correlation_features, df_expected)
 
         print("CASE 2: There are no highest correlation features")
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         f._Fairness__find_highest_correlation_features(df_correlations=df_test,
                                                        threshold=0.95,
                                                        sensitive_cols=['F1'])
@@ -331,7 +332,7 @@ class FairnessUnitTest(unittest.TestCase):
                                             'separation_score_weight', 'sufficiency_score', 'sufficiency_category',
                                             'sufficiency_score_weight'])
 
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         f._Fairness__pre_processing(df=self.df_dataset,
                                     sensitive_cols=['Gender', 'Color'],
                                     target_col='y_true',
@@ -377,7 +378,7 @@ class FairnessUnitTest(unittest.TestCase):
                                             'separation_global_score', 'separation_category',
                                             'sufficiency_global_score', 'sufficiency_category'])
 
-        f = Fairness(destination_path='./')
+        f = Fairness(destination_path='./', verbose=0)
         f._Fairness__pre_processing(df=self.df_dataset,
                                     sensitive_cols=['Gender', 'Color'],
                                     target_col='y_true',

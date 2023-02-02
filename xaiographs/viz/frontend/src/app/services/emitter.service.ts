@@ -10,12 +10,14 @@ export class EmitterService {
     currentGlobalFrencuency;
     currentLocalTarget;
     currentLocalFeatures;
+    currentTheme = false;
 
     globalTargetChangeEmitter = new EventEmitter();
     globalFeaturesChangeEmitter = new EventEmitter();
     globalFrecuencyChangeEmitter = new EventEmitter();
     localTargetChangeEmitter = new EventEmitter();
     localFeaturesChangeEmitter = new EventEmitter();
+    themeChangeEmitter = new EventEmitter();
 
     constructor() { }
 
@@ -44,14 +46,14 @@ export class EmitterService {
         return this.currentGlobalFrencuency;
     }
 
-    setAllGlobal(target: string, features: number, frecuency: number) {
+    setAllGlobal(target: any, features: number, frecuency: number) {
         this.currentGlobalTarget = target;
         this.currentGlobalFeatures = features;
         this.currentGlobalFrencuency = frecuency;
         this.globalTargetChangeEmitter.emit();
     }
 
-    setLocalTarget(target: string) {
+    setLocalTarget(target: any) {
         this.currentLocalTarget = target;
         this.localTargetChangeEmitter.emit();
     }
@@ -71,5 +73,13 @@ export class EmitterService {
         this.currentLocalTarget = target;
         this.currentLocalFeatures = features;
         this.localTargetChangeEmitter.emit();
+    }
+
+    setTheme(current: any) {
+        this.currentTheme = current;
+        this.themeChangeEmitter.emit();
+    }
+    getTheme() {
+        return this.currentTheme;
     }
 }

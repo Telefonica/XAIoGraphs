@@ -8,13 +8,12 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { ctsFiles } from '../../../constants/csvFiles';
-import { distributionGraphStyle } from '../../../../assets/data';
-import { distributionGraphWidth } from '../../../../assets/data';
-import { distributionGraphHeight } from '../../../../assets/data';
+import { distributionGraphStyle, distributionGraphWidth, distributionGraphHeight } from '../themes/data';
 
 @Component({
     selector: 'app-data-dataset',
     templateUrl: './dataset.component.html',
+    styleUrls: ['../data.component.scss']
 })
 export class DataDatasetComponent implements OnInit {
 
@@ -105,10 +104,7 @@ export class DataDatasetComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    getDistributionHeaders(column: string) {
-        console.log(column);
-        console.log(this.csvDistribution[column].keys)
-    }
+    getDistributionHeaders(column: string) { }
 
 
 }

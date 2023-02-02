@@ -1,4 +1,4 @@
-export const featuresGraphStyle = [
+export const featuresGraphStyle0 = [
     {
         "stroke-color": "#DABDDE",
         "stroke-width": 0,
@@ -32,7 +32,7 @@ export const featuresGraphStyle = [
     }
 ];
 
-export const featuresImportanceTargetGraphStyle = [
+export const featuresImportanceTargetGraphStyle0 = [
     {
         "stroke-color": "#D07697",
         "stroke-width": 0,
@@ -42,7 +42,7 @@ export const featuresImportanceTargetGraphStyle = [
     }
 ];
 
-export const featuresFrecuencyTargetGraphStyle = [
+export const featuresFrecuencyTargetGraphStyle0 = [
     {
         "stroke-color": "#667989",
         "stroke-width": 0,
@@ -52,27 +52,27 @@ export const featuresFrecuencyTargetGraphStyle = [
     }
 ]
 
-export const distributionGraphStyle = [
+export const distributionGraphStyle0 = [
     {
         color: "#3F246D",
     }, {
-        color: "#CDC1E0",
+        color: "#5A3F87",
     }, {
         color: "#7B63A3",
     }, {
         color: "#A290C2",
     }, {
-        color: "#5A3F87",
+        color: "#CDC1E0",
     }
 ];
 
-export const distributionGraph3D = false;
-export const distributionGraphPieHole = 0.2;
+export const distributionGraph3D0 = false;
+export const distributionGraphPieHole0 = 0.2;
 
-export const nodeGraphStyle = [
+export const nodeGraphStyle0 = [
     "#D07697",
 ];
-export const edgeGraphStyle = [
+export const edgeGraphStyle0 = [
     "#CDC1E0",
     "#A290C2",
     "#7B63A3",

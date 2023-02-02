@@ -1,6 +1,14 @@
 <div fxFlex fxLayout="column" style="height: 100vh;">
-    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="start center" class="globalTitle">
+    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="space-between center" class="globalTitle">
         <label>Global explainability</label>
+        <div fxLayout="column" fxLayoutAlign="center center" class="globalTheme">
+            <label>Theme</label>
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+                <label>1</label>
+                <mat-slide-toggle [(ngModel)]="theme" (change)="changeTheme()"></mat-slide-toggle>
+                <label>2</label>
+            </div>
+        </div>
     </div>
     <div fxFlex fxLayout="column" fxLayoutGap="20px" class="globalBody">
         <div fxFlex fxLayout="row" fxLayoutGap="20px">
@@ -8,11 +16,13 @@
             <app-global-distribution fxFlex class="globalCard"></app-global-distribution>
         </div>
 
-        <app-global-target fxFlex class=""></app-global-target>
-
-        <div fxFlex fxLayout="row" fxLayoutGap="20px">
-            <app-global-target-graph fxFlex class="globalCard"></app-global-target-graph>
-            <app-global-target-features fxFlex class="globalCard"></app-global-target-features>
+        <div fxFlex fxLayout="column" fxLayoutGap="10px" class="globalCard">
+            <label class="globalFeatByTarget">Feature distribution by target</label>
+            <app-global-target fxFlex></app-global-target>
+            <div fxFlex fxLayout="row" fxLayoutGap="20px" style="padding: 0px 35px;">
+                <app-global-target-graph fxFlex class="globalCard"></app-global-target-graph>
+                <app-global-target-features fxFlex class="globalCard"></app-global-target-features>
+            </div>
         </div>
     </div>
 </div>

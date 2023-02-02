@@ -12,7 +12,7 @@ from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScal
 
 from xaiographs.common.constants import ID, TARGET, RCAT, RNUM
 from xaiographs.common.utils import xgprint
-from xaiographs.exgraph.explainer.explainer import Explainer
+from xaiographs.exgraph.explainer import Explainer
 
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
 CONT_COLUMN_NAMES = ['age', 'fare']

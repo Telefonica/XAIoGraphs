@@ -60,6 +60,7 @@ import { FeatureSeparationComponent } from './components/fairness/details/featur
 import { FeatureIndependenceComponent } from './components/fairness/details/feature-independence.component';
 import { FeatureCorrelationComponent } from './components/fairness/details/feature-correlation.component';
 import { LegendComponent } from './components/fairness/details/legend.component';
+import { LocalFilterComponent } from './components/local/details/filter.component';
 
 @NgModule({
     declarations: [
@@ -90,6 +91,7 @@ import { LegendComponent } from './components/fairness/details/legend.component'
         FeatureIndependenceComponent,
         FeatureCorrelationComponent,
         LegendComponent,
+        LocalFilterComponent,
     ],
     imports: [
         BrowserModule,
