@@ -50,12 +50,12 @@ FAIRNESS_SUFFICIENCY_COLS = [SENSITIVE_FEATURE, SENSITIVE_VALUE, TARGET_LABEL, S
 FAIRNESS_CORRELATIONS_COLS = [FEATURE_1, FEATURE_2, CORRELATION_VALUE, IS_CORRELATION_SENSIBLE]
 
 # FILE CONSTANTS
-FAIRNESS_CONFUSION_MATRIX_FILE = 'fairness_confusion_matrix.csv'
-FAIRNESS_HIGHEST_CORRELATION_FILE = 'fairness_highest_correlation.csv'
-FAIRNESS_INDEPENDENCE_FILE = 'fairness_independence.csv'
-FAIRNESS_SEPARATION_FILE = 'fairness_separation.csv'
-FAIRNESS_SUFFICIENCY_FILE = 'fairness_sufficiency.csv'
-FAIRNESS_SUMARIZE_CRITERIAS_FILE = 'fairness_sumarize_criterias.csv'
+FAIRNESS_CONFUSION_MATRIX_FILE = 'fairness_confusion_matrix.json'
+FAIRNESS_HIGHEST_CORRELATION_FILE = 'fairness_highest_correlation.json'
+FAIRNESS_INDEPENDENCE_FILE = 'fairness_independence.json'
+FAIRNESS_SEPARATION_FILE = 'fairness_separation.json'
+FAIRNESS_SUFFICIENCY_FILE = 'fairness_sufficiency.json'
+FAIRNESS_SUMARIZE_CRITERIAS_FILE = 'fairness_sumarize_criterias.json'
 
 # Warning message
 WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute fit_fairness() function to get results.'
@@ -80,21 +80,21 @@ class Fairness(object):
 
     Example:
             >>> import pandas as pd
-            >>> df = pd.DataFrame({'gender': ['MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN', 'MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN'],
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
             ...                   columns=['gender', 'y_true', 'y_predict'])
             >>> df
               gender y_true y_predict
-            0    MEN    YES       YES
-            1    MEN    YES       YES
+            0    MAN    YES       YES
+            1    MAN    YES       YES
             2  WOMAN     NO        NO
-            3    MEN     NO       YES
+            3    MAN     NO       YES
             4  WOMAN    YES        NO
-            5    MEN    YES        NO
-            6    MEN    YES       YES
+            5    MAN    YES        NO
+            6    MAN    YES       YES
             7  WOMAN    YES       YES
-            8    MEN     NO        NO
+            8    MAN     NO        NO
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
@@ -131,21 +131,21 @@ class Fairness(object):
 
         Example:
             >>> import pandas as pd
-            >>> df = pd.DataFrame({'gender': ['MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN', 'MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN'],
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
             ...                   columns=['gender', 'y_true', 'y_predict'])
             >>> df
               gender y_true y_predict
-            0    MEN    YES       YES
-            1    MEN    YES       YES
+            0    MAN    YES       YES
+            1    MAN    YES       YES
             2  WOMAN     NO        NO
-            3    MEN     NO       YES
+            3    MAN     NO       YES
             4  WOMAN    YES        NO
-            5    MEN    YES        NO
-            6    MEN    YES       YES
+            5    MAN    YES        NO
+            6    MAN    YES       YES
             7  WOMAN    YES       YES
-            8    MEN     NO        NO
+            8    MAN     NO        NO
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
@@ -170,21 +170,21 @@ class Fairness(object):
 
         Example:
             >>> import pandas as pd
-            >>> df = pd.DataFrame({'gender': ['MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN', 'MEN', 'MEN', 'WOMAN', 'MEN', 'WOMAN'],
+            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
             ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
             ...                   columns=['gender', 'y_true', 'y_predict'])
             >>> df
               gender y_true y_predict
-            0    MEN    YES       YES
-            1    MEN    YES       YES
+            0    MAN    YES       YES
+            1    MAN    YES       YES
             2  WOMAN     NO        NO
-            3    MEN     NO       YES
+            3    MAN     NO       YES
             4  WOMAN    YES        NO
-            5    MEN    YES        NO
-            6    MEN    YES       YES
+            5    MAN    YES        NO
+            6    MAN    YES       YES
             7  WOMAN    YES       YES
-            8    MEN     NO        NO
+            8    MAN     NO        NO
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
@@ -673,7 +673,7 @@ class Fairness(object):
         Detail calculations:
 
         .. math::
-            P(Y = 'YES' | A = 'MEN') = 4 / 6 = 0.66
+            P(Y = 'YES' | A = 'MAN') = 4 / 6 = 0.66
         .. math::
             P(Y = 'YES' | A = 'WOMAN') = 1 / 4 = 0.25
         .. math::
@@ -1138,33 +1138,32 @@ class Fairness(object):
         if not os.path.exists(self.__destination_path):
             os.mkdir(self.__destination_path)
 
-        # 1.- Confusion matrix "fairness_confusion_matrix.csv"
-        self.confusion_matrix.to_csv(os.path.join(self.__destination_path, FAIRNESS_CONFUSION_MATRIX_FILE),
-                                     index=True, header=True)
+        # 1.- Confusion matrix "fairness_confusion_matrix.json"
+        self.confusion_matrix.to_json(os.path.join(self.__destination_path, FAIRNESS_CONFUSION_MATRIX_FILE), 
+                                      orient='records')
 
         # 2.- Summary table:
-        #     For each of the criteria and features -> Score - Category_Score "fairness_sumarize_criterias.csv"
-        self.fairness_global_info.to_csv(os.path.join(self.__destination_path, FAIRNESS_SUMARIZE_CRITERIAS_FILE),
-                                         index=False, header=True)
+        #     For each of the criteria and features -> Score - Category_Score "fairness_sumarize_criterias.json"
+        self.fairness_global_info.to_json(os.path.join(self.__destination_path, FAIRNESS_SUMARIZE_CRITERIAS_FILE),
+                                          orient='records')
 
         # 3.- Independence criteria table:
-        #     For each Value of the features & targets -> Score - Category_Score "fairness_independence.csv"
-        self.independence_info.to_csv(os.path.join(self.__destination_path, FAIRNESS_INDEPENDENCE_FILE),
-                                      index=False, header=True)
+        #     For each Value of the features & targets -> Score - Category_Score "fairness_independence.json"
+        self.independence_info.to_json(os.path.join(self.__destination_path, FAIRNESS_INDEPENDENCE_FILE),
+                                       orient='records')
 
         # 4.- Separation criteria table:
-        #     For each Value of the features & targets -> Score - Category_Score "fairness_separation.csv"
-        self.separation_info.to_csv(os.path.join(self.__destination_path, FAIRNESS_SEPARATION_FILE),
-                                    index=False, header=True)
+        #     For each Value of the features & targets -> Score - Category_Score "fairness_separation.json"
+        self.separation_info.to_json(os.path.join(self.__destination_path, FAIRNESS_SEPARATION_FILE), orient='records')
 
         # 5.- Sufficiency criteria table:
-        #     For each Value of the features & targets -> Score - Category_Score "fairness_sufficiency.csv"
-        self.sufficiency_info.to_csv(os.path.join(self.__destination_path, FAIRNESS_SUFFICIENCY_FILE),
-                                     index=False, header=True)
+        #     For each Value of the features & targets -> Score - Category_Score "fairness_sufficiency.json"
+        self.sufficiency_info.to_json(os.path.join(self.__destination_path, FAIRNESS_SUFFICIENCY_FILE),
+                                      orient='records')
 
-        # 6.- List with pairs of highly correlated variables "fairness_highest_correlation.csv"
-        self.highest_correlation_features.to_csv(
-            os.path.join(self.__destination_path, FAIRNESS_HIGHEST_CORRELATION_FILE), index=False, header=True)
+        # 6.- List with pairs of highly correlated variables "fairness_highest_correlation.json"
+        self.highest_correlation_features.to_json(os.path.join(self.__destination_path,
+                                                               FAIRNESS_HIGHEST_CORRELATION_FILE), orient='records')
 
     def __fit_correlation_features(self, df: pd.DataFrame) -> None:
         """Function that calculates the correlation matrix. Set this information in "__correlation_matrix" attribute.
