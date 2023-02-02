@@ -65,13 +65,13 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
         + **embarked:** city of embarkation - {S: Southampton, C: Cherbourg, Q: Queenstown}
         + **class:** class in which the passenger was traveling - {1: first class, 2: second class, 3: third class}
         + **ticket_price:** discretized price that the passenger pays for the trip - {high, mid, low}
-        + **NO_SURVIVED:** probability [0,1] that the passenger will not survive. Calculated by a machine learning model
-        + **SURVIVED:** probability [0,1] that the passenger will survive. Calculated by a machine learning model
+        + **NO_SURVIVED:** probability [0,1] that the passenger will not survive. Calculated by ML model
+        + **SURVIVED:** probability [0,1] that the passenger will survive. Calculated by ML model
         + **y_true:** real target - {SURVIVED, NO_SURVIVED}
         + **y_predict:** machine learning model prediction - {SURVIVED, NO_SURVIVED}
 
-    :return: Tuple, pd.DataFrame with data, List[str] with features name columns,
-    List[str] with target names probabilities, str with GroundTruth, str with prediction ML model
+    :return: Tuple: 1) pd.DataFrame, with data, 2) List[str], with features name columns, \
+    3) List[str], with target names probabilities, 4) str, with GroundTruth, 5) str, with prediction ML model
 
     Example:
             >>> from xaiographs.datasets import load_titanic_discretized
@@ -83,7 +83,6 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
             2             2  female   Mrs    <12_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
             3             3    male    Mr  18_30_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
             4             4  female   Mrs  18_30_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
-
             >>> features_cols
             ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'pclass', 'ticket_price']
             >>> target_cols
