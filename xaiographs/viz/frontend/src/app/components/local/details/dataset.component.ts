@@ -6,7 +6,7 @@ import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { jsonFiles } from '../../../constants/jsonFiles';
 
 @Component({
     selector: 'app-local-dataset',
@@ -36,10 +36,10 @@ export class LocalDatasetComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this._apiReader.readLocalDataset({ fileName: ctsFiles.local_dataset_reliability }).subscribe({
+        this._apiReader.readJSON(jsonFiles.local_dataset_reliability ).subscribe({
             next: (response: any) => {
-                this.csvDataset = response.data;
-                this.displayedColumns = response.headers;
+                this.csvDataset = response;
+                this.displayedColumns = Object.keys(response[0]);
             },
             complete: () => {
                 this.currentID = this.csvDataset[0].id;

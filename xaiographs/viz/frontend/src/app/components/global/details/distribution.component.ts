@@ -6,7 +6,7 @@ import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { jsonFiles } from '../../../constants/jsonFiles';
 import { distributionGraphStyle0, distributionGraph3D0, distributionGraphPieHole0 } from '../themes/global0';
 import { distributionGraphStyle1, distributionGraph3D1, distributionGraphPieHole1 } from '../themes/global1';
 
@@ -43,13 +43,13 @@ export class GlobalDistributionComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this._apiReader.readCSV({ fileName: ctsFiles.global_target_distribution }).subscribe({
+        this._apiReader.readJSON(jsonFiles.global_target_distribution).subscribe({
             next: (response: any) => {
                 this.serviceResponse = response;
             },
             complete: () => {
-                if (this.serviceResponse.data.length > 0) {
-                    this.serviceResponse.data.sort((element1, element2) => parseInt(element2.count) - parseInt(element1.count));
+                if (this.serviceResponse.length > 0) {
+                    this.serviceResponse.sort((element1, element2) => parseInt(element2.count) - parseInt(element1.count));
                     this.prepareTheme();
                     this.initGraph();
                     this.createGraph();
@@ -97,11 +97,11 @@ export class GlobalDistributionComponent implements OnInit, OnDestroy {
             'Percentage',
             { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
         ];
-        const totalCount = this.serviceResponse.data.reduce((accumulator, target) => {
+        const totalCount = this.serviceResponse.reduce((accumulator, target) => {
             return accumulator + parseInt(target.count);
         }, 0);
 
-        this.serviceResponse.data.map((data: any) => {
+        this.serviceResponse.map((data: any) => {
             const count = parseInt(data.count);
 
             transformDataSet.push([

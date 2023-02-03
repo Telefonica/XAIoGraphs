@@ -1,3 +1,7 @@
-<div fxFlex fxLayout="column" fxLayoutGap="10px">
-    <label *ngFor="let correlation of listCorrelation">{{ correlation.feature_1 }} is highly correlated (Pearson={{ correlation.correlation_value }}) with the {{ correlation.feature_2 }} feature</label>
+<div fxFlex fxLayout="row" fxLayoutGap="10px" class="fairnessCard" *ngIf="listCorrelation.length > 0" fxLayoutAlign="start center">
+    <mat-icon>warning</mat-icon>
+    <label class="fairnessCorrelationTitle">Features correlation:</label>
+    <div fxFlex fxLayout="row" fxLayoutGap="10px">
+        <label *ngFor="let correlation of listCorrelation">{{ correlation.feature_1 }} is highly correlated (Pearson={{ correlation.correlation_value }}) with the {{ correlation.feature_2 }} feature</label>
+    </div>
 </div>

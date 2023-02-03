@@ -7,7 +7,7 @@ import { ChartType } from 'angular-google-charts';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { jsonFiles } from '../../../constants/jsonFiles';
 import { distributionGraphStyle, distributionGraphWidth, distributionGraphHeight } from '../themes/data';
 
 @Component({
@@ -18,11 +18,9 @@ import { distributionGraphStyle, distributionGraphWidth, distributionGraphHeight
 export class DataDatasetComponent implements OnInit {
 
     displayedColumns: string[] = []
-    totalHeaders: string[] = []
 
-    dataSource = new MatTableDataSource([]);
-    csvDataset: any;
-    csvDistribution: any;
+    jsonResponse: any[] = []
+    dataSource = new MatTableDataSource();
     display: boolean = false;
 
     type = ChartType.ColumnChart;
@@ -49,41 +47,13 @@ export class DataDatasetComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this._apiReader.listDatasetHeaders({ fileName: ctsFiles.local_dataset_reliability }).subscribe({
+        this._apiReader.readJSON(jsonFiles.local_dataset_reliability).subscribe({
             next: (response: any) => {
-                this.displayedColumns = response;
-                this.totalHeaders = response;
+                this.jsonResponse = response.map(({id, ...keepColumns}) => keepColumns)
             },
             complete: () => {
-                this.getData();
-            },
-            error: (err) => {
-                this._apiSnackBar.openSnackBar(JSON.stringify(err));
-            }
-        });
-    }
-
-    getData() {
-        const body = {
-            fileName: ctsFiles.local_dataset_reliability,
-            displayedColumns: this.displayedColumns,
-        }
-
-        this._apiReader.readDatasetSelected(body).subscribe({
-            next: (response: any) => {
-                this.csvDataset = response.data;
-
-                this.displayedColumns.forEach((header: any) => {
-                    if(header != 'id') {
-                        response.distribution[header].map((row: any, index: number) => {
-                            row.push(JSON.stringify(distributionGraphStyle[index % distributionGraphStyle.length]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';'));
-                        });
-                    }
-                });
-                this.csvDistribution = response.distribution;
-            },
-            complete: () => {
-                this.dataSource = new MatTableDataSource(this.csvDataset);
+                this.displayedColumns = Object.keys(this.jsonResponse[0]);
+                this.dataSource = new MatTableDataSource(this.jsonResponse);
                 this.setDataSourceAttributes();
                 this.display = true;
             },
@@ -92,6 +62,36 @@ export class DataDatasetComponent implements OnInit {
             }
         });
     }
+
+    // getData() {
+    //     const body = {
+    //         fileName: ctsFiles.local_dataset_reliability,
+    //         displayedColumns: this.displayedColumns,
+    //     }
+
+    //     this._apiReader.readDatasetSelected(body).subscribe({
+    //         next: (response: any) => {
+    //             this.csvDataset = response.data;
+
+    //             this.displayedColumns.forEach((header: any) => {
+    //                 if(header != 'id') {
+    //                     response.distribution[header].map((row: any, index: number) => {
+    //                         row.push(JSON.stringify(distributionGraphStyle[index % distributionGraphStyle.length]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';'));
+    //                     });
+    //                 }
+    //             });
+    //             this.csvDistribution = response.distribution;
+    //         },
+    //         complete: () => {
+    //             this.dataSource = new MatTableDataSource(this.csvDataset);
+    //             this.setDataSourceAttributes();
+    //             this.display = true;
+    //         },
+    //         error: (err) => {
+    //             this._apiSnackBar.openSnackBar(JSON.stringify(err));
+    //         }
+    //     });
+    // }
 
     applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue.trim().toLowerCase();

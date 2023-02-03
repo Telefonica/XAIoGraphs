@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReaderService } from 'src/app/services/reader.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 
-import { ctsFiles } from '../../../constants/csvFiles'
+import { jsonFiles } from '../../../constants/jsonFiles'
 
 import { DefIndependenceComponent } from '../definitions/independence.component';
 import { DefSeparationComponent } from '../definitions/separation.component';
@@ -27,19 +27,17 @@ export class CriteriasComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this._apiReader.readCSV({ fileName: ctsFiles.fairness_sumarize_criterias }).subscribe({
+        this._apiReader.readJSON(jsonFiles.fairness_sumarize_criterias).subscribe({
             next: (response: any) => {
-                this.listCriterias = response.data
-                this.headers = response.headers
-
+                this.listCriterias = response
+                this.headers = Object.keys(response[0])
+            },
+            complete: () => {
                 this.listCriterias.forEach((criteria: any) => {
                     criteria[this.headers[1]] = (parseFloat(criteria[this.headers[1]]) * 100).toFixed(2) + ' %'
                     criteria[this.headers[3]] = (parseFloat(criteria[this.headers[3]]) * 100).toFixed(2) + ' %'
                     criteria[this.headers[5]] = (parseFloat(criteria[this.headers[5]]) * 100).toFixed(2) + ' %'
                 })
-            },
-            complete: () => {
-
             },
             error: (err) => {
                 this._apiSnackBar.openSnackBar(JSON.stringify(err))

@@ -1,21 +1,23 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { jsonFiles } from '../../../constants/jsonFiles';
 
 @Component({
     selector: 'app-local-reason',
     templateUrl: './reason.component.html',
     styleUrls: ['../local.component.scss']
 })
-export class LocalReasonComponent implements OnDestroy {
+export class LocalReasonComponent implements OnInit, OnDestroy {
 
     currentTarget: any;
 
     targetSubscription: any;
+
+    reasonJson = []
 
     reasonWhy = '';
     display: boolean = false;
@@ -26,29 +28,33 @@ export class LocalReasonComponent implements OnDestroy {
         private _apiSnackBar: SnackbarService,
     ) {
         this.targetSubscription = this._apiEmitter.localTargetChangeEmitter.subscribe(() => {
-            this.getData();
+            this.filterData();
         });
     }
 
-    getData() {
-        this.currentTarget = this._apiEmitter.getLocalTarget();
-        this.reasonWhy = ''
-
-        const body = {
-            fileName: ctsFiles.local_reason_why,
-            target: this.currentTarget.id,
-        }
-
-        this._apiReader.readLocalReasonWhy(body).subscribe({
+    ngOnInit() {
+        this._apiReader.readJSON(jsonFiles.local_reason_why).subscribe({
             next: (response: any) => {
-                if (response.length > 0)
-                    this.reasonWhy = response[0].reason;
+                this.reasonJson = response
             },
-            complete: () => { },
+            complete: () => {
+                this.filterData();
+            },
             error: (err) => {
                 this._apiSnackBar.openSnackBar(JSON.stringify(err));
             }
         });
+    }
+
+    filterData() {
+        this.currentTarget = this._apiEmitter.getLocalTarget();
+        const reasonRow = this.reasonJson.filter((row: any) => {
+            return row.id == this.currentTarget.id
+        });
+
+        if(reasonRow.length > 0) {
+            this.reasonWhy = reasonRow[0]['reason']
+        }
     }
 
     ngOnDestroy(): void {

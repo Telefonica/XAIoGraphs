@@ -61,6 +61,7 @@ import { FeatureIndependenceComponent } from './components/fairness/details/feat
 import { FeatureCorrelationComponent } from './components/fairness/details/feature-correlation.component';
 import { LegendComponent } from './components/fairness/details/legend.component';
 import { LocalFilterComponent } from './components/local/details/filter.component';
+import { DatasetGraphComponent } from './components/data/details/graph.component';
 
 @NgModule({
     declarations: [
@@ -92,6 +93,7 @@ import { LocalFilterComponent } from './components/local/details/filter.componen
         FeatureCorrelationComponent,
         LegendComponent,
         LocalFilterComponent,
+        DatasetGraphComponent,
     ],
     imports: [
         BrowserModule,
