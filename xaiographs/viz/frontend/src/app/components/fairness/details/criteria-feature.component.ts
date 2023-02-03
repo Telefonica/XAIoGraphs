@@ -28,7 +28,7 @@ export class CriteriaFeatureComponent implements OnInit {
         this._apiReader.readJSON(jsonFiles.fairness_sumarize_criterias).subscribe({
             next: (response: any) => {
                 response.forEach(row => {
-                    this.listFeatures.push(row[ctsFairness.sensitive_value])
+                    this.listFeatures.push(row[ctsFairness.sensitive_feature])
                 });
             },
             complete: () => {

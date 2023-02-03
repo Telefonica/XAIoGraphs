@@ -31,6 +31,11 @@ export class CriteriasComponent implements OnInit {
             next: (response: any) => {
                 this.listCriterias = response
                 this.headers = Object.keys(response[0])
+                this.listCriterias.forEach((criteria: any) => {
+                    criteria[this.headers[2]] = criteria[this.headers[2]].replace('+', 'P')
+                    criteria[this.headers[4]] = criteria[this.headers[4]].replace('+', 'P')
+                    criteria[this.headers[6]] = criteria[this.headers[6]].replace('+', 'P')
+                })
             },
             complete: () => {
                 this.listCriterias.forEach((criteria: any) => {
@@ -60,7 +65,7 @@ export class CriteriasComponent implements OnInit {
         });
 
     }
-    openSufficience() {
+    openSufficiency() {
         this.dialog.open(DefSufficienceComponent, {
             width: '50%',
             height: '80%',

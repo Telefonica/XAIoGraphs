@@ -34,7 +34,7 @@ export class FeatureSufficienceComponent implements OnChanges {
         'score_D_value',
         'score_D_class',
     ]
-    moduleName: string = 'sufficience'
+    moduleName: string = 'sufficiency'
 
     @Input() currentFeature = '';
 

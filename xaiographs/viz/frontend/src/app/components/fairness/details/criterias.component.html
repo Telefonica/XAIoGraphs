@@ -16,27 +16,27 @@
         </mat-grid-tile>
         <mat-grid-tile>
             <div fxLayout="row" fxLayoutGap="5px" class="criterias_title" fxLayoutAlign="center center">
-                <label >Sufficience</label>
-                <mat-icon class="criterias_help" (click)="openSufficience()">help</mat-icon>
+                <label >Sufficiency</label>
+                <mat-icon class="criterias_help" (click)="openSufficiency()">help</mat-icon>
             </div>
         </mat-grid-tile>
         <ng-container *ngFor="let criteria of listCriterias">
             <mat-grid-tile><label class="criterias_feature">{{ criteria[headers[0]] }}</label></mat-grid-tile>
             <mat-grid-tile>
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[2]]">
-                    <label class="criterias_value_class">{{ criteria[headers[2]] }}</label>
+                    <label class="criterias_value_class">{{ criteria[headers[2]].replace('P','+') }}</label>
                     <label>{{ criteria[headers[1]] }}</label>
                 </div>
             </mat-grid-tile>
             <mat-grid-tile>
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[4]]">
-                    <label class="criterias_value_class">{{ criteria[headers[4]] }}</label>
+                    <label class="criterias_value_class">{{ criteria[headers[4]].replace('P','+') }}</label>
                     <label>{{ criteria[headers[3]] }}</label>
                 </div>
             </mat-grid-tile>
             <mat-grid-tile>
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[6]]">
-                    <label class="criterias_value_class">{{ criteria[headers[6]] }}</label>
+                    <label class="criterias_value_class">{{ criteria[headers[6]].replace('P','+') }}</label>
                     <label>{{ criteria[headers[5]] }}</label>
                 </div>
             </mat-grid-tile>

@@ -18,5 +18,5 @@ export const jsonFiles = {
     fairness_highest_correlation: 'fairness_highest_correlation.json',
     fairness_independence: 'fairness_independence.json',
     fairness_separation: 'fairness_separation.json',
-    fairness_sufficience: 'fairness_sufficience.json',
+    fairness_sufficiency: 'fairness_sufficiency.json',
 };
