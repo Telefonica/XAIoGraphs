@@ -5,7 +5,7 @@ import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { jsonFiles } from '../../../constants/jsonFiles';
 import { ctsGlobal } from '../../../constants/global';
 
 @Component({
@@ -31,7 +31,7 @@ export class GlobalTargetComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this._apiReader.readGlobalDescription({ fileName: ctsFiles.global_graph_description }).subscribe({
+        this._apiReader.readJSON(jsonFiles.global_graph_description).subscribe({
             next: (response: any) => {
                 response.forEach(description => {
                     this.listTarget.push(description.target)

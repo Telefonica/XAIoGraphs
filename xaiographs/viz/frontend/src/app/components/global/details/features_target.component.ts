@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
@@ -6,7 +6,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { ChartType } from 'angular-google-charts';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { jsonFiles } from '../../../constants/jsonFiles';
 import { featuresImportanceTargetGraphStyle0, featuresFrecuencyTargetGraphStyle0 } from '../themes/global0';
 import { featuresImportanceTargetGraphStyle1, featuresFrecuencyTargetGraphStyle1 } from '../themes/global1';
 
@@ -15,18 +15,19 @@ import { featuresImportanceTargetGraphStyle1, featuresFrecuencyTargetGraphStyle1
     templateUrl: './features_target.component.html',
     styleUrls: ['../global.component.scss']
 })
-export class GlobalFeaturesTargetComponent implements OnDestroy {
+export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
 
     currentTarget = '';
     currentFeatures = 0;
     currentFrecuency = 0;
 
-    themeSubscription:any;
+    themeSubscription: any;
     targetSubscription: any;
     featuresSubscription: any;
     frecuencySubscription: any;
 
-    serviceResponse: any;
+    serviceResponse = [];
+    dataSource = [];
 
     type = ChartType.BarChart;
     dataGraph: any[] = [];
@@ -43,13 +44,16 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
         private _apiSnackBar: SnackbarService,
     ) {
         this.targetSubscription = this._apiEmitter.globalTargetChangeEmitter.subscribe(() => {
-            this.getData();
+            this.filterData();
+            this.generateGraph();
         });
         this.featuresSubscription = this._apiEmitter.globalFeaturesChangeEmitter.subscribe(() => {
-            this.getData();
+            this.filterData();
+            this.generateGraph();
         });
         this.frecuencySubscription = this._apiEmitter.globalFrecuencyChangeEmitter.subscribe(() => {
-            this.getData();
+            this.filterData();
+            this.generateGraph();
         });
         this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
             this.prepareTheme();
@@ -58,20 +62,8 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
         });
     }
 
-    getData() {
-        this.currentTarget = this._apiEmitter.getGlobalTarget();
-        this.currentFeatures = this._apiEmitter.getGlobalFeatures();
-
-        this.currentFrecuency = this._apiEmitter.getGlobalFrecuency();
-
-        const bodyNodes = {
-            fileName: ctsFiles.global_graph_nodes,
-            target: this.currentTarget,
-            numFeatures: this.currentFeatures,
-            numFrecuency: this.currentFrecuency,
-        }
-
-        this._apiReader.readGlobalNodesWeights(bodyNodes).subscribe({
+    ngOnInit() {
+        this._apiReader.readJSON(jsonFiles.global_graph_nodes).subscribe({
             next: (response: any) => {
                 this.serviceResponse = response;
             },
@@ -79,6 +71,7 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
                 if (this.serviceResponse.length > 0) {
                     this.prepareTheme();
                     this.initGraph();
+                    this.filterData();
                     this.generateGraph();
                     this.displayGraph = true;
                 } else {
@@ -93,7 +86,7 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
     }
 
     prepareTheme() {
-        if(!this._apiEmitter.getTheme()) {
+        if (!this._apiEmitter.getTheme()) {
             this.featuresImportanceTargetGraphStyle = featuresImportanceTargetGraphStyle0
             this.featuresFrecuencyTargetGraphStyle = featuresFrecuencyTargetGraphStyle0
         } else {
@@ -107,7 +100,7 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
         this.options = {
             legend: 'none',
             bar: { groupWidth: '90%' },
-            chartArea:{right:20,top:20,width:'75%',height:'90%'},
+            chartArea: { right: 20, top: 20, width: '75%', height: '90%' },
             series: {
                 0: { targetAxisIndex: 0 },
                 1: { targetAxisIndex: 1 }
@@ -118,6 +111,17 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
             },
             tooltip: { type: 'string', isHtml: true },
         };
+    }
+
+    filterData() {
+        this.currentTarget = this._apiEmitter.getGlobalTarget();
+        this.currentFeatures = this._apiEmitter.getGlobalFeatures();
+        this.currentFrecuency = this._apiEmitter.getGlobalFrecuency();
+
+        this.dataSource = this.serviceResponse.filter((row: any) => {
+            return row.target == this.currentTarget
+                && parseInt(row.node_name_ratio_rank) <= this.currentFrecuency;
+        }).slice(0, this.currentFeatures);
     }
 
     generateGraph() {
@@ -133,7 +137,7 @@ export class GlobalFeaturesTargetComponent implements OnDestroy {
             { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
         ];
 
-        this.serviceResponse.forEach((data: any) => {
+        this.dataSource.forEach((data: any) => {
             const importance = parseFloat(data.node_importance);
             const count = parseInt(data.node_count);
             const frecuency = parseFloat(data.node_name_ratio);

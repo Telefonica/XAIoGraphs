@@ -6,7 +6,7 @@ import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
-import { ctsFiles } from '../../../constants/csvFiles';
+import { jsonFiles } from '../../../constants/jsonFiles';
 import { featuresGraphStyle0 } from '../themes/global0';
 import { featuresGraphStyle1 } from '../themes/global1';
 
@@ -41,12 +41,12 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this._apiReader.readCSV({ fileName: ctsFiles.global_explainability }).subscribe({
+        this._apiReader.readJSON(jsonFiles.global_explainability).subscribe({
             next: (response: any) => {
                 this.serviceResponse = response;
             },
             complete: () => {
-                if (this.serviceResponse.data.length > 0) {
+                if (this.serviceResponse.length > 0) {
                     this.prepareTheme();
                     this.initGraph();
                     this.createGraph();
@@ -90,7 +90,7 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
             { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
         ];
 
-        this.serviceResponse.data.map((node: any, index: number) => {
+        this.serviceResponse.map((node: any) => {
             const weight = parseFloat(node.feature_weight);
             const importance = parseFloat(node.feature_importance);
 

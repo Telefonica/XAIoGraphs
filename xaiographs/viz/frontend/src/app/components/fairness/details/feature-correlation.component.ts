@@ -3,7 +3,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { ReaderService } from 'src/app/services/reader.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 
-import { ctsFiles } from '../../../constants/csvFiles'
+import { jsonFiles } from '../../../constants/jsonFiles'
 
 @Component({
     selector: 'app-feature-correlation',
@@ -13,6 +13,7 @@ import { ctsFiles } from '../../../constants/csvFiles'
 export class FeatureCorrelationComponent implements OnChanges {
 
     listCorrelation: any[] = []
+    jsonResponse: any[] = []
 
     @Input() currentFeature = '';
 
@@ -24,21 +25,23 @@ export class FeatureCorrelationComponent implements OnChanges {
     ngOnChanges(): void {
         this.listCorrelation = []
         if (this.currentFeature) {
-            this._apiReader.readFairnessCorrelation({
-                fileName: ctsFiles.fairness_highest_correlation,
-                feature: this.currentFeature,
-            }).subscribe({
+            this._apiReader.readJSON(jsonFiles.fairness_highest_correlation).subscribe({
                 next: (response: any) => {
-                    this.listCorrelation = response.map((node: any) => {
+                    this.jsonResponse = response.filter((row: any) => {
+                        return row.feature_1 == this.currentFeature
+                            || row.feature_2 == this.currentFeature
+                    })
+                },
+                complete: () => {
+                    this.listCorrelation = this.jsonResponse.map((node: any) => {
                         node.correlation_value = parseFloat(node.correlation_value).toFixed(2)
-                        if(node.feature_1 != this.currentFeature) {
+                        if (node.feature_1 != this.currentFeature) {
                             node.feature_2 = node.feature_1
                             node.feature_1 = this.currentFeature
                         }
                         return node
                     });
                 },
-                complete: () => { },
                 error: (err) => {
                     this._apiSnackBar.openSnackBar(JSON.stringify(err))
                 }
