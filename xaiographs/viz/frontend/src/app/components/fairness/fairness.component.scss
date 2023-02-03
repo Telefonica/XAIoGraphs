@@ -30,6 +30,12 @@
     border-bottom: 1px solid gray;
 }
 
+.fairnessCorrelationTitle {
+    @extend .fontGrey5;
+    @extend .fontBold;
+    font-size: 16px;
+}
+
 .criterias_value {
     width: 100%;
     padding: 15px;

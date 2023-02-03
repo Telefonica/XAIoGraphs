@@ -1,7 +1,9 @@
 <div fxFlex fxLayout="column" fxLayoutGap="10px" class="localDataset">
     <table fxFlex mat-table [dataSource]="dataSource" matSort>
         <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <label *ngIf="column != 'id'">{{ column }}</label>
+            </th>
             <td mat-cell *matCellDef="let row">
                 <label *ngIf="column != 'id'">{{ row[column] }}</label>
                 <div *ngIf="column == 'id'">
