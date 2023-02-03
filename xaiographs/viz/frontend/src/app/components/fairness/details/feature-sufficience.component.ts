@@ -19,21 +19,7 @@ export class FeatureSufficienceComponent implements OnChanges {
 
     listData: any[] = []
     jsonResponse: any = []
-    headers: string[] = [
-        'sensitive_value',
-        'score_A',
-        'score_A_value',
-        'score_A_class',
-        'score_B',
-        'score_B_value',
-        'score_B_class',
-        'score_C',
-        'score_C_value',
-        'score_C_class',
-        'score_D',
-        'score_D_value',
-        'score_D_class',
-    ]
+    headers: string[] = []
     moduleName: string = 'sufficiency'
 
     @Input() currentFeature = '';
@@ -56,21 +42,12 @@ export class FeatureSufficienceComponent implements OnChanges {
                 },
                 complete: () => {
                     this.jsonResponse.forEach(element => {
+                        if(this.headers.indexOf(element.target_label) < 0) {
+                            this.headers.push(element.target_label)
+                        }
                         if (!dataDict[element.sensitive_value]) {
                             dataDict[element.sensitive_value] = {
-                                sensitive_value: element.sensitive_value,
-                                score_A: '',
-                                score_A_value: 0,
-                                score_A_class: '',
-                                score_B: '',
-                                score_B_value: 0,
-                                score_B_class: '',
-                                score_C: '',
-                                score_C_value: 0,
-                                score_C_class: '',
-                                score_D: '',
-                                score_D_value: 0,
-                                score_D_class: '',
+                                sensitive_value: element.sensitive_value
                             }
                         }
                         dataDict[element.sensitive_value]['score_' + element.target_label] = element[this.moduleName + '_category']
