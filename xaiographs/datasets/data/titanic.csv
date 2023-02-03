@@ -1,4 +1,4 @@
-passenger_id,gender,title,age,family_size,is_alone,embarked,class,ticket_price,survived
+id,gender,title,age,family_size,is_alone,embarked,class,ticket_price,survived
 0,female,Mrs,29.0,0,1,S,1,211.3375,1
 1,male,Mr,0.9167,3,0,S,1,151.55,1
 2,female,Mrs,2.0,3,0,S,1,151.55,0

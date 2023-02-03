@@ -14,7 +14,7 @@ class DatasetsUnitTest(unittest.TestCase):
     def load_titanic_unit_test():
         """ Test: Method to load titanic dataset
         """
-        df_expected = pd.DataFrame({'passenger_id': [0, 1, 2],
+        df_expected = pd.DataFrame({'id': [0, 1, 2],
                                     'gender': ['female', 'male', 'female'],
                                     'title': ['Mrs', 'Mr', 'Mrs'],
                                     'age': [29.0, 0.9167, 2.0],
@@ -24,7 +24,7 @@ class DatasetsUnitTest(unittest.TestCase):
                                     'class': [1, 1, 1],
                                     'ticket_price': [211.3375, 151.55, 151.55],
                                     'survived': [1, 1, 0]},
-                                   columns=['passenger_id', 'gender', 'title', 'age', 'family_size', 'is_alone',
+                                   columns=['id', 'gender', 'title', 'age', 'family_size', 'is_alone',
                                             'embarked', 'class', 'ticket_price', 'survived'])
         df_dataset = load_titanic()
         pd.testing.assert_frame_equal(df_dataset.head(3), df_expected)
@@ -32,7 +32,7 @@ class DatasetsUnitTest(unittest.TestCase):
     def load_titanic_discretized_unit_test(self):
         """ Test: Method to load titanic dataset discretized
         """
-        df_expected = pd.DataFrame({'passenger_id': [0, 1, 2],
+        df_expected = pd.DataFrame({'id': [0, 1, 2],
                                     'gender': ['female', 'male', 'female'],
                                     'title': ['Mrs', 'Mr', 'Mrs'],
                                     'age': ['18_30_years', '<12_years', '<12_years'],
@@ -45,7 +45,7 @@ class DatasetsUnitTest(unittest.TestCase):
                                     'SURVIVED': [1, 1, 0],
                                     'y_true': ['SURVIVED', 'SURVIVED', 'NO_SURVIVED'],
                                     'y_predict': ['SURVIVED', 'SURVIVED', 'NO_SURVIVED']},
-                                   columns=['passenger_id', 'gender', 'title', 'age', 'family_size', 'is_alone',
+                                   columns=['id', 'gender', 'title', 'age', 'family_size', 'is_alone',
                                             'embarked', 'class', 'ticket_price', 'NO_SURVIVED', 'SURVIVED', 'y_true',
                                             'y_predict'])
 

@@ -1,4 +1,4 @@
-passenger_id,gender,title,age,family_size,is_alone,embarked,class,ticket_price,NO_SURVIVED,SURVIVED,y_true,y_predict
+id,gender,title,age,family_size,is_alone,embarked,class,ticket_price,NO_SURVIVED,SURVIVED,y_true,y_predict
 0,female,Mrs,18_30_years,1,1,S,1,High,0,1,SURVIVED,SURVIVED
 1,male,Mr,<12_years,3-5,0,S,1,High,0,1,SURVIVED,SURVIVED
 2,female,Mrs,<12_years,3-5,0,S,1,High,1,0,NO_SURVIVED,NO_SURVIVED

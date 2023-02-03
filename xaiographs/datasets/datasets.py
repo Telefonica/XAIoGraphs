@@ -6,7 +6,7 @@ import pandas as pd
 # Titanic Dataset
 TITANIC_PATH = 'data/titanic.csv'
 TITANIC_DISCRETIZED_PATH = 'data/titanic_discretized.csv'
-FEATURE_COLS_TITANIC = ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'pclass', 'ticket_price']
+FEATURE_COLS_TITANIC = ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
 TARGET_COLS_TITANIC = ['NO_SURVIVED', 'SURVIVED']
 
 # All datasets that include predictions must have a column with the prediction and another with its real target
@@ -20,7 +20,7 @@ SRC_DIR = os.path.dirname(__file__)
 def load_titanic() -> pd.DataFrame:
     """Function returns a dataframe with the Titanic dataset with the following Features
 
-        + **passenger_id:** unique passenger identifier
+        + **id:** unique passenger identifier
         + **gender:** passenger gender
         + **title:** passenger title
         + **age:** passenger age
@@ -37,12 +37,12 @@ def load_titanic() -> pd.DataFrame:
             >>> from xaiographs.datasets import load_titanic
             >>> df_dataset = load_titanic()
             >>> df_dataset.head(5)
-               passenger_id  gender title      age  family_size  is_alone embarked  class  ticket_price  survived
-            0             0  female   Mrs  29.0000            0         1        S      1      211.3375         1
-            1             1    male    Mr   0.9167            3         0        S      1      151.5500         1
-            2             2  female   Mrs   2.0000            3         0        S      1      151.5500         0
-            3             3    male    Mr  30.0000            3         0        S      1      151.5500         0
-            4             4  female   Mrs  25.0000            3         0        S      1      151.5500         0
+               id  gender title      age  family_size  is_alone embarked  class  ticket_price  survived
+            0   0  female   Mrs  29.0000            0         1        S      1      211.3375         1
+            1   1    male    Mr   0.9167            3         0        S      1      151.5500         1
+            2   2  female   Mrs   2.0000            3         0        S      1      151.5500         0
+            3   3    male    Mr  30.0000            3         0        S      1      151.5500         0
+            4   4  female   Mrs  25.0000            3         0        S      1      151.5500         0
         """
     return pd.read_csv(os.path.join(SRC_DIR, TITANIC_PATH))
 
@@ -56,7 +56,7 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
     To test the Fairness module, return the name of columns that contain the GroundTruth and ML model prediction. \
     Information on the dataset columns with the values they can take is shown below:
 
-        + **passenger_id:** unique passenger identifier
+        + **id:** unique passenger identifier
         + **gender:** passenger gender - {male, female}
         + **title:** passenger title - {Mrs, Mr, rare}
         + **age:** passenger age discretized - {<12_years, 12_18_years, 18_30_years, 30_60_years, >60_years}
@@ -77,14 +77,14 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_dataset, features_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> df_dataset.head(5)
-               passenger_id  gender title          age family_size  is_alone embarked  class ticket_price  NO_SURVIVED  SURVIVED       y_true    y_predict
-            0             0  female   Mrs  18_30_years           1         1        S      1         High            0         1     SURVIVED     SURVIVED
-            1             1    male    Mr    <12_years         3-5         0        S      1         High            0         1     SURVIVED     SURVIVED
-            2             2  female   Mrs    <12_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
-            3             3    male    Mr  18_30_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
-            4             4  female   Mrs  18_30_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
+               id  gender title          age family_size  is_alone embarked  class ticket_price  NO_SURVIVED  SURVIVED       y_true    y_predict
+            0   0  female   Mrs  18_30_years           1         1        S      1         High            0         1     SURVIVED     SURVIVED
+            1   1    male    Mr    <12_years         3-5         0        S      1         High            0         1     SURVIVED     SURVIVED
+            2   2  female   Mrs    <12_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
+            3   3    male    Mr  18_30_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
+            4   4  female   Mrs  18_30_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
             >>> features_cols
-            ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'pclass', 'ticket_price']
+            ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
             >>> target_cols
             ['NO_SURVIVED', 'SURVIVED']
             >>> y_true
