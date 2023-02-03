@@ -33,8 +33,10 @@ export class ConfMatrixComponent implements OnInit {
     ngOnInit(): void {
         this._apiReader.readJSON(jsonFiles.fairness_confusion_matrix).subscribe({
             next: (response: any) => {
-                this.listLabels = Object.keys(response[0]).splice(1)
-                this.dataSource = response
+                this.listLabels = Object.keys(response[0])
+                response.forEach((row: any, index) => {
+                    this.dataSource.push(Object.assign({[ctsFairness.confMatrixIndex] : this.listLabels[index]}, row))
+                });
             },
             complete: () => {
                 this.listLabels.forEach((label: string) => {
