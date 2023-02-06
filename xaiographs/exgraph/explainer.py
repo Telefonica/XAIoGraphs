@@ -1,9 +1,8 @@
-import os
 from typing import List, Tuple
 
 import pandas as pd
 
-from xaiographs.common.constants import ID, TARGET
+from xaiographs.common.constants import ID
 from xaiographs.common.utils import FeaturesInfo, TargetInfo, get_features_info, get_target_info, sample_by_target, \
     xgprint
 from xaiographs.exgraph.exporter import Exporter
@@ -11,11 +10,6 @@ from xaiographs.exgraph.feature_selector import FeatureSelector
 from xaiographs.exgraph.importance.importance_calculator import ImportanceCalculator
 from xaiographs.exgraph.importance.importance_calculator_factory import ImportanceCalculatorFactory
 from xaiographs.exgraph.stats_calculator import StatsCalculator
-
-# CONSTANTS
-DISTANCE = 'distance'
-FEATURE = 'feature'
-RANK = 'rank'
 
 # Warning message
 WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute explain() function to get results.'
@@ -43,48 +37,180 @@ class Explainer(object):
         :param verbose:                  Verbosity level, where any value greater than 0 means the message is printed
 
         """
+        self.__global_explainability = None
+        self.__global_target_feature_value_explainability = None
+        self.__global_target_explainability = None
         self.__top_features = list()
         self.__top_features_by_target = dict()
-        self.df = dataset
-        self.path = destination_path
-        self.engine = importance_engine
-        self.number_of_features = number_of_features
-        self.verbose = verbose
+        self.__df = dataset
+        self.__path = destination_path
+        self.__engine = importance_engine
+        self.__number_of_features = number_of_features
+        self.__verbose = verbose
+
+    @property
+    def global_explainability(self):
+        """
+        Property that returns all the features to be explained, ranked by their global importance. Prior to this,
+        the mean of each feature importance for each target is computed. Then the targets probabilities are computed
+        and each of the importance values previously obtained, are multiplied by their corresponding probability for
+        each target. Finally, the resulting values for each feature (one value per target) are averaged, so a single
+        number representing each feature importance is obtained.
+        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+
+
+        :return: pd.DataFrame, containing each feature ranked by its global importance
+        """
+        if self.__global_explainability is None:
+            print(WARN_MSG.format('\"global_explainability\"'))
+        else:
+            return self.__global_explainability
+
+    @property
+    def global_target_explainability(self):
+        """
+        Property that returns all the features to be explained, ranked by their global importance by target value. This
+        is achieved by computing the mean of each feature importance for each of the top1 targets.
+        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+
+
+        :return: pd.DataFrame, containing each feature ranked by its global importance by target value
+        """
+        if self.__global_target_explainability is None:
+            print(WARN_MSG.format('\"global_target_explainability\"'))
+        else:
+            return self.__global_target_explainability
+
+    @property
+    def global_target_feature_value_explainability(self):
+        """
+        Property that, for each target value, returns all the pairs feature-value ranked by their global importance.
+        This is achieved by computing the mean of the importance/s of each feature-value pair for all those samples
+        whose top1 target matches the target value being processed. Again, it's important to remark that this is done
+        for each possible target value.
+        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+
+        :return: pd.DataFrame, containing for each target value all the feature-value pairs appearing in all those
+                 samples whose top1 target is equal to the target value being processed. Feature-value pair importance
+                 is computed by averaging the importance of all the occurrences of that feature-value pair linked to
+                 the target value being processed
+        """
+        if self.__global_target_feature_value_explainability is None:
+            print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
+        else:
+            return self.__global_target_feature_value_explainability
 
     @property
     def top_features(self):
+        """
+        Property that returns all the features ranked by the `FeatureSelector`. Ranking is calculated as follows:
+
+         - For each target value and for all the features, two histograms are calculated per feature. The first one
+         considering the input pandas DataFrame filtered by the target value and the second one considering the opposite
+        (DataFrame filtered by the absence of target value)
+         - Modified Jensen Shannon distance (see below for details) is calculated between the resulting two
+         distributions
+         - Once all distances have been computed for all the features for a given target value, they're ranked, so that
+         the larger the distance, the higher the rank
+         - Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with
+         the largest aggregated rank will rank the first in the top K features (note that when talking about ranks,
+         1 is greater than 2)
+         If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+
+        Modified Jensen Shannon distance calculation:
+         - The formula can be found
+        `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_
+         - However the used formula is a modified version which returns a four element numpy array:
+             + First element replaces the square root by the square root of the median
+             + Second element replaces the square root by the square root of the mean
+             + Third element replaces the square root by the square root of the max
+             + Fourth element replaces the square root by the square root of the sum
+         - An numpy array as explained above will be returned per feature and all of them stacked up becoming a
+        `number_of_features x 4` matrix
+         - Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding
+         column
+         - For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a
+         vector containing one element per feature
+         - Finally each element is normalized by dividing it by the sum of all the elements. These are the distances
+         taken into account to compute the rank so that the higher the distance the more discriminative the feature
+         is considered, thus, the more interesting from the predictive point of view. The feature with the highest
+         distance will be ranked first while the feature with the smallest distance will be ranked last
+         - A vector like the one described in the step above will be obtained for each target value, this means that
+         a ranking will be obtained for each target value
+         - In order to obtain a final ranking, partial ranks per target value are added for each feature, so that,
+         the higher the rank sum for each feature, the less relevant it will be considered
+
+        :return: pd.DataFrame, with all the features ranked by the `FeatureSelector`
+        """
         if self.__top_features is None:
             print(WARN_MSG.format('\"top_features\"'))
         else:
-            return pd.DataFrame(zip(self.__top_features, list(range(1, len(self.__top_features) + 1))),
-                                columns=[FEATURE, RANK])
+            return self.__top_features
 
     @property
     def top_features_by_target(self):
+        """
+        Property that returns all the features ranked by the "FeatureSelector". Ranking is calculated as follows:
+
+         - For each target value and for all the features, two histograms are calculated per feature. The first one
+         considering the input pandas DataFrame filtered by the target value and the second one considering the opposite
+        (DataFrame filtered by the absence of target value)
+         - Modified Jensen Shannon distance (see below for details) is calculated between the resulting two
+         distributions
+         - Once all distances have been computed for all the features for a given target value, they're ranked, so that
+         the larger the distance, the higher the rank
+         - Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with
+         the largest aggregated rank will rank the first in the top K features (note that when talking about ranks,
+         1 is greater than 2)
+         If the method "explain()" from the "Explainer" class has not been executed, it will return a warning message.
+
+        Modified Jensen Shannon distance calculation:
+         - The formula can be found
+        `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_
+         - However the used formula is a modified version which returns a four element numpy array:
+             + First element replaces the square root by the square root of the median
+             + Second element replaces the square root by the square root of the mean
+             + Third element replaces the square root by the square root of the max
+             + Fourth element replaces the square root by the square root of the sum
+         - An numpy array as explained above will be returned per feature and all of them stacked up becoming a
+        `number_of_features x 4` matrix
+         - Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding
+         column
+         - For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a
+         vector containing one element per feature
+         - Finally each element is normalized by dividing it by the sum of all the elements. These are the distances
+         taken into account to compute the rank so that the higher the distance the more discriminative the feature
+         is considered, thus, the more interesting from the predictive point of view. The feature with the highest
+         distance will be ranked first while the feature with the smallest distance will be ranked last
+         - A vector like the one described in the step above will be obtained for each target value, this means that
+         a ranking will be obtained for each target value
+
+
+        :return: pd.DataFrame, providing for each feature its rank per target calculated by the "FeatureSelector".
+                 Furthermore, the distance for each feature and target value, is provided along with its rank
+        """
         if self.__top_features_by_target is None:
             print(WARN_MSG.format('\"top_features_by_target\"'))
         else:
-            return pd.DataFrame(
-                [[target] + list(fd) for target, feat_dist in self.__top_features_by_target.items() for fd in
-                 feat_dist], columns=[TARGET, FEATURE, DISTANCE])
+            return self.__top_features_by_target
 
     def __get_common_info(self, feature_cols: List[str], target_cols: List[str]) -> Tuple[FeaturesInfo, TargetInfo]:
         """
         This function orchestrates the generation of both, features columns information and target information
 
-        :param feature_cols: List of strings containing the column names for the features
-        :param target_cols:  List of strings containing the possible targets
-        :return:             NamedTuple containing all the feature column names lists which will be used all through the
-                             execution flow and another NamedTuple containing target related info
+        :param feature_cols: List of strings, containing the column names for the features
+        :param target_cols:  List of strings, containing the possible targets
+        :return:             NamedTuple, containing all the feature column names lists which will be used all through
+                             the execution flow and another NamedTuple containing target related info
         """
 
-        features_info = get_features_info(df=self.df, feature_cols=feature_cols, target_cols=target_cols)
-        target_info = get_target_info(df=self.df, target_cols=target_cols)
+        features_info = get_features_info(df=self.__df, feature_cols=feature_cols, target_cols=target_cols)
+        target_info = get_target_info(df=self.__df, target_cols=target_cols)
 
         return features_info, target_info
 
     def explain(self, feature_cols: List[str], target_cols: List[str], num_samples_local_expl: int = 100,
-                num_samples_global_expl: int = 50000, batch_size_expl: int = 5000):
+                num_samples_global_expl: int = 50000, batch_size_expl: int = 5000, train_stratify: bool = True):
         if num_samples_global_expl < num_samples_local_expl:
             print('ERROR: num_samples_global_expl ({}) < num_samples_local_exp ({}): Number of samples for global '
                   'explainability must be larger than the number of samples for local explainability'
@@ -97,34 +223,31 @@ class Explainer(object):
         features_info, target_info = self.__get_common_info(feature_cols=feature_cols, target_cols=target_cols)
 
         # Feature selector is instantiated
-        selector = FeatureSelector(df=self.df, feature_cols=features_info.feature_columns, target_info=target_info,
-                                   number_of_features=self.number_of_features, verbose=self.verbose)
+        selector = FeatureSelector(df=self.__df, feature_cols=features_info.feature_columns, target_info=target_info,
+                                   number_of_features=self.__number_of_features, verbose=self.__verbose)
 
         # Then it's used to select the top K features
         topk_features = selector.select_topk()
-        print(selector.top_features)
-        print(selector.top_features_by_target)
-
         self.__top_features = selector.top_features
         self.__top_features_by_target = selector.top_features_by_target
 
         # Dataset must be rebuilt by selecting the topk features, the ID and the target columns
-        self.df = self.df[[ID] + topk_features + target_cols]
+        self.__df = self.__df[[ID] + topk_features + target_cols]
 
         # Since feature columns have changed, information related to features must be generated again
-        features_info = get_features_info(df=self.df, feature_cols=topk_features, target_cols=target_cols)
+        features_info = get_features_info(df=self.__df, feature_cols=topk_features, target_cols=target_cols)
 
         # Computations have been split in two types: statistics calculation and importance calculation
         #   An ImportanceCalculator object is used to compute importance values
         imp_calc_factory = ImportanceCalculatorFactory()
-        importance_calculator = imp_calc_factory.build_importance_calculator(self.engine,
+        importance_calculator = imp_calc_factory.build_importance_calculator(name=self.__engine,
                                                                              explainer_params={},
                                                                              feature_cols=features_info.feature_columns,
                                                                              target_info=target_info,
-                                                                             train_stratify=True,
-                                                                             verbose=self.verbose)
+                                                                             train_stratify=train_stratify,
+                                                                             verbose=self.__verbose)
         top1_importance_features, global_explainability, global_nodes_importance, df_explanation_global = (
-            importance_calculator.calculate_importance(df=self.df, features_info=features_info,
+            importance_calculator.calculate_importance(df=self.__df, features_info=features_info,
                                                        num_samples=num_samples_global_expl, batch_size=batch_size_expl))
 
         # Here, the row IDs to be sampled for local explanation are generated. A sample ids mask will be used for id
@@ -138,7 +261,7 @@ class Explainer(object):
 
         # Once global explanation related information is calculated. The explanation DataFrame is sampled, so that only
         # some rows will be taken into account when generating the local output for visualization
-        xgprint(self.verbose, 'INFO:     Sampling the dataset to be locally explained: {} samples will be used ...'.
+        xgprint(self.__verbose, 'INFO:     Sampling the dataset to be locally explained: {} samples will be used ...'.
                 format(num_samples_local_expl))
         df_explanation_sample = ImportanceCalculator.sample_explanation(df_explanation=df_explanation_global,
                                                                         sample_ids_mask_2_explain=sample_ids_mask)
@@ -149,13 +272,8 @@ class Explainer(object):
                                 feature_cols=features_info.feature_columns,
                                 float_feature_cols=features_info.float_feature_columns,
                                 target_cols=target_info.target_columns,
-                                sample_ids_mask=sample_ids_mask, sample_ids=sample_ids, verbose=self.verbose)
+                                sample_ids_mask=sample_ids_mask, sample_ids=sample_ids, verbose=self.__verbose)
         edges_stats, nodes_stats, target_distribution = stats.calculate_stats()
-
-        # Sample reason why
-        # TODO: Aquí iría la parte del why
-        df_why = pd.read_csv(filepath_or_buffer=os.path.join(self.path, 'reason_why_devrec100k.csv'))
-        df_reason_why = df_why[df_why[ID].isin(list(map(int, sample_ids)))]
 
         # Exporter takes care of the following tasks:
         #   Mixing calculated statistics and calculated importance when needed
@@ -163,9 +281,11 @@ class Explainer(object):
         #   Persisting results
         # TODO: Al igual que un hipotético fichero con IDs, o un número de samples...habría que meter como parámetro
         #  el path donde se quieren guardar los ficheros
-        exporter = Exporter(df_explanation_sample=df_explanation_sample, path=self.path, verbose=self.verbose)
+        exporter = Exporter(df_explanation_sample=df_explanation_sample, path=self.__path, verbose=self.__verbose)
         exporter.export(features_info=features_info, target_info=target_info, sample_ids_mask=sample_ids_mask,
                         global_target_explainability=top1_importance_features,
-                        global_explainability=global_explainability,
-                        global_nodes_importance=global_nodes_importance, edges_info=edges_stats, nodes_info=nodes_stats,
-                        target_distribution=target_distribution, reason_why=df_reason_why)
+                        global_explainability=global_explainability, global_nodes_importance=global_nodes_importance,
+                        edges_info=edges_stats, nodes_info=nodes_stats, target_distribution=target_distribution)
+        exporter.global_target_explainability
+        exporter.global_explainability
+        exporter.global_target_feature_value_explainability

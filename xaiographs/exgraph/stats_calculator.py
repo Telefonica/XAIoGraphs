@@ -4,9 +4,15 @@ from typing import Any, List, NamedTuple, Tuple
 import numpy as np
 import pandas as pd
 
-from xaiographs.common.constants import COUNT, FEATURE_NAME, ID, NODE_1, NODE_2, NODE_COUNT, NODE_NAME, \
-    NODE_NAME_RATIO, NODE_NAME_RATIO_RANK, TARGET, TOTAL_COUNT
+from xaiographs.common.constants import COUNT, FEATURE_NAME, ID, NODE_NAME, NODE_NAME_RATIO, TARGET
 from xaiographs.common.utils import filter_by_ids, xgprint
+
+# CONSTANTS
+NODE_1 = 'node_1'
+NODE_2 = 'node_2'
+NODE_COUNT = 'node_count'
+NODE_NAME_RATIO_RANK = 'node_name_ratio_rank'
+TOTAL_COUNT = 'total_count'
 
 
 class StatsResults(NamedTuple):
@@ -27,25 +33,25 @@ class StatsCalculator(object):
         """
         Constructor method for StatsCalculator
 
-        :param df:                  Pandas DataFrame containing the provided dataset
-        :param top1_targets:        Numpy array containing the top1_target for each row
-        :param feature_cols:        List of strings containing the column names for the features
-        :param float_feature_cols:  List of strings containing the column names for the float type features
-        :param sample_ids_mask:     Numpy array containing boolean values which will be used to filter any given
+        :param df:                  Pandas DataFrame, containing the provided dataset
+        :param top1_targets:        Numpy array, containing the top1_target for each row
+        :param feature_cols:        List of strings, containing the column names for the features
+        :param float_feature_cols:  List of strings, containing the column names for the float type features
+        :param sample_ids_mask:     Numpy array, containing boolean values which will be used to filter any given
                                     DataFrame
-        :param target_cols:         List of strings containing the column names for the target/s
-        :param sample_ids:          List of ids which will be part of the sample
+        :param target_cols:         List of strings, containing the column names for the target/s
+        :param sample_ids:          List of integers, representing the ids which will be part of the sample
         :param verbose:             Verbosity level, where any value greater than 0 means the message is printed
         """
-        self.df = df
-        self.top1_targets = top1_targets
-        self.feature_cols = feature_cols
-        self.float_feature_cols = float_feature_cols
-        self.target_cols = target_cols
-        self.sample_ids_mask = sample_ids_mask
-        self.sample_ids = sample_ids
-        self.verbose = verbose
-        xgprint(self.verbose, 'INFO: Instantiating StatsCalculator:')
+        self.__df = df
+        self.__top1_targets = top1_targets
+        self.__feature_cols = feature_cols
+        self.__float_feature_cols = float_feature_cols
+        self.__target_cols = target_cols
+        self.__sample_ids_mask = sample_ids_mask
+        self.__sample_ids = sample_ids
+        self.__verbose = verbose
+        xgprint(self.__verbose, 'INFO: Instantiating StatsCalculator:')
 
     def __calculate_edges_stats(self) -> StatsResults:
         """
@@ -54,16 +60,16 @@ class StatsCalculator(object):
         propagated to the local case. Bear in mind that, for the local edges, a sample ids mask will be applied so that
         only certain ids will be taken into account
 
-        :return:    StatsResult object comprising both, the local and the global information related to the graph edges
+        :return:    StatsResult object, comprising both, the local and the global information related to the graph edges
         """
-        xgprint(self.verbose, 'INFO:     StatsCalculator: calculating edges stats ...')
+        xgprint(self.__verbose, 'INFO:     StatsCalculator: calculating edges stats ...')
         # A copy is done to avoid mutation side effects
-        df_example = self.df.copy()
+        df_example = self.__df.copy()
 
         # First, edges global stats are computed. For each feature column name, all feature_value node names are
         # generated (float feature values require special treatment)
-        for feature_col in self.feature_cols:
-            if feature_col in self.float_feature_cols:
+        for feature_col in self.__feature_cols:
+            if feature_col in self.__float_feature_cols:
                 # TODO: Para ciertos float, la representación puede dispararse en cuanto a número de decimales
                 #  Habría que ver una manera de especificar el tope de precisión a garantizar para las features con
                 #  valores de ese tipo
@@ -73,8 +79,8 @@ class StatsCalculator(object):
                 df_example[feature_col] = feature_col + '_' + df_example[feature_col].map(str)
 
         # Now all possible feature_value combinations (order doesn't matter) are generated
-        df_example[TARGET] = self.top1_targets
-        feature_cols_combinations = itertools.combinations(self.feature_cols, 2)
+        df_example[TARGET] = self.__top1_targets
+        feature_cols_combinations = itertools.combinations(self.__feature_cols, 2)
         df_global_graph_edges_list = []
         df_local_graph_edges_list = []
         for feature_cols_tuple in feature_cols_combinations:
@@ -98,15 +104,25 @@ class StatsCalculator(object):
 
         # Sample ids mask is applied
         df_local_graph_edges_sample_raw = filter_by_ids(df=df_local_graph_edges_raw,
-                                                        sample_id_mask=self.sample_ids_mask,
-                                                        n_repetitions=int(len(df_local_graph_edges_raw)/len(self.df)))
+                                                        sample_id_mask=self.__sample_ids_mask,
+                                                        n_repetitions=int(len(df_local_graph_edges_raw)/len(self.__df)))
 
         # IDs present in resulting sample must match te sample ids
         assert np.array_equal(np.unique(np.sort(df_local_graph_edges_sample_raw[ID].astype('str').values)),
-                              np.sort(self.sample_ids)), "Something went wrong when sampling local edges"
+                              np.sort(self.__sample_ids)), "Something went wrong when sampling local edges"
         df_local_graph_edges_sample = df_local_graph_edges_sample_raw.merge(df_global_graph_edges, how='left',
                                                                             on=[TARGET, NODE_1, NODE_2])
         return StatsResults(global_stats=df_global_graph_edges, local_stats=df_local_graph_edges_sample)
+
+    def __calculate_global_target_distribution(self) -> pd.DataFrame:
+        """
+        This method counts the appearances of each possible target value
+
+        :return: Pandas DataFrame, containing the count for each possible target value
+        """
+        return pd.DataFrame(np.concatenate((np.array(self.__target_cols).reshape(-1, 1),
+                                            np.sum(self.__df[self.__target_cols].values, axis=0).reshape(-1, 1)), axis=1),
+                            columns=[TARGET, COUNT])
 
     def __calculate_nodes_stats(self) -> StatsResults:
         """
@@ -118,17 +134,17 @@ class StatsCalculator(object):
 
         :return:    StatsResult object comprising both, the local and the global information related to the graph nodes
         """
-        xgprint(self.verbose, 'INFO:     StatsCalculator: calculating nodes stats ...')
-        all_columns = list(self.df.columns)
-        df_values = self.df.values
+        xgprint(self.__verbose, 'INFO:     StatsCalculator: calculating nodes stats ...')
+        all_columns = list(self.__df.columns)
+        df_values = self.__df.values
         graph_nodes_info = []
 
         # First, for each feature column name, all feature_value node names are generated (float feature values require
         # special treatment)
         for i, row in enumerate(df_values):
-            for feature_col in self.feature_cols:
+            for feature_col in self.__feature_cols:
                 feature_value_raw = row[all_columns.index(feature_col)]
-                if feature_col in self.float_feature_cols:
+                if feature_col in self.__float_feature_cols:
                     # TODO: Para ciertos float, la representación puede dispararse en cuanto a número de decimales
                     #  Habría que ver una manera de especificar el tope de precisión a garantizar para las features con
                     #  valores de ese tipo
@@ -136,7 +152,7 @@ class StatsCalculator(object):
                 else:
                     feature_value = '_'.join([feature_col, str(feature_value_raw)])
 
-                graph_nodes_info.append([row[0], feature_value, feature_col, self.top1_targets[i]])
+                graph_nodes_info.append([row[0], feature_value, feature_col, self.__top1_targets[i]])
 
         # For the moment this is all the information for the local graph nodes statistics. This will be used later,
         # combined with the Importance calculation part
@@ -145,38 +161,28 @@ class StatsCalculator(object):
         # For the global part, feature_value frequencies are computed. Note that thw whole local nodes information is
         # taken into account
         df_global_graph_nodes = df_local_graph_nodes.groupby(NODE_NAME)[NODE_NAME].count().reset_index(name=NODE_COUNT)
-        df_global_graph_nodes[TOTAL_COUNT] = len(self.df)
+        df_global_graph_nodes[TOTAL_COUNT] = len(self.__df)
         df_global_graph_nodes[NODE_NAME_RATIO] = df_global_graph_nodes[NODE_COUNT] / df_global_graph_nodes[TOTAL_COUNT]
         df_global_graph_nodes[NODE_NAME_RATIO_RANK] = (
             df_global_graph_nodes[NODE_NAME_RATIO].rank(method='dense', ascending=False).astype(int))
 
         # Sample ids mask is applied to the local nodes before returning the information
         df_local_graph_nodes_sample = filter_by_ids(df=df_local_graph_nodes,
-                                                    sample_id_mask=self.sample_ids_mask,
-                                                    n_repetitions=int(len(df_local_graph_nodes) / len(self.df)))
+                                                    sample_id_mask=self.__sample_ids_mask,
+                                                    n_repetitions=int(len(df_local_graph_nodes) / len(self.__df)))
 
         # IDs present in resulting sample must match te sample ids
         assert np.array_equal(np.unique(np.sort(df_local_graph_nodes_sample[ID].astype('str').values)),
-                              np.sort(self.sample_ids)), "Something went wrong when sampling local nodes"
+                              np.sort(self.__sample_ids)), "Something went wrong when sampling local nodes"
 
         return StatsResults(global_stats=df_global_graph_nodes, local_stats=df_local_graph_nodes_sample)
-
-    def __calculate_global_target_distribution(self) -> pd.DataFrame:
-        """
-        This method counts the appearances of each possible target value
-
-        :return: Pandas DataFrame containing the count for each possible target value
-        """
-        return pd.DataFrame(np.concatenate((np.array(self.target_cols).reshape(-1, 1),
-                                            np.sum(self.df[self.target_cols].values, axis=0).reshape(-1, 1)), axis=1),
-                            columns=[TARGET, COUNT])
 
     def calculate_stats(self) -> Tuple[StatsResults, StatsResults, pd.DataFrame]:
         """
         This method is intended to orchestrate the execution of nodes, edges and targets statistics. It's meant to be
         an abstraction layer over those atomic methods
 
-        :return: Tuple containing a StatsResults object to store edges statistics, another StatsResults object to store
+        :return: Tuple, containing a StatsResults object to store edges statistics, another StatsResults object to store
                  nodes statistics and a pandas DataFrame to store target values counts
         """
         edges_stats = self.__calculate_edges_stats()

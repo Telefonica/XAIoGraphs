@@ -10,13 +10,16 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
-from xaiographs.common.constants import ID, TARGET, RCAT, RNUM
+from xaiographs.common.constants import ID, TARGET
 from xaiographs.common.utils import xgprint
 from xaiographs.exgraph.explainer import Explainer
 
+# CONSTANTS
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
 CONT_COLUMN_NAMES = ['age', 'fare']
 QUANTILE_SIZE = 10
+RCAT = 'rcat'
+RNUM = 'rnum'
 TAR_COLUMN_NAMES = [TARGET]
 
 
