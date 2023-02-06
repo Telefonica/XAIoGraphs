@@ -16,8 +16,8 @@ class ImportanceCalculatorFactory(object):
         This function builds an ImportanceCalculator object. The ImportanceCalculator type will be given by the name
         parameter
 
-        :param name:                         String providing the name of the ImportanceCalculator to be built
-        :param importance_calculator_params: Dictionary of parameters which will vary according to the
+        :param name:                         String, providing the name of the ImportanceCalculator to be built
+        :param importance_calculator_params: Dictionary, of parameters which will vary according to the
                                              ImportanceCalculator to be built
         :return:                             ImportanceCalculator object of the requested type
         """

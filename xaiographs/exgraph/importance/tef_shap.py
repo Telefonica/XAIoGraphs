@@ -32,15 +32,15 @@ class TefShap(ImportanceCalculator):
         """
         Constructor method for TefShap ImportanceCalculator
 
-        :param explainer_params:            Dictionary containing potentially useful information for this importance
+        :param explainer_params:            Dictionary, containing potentially useful information for this importance
                                             calculator
-        :param feature_cols:                List of strings containing the column names for the features
-        :param target_info:                 NamedTuple containing a numpy array listing the top1 target for each
+        :param feature_cols:                List of strings, containing the column names for the features
+        :param target_info:                 NamedTuple, containing a numpy array listing the top1 target for each
                                             DataFrame row, another numpy array listing a probability for each possible
                                             target value and a third numpy array showing the top1 targets indexes
-        :param train_size:                  Float indicating the percentage of the pandas DataFrame that will be used
+        :param train_size:                  Float, indicating the percentage of the pandas DataFrame that will be used
                                             to train the calculator
-        :param train_stratify:              Boolean indicating whether target columns proportions will be taken into
+        :param train_stratify:              Boolean, indicating whether target columns proportions will be taken into
                                             account when splitting the data (if train_size > 0.0)
         :param verbose:                     Verbosity level, where any value greater than 0 means the message is printed
         """
@@ -56,11 +56,11 @@ class TefShap(ImportanceCalculator):
         each coalition) and a third structure which is a list of lists so that all the coalitions ids contained in each
         sublist, belong to coalitions of the same length
 
-        :param num_features: Integer representing the number of features for which coalitions will be built
+        :param num_features: Integer, representing the number of features for which coalitions will be built
         :param verbose:      Verbosity level, where any value greater than 0 means the message is printed
         :return:             Three structures:
-                             - List of strings containing the coalitions names
-                             - List of integers containing the coalitions ids
+                             - List of strings, containing the coalitions names
+                             - List of integers, containing the coalitions ids
                              - List of lists, so that all the coalitions ids contained in each sublist, belong to
                              coalitions of the same length
         """
@@ -98,48 +98,6 @@ class TefShap(ImportanceCalculator):
         return coalition_names, coalition_ids, coalition_lengths
 
     @staticmethod
-    def __compute_edges(coalition_lengths: List[List[int]], coalition_names: List[str], coalition_length: int,
-                        feature: str) -> Tuple[List[int], List[int]]:
-        """
-        This method computes all possible edges for a given feature and a given coalition length. The rule to be
-        observed is that for the given feature, the output node for a valid edge can't contain the feature and the
-        input (destination) node, must contain it. Furthermore, the features conforming the output node coalition name
-         must be a subset of the features conforming the input node coalition name.
-         For example, for feature 0, these are valid edges (output_node -> input_node): E -> E_0, E_1 -> E_1_0,
-          E_2 -> E_2_0, E_1_2 -> E_0_1_2 ...
-
-        :param coalition_lengths:   List of lists of integers containing for each possible coalition length, the
-                                    coalitions ids for those coalitions with the given length
-        :param coalition_names:     List of coalitions names
-        :param coalition_length:    Integer representing the coalition length being processed
-        :param feature:             String representing the feature being processed
-        :return:                    Tuple of two lists representing edges:
-                                    - List of integers containing the ids of the coalitions being a valid output node
-                                     for an edge.
-                                    - List of integers containing the ids of the coalitions being a valid input node for
-                                    an edge
-        """
-        input_nodes = []
-        output_nodes = []
-        for output_node in coalition_lengths[coalition_length - 1]:
-
-            # For an output node to be valid to be part of an edge, the processed feature can't be contained on its name
-            if feature in coalition_names[output_node].split(TefShap._COALITION_NAME_SEP):
-                continue
-            for input_node in coalition_lengths[coalition_length]:
-
-                # For an input node to be valid to be part of an edge, the processed feature must be contained on its
-                # name
-                if feature not in coalition_names[input_node].split(TefShap._COALITION_NAME_SEP):
-                    continue
-                if set(coalition_names[output_node].split(TefShap._COALITION_NAME_SEP)).issubset(
-                        set(coalition_names[input_node].split(TefShap._COALITION_NAME_SEP))):
-                    input_nodes.append(input_node)
-                    output_nodes.append(output_node)
-
-        return input_nodes, output_nodes
-
-    @staticmethod
     def __build_computational_graph(features_num: int,
                                     coalition_names: List[str],
                                     coalition_lengths: List[List[int]],
@@ -148,15 +106,15 @@ class TefShap(ImportanceCalculator):
         This method builds the computational graph for each feature. It requires the list of coalition names and the
         lists of coalitions ids grouped by their length in order to calculate the graph edges.
 
-        :param features_num:        Integer representing the number of features
-        :param coalition_names:     List of strings containing the coalitions names
-        :param coalition_lengths:   List of lists of integers containing for each possible coalition length, the
+        :param features_num:        Integer, representing the number of features
+        :param coalition_names:     List of strings, containing the coalitions names
+        :param coalition_lengths:   List of lists of integers, containing for each possible coalition length, the
                                     coalitions ids for those coalitions with the given length
         :param verbose:             Verbosity level, where any value greater than 0 means the message is printed
         :return:                    Tuple of numpy arrays in returned:
-                                    - Numpy array containing the edges for each feature. Edges are represented by a
+                                    - Numpy array, containing the edges for each feature. Edges are represented by a
                                     list of output nodes and a list of input nodes (both per feature)
-                                    - Numpy array containing the result of dividing the weights for each coalition by
+                                    - Numpy array, containing the result of dividing the weights for each coalition by
                                     the computed degree for the input coalitions
         """
         # A weight is computed for each coalition
@@ -212,12 +170,12 @@ class TefShap(ImportanceCalculator):
         those features in the train DataFrame. The result is propagated to those samples to be explained whose features
          values match the grouped features. This way the coalitions worth are computed
 
-        :param df_2_explain:    Pandas DataFrame containing the samples to be explained
-        :param df_train:        Pandas DataFrame containing the training dataset
-        :param target_cols:     List of strings containing the possible targets
-        :param coalition_names: List of strings containing the coalitions names
+        :param df_2_explain:    Pandas DataFrame, containing the samples to be explained
+        :param df_train:        Pandas DataFrame, containing the training dataset
+        :param target_cols:     List of strings, containing the possible targets
+        :param coalition_names: List of strings, containing the coalitions names
         :param verbose:         Verbosity level, where any value greater than 0 means the message is printed
-        :return:                Numpy matrix containing the coalitions worth. For each sample to be explained a worth is
+        :return:                Numpy matrix, containing the coalitions worth. For each sample to be explained a worth is
                                 calculated per coalition and per target (n_samples x n_coalitions x n_target_cols)
         """
         coalitions_worth = []
@@ -252,7 +210,59 @@ class TefShap(ImportanceCalculator):
         return coalitions_worth
 
     @staticmethod
+    def __compute_edges(coalition_lengths: List[List[int]], coalition_names: List[str], coalition_length: int,
+                        feature: str) -> Tuple[List[int], List[int]]:
+        """
+        This method computes all possible edges for a given feature and a given coalition length. The rule to be
+        observed is that for the given feature, the output node for a valid edge can't contain the feature and the
+        input (destination) node, must contain it. Furthermore, the features conforming the output node coalition name
+         must be a subset of the features conforming the input node coalition name.
+         For example, for feature 0, these are valid edges (output_node -> input_node): E -> E_0, E_1 -> E_1_0,
+          E_2 -> E_2_0, E_1_2 -> E_0_1_2 ...
+
+        :param coalition_lengths:   List of lists of integers, containing for each possible coalition length, the
+                                    coalitions ids for those coalitions with the given length
+        :param coalition_names:     List of strings, containing the coalitions names
+        :param coalition_length:    Integer, representing the coalition length being processed
+        :param feature:             String, representing the feature being processed
+        :return:                    Tuple of two lists, representing edges:
+                                    - List of integers, containing the ids of the coalitions being a valid output node
+                                     for an edge.
+                                    - List of integers, containing the ids of the coalitions being a valid input node for
+                                    an edge
+        """
+        input_nodes = []
+        output_nodes = []
+        for output_node in coalition_lengths[coalition_length - 1]:
+
+            # For an output node to be valid to be part of an edge, the processed feature can't be contained on its name
+            if feature in coalition_names[output_node].split(TefShap._COALITION_NAME_SEP):
+                continue
+            for input_node in coalition_lengths[coalition_length]:
+
+                # For an input node to be valid to be part of an edge, the processed feature must be contained on its
+                # name
+                if feature not in coalition_names[input_node].split(TefShap._COALITION_NAME_SEP):
+                    continue
+                if set(coalition_names[output_node].split(TefShap._COALITION_NAME_SEP)).issubset(
+                        set(coalition_names[input_node].split(TefShap._COALITION_NAME_SEP))):
+                    input_nodes.append(input_node)
+                    output_nodes.append(output_node)
+
+        return input_nodes, output_nodes
+
+    @staticmethod
     def __get_degree(a: np.ndarray) -> np.ndarray:
+        """
+        This method computes the degrees for each element of the given numpy array of integers. The degree is actually
+        a count of each element appearances, absent elements will have a degree of 0. For instance, given the numpy
+        array [4, 2, 2, 2, 1] the degrees array will be [0, 1, 3, 0, 1]. Those numbers not present and less than the
+        maximum (4) are taken into account to compute the degrees (their degree is 0)
+
+        :param a:   Numpy array of integers, for which degrees will be computed
+        :return:    Numpy array of integers, containing the computed degrees for each of the integers of the given
+                    array, but also for those absent whose value is less than the maximum of the present elements
+        """
         values, counts = np.unique(a, return_counts=True)
         degrees = np.zeros(np.max(a) + 1)
         np.put(degrees, values, counts)
@@ -267,14 +277,14 @@ class TefShap(ImportanceCalculator):
         """
         This method takes care of computing the importance. It uses a graph neural network for this purpose
 
-        :param features:    Numpy matrix containing the coalitions worth. For each sample to be explained a worth is
+        :param features:    Numpy matrix, containing the coalitions worth. For each sample to be explained a worth is
                             calculated per coalition and per target
-        :param graph_edges: Numpy array containing the edges for each feature. Edges are represented by a list of
+        :param graph_edges: Numpy array, containing the edges for each feature. Edges are represented by a list of
                             output nodes and a list of input nodes (both per feature)
-        :param weights:     Numpy array containing the weights for each coalition
-        :param batch_size:  Integer representing the batch size to be used during importance calculation
+        :param weights:     Numpy array, containing the weights for each coalition
+        :param batch_size:  Integer, representing the batch size to be used during importance calculation
         :param verbose:     Verbosity level, where any value greater than 0 means the message is printed
-        :return:            Numpy matrix containing the calculated importance. For each row of the DataFrame to explain
+        :return:            Numpy matrix, containing the calculated importance. For each row of the DataFrame to explain
                             an importance value per feature and per target is computed
         """
         tot_shap_values = []
@@ -313,16 +323,17 @@ class TefShap(ImportanceCalculator):
          The reliability is stored in the reliability columns of the "explained" DataFrame too.
         There will be an importance column per feature and per target and a reliability column per target.
 
-        :param batch_size:  Integer representing the size of the batches (chunks) on which importance will be calculated
-        :param params:      Dictionary containing four elements:
-                            - df_to_explain:    Pandas DataFrame consisting of a sample of the train pandas DataFrame
-                            - coalitions_worth: Numpy matrix containing the coalitions worth. For each sample to be
+        :param batch_size:  Integer, representing the size of the batches (chunks) on which importance will be
+                            calculated
+        :param params:      Dictionary, containing four elements:
+                            - df_to_explain:    Pandas DataFrame, consisting of a sample of the train pandas DataFrame
+                            - coalitions_worth: Numpy matrix, containing the coalitions worth. For each sample to be
                                                 explained a worth is calculated per coalition and per target
                                                 (n_samples x n_coalitions x n_target_cols)
-                            - edges:            Numpy array containing the edges for each feature. Edges are
+                            - edges:            Numpy array, containing the edges for each feature. Edges are
                                                 represented by a list of output nodes and a list of input nodes (both
                                                  per feature)
-                            - weights:          Numpy array containing the result of dividing the weights for each
+                            - weights:          Numpy array, containing the result of dividing the weights for each
                                                 coalition by the computed degree for the input coalitions (nodes)
 
         :return:            Dictionary containing two elements:
@@ -335,7 +346,7 @@ class TefShap(ImportanceCalculator):
                                                         graph_edges=params[TefShap._EDGES],
                                                         weights=params[TefShap._WEIGHTS],
                                                         batch_size=batch_size,
-                                                        verbose=self.verbose)
+                                                        verbose=self._verbose)
 
         # In this sixth step, a consistency check is performed on local accuracy
         #    a) coalitions_worth[:, 0, :] --> phi0 = E(targets | empty coalition)
@@ -343,13 +354,13 @@ class TefShap(ImportanceCalculator):
 
         #    b) coalitions_worth[:, -1, :] --> ground truth = E(targets | coalition to be justified)
         y_hat: np.ndarray = phi0 + calculated_importance.sum(axis=1)
-        ImportanceCalculator.sanity_check(ground_truth=params[TefShap._COALITIONS_WORTH][:, -1, :],
-                                          prediction=y_hat,
-                                          target_cols=self.target_info.target_columns,
-                                          scope='aggregated')
+        ImportanceCalculator._sanity_check(ground_truth=params[TefShap._COALITIONS_WORTH][:, -1, :],
+                                           prediction=y_hat,
+                                           target_cols=self._target_info.target_columns,
+                                           scope='aggregated')
 
         # Ground truth is retrieved
-        y: np.ndarray = params[TefShap._DF_TO_EXPLAIN][self.target_info.target_columns].values
+        y: np.ndarray = params[TefShap._DF_TO_EXPLAIN][self._target_info.target_columns].values
 
         # Difference between ground truth and predictions
         reliability: np.ndarray = (y - y_hat)
@@ -361,19 +372,19 @@ class TefShap(ImportanceCalculator):
         reshaped_adapted_importance = adapted_importance.reshape(adapted_importance.shape[0], -1)
 
         df_explanation = params[TefShap._DF_TO_EXPLAIN].rename(columns={str(k): v for k, v in
-                                                                        enumerate(self.feature_cols)})
+                                                                        enumerate(self._feature_cols)})
         del params[TefShap._DF_TO_EXPLAIN]
 
         importance_columns = []
-        for c in self.feature_cols:
-            for target_col in self.target_info.target_columns:
+        for c in self._feature_cols:
+            for target_col in self._target_info.target_columns:
                 importance_columns.append('{}_{}{}'.format(target_col, c, IMPORTANCE_SUFFIX))
 
         # TODO: Chequear para el target top1 que PHI0 + adapted shapley es mayor que 0 para cada ID
         for i, c in enumerate(importance_columns):
             df_explanation[c] = reshaped_adapted_importance[:, i]
 
-        for j, target_col in enumerate(self.target_info.target_columns):
+        for j, target_col in enumerate(self._target_info.target_columns):
             reliability_column = '{}_{}'.format(target_col, RELIABILITY)
             df_explanation[reliability_column] = reliability[:, j]
 
@@ -381,8 +392,8 @@ class TefShap(ImportanceCalculator):
         y_hat_reduced = phi0 + np.sum(df_explanation[importance_columns].values.reshape(-1, adapted_importance.shape[1],
                                                                                         adapted_importance.shape[2]),
                                       axis=1)
-        ImportanceCalculator.sanity_check(ground_truth=y, prediction=y_hat_reduced,
-                                          target_cols=self.target_info.target_columns, scope='original')
+        ImportanceCalculator._sanity_check(ground_truth=y, prediction=y_hat_reduced,
+                                           target_cols=self._target_info.target_columns, scope='original')
         return {
            ImportanceCalculator._DF_EXPLANATION: df_explanation,
            ImportanceCalculator._IMPORTANCE_VALUES: adapted_importance
@@ -394,47 +405,47 @@ class TefShap(ImportanceCalculator):
         This method takes care of the train part which ends up in the coalitions worth being calculated. Before this,
         the coalitions template and the computational graph are built.
 
-        :param df:                      Pandas DataFrame containing the loaded dataset with the selected features
-        :param num_samples_to_explain:  Integer representing the number of samples to be (globally) explained
+        :param df:                      Pandas DataFrame, containing the loaded dataset with the selected features
+        :param num_samples_to_explain:  Integer, representing the number of samples to be (globally) explained
 
         :return:                        Dictionary containing four elements:
-                                        - df_to_explain:    Pandas DataFrame consisting of a sample of the train pandas
+                                        - df_to_explain:    Pandas DataFrame, consisting of a sample of the train pandas
                                                             DataFrame
-                                        - coalitions_worth: Numpy matrix containing the coalitions worth. For each
+                                        - coalitions_worth: Numpy matrix, containing the coalitions worth. For each
                                                             sample to be explained a worth is calculated per coalition
                                                              and per target (n_samples x n_coalitions x n_target_cols)
-                                        - edges:            Numpy array containing the edges for each feature. Edges
+                                        - edges:            Numpy array, containing the edges for each feature. Edges
                                                             are represented by a list of output nodes and a list of
                                                             input nodes (both per feature)
-                                        - weights:          Numpy array containing the weights for each coalition
+                                        - weights:          Numpy array, containing the weights for each coalition
         """
-        if self.train_size > 0.0:
-            xgprint(self.verbose, 'INFO:          train_size: {}'.format(self.train_size))
-            if self.train_stratify:
-                xgprint(self.verbose, 'INFO:          stratifying on target: {}'.
-                        format(self.target_info.target_columns))
-                df_train, _ = train_test_split(df, train_size=self.train_size,
-                                               stratify=df[self.target_info.target_columns])
+        if self._train_size > 0.0:
+            xgprint(self._verbose, 'INFO:          train_size: {}'.format(self._train_size))
+            if self._train_stratify:
+                xgprint(self._verbose, 'INFO:          stratifying on target: {}'.
+                        format(self._target_info.target_columns))
+                df_train, _ = train_test_split(df, train_size=self._train_size,
+                                               stratify=df[self._target_info.target_columns])
             else:
-                df_train, _ = train_test_split(df, train_size=self.train_size)
+                df_train, _ = train_test_split(df, train_size=self._train_size)
         else:
-            xgprint(self.verbose, 'INFO:          the whole dataset will be used to train')
+            xgprint(self._verbose, 'INFO:          the whole dataset will be used to train')
             df_train = df.copy()
         df_train.drop(ID, axis=1, inplace=True)
 
         # First step consists of retrieving the number of samples to be globally explained
-        xgprint(self.verbose, 'INFO:          sampling the dataset to be globally explained: {} samples will be '
-                              'used ...'.
+        xgprint(self._verbose, 'INFO:          sampling the dataset to be globally explained: {} samples will be '
+                               'used ...'.
                 format(num_samples_to_explain))
-        df_2_explain = ImportanceCalculator.sample_global(df=df.copy(), top1_targets=self.target_info.top1_targets,
+        df_2_explain = ImportanceCalculator.sample_global(df=df.copy(), top1_targets=self._target_info.top1_targets,
                                                           num_samples=num_samples_to_explain,
-                                                          target_probs=self.target_info.target_probs,
-                                                          target_cols=self.target_info.target_columns)
+                                                          target_probs=self._target_info.target_probs,
+                                                          target_cols=self._target_info.target_columns)
         del df
 
         # Second step is to build the coalitions template and setup an order
-        num_features = len(self.feature_cols)
-        coalition_names, coalition_ids, coalition_lengths = self.__build_coalitions_graph(num_features, self.verbose)
+        num_features = len(self._feature_cols)
+        coalition_names, coalition_ids, coalition_lengths = self.__build_coalitions_graph(num_features, self._verbose)
 
         # Third step is to build computational graphs, there'll be one per feature
         # node_names = E, E_0, E_1, E_2, E_0_1, E_0_2, E_1_2, E_0_1_2
@@ -445,13 +456,13 @@ class TefShap(ImportanceCalculator):
         #           [[E, E_0, E_2, E_0_2], [E_1, E_0_1, E_1_2, E_0_1_2]],
         #           [[E, E_0, E_1, E_1_2], [E_2, E_0_2, E_1_2, E_0_1_2]]]
         edges, weights = self.__build_computational_graph(num_features, coalition_names, coalition_lengths,
-                                                          self.verbose)
+                                                          self._verbose)
 
         # Fourth step consists of computing the coalitions worth
-        df_train = df_train.rename(columns={v: str(k) for k, v in enumerate(self.feature_cols)})
-        df_2_explain = df_2_explain.rename(columns={v: str(k) for k, v in enumerate(self.feature_cols)})
-        coalitions_worth = self.__build_features_graph(df_2_explain, df_train, self.target_info.target_columns,
-                                                       coalition_names, self.verbose)
+        df_train = df_train.rename(columns={v: str(k) for k, v in enumerate(self._feature_cols)})
+        df_2_explain = df_2_explain.rename(columns={v: str(k) for k, v in enumerate(self._feature_cols)})
+        coalitions_worth = self.__build_features_graph(df_2_explain, df_train, self._target_info.target_columns,
+                                                       coalition_names, self._verbose)
 
         return {
             TefShap._DF_TO_EXPLAIN: df_2_explain,
