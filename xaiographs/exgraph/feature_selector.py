@@ -56,8 +56,10 @@ class FeatureSelector(object):
         :return: pd.DataFrame, with all the features ranked by the `FeatureSelector`
         """
         if len(self.__top_features):
-            return pd.DataFrame(zip(self.__top_features, list(range(1, len(self.__top_features) + 1))),
-                                columns=[FEATURE, RANK])
+            df_top_features = pd.DataFrame(zip(self.__top_features, list(range(1, len(self.__top_features) + 1))),
+                                           columns=[FEATURE, RANK])
+            df_top_features[RANK] = pd.to_numeric(df_top_features[RANK], downcast="unsigned")
+            return df_top_features
         else:
             return None
 
@@ -73,9 +75,12 @@ class FeatureSelector(object):
         :return: pd.DataFrame, with all the features ranked by the `FeatureSelector`
         """
         if len(self.__top_features_by_target):
-            return pd.DataFrame(
+            df_top_features_by_target = pd.DataFrame(
                 [[target] + list(fd) for target, feat_dist in self.__top_features_by_target.items() for fd in
                  feat_dist], columns=[TARGET, FEATURE, DISTANCE])
+            df_top_features_by_target[DISTANCE] = pd.to_numeric(df_top_features_by_target[DISTANCE],
+                                                                downcast="float")
+            return df_top_features_by_target
         else:
             return None
 

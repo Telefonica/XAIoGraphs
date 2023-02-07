@@ -189,8 +189,8 @@ class ImportanceCalculator(metaclass=ABCMeta):
         :param top1_targets:    Numpy array, containing the top1 target for each row. Sampling will be calculated so
                                 that the target ratio will be kept, this parameter allows filtering by target
         :param num_samples:     Integer, representing the number of samples which will be calculated
-        :param target_probs:    Numpy array, containing the probability for each target. It's used to calculate the ratio
-                                for each target
+        :param target_probs:    Numpy array, containing the probability for each target. It's used to calculate the
+                                ratio for each target
         :param target_cols:     List of strings, containing the possible targets
         :param target_col:      String, representing the target col name (default: 'target')
         :return:                Pandas DataFrame, containing the requested number of samples
@@ -209,7 +209,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
                   ' size ({}) ...'.format(num_samples, len(df)))
             print('INFO:               only {} samples will be taken into account to compute global explainability. '
                   'Requested number of samples can be setup by means of the `num_samples_global_expl` parameter when '
-                  'invoking the `explain()` method from the `Explainer` class')
+                  'invoking the `explain()` method from the `Explainer` class'.format(num_samples))
 
             # A target column is included in the given pandas DataFrame, this column will contain the top1 target
             # for each row

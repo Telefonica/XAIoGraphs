@@ -4,13 +4,13 @@ from typing import Any, List, NamedTuple, Tuple
 import numpy as np
 import pandas as pd
 
-from xaiographs.common.constants import COUNT, FEATURE_NAME, ID, NODE_NAME, NODE_NAME_RATIO, TARGET
+from xaiographs.common.constants import COUNT, FEATURE_NAME, ID, IMPORTANCE_SUFFIX, NODE_COUNT, NODE_NAME, \
+    NODE_NAME_RATIO, TARGET
 from xaiographs.common.utils import filter_by_ids, xgprint
 
 # CONSTANTS
 NODE_1 = 'node_1'
 NODE_2 = 'node_2'
-NODE_COUNT = 'node_count'
 NODE_NAME_RATIO_RANK = 'node_name_ratio_rank'
 TOTAL_COUNT = 'total_count'
 
@@ -121,10 +121,11 @@ class StatsCalculator(object):
         :return: Pandas DataFrame, containing the count for each possible target value
         """
         return pd.DataFrame(np.concatenate((np.array(self.__target_cols).reshape(-1, 1),
-                                            np.sum(self.__df[self.__target_cols].values, axis=0).reshape(-1, 1)), axis=1),
+                                            np.sum(self.__df[self.__target_cols].values, axis=0).reshape(-1, 1)),
+                                           axis=1),
                             columns=[TARGET, COUNT])
 
-    def __calculate_nodes_stats(self) -> StatsResults:
+    def __calculate_nodes_stats(self) -> Tuple[StatsResults, np.ndarray]:
         """
         This method computes the local and global nodes statistics. For the moment there's no actual aggregation to
         compute for the local case, but only a table containing feature_value pairs for each ID, together with their
@@ -133,6 +134,8 @@ class StatsCalculator(object):
         ids mask will be applied so only certain ids will be taken into account
 
         :return:    StatsResult object comprising both, the local and the global information related to the graph nodes
+                    and a numpy matrix containing for each ID-node pairs, their top1 target and the name of the column
+                    containing the importance value
         """
         xgprint(self.__verbose, 'INFO:     StatsCalculator: calculating nodes stats ...')
         all_columns = list(self.__df.columns)
@@ -152,11 +155,13 @@ class StatsCalculator(object):
                 else:
                     feature_value = '_'.join([feature_col, str(feature_value_raw)])
 
-                graph_nodes_info.append([row[0], feature_value, feature_col, self.__top1_targets[i]])
+                graph_nodes_info.append([row[0], feature_value, feature_col, self.__top1_targets[i],
+                                         '_'.join([self.__top1_targets[i], feature_col]) + IMPORTANCE_SUFFIX])
+        graph_nodes_info = np.array(graph_nodes_info)
 
         # For the moment this is all the information for the local graph nodes statistics. This will be used later,
         # combined with the Importance calculation part
-        df_local_graph_nodes = pd.DataFrame(graph_nodes_info, columns=[ID, NODE_NAME, FEATURE_NAME, TARGET])
+        df_local_graph_nodes = pd.DataFrame(graph_nodes_info[:, :-1], columns=[ID, NODE_NAME, FEATURE_NAME, TARGET])
 
         # For the global part, feature_value frequencies are computed. Note that thw whole local nodes information is
         # taken into account
@@ -175,18 +180,20 @@ class StatsCalculator(object):
         assert np.array_equal(np.unique(np.sort(df_local_graph_nodes_sample[ID].astype('str').values)),
                               np.sort(self.__sample_ids)), "Something went wrong when sampling local nodes"
 
-        return StatsResults(global_stats=df_global_graph_nodes, local_stats=df_local_graph_nodes_sample)
+        return StatsResults(global_stats=df_global_graph_nodes, local_stats=df_local_graph_nodes_sample), np.delete(
+            graph_nodes_info, [2, 3], axis=1)
 
-    def calculate_stats(self) -> Tuple[StatsResults, StatsResults, pd.DataFrame]:
+    def calculate_stats(self) -> Tuple[StatsResults, StatsResults, pd.DataFrame, np.ndarray]:
         """
         This method is intended to orchestrate the execution of nodes, edges and targets statistics. It's meant to be
         an abstraction layer over those atomic methods
 
         :return: Tuple, containing a StatsResults object to store edges statistics, another StatsResults object to store
-                 nodes statistics and a pandas DataFrame to store target values counts
+                 nodes statistics, a pandas DataFrame to store target values counts and a numpy array containing for
+                 all the ID-node pairs, their top1 target and the name of the column containing the importance value
         """
         edges_stats = self.__calculate_edges_stats()
-        nodes_stats = self.__calculate_nodes_stats()
+        nodes_stats, nodes_importance_columns = self.__calculate_nodes_stats()
         target_distribution = self.__calculate_global_target_distribution()
 
-        return edges_stats, nodes_stats, target_distribution
+        return edges_stats, nodes_stats, target_distribution, nodes_importance_columns

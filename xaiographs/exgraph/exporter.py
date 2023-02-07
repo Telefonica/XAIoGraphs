@@ -3,8 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 
-from xaiographs.common.constants import COUNT, FEATURE, FEATURE_IMPORTANCE, FEATURE_NAME, ID, IMPORTANCE_SUFFIX, \
-    NODE_IMPORTANCE, NODE_NAME, NODE_NAME_RATIO, RELIABILITY, RANK, TARGET
+from xaiographs.common.constants import COUNT, FEATURE, FEATURE_IMPORTANCE, FEATURE_NAME, ID, IMPORTANCE, \
+    IMPORTANCE_SUFFIX, FEATURE_VALUE, NODE_COUNT, NODE_IMPORTANCE, NODE_NAME, NODE_NAME_RATIO, RELIABILITY, RANK, TARGET
 from xaiographs.common.utils import FeaturesInfo, TargetInfo, xgprint
 from xaiographs.exgraph.stats_calculator import StatsResults
 
@@ -13,9 +13,8 @@ BIN_WIDTH_EDGE_WEIGHT = 1
 BIN_WIDTH_FEATURE_WEIGHT = 1
 BIN_WIDTH_NODE_WEIGHT = 5
 EDGE_WEIGHT = 'edge_weight'
-FEATURE_VALUE = 'feature_value'
 FEATURE_WEIGHT = 'feature_weight'
-IMPORTANCE = 'importance'
+FREQUENCY = 'frequency'
 IMPORTANCE_FEATURE = 'importance_feature'
 MAX_EDGE_WEIGHT = 10
 MAX_FEATURE_WEIGHT = 5
@@ -79,9 +78,27 @@ class Exporter(object):
         :return: pd.DataFrame, containing each feature ranked by its global importance
         """
         if self.__global_explainability is not None:
-            self.__global_explainability[RANK] = self.__global_explainability[FEATURE_IMPORTANCE].rank().astype('int')
+            self.__global_explainability[RANK] = pd.to_numeric(
+                self.__global_explainability[FEATURE_IMPORTANCE].rank().astype('int'), downcast="unsigned")
+            self.__global_explainability[FEATURE_IMPORTANCE] = pd.to_numeric(
+                self.__global_explainability[FEATURE_IMPORTANCE], downcast="float")
             return self.__global_explainability[[FEATURE_NAME, FEATURE_IMPORTANCE, RANK]].rename(
                 columns={FEATURE_NAME: FEATURE, FEATURE_IMPORTANCE: IMPORTANCE})
+        else:
+            return None
+
+    @property
+    def global_frequency_feature_value(self):
+        """
+        Property that returns for each feature-value pair the number of its occurrences
+
+        :return: pd.DataFrame, containing the number of times each feature-value occurs
+        """
+        if self.__global_nodes_info is not None:
+            self.__global_nodes_info[NODE_COUNT] = pd.to_numeric(self.__global_nodes_info[NODE_COUNT],
+                                                                 downcast="unsigned")
+            return self.__global_nodes_info[[NODE_NAME, NODE_COUNT]].drop_duplicates(subset=[NODE_NAME]).rename(
+                columns={NODE_NAME: FEATURE_VALUE, NODE_COUNT: FREQUENCY})
         else:
             return None
 
@@ -103,8 +120,11 @@ class Exporter(object):
                         continue
                     df_rows.append([target_val, self.__global_target_explainability.columns[i], val])
             df_global_target_explainability = pd.DataFrame(df_rows, columns=[TARGET, FEATURE, IMPORTANCE])
-            df_global_target_explainability[RANK] = df_global_target_explainability.groupby(TARGET)[IMPORTANCE].rank(
-                ascending=False).astype('int')
+            df_global_target_explainability[RANK] = pd.to_numeric(
+                df_global_target_explainability.groupby(TARGET)[IMPORTANCE].rank(ascending=False).astype('int'),
+                downcast="unsigned")
+            df_global_target_explainability[IMPORTANCE] = pd.to_numeric(df_global_target_explainability[IMPORTANCE],
+                                                                        downcast="float")
             return df_global_target_explainability.sort_values(by=[TARGET, RANK])
         else:
             return None
@@ -121,6 +141,9 @@ class Exporter(object):
                  the target value being processed
         """
         if self.__global_nodes_info is not None:
+            self.__global_nodes_info[NODE_IMPORTANCE] = pd.to_numeric(self.__global_nodes_info[NODE_IMPORTANCE],
+                                                                      downcast="float")
+            self.__global_nodes_info[RANK] = pd.to_numeric(self.__global_nodes_info[RANK], downcast="unsigned")
             return self.__global_nodes_info[[TARGET, NODE_NAME, NODE_IMPORTANCE, RANK]].rename(
                 columns={NODE_NAME: FEATURE_VALUE, NODE_IMPORTANCE: IMPORTANCE})
         else:
@@ -363,9 +386,7 @@ class Exporter(object):
 
         self.__global_nodes_info = self.__export_global_nodes(df_stats=nodes_info.global_stats,
                                                               df_importance=global_nodes_importance)
-        print('self.__global_nodes_info')
-        print(self.__global_nodes_info.columns)
-        print(self.__global_nodes_info.head(10))
+
         self.__export_global_description(df_global_nodes_info=self.__global_nodes_info)
 
         self.__export_global_target_distribution(df_global_target_distribution=target_distribution)
