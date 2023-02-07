@@ -36,11 +36,13 @@ JSON_FILES = ["global_explainability.json",
              "fairness_sumarize_criterias.json"
              ]
 
+
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.path = os.path.join(MY_HTML_FOLDER_PATH, MY_HOME_PAGE_FILE_PATH)
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
 
 def print_upper_line():
     """
@@ -54,6 +56,8 @@ def print_upper_line():
     for _ in range(COL_HEIGHT_RIGHT):
         print(u"\u2550", end='')
     print(u"\u2557")
+
+
 def print_middle_line():
     """
     This function print the middle line of the requirements validatons table.
@@ -66,6 +70,8 @@ def print_middle_line():
     for _ in range(COL_HEIGHT_RIGHT):
         print(u"\u2550", end='')
     print(u"\u2563")
+
+
 def print_message_line(message: str, status: str, style: str):
     """
     This function print a message line of the requirements validatons table.
@@ -81,6 +87,8 @@ def print_message_line(message: str, status: str, style: str):
     print(u"\u2551", end=' ')
     print(style + status.ljust(COL_HEIGHT_RIGHT - 1) + TEXT_COLOR_WHITE, end='')
     print(u"\u2551")
+
+
 def print_bottom_line():
     """
     This function print the bottom line of the requirements validatons table.
@@ -94,6 +102,7 @@ def print_bottom_line():
         print(u"\u2550", end='')
     print(u"\u255D")
 
+
 def clean_json_public_folder():
     """
     This function remove all JSON files used previously.
@@ -105,6 +114,7 @@ def clean_json_public_folder():
             os.unlink(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
+
 
 def process_json_files(path: str):
     """
@@ -129,6 +139,7 @@ def process_json_files(path: str):
         else:
             print_message_line(json, 'File Not Found', TEXT_COLOR_RED)
             print_middle_line()
+
 
 def main():
     parser = argparse.ArgumentParser(description='XAIoGraphs')
@@ -155,6 +166,7 @@ def main():
             pass
         
         httpd.server_close()
+
 
 if __name__ == '__main__':
     main()
