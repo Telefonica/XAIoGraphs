@@ -111,7 +111,33 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
 
 
 def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """
+    """Function that returns the dataframes necessary to test the WHY module of XAIoGraphs with the explainability \
+    calculated with the Titanic dataset.
+
+    Example:
+            >>> from xaiographs.datasets import load_titanic_why
+            >>> df_global_semantics, df_target_semantics, df_why_templates = load_titanic_why()
+            >>> df_global_semantics.head(5)
+                       feature                              reason
+            0      gender_male                         to be a man
+            1    gender_female                       to be a woman
+            2       is_alone_1                        travel alone
+            3    family_size_2  to be from a family of few members
+            4  family_size_3-5                   be a large family
+            >>> df_target_semantics.head(5)
+                    target          feature                                  reason
+            0  NO_SURVIVED      gender_male                      many men have died
+            1  NO_SURVIVED    gender_female                           to be a woman
+            2  NO_SURVIVED       is_alone_1                     they traveled alone
+            3  NO_SURVIVED    family_size_2  they were from a family of few members
+            4  NO_SURVIVED  family_size_3-5           they were from a large family
+            >>> df_why_templates.head(5)
+                                                               0
+            0    An explanation cannot be offered for this case.
+            1  For $temp_local_explain, this case has been cl...
+            2  For $temp_local_explain, this case has been cl...
+            3  This case has been classified as $target becau...
+            4  The classification of this case as $target is ...
 
     :param language: Language identifier {es: Spanish, en: English}. Default uses English language
     :return: Tuple: 1) pd.DataFrame with the natural language explanation of global feature-value we want to use, \
