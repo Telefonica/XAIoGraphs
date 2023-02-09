@@ -3,9 +3,23 @@ from typing import List, Tuple
 
 import pandas as pd
 
+from xaiographs.common.constants import LANG_EN, LANG_ES
+
 # Titanic Dataset
 TITANIC_PATH = 'data/titanic.csv'
 TITANIC_DISCRETIZED_PATH = 'data/titanic_discretized.csv'
+TITANIC_GLOBAL_SEMANTICS_PATH = {
+    LANG_EN: 'data/global_semantics_en.csv',
+    LANG_ES: 'data/global_semantics_es.csv'
+}
+TITANIC_TARGET_SEMANTICS_PATH = {
+    LANG_EN: 'data/target_semantics_en.csv',
+    LANG_ES: 'data/target_semantics_es.csv'
+}
+TITANIC_WHY_TEMPLATE_PATH = {
+    LANG_EN: 'data/why_templates_en.csv',
+    LANG_ES: 'data/why_templates_es.csv'
+}
 FEATURE_COLS_TITANIC = ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
 TARGET_COLS_TITANIC = ['NO_SURVIVED', 'SURVIVED']
 
@@ -94,3 +108,26 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
     """
     df_dataset = pd.read_csv(os.path.join(SRC_DIR, TITANIC_DISCRETIZED_PATH))
     return df_dataset, FEATURE_COLS_TITANIC, TARGET_COLS_TITANIC, TARGET_COL, PREDICT_COL
+
+
+def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """
+
+    :param language: Language identifier {es: Spanish, en: English}. Default uses English language
+    :return: Tuple: 1) pd.DataFrame with the natural language explanation of global feature-value we want to use, \
+    2) pd.DataFrame with the natural language explanation of feature-value we want to use per target,
+    3) pd.DataFrame with the templates of the sentences with the explanation
+    """
+    df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_ES]))
+                          if language == LANG_ES
+                          else pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_EN])))
+
+    df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_ES]))
+                          if language == LANG_ES
+                          else pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_EN])))
+
+    df_why_templates = (pd.read_fwf(os.path.join(SRC_DIR, TITANIC_WHY_TEMPLATE_PATH[LANG_ES]), header=None)
+                        if language == LANG_ES
+                        else pd.read_fwf(os.path.join(SRC_DIR, TITANIC_WHY_TEMPLATE_PATH[LANG_EN]), header=None))
+
+    return df_global_semantic, df_target_semantic, df_why_templates
