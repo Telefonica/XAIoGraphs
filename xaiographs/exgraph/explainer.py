@@ -1,8 +1,9 @@
 from typing import List, Tuple
 
+import numpy as np
 import pandas as pd
 
-from xaiographs.common.constants import ID
+from xaiographs.common.constants import FEATURE_VALUE, ID, IMPORTANCE, RANK, TARGET, RELIABILITY
 from xaiographs.common.utils import FeaturesInfo, TargetInfo, get_features_info, get_target_info, sample_by_target, \
     xgprint
 from xaiographs.exgraph.exporter import Exporter
@@ -38,10 +39,13 @@ class Explainer(object):
 
         """
         self.__global_explainability = None
+        self.__global_frequency_feature_value = None
         self.__global_target_feature_value_explainability = None
         self.__global_target_explainability = None
-        self.__top_features = list()
-        self.__top_features_by_target = dict()
+        self.__local_dataset_reliability = None
+        self.__local_feature_value_explainability = None
+        self.__top_features = None
+        self.__top_features_by_target = None
         self.__df = dataset
         self.__path = destination_path
         self.__engine = importance_engine
@@ -67,6 +71,20 @@ class Explainer(object):
             return self.__global_explainability
 
     @property
+    def global_frequency_feature_value(self):
+        """
+        Property that returns the number of occurrences for each feature-value pair. This is computed by adding up each
+         feature-value pair occurrence.
+        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+
+        :return: pd.DataFrame, containing the number of times each feature-value occurs
+        """
+        if self.__global_frequency_feature_value is None:
+            print(WARN_MSG.format('\"global_frequency_feature_value\"'))
+        else:
+            return self.__global_frequency_feature_value
+
+    @property
     def global_target_explainability(self):
         """
         Property that returns all the features to be explained, ranked by their global importance by target value. This
@@ -90,7 +108,7 @@ class Explainer(object):
         for each possible target value.
         If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
 
-        :return: pd.DataFrame, containing for each target value all the feature-value pairs appearing in all those
+        :return: pd.DataFrame, containing for each target value all the feature-value pairs occurring in all those
                  samples whose top1 target is equal to the target value being processed. Feature-value pair importance
                  is computed by averaging the importance of all the occurrences of that feature-value pair linked to
                  the target value being processed
@@ -99,6 +117,50 @@ class Explainer(object):
             print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
         else:
             return self.__global_target_feature_value_explainability
+
+    @property
+    def local_dataset_reliability(self):
+        """
+        Property that, for each sample, returns its top1 target and the reliability value associated to that target
+        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+
+        :return: pd.DataFrame, containing for each sample all its feature-value pairs together with their importance
+        """
+        if self.__local_dataset_reliability is None:
+            print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
+        else:
+            df_local_dataset_reliability = pd.DataFrame(self.__local_dataset_reliability, columns=[ID, TARGET,
+                                                                                                   RELIABILITY])
+            df_local_dataset_reliability[ID] = pd.to_numeric(df_local_dataset_reliability[ID], downcast="unsigned")
+            df_local_dataset_reliability[RELIABILITY] = pd.to_numeric(df_local_dataset_reliability[RELIABILITY],
+                                                                      downcast="float")
+            return df_local_dataset_reliability
+
+    @property
+    def local_feature_value_explainability(self):
+        """
+        Property that, for each sample, returns as many rows as feature-value pairs, together with their calculated
+        importance. In order to achieve this, the column name where the right importance value will be found must be
+        compounded. This is done by joining together the top1 target for that sample, the feature-value pair and the
+        suffix '_imp'
+        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+
+        :return: pd.DataFrame, containing for each sample all its feature-value pairs together with their importance
+        """
+
+        if self.__local_feature_value_explainability is None:
+            print(WARN_MSG.format('\"local_feature_value_explainability\"'))
+        else:
+            df_local_feature_value_explainability = pd.DataFrame(self.__local_feature_value_explainability,
+                                                                 columns=[ID, FEATURE_VALUE, IMPORTANCE])
+            df_local_feature_value_explainability[ID] = pd.to_numeric(df_local_feature_value_explainability[ID],
+                                                                      downcast="unsigned")
+            df_local_feature_value_explainability[IMPORTANCE] = pd.to_numeric(
+                df_local_feature_value_explainability[IMPORTANCE], downcast="float")
+            df_local_feature_value_explainability[RANK] = pd.to_numeric(
+                df_local_feature_value_explainability.groupby(ID)[IMPORTANCE].rank(ascending=False).astype('int'),
+                downcast="unsigned")
+            return df_local_feature_value_explainability
 
     @property
     def top_features(self):
@@ -259,6 +321,15 @@ class Explainer(object):
                                                        target_probs=target_info.target_probs,
                                                        target_cols=target_info.target_columns)
 
+        # local_dataset_reliability property is computed
+        self.__local_dataset_reliability = np.concatenate((df_explanation_global[ID].values.reshape(-1, 1),
+                                                           target_info.top1_targets.reshape(-1, 1),
+                                                           np.abs(1 - np.round(df_explanation_global[
+                                                               features_info.reliability_columns].values[
+                                                               np.arange(len(df_explanation_global)),
+                                                               target_info.top1_argmax].reshape(-1, 1), decimals=2))),
+                                                          axis=1)
+
         # Once global explanation related information is calculated. The explanation DataFrame is sampled, so that only
         # some rows will be taken into account when generating the local output for visualization
         xgprint(self.__verbose, 'INFO:     Sampling the dataset to be locally explained: {} samples will be used ...'.
@@ -266,14 +337,21 @@ class Explainer(object):
         df_explanation_sample = ImportanceCalculator.sample_explanation(df_explanation=df_explanation_global,
                                                                         sample_ids_mask_2_explain=sample_ids_mask)
 
-        #   StatsCalculator takes care of everything related to frequency calculation, counting...
+        # StatsCalculator takes care of everything related to frequency calculation, counting...
         stats = StatsCalculator(df=df_explanation_global[[ID] + features_info.feature_columns + target_cols],
                                 top1_targets=target_info.top1_targets,
                                 feature_cols=features_info.feature_columns,
                                 float_feature_cols=features_info.float_feature_columns,
                                 target_cols=target_info.target_columns,
                                 sample_ids_mask=sample_ids_mask, sample_ids=sample_ids, verbose=self.__verbose)
-        edges_stats, nodes_stats, target_distribution = stats.calculate_stats()
+        edges_stats, nodes_stats, target_distribution, importance_col_stats = stats.calculate_stats()
+
+        # local_feature_value_explainability property is computed
+        feature_value_expl = np.array([df_explanation_global[id_imp_row[2]].to_numpy()[
+                                           df_explanation_global[ID].to_numpy() == int(id_imp_row[0])].item() for
+                                       id_imp_row in importance_col_stats])
+        self.__local_feature_value_explainability = np.concatenate((np.delete(importance_col_stats, 2, axis=1),
+                                                                    feature_value_expl.reshape(-1, 1)), axis=1)
 
         # Exporter takes care of the following tasks:
         #   Mixing calculated statistics and calculated importance when needed
@@ -286,6 +364,9 @@ class Explainer(object):
                         global_target_explainability=top1_importance_features,
                         global_explainability=global_explainability, global_nodes_importance=global_nodes_importance,
                         edges_info=edges_stats, nodes_info=nodes_stats, target_distribution=target_distribution)
-        exporter.global_target_explainability
-        exporter.global_explainability
-        exporter.global_target_feature_value_explainability
+
+        # Properties from Exporter module are retrieved
+        self.__global_explainability = exporter.global_explainability
+        self.__global_frequency_feature_value = exporter.global_frequency_feature_value
+        self.__global_target_feature_value_explainability = exporter.global_target_feature_value_explainability
+        self.__global_target_explainability = exporter.global_target_explainability

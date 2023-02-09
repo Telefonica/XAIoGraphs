@@ -284,6 +284,33 @@ def main():
     # Explaining process is triggered
     explainer.explain(feature_cols=feature_cols, target_cols=target_cols)
 
+    # Properties are displayed depending on verbose
+    xgprint(verbosity, 'INFO: properties information is displayed:')
+    xgprint(verbosity, 'INFO:     explainer.local_dataset_reliability')
+    xgprint(verbosity, explainer.local_dataset_reliability.shape)
+    xgprint(verbosity, explainer.local_dataset_reliability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.local_feature_value_explainability')
+    xgprint(verbosity, explainer.local_feature_value_explainability.shape)
+    xgprint(verbosity, explainer.local_feature_value_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.global_frequency_feature_value')
+    xgprint(verbosity, explainer.global_frequency_feature_value.shape)
+    xgprint(verbosity, explainer.global_frequency_feature_value.head(10))
+    xgprint(verbosity, 'INFO:     explainer.global_target_feature_value_explainability')
+    xgprint(verbosity, explainer.global_target_feature_value_explainability.shape)
+    xgprint(verbosity, explainer.global_target_feature_value_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.global_explainability')
+    xgprint(verbosity, explainer.global_explainability.shape)
+    xgprint(verbosity, explainer.global_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.global_target_explainability')
+    xgprint(verbosity, explainer.global_target_explainability.shape)
+    xgprint(verbosity, explainer.global_target_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.top_features')
+    xgprint(verbosity, explainer.top_features.shape)
+    xgprint(verbosity, explainer.top_features.head(10))
+    xgprint(verbosity, 'INFO:     explainer.top_features_by_target')
+    xgprint(verbosity, explainer.top_features_by_target.shape)
+    xgprint(verbosity, explainer.top_features_by_target.head(10))
+
 
 if __name__ == '__main__':
     main()

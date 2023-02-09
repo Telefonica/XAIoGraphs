@@ -569,7 +569,7 @@ def main():
     # Device recommender dataset to be used is specified here (WHAT or WHEN)
     # Dataset filename can be parametrized by using prepare_devrec_dataset_filename parameter otherwise,
     # 'what_dr_100K.csv' will be used for WHAT and 'when_dr_all_2M.csv' for WHEN
-    dataset_name = WHAT
+    dataset_name = WHEN
 
     # Dataset path is specified here
     path = '../../datasets/'
@@ -588,10 +588,37 @@ def main():
 
     # The desired explainer is created
     explainer = Explainer(dataset=df_devrec_cooked, importance_engine='TEF_SHAP',
-                          destination_path='/home/cx02747/Utils/', number_of_features=11, verbose=verbosity)
+                          destination_path='/home/cx02747/Utils/', number_of_features=12, verbose=verbosity)
 
     # Explaining process is triggered
     explainer.explain(feature_cols=feature_cols, target_cols=target_cols, num_samples_global_expl=50000)
+
+    # Properties are displayed depending on verbose
+    xgprint(verbosity, 'INFO: properties information is displayed:')
+    xgprint(verbosity, 'INFO:     explainer.local_dataset_reliability')
+    xgprint(verbosity, explainer.local_dataset_reliability.shape)
+    xgprint(verbosity, explainer.local_dataset_reliability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.local_feature_value_explainability')
+    xgprint(verbosity, explainer.local_feature_value_explainability.shape)
+    xgprint(verbosity, explainer.local_feature_value_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.global_frequency_feature_value')
+    xgprint(verbosity, explainer.global_frequency_feature_value.shape)
+    xgprint(verbosity, explainer.global_frequency_feature_value.head(10))
+    xgprint(verbosity, 'INFO:     explainer.global_target_feature_value_explainability')
+    xgprint(verbosity, explainer.global_target_feature_value_explainability.shape)
+    xgprint(verbosity, explainer.global_target_feature_value_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.global_explainability')
+    xgprint(verbosity, explainer.global_explainability.shape)
+    xgprint(verbosity, explainer.global_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.global_target_explainability')
+    xgprint(verbosity, explainer.global_target_explainability.shape)
+    xgprint(verbosity, explainer.global_target_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.top_features')
+    xgprint(verbosity, explainer.top_features.shape)
+    xgprint(verbosity, explainer.top_features.head(10))
+    xgprint(verbosity, 'INFO:     explainer.top_features_by_target')
+    xgprint(verbosity, explainer.top_features_by_target.shape)
+    xgprint(verbosity, explainer.top_features_by_target.head(10))
 
 
 if __name__ == '__main__':
