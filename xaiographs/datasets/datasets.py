@@ -141,7 +141,7 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
 
     :param language: Language identifier {es: Spanish, en: English}. Default uses English language
     :return: Tuple: 1) pd.DataFrame with the natural language explanation of global feature-value we want to use, \
-    2) pd.DataFrame with the natural language explanation of feature-value we want to use per target,
+    2) pd.DataFrame with the natural language explanation of feature-value we want to use per target, \
     3) pd.DataFrame with the templates of the sentences with the explanation
     """
     df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_ES]))
