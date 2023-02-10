@@ -5,8 +5,8 @@ from typing import Any, Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
 
+from xaiographs import Explainer
 from xaiographs.common.utils import xgprint
-from xaiographs.exgraph.explainer import Explainer
 
 FLAGSHIP = 'Flagship'
 ID = 'id'
@@ -587,8 +587,8 @@ def main():
     xgprint(verbosity, 'INFO: "{}" targets {}:'.format(dataset_name, target_cols))
 
     # The desired explainer is created
-    explainer = Explainer(dataset=df_devrec_cooked, importance_engine='TEF_SHAP',
-                          destination_path='/home/cx02747/Utils/', number_of_features=12, verbose=verbosity)
+    explainer = Explainer(dataset=df_devrec_cooked, importance_engine='TEF_SHAP', number_of_features=12,
+                          verbose=verbosity)
 
     # Explaining process is triggered
     explainer.explain(feature_cols=feature_cols, target_cols=target_cols, num_samples_global_expl=50000)
