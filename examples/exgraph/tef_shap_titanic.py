@@ -10,9 +10,9 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, QuantileTransformer, RobustScaler
 
+from xaiographs import Explainer
 from xaiographs.common.constants import ID, TARGET
 from xaiographs.common.utils import xgprint
-from xaiographs.exgraph.explainer import Explainer
 
 # CONSTANTS
 CAT_COLUMN_NAMES = ['family_size', 'embarked', 'sex', 'pclass', 'title', 'is_alone']
@@ -278,8 +278,7 @@ def main():
         feature_cols.extend([RCAT, RNUM])
 
     # The desired explainer is created
-    explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', destination_path='/home/cx02747/Utils/',
-                          verbose=verbosity)
+    explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=verbosity)
 
     # Explaining process is triggered
     explainer.explain(feature_cols=feature_cols, target_cols=target_cols)

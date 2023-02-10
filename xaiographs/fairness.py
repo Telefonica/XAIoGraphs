@@ -107,7 +107,7 @@ class Fairness(object):
             0            gender                   0.416667                     E                    0.375                   E                  0.216667                    D
     """
 
-    def __init__(self, destination_path: str = './xaiographs_web_files', verbose: int = 0):
+    def __init__(self, destination_path: str = './xaioweb_files', verbose: int = 0):
         """Class Constructor
 
         :param destination_path: String, representing the path where output files will be stored
@@ -1134,7 +1134,7 @@ class Fairness(object):
         # Write the global scores for each of the sensitive variables
         self.__global_scores()
 
-        # Writing CSVs for the web interface
+        # Writing files for the web interface
         if not os.path.exists(self.__destination_path):
             os.mkdir(self.__destination_path)
 

@@ -52,12 +52,12 @@ class Exporter(object):
     - Create additional columns related to graphical representation (like weight in pixels for each row) when needed
     """
 
-    def __init__(self, df_explanation_sample: pd.DataFrame, path: str, verbose: int = 0):
+    def __init__(self, df_explanation_sample: pd.DataFrame, destination_path: str, verbose: int = 0):
         """
         Constructor method for Exporter
 
         :param df_explanation_sample: Pandas DataFrame, containing a sample of the explained pandas DataFrame
-        :param path:                  String, representing the path where data will be persisted
+        :param destination_path:      String, representing the path where data will be persisted
         :param verbose:               Verbosity level, where any value greater than 0 means the message is printed
 
         """
@@ -65,7 +65,7 @@ class Exporter(object):
         self.__global_explainability = None
         self.__global_nodes_info = None
         self.__global_target_explainability = None
-        self.__path = path
+        self.__destination_path = destination_path
         self.__verbose = verbose
         xgprint(self.__verbose, 'INFO: Instantiating Exporter:')
 
@@ -160,7 +160,7 @@ class Exporter(object):
         df_stats[EDGE_WEIGHT] = pd.cut(df_stats[COUNT], bins=N_BINS_EDGE_WEIGHT,
                                        labels=range(MIN_EDGE_WEIGHT,
                                                     MAX_EDGE_WEIGHT + BIN_WIDTH_EDGE_WEIGHT))
-        df_stats.to_json(path_or_buf=os.path.join(self.__path, filename), orient='records')
+        df_stats.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
     def __export_global_description(self, df_global_nodes_info: pd.DataFrame,
                                     filename: str = EXPLAINER_GLOBAL_GRAPH_DESCRIPTION_FILE):
@@ -173,7 +173,8 @@ class Exporter(object):
         :param filename:                String, representing the name of the file used to persist the information
         """
         df_global_nodes_info[[TARGET, RANK]].drop_duplicates(subset=[TARGET], keep='last').rename(
-            columns={RANK: NUM_FEATURES}).to_json(path_or_buf=os.path.join(self.__path, filename), orient='records')
+            columns={RANK: NUM_FEATURES}).to_json(path_or_buf=os.path.join(self.__destination_path, filename),
+                                                  orient='records')
 
     def __export_global_explainability(self, df_importance: pd.DataFrame,
                                        filename: str = EXPLAINER_GLOBAL_EXPLAINABILITY_FILE) -> pd.DataFrame:
@@ -193,7 +194,7 @@ class Exporter(object):
                                                    MAX_FEATURE_WEIGHT + BIN_WIDTH_FEATURE_WEIGHT,
                                                    BIN_WIDTH_FEATURE_WEIGHT)))
 
-        df_importance.to_json(path_or_buf=os.path.join(self.__path, filename), orient='records')
+        df_importance.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
         return df_importance
 
     def __export_global_nodes(self, df_stats: pd.DataFrame, df_importance: pd.DataFrame,
@@ -223,7 +224,7 @@ class Exporter(object):
                                                    MAX_NODE_WEIGHT + BIN_WIDTH_NODE_WEIGHT,
                                                    BIN_WIDTH_NODE_WEIGHT)))
         global_node_info.sort_values(by=[TARGET, RANK], inplace=True)
-        global_node_info.to_json(path_or_buf=os.path.join(self.__path, filename), orient='records')
+        global_node_info.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
         return global_node_info
 
@@ -236,7 +237,8 @@ class Exporter(object):
                                                 appearances of each possible target value
         :param filename:                        String representing the name of the file used to persist the information
         """
-        df_global_target_distribution.to_json(path_or_buf=os.path.join(self.__path, filename), orient='records')
+        df_global_target_distribution.to_json(path_or_buf=os.path.join(self.__destination_path, filename),
+                                              orient='records')
 
     def __export_global_target_explainability(self, df_importance: pd.DataFrame,
                                               filename: str = EXPLAINER_GLOBAL_TARGET_EXPLAINABILITY):
@@ -246,7 +248,7 @@ class Exporter(object):
         :param df_importance:   Pandas DataFrame containing the mean of each feature importance for each target
         :param filename:        String representing the name of the file used to persist the information
         """
-        df_importance.to_json(path_or_buf=os.path.join(self.__path, filename), orient='records')
+        df_importance.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
     def __export_local_dataset_reliability(self, features_info: FeaturesInfo, target_info: TargetInfo,
                                            sample_ids_mask: np.ndarray,
@@ -281,7 +283,7 @@ class Exporter(object):
                                                                      0]), target_info.top1_argmax[sample_ids_mask]],
                                                          decimals=2)).reshape(-1, 1)), axis=1),
                      columns=[ID] + features_info.feature_columns + [TARGET] + [RELIABILITY]).to_json(
-            path_or_buf=os.path.join(self.__path, filename), orient='records')
+            path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
         pd.DataFrame(np.concatenate((df_local_feature_values, target_info.top1_targets[sample_ids_mask].reshape(-1, 1),
                                      np.abs(1 - np.round(df_local_reliability_values[
@@ -290,7 +292,7 @@ class Exporter(object):
                                                                      0]), target_info.top1_argmax[sample_ids_mask]],
                                                          decimals=2)).reshape(-1, 1)), axis=1),
                      columns=[ID] + features_info.feature_columns + [TARGET] + [RELIABILITY]).to_json(
-            path_or_buf=os.path.join(self.__path, filename), orient='records')
+            path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
     def __export_local_explainability(self, features_info: FeaturesInfo, target_info: TargetInfo,
                                       sample_ids_mask: np.ndarray, filename: str = EXPLAINER_LOCAL_EXPLAINABILITY):
@@ -332,7 +334,7 @@ class Exporter(object):
                                          len(self.__df_explanation_sample), -1),
                                      top1_targets.reshape(-1, 1)), axis=1),
                      columns=[ID] + features_info.feature_columns + [TARGET]).to_json(
-            path_or_buf=os.path.join(self.__path, filename), orient='records')
+            path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
     def __export_local_nodes(self, df_stats: pd.DataFrame, features_info: FeaturesInfo,
                              filename=EXPLAINER_LOCAL_GRAPH_NODES):
@@ -354,14 +356,14 @@ class Exporter(object):
         local_nodes_info = df_stats[[ID, NODE_NAME, NODE_IMPORTANCE, TARGET]].copy()
         local_nodes_info[RANK] = local_nodes_info.groupby(ID)[NODE_IMPORTANCE].rank(method='dense',
                                                                                     ascending=False).astype(int)
-        local_nodes_info.to_json(path_or_buf=os.path.join(self.__path, filename), orient='records')
+        local_nodes_info.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
         local_nodes_info[NODE_WEIGHT] = pd.cut(local_nodes_info[NODE_IMPORTANCE].abs(),
                                                bins=N_BINS_NODE_WEIGHT,
                                                labels=list(range(
                                                    MIN_NODE_WEIGHT,
                                                    MAX_NODE_WEIGHT + BIN_WIDTH_NODE_WEIGHT,
                                                    BIN_WIDTH_NODE_WEIGHT)))
-        local_nodes_info.sort_values(by=[ID, RANK]).to_json(path_or_buf=os.path.join(self.__path, filename),
+        local_nodes_info.sort_values(by=[ID, RANK]).to_json(path_or_buf=os.path.join(self.__destination_path, filename),
                                                             orient='records')
 
     def export(self, features_info: FeaturesInfo, target_info: TargetInfo, sample_ids_mask: np.ndarray,
@@ -369,7 +371,10 @@ class Exporter(object):
                global_nodes_importance: pd.DataFrame, nodes_info: StatsResults, edges_info: StatsResults,
                target_distribution: pd.DataFrame):
         self.__global_target_explainability = global_target_explainability
-        xgprint(self.__verbose, 'INFO:     Exporting data in CSV format to {}'.format(self.__path))
+        xgprint(self.__verbose, 'INFO:     Exporting data in CSV format to {}'.format(self.__destination_path))
+        if not os.path.exists(self.__destination_path):
+            os.mkdir(self.__destination_path)
+
         self.__export_local_explainability(features_info=features_info, target_info=target_info,
                                            sample_ids_mask=sample_ids_mask)
 

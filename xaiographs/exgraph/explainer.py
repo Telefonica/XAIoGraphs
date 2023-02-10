@@ -23,7 +23,7 @@ class Explainer(object):
     visualization tasks
     """
 
-    def __init__(self, dataset: pd.DataFrame, importance_engine: str, destination_path: str,
+    def __init__(self, dataset: pd.DataFrame, importance_engine: str, destination_path: str = './xaioweb_files',
                  number_of_features: int = 8, verbose: int = 0):
         """
         Constructor method for Explainer.
@@ -47,7 +47,7 @@ class Explainer(object):
         self.__top_features = None
         self.__top_features_by_target = None
         self.__df = dataset
-        self.__path = destination_path
+        self.__destination_path = destination_path
         self.__engine = importance_engine
         self.__number_of_features = number_of_features
         self.__verbose = verbose
@@ -359,7 +359,8 @@ class Explainer(object):
         #   Persisting results
         # TODO: Al igual que un hipotético fichero con IDs, o un número de samples...habría que meter como parámetro
         #  el path donde se quieren guardar los ficheros
-        exporter = Exporter(df_explanation_sample=df_explanation_sample, path=self.__path, verbose=self.__verbose)
+        exporter = Exporter(df_explanation_sample=df_explanation_sample, destination_path=self.__destination_path,
+                            verbose=self.__verbose)
         exporter.export(features_info=features_info, target_info=target_info, sample_ids_mask=sample_ids_mask,
                         global_target_explainability=top1_importance_features,
                         global_explainability=global_explainability, global_nodes_importance=global_nodes_importance,
