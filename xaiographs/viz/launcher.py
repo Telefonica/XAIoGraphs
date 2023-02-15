@@ -1,3 +1,5 @@
+from xaiographs.common.constants import WEB_ENTRY_POINT
+
 import argparse
 import http.server
 import os
@@ -10,14 +12,17 @@ from copy import deepcopy
 
 MY_PROTOCOL = 'http://'
 MY_HOST_NAME = 'localhost'
-MY_HTML_FOLDER_PATH = 'frontpiled/'
+MY_HTML_FOLDER_PATH = 'frontpiled'
 MY_HOME_PAGE_FILE_PATH = 'index.html'
 COL_HEIGHT_LEFT = 50
 COL_HEIGHT_RIGHT = 20
-JSON_PUBLIC_FOLDER = os.path.join(MY_HTML_FOLDER_PATH, 'assets/public')
 TEXT_COLOR_WHITE = '\033[0m'
 TEXT_COLOR_RED = '\033[91m'
 TEXT_COLOR_GREEN = '\033[92m'
+XAIOWEB_DISTRIBUTION = 'XAIoWeb distribution'
+HIDDEN_DIR = '.{}'.format(WEB_ENTRY_POINT)
+SRC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), MY_HTML_FOLDER_PATH)
+JSON_PUBLIC_FOLDER = os.path.join(HIDDEN_DIR, 'assets/public')
 
 JSON_FILES = ["global_explainability.json",
              "global_target_distribution.json",
@@ -39,7 +44,7 @@ JSON_FILES = ["global_explainability.json",
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
-            self.path = os.path.join(MY_HTML_FOLDER_PATH, MY_HOME_PAGE_FILE_PATH)
+            self.path = os.path.join(HIDDEN_DIR, MY_HOME_PAGE_FILE_PATH)
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 def print_upper_line():
@@ -94,6 +99,28 @@ def print_bottom_line():
         print(u"\u2550", end='')
     print(u"\u255D")
 
+def check_deploy_web(force: bool = False) -> None:
+    """
+    This function check build of the frontend.
+    In case of build folder doesn't exist, execute a build process.
+    :return: Boolean value to continue with the publishing process.
+    """
+    print_upper_line()
+
+    if not os.path.exists(os.path.join(os.getcwd(),HIDDEN_DIR)):
+        print_message_line(XAIOWEB_DISTRIBUTION, 'MISSING', TEXT_COLOR_WHITE)
+        print_message_line(XAIOWEB_DISTRIBUTION, 'INSTALLING...', TEXT_COLOR_WHITE)
+        shutil.copytree(SRC_DIR, HIDDEN_DIR)
+    else:
+        if(force):
+            print_message_line(XAIOWEB_DISTRIBUTION, 'UPDATING...', TEXT_COLOR_WHITE)
+            if os.path.exists(HIDDEN_DIR):
+                shutil.rmtree(HIDDEN_DIR)
+            shutil.copytree(SRC_DIR, HIDDEN_DIR)
+    
+    print_message_line(XAIOWEB_DISTRIBUTION, 'AVAILABLE', TEXT_COLOR_GREEN)
+    print_bottom_line()
+
 def clean_json_public_folder():
     """
     This function remove all JSON files used previously.
@@ -105,7 +132,6 @@ def clean_json_public_folder():
             os.unlink(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
-
 def process_json_files(path: str):
     """
     This function prepare the backend publish folder used to store and read the JSON files.
@@ -135,8 +161,11 @@ def main():
     parser.add_argument('-d', '--data', default=None, help='JSON files path', type=str, required=False)
     parser.add_argument('-p', '--port', default=8080, help='Web server port', type=int, required=False)
     parser.add_argument('-o', '--open', action='store_true', help='Open web in browser', required=False)
+    parser.add_argument('-f', '--force', action='store_true',
+                        help='Force building the web from scratch, overwriting the existing one', required=False)
     args = deepcopy(parser.parse_args().__dict__)
 
+    check_deploy_web(force=args.get('force'))
     process_json_files(path=args.get('data'))
 
     my_handler = MyHttpRequestHandler
