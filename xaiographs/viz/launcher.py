@@ -25,33 +25,33 @@ SRC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), MY_HTML_FOLD
 JSON_PUBLIC_FOLDER = os.path.join(HIDDEN_DIR, 'assets/public')
 
 JSON_FILES = ["global_explainability.json",
-             "global_target_distribution.json",
-             "global_graph_description.json",
-             "global_graph_nodes.json",
-             "global_graph_edges.json",
-             "local_dataset_reliability.json",
-             "local_reason_why.json",
-             "local_graph_nodes.json",
-             "local_graph_edges.json",
-             "fairness_confusion_matrix.json",
-             "fairness_highest_correlation.json",
-             "fairness_independence.json",
-             "fairness_separation.json",
-             "fairness_sufficiency.json",
-             "fairness_sumarize_criterias.json"
-             ]
+              "global_target_distribution.json",
+              "global_graph_description.json",
+              "global_graph_nodes.json",
+              "global_graph_edges.json",
+              "local_dataset_reliability.json",
+              "local_reason_why.json",
+              "local_graph_nodes.json",
+              "local_graph_edges.json",
+              "fairness_confusion_matrix.json",
+              "fairness_highest_correlation.json",
+              "fairness_independence.json",
+              "fairness_separation.json",
+              "fairness_sufficiency.json",
+              "fairness_sumarize_criterias.json"
+              ]
 
 
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
-            self.path = os.path.join(HIDDEN_DIR, MY_HOME_PAGE_FILE_PATH)
+            self.path = os.path.join(HIDDEN_DIR, MY_HOME_PAGE_FILE_PATH).replace("\\", "/")
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 
 def print_upper_line():
     """
-    This function print the upper line of the requirements validatons table.
+    This function print the upper line of the requirements validations table.
     The only functionality it has is when viewing the fulfillment of requirements
     """
     print(u"\u2554", end='')
@@ -65,7 +65,7 @@ def print_upper_line():
 
 def print_middle_line():
     """
-    This function print the middle line of the requirements validatons table.
+    This function print the middle line of the requirements validations table.
     The only functionality it has is when viewing the fulfillment of requirements
     """
     print(u"\u2560", end='')
@@ -79,7 +79,7 @@ def print_middle_line():
 
 def print_message_line(message: str, status: str, style: str):
     """
-    This function print a message line of the requirements validatons table.
+    This function print a message line of the requirements validations table.
     The only functionality it has is when viewing the fulfillment of requirements
     The message shows the status of compliance with some of the requirements.
 
@@ -107,6 +107,7 @@ def print_bottom_line():
         print(u"\u2550", end='')
     print(u"\u255D")
 
+
 def check_deploy_web(force: bool = False) -> None:
     """
     This function check build of the frontend.
@@ -115,17 +116,17 @@ def check_deploy_web(force: bool = False) -> None:
     """
     print_upper_line()
 
-    if not os.path.exists(os.path.join(os.getcwd(),HIDDEN_DIR)):
+    if not os.path.exists(os.path.join(os.getcwd(), HIDDEN_DIR)):
         print_message_line(XAIOWEB_DISTRIBUTION, 'MISSING', TEXT_COLOR_WHITE)
         print_message_line(XAIOWEB_DISTRIBUTION, 'INSTALLING...', TEXT_COLOR_WHITE)
         shutil.copytree(SRC_DIR, HIDDEN_DIR)
     else:
-        if(force):
+        if force:
             print_message_line(XAIOWEB_DISTRIBUTION, 'UPDATING...', TEXT_COLOR_WHITE)
             if os.path.exists(HIDDEN_DIR):
                 shutil.rmtree(HIDDEN_DIR)
             shutil.copytree(SRC_DIR, HIDDEN_DIR)
-    
+
     print_message_line(XAIOWEB_DISTRIBUTION, 'AVAILABLE', TEXT_COLOR_GREEN)
     print_bottom_line()
 
@@ -194,7 +195,7 @@ def main():
             httpd.serve_forever()
         except KeyboardInterrupt:
             pass
-        
+
         httpd.server_close()
 
 
