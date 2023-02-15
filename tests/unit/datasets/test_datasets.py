@@ -62,26 +62,26 @@ class DatasetsUnitTest(unittest.TestCase):
         """
 
         df_global_semantics_en_expected = (
-            pd.DataFrame({'feature': ['gender_male', 'gender_female', 'is_alone_1'],
+            pd.DataFrame({'feature_value': ['gender_male', 'gender_female', 'is_alone_1'],
                           'reason': ['to be a man', 'to be a woman', 'travel alone']},
-                         columns=['feature', 'reason']))
+                         columns=['feature_value', 'reason']))
 
         df_global_semantics_es_expected = (
-            pd.DataFrame({'feature': ['gender_male', 'gender_female', 'is_alone_1'],
+            pd.DataFrame({'feature_value': ['gender_male', 'gender_female', 'is_alone_1'],
                           'reason': ['ser hombre', 'ser mujer', 'viajar solo']},
-                         columns=['feature', 'reason']))
+                         columns=['feature_value', 'reason']))
 
         df_target_semantics_en_expected = (
             pd.DataFrame({'target': ['NO_SURVIVED', 'NO_SURVIVED', 'NO_SURVIVED'],
-                          'feature': ['gender_male', 'gender_female', 'is_alone_1'],
+                          'feature_value': ['gender_male', 'gender_female', 'is_alone_1'],
                           'reason': ['many men have died', 'to be a woman', 'they traveled alone']},
-                         columns=['target', 'feature', 'reason']))
+                         columns=['target', 'feature_value', 'reason']))
 
         df_target_semantics_es_expected = (
             pd.DataFrame({'target': ['NO_SURVIVED', 'NO_SURVIVED', 'NO_SURVIVED'],
-                          'feature': ['gender_male', 'gender_female', 'is_alone_1'],
+                          'feature_value': ['gender_male', 'gender_female', 'is_alone_1'],
                           'reason': ['han muerto muchos hombres', 'ser mujer', 'viajaban solos']},
-                         columns=['target', 'feature', 'reason']))
+                         columns=['target', 'feature_value', 'reason']))
 
         df_why_templates_en_expected = (
             pd.DataFrame([['An explanation cannot be offered for this case.'],
@@ -101,6 +101,7 @@ class DatasetsUnitTest(unittest.TestCase):
         pd.testing.assert_frame_equal(df_global_semantics.head(3), df_global_semantics_en_expected)
         pd.testing.assert_frame_equal(df_global_semantics_en.head(3), df_global_semantics_en_expected)
         pd.testing.assert_frame_equal(df_global_semantics_es.head(3), df_global_semantics_es_expected)
+        
         pd.testing.assert_frame_equal(df_global_semantics_err.head(3), df_global_semantics_en_expected)
 
         pd.testing.assert_frame_equal(df_target_semantics.head(3), df_target_semantics_en_expected)

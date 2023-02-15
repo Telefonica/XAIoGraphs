@@ -32,7 +32,7 @@ SRC_DIR = os.path.dirname(__file__)
 
 
 def load_titanic() -> pd.DataFrame:
-    """Function returns a dataframe with the Titanic dataset with the following Features
+    """Function returns a DataFrame with the Titanic dataset with the following Features
 
         + **id:** unique passenger identifier
         + **gender:** passenger gender
@@ -111,21 +111,21 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
 
 
 def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Function that returns the dataframes necessary to test the WHY module of XAIoGraphs with the explainability \
+    """Function that returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
     calculated with the Titanic dataset.
 
     Example:
             >>> from xaiographs.datasets import load_titanic_why
             >>> df_global_semantics, df_target_semantics, df_why_templates = load_titanic_why()
             >>> df_global_semantics.head(5)
-                       feature                              reason
+                 feature_value                              reason
             0      gender_male                         to be a man
             1    gender_female                       to be a woman
             2       is_alone_1                        travel alone
             3    family_size_2  to be from a family of few members
             4  family_size_3-5                   be a large family
             >>> df_target_semantics.head(5)
-                    target          feature                                  reason
+                    target    feature_value                                  reason
             0  NO_SURVIVED      gender_male                      many men have died
             1  NO_SURVIVED    gender_female                           to be a woman
             2  NO_SURVIVED       is_alone_1                     they traveled alone
@@ -147,7 +147,8 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
     df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_EN])))
-
+    print("df_global_semantic")
+    print(df_global_semantic.head(10))
     df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_EN])))
