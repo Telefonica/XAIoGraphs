@@ -371,7 +371,7 @@ class Exporter(object):
                global_nodes_importance: pd.DataFrame, nodes_info: StatsResults, edges_info: StatsResults,
                target_distribution: pd.DataFrame):
         self.__global_target_explainability = global_target_explainability
-        xgprint(self.__verbose, 'INFO:     Exporting data in CSV format to {}'.format(self.__destination_path))
+        xgprint(self.__verbose, 'INFO:     Exporting data to {}'.format(self.__destination_path))
         if not os.path.exists(self.__destination_path):
             os.mkdir(self.__destination_path)
 
