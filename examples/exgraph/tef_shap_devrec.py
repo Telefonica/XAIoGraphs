@@ -569,7 +569,7 @@ def main():
     # Device recommender dataset to be used is specified here (WHAT or WHEN)
     # Dataset filename can be parametrized by using prepare_devrec_dataset_filename parameter otherwise,
     # 'what_dr_100K.csv' will be used for WHAT and 'when_dr_all_2M.csv' for WHEN
-    dataset_name = WHEN
+    dataset_name = WHAT
 
     # Dataset path is specified here
     path = '../../datasets/'
@@ -587,11 +587,11 @@ def main():
     xgprint(verbosity, 'INFO: "{}" targets {}:'.format(dataset_name, target_cols))
 
     # The desired explainer is created
-    explainer = Explainer(dataset=df_devrec_cooked, importance_engine='TEF_SHAP', number_of_features=12,
+    explainer = Explainer(dataset=df_devrec_cooked, importance_engine='TEF_SHAP', number_of_features=11,
                           verbose=verbosity)
 
     # Explaining process is triggered
-    explainer.explain(feature_cols=feature_cols, target_cols=target_cols, num_samples_global_expl=50000)
+    explainer.fit(feature_cols=feature_cols, target_cols=target_cols, num_samples_global_expl=50000)
 
     # Properties are displayed depending on verbose
     xgprint(verbosity, 'INFO: properties information is displayed:')
@@ -613,6 +613,9 @@ def main():
     xgprint(verbosity, 'INFO:     explainer.global_target_explainability')
     xgprint(verbosity, explainer.global_target_explainability.shape)
     xgprint(verbosity, explainer.global_target_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.sample_ids_to_display')
+    xgprint(verbosity, explainer.sample_ids_to_display.shape)
+    xgprint(verbosity, explainer.sample_ids_to_display.head(10))
     xgprint(verbosity, 'INFO:     explainer.top_features')
     xgprint(verbosity, explainer.top_features.shape)
     xgprint(verbosity, explainer.top_features.head(10))

@@ -281,7 +281,7 @@ def main():
     explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=verbosity)
 
     # Explaining process is triggered
-    explainer.explain(feature_cols=feature_cols, target_cols=target_cols)
+    explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
 
     # Properties are displayed depending on verbose
     xgprint(verbosity, 'INFO: properties information is displayed:')
@@ -303,6 +303,9 @@ def main():
     xgprint(verbosity, 'INFO:     explainer.global_target_explainability')
     xgprint(verbosity, explainer.global_target_explainability.shape)
     xgprint(verbosity, explainer.global_target_explainability.head(10))
+    xgprint(verbosity, 'INFO:     explainer.sample_ids_to_display')
+    xgprint(verbosity, explainer.sample_ids_to_display.shape)
+    xgprint(verbosity, explainer.sample_ids_to_display.head(10))
     xgprint(verbosity, 'INFO:     explainer.top_features')
     xgprint(verbosity, explainer.top_features.shape)
     xgprint(verbosity, explainer.top_features.head(10))

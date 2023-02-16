@@ -1,4 +1,4 @@
-target,feature,reason
+target,feature_value,reason
 NO_SURVIVED,gender_male,han muerto muchos hombres
 NO_SURVIVED,gender_female,ser mujer
 NO_SURVIVED,is_alone_1,viajaban solos

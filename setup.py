@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from xaiographs.common.constants import WEB_ENTRY_POINT
-
 from setuptools import setup
 
 __VERSION__ = open('VERSION').read().strip()
+WEB_ENTRY_POINT = 'xaioweb'
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()

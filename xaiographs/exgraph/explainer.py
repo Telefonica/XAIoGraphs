@@ -13,7 +13,7 @@ from xaiographs.exgraph.importance.importance_calculator_factory import Importan
 from xaiographs.exgraph.stats_calculator import StatsCalculator
 
 # Warning message
-WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute explain() function to get results.'
+WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute fit() function to get results.'
 
 
 class Explainer(object):
@@ -44,6 +44,7 @@ class Explainer(object):
         self.__global_target_explainability = None
         self.__local_dataset_reliability = None
         self.__local_feature_value_explainability = None
+        self.__sample_ids_to_display = list()
         self.__top_features = None
         self.__top_features_by_target = None
         self.__df = dataset
@@ -60,7 +61,7 @@ class Explainer(object):
         and each of the importance values previously obtained, are multiplied by their corresponding probability for
         each target. Finally, the resulting values for each feature (one value per target) are averaged, so a single
         number representing each feature importance is obtained.
-        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
 
         :return: pd.DataFrame, containing each feature ranked by its global importance
@@ -75,7 +76,7 @@ class Explainer(object):
         """
         Property that returns the number of occurrences for each feature-value pair. This is computed by adding up each
          feature-value pair occurrence.
-        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, containing the number of times each feature-value occurs
         """
@@ -89,7 +90,7 @@ class Explainer(object):
         """
         Property that returns all the features to be explained, ranked by their global importance by target value. This
         is achieved by computing the mean of each feature importance for each of the top1 targets.
-        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
 
         :return: pd.DataFrame, containing each feature ranked by its global importance by target value
@@ -106,7 +107,7 @@ class Explainer(object):
         This is achieved by computing the mean of the importance/s of each feature-value pair for all those samples
         whose top1 target matches the target value being processed. Again, it's important to remark that this is done
         for each possible target value.
-        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, containing for each target value all the feature-value pairs occurring in all those
                  samples whose top1 target is equal to the target value being processed. Feature-value pair importance
@@ -122,7 +123,7 @@ class Explainer(object):
     def local_dataset_reliability(self):
         """
         Property that, for each sample, returns its top1 target and the reliability value associated to that target
-        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, containing for each sample all its feature-value pairs together with their importance
         """
@@ -143,7 +144,7 @@ class Explainer(object):
         importance. In order to achieve this, the column name where the right importance value will be found must be
         compounded. This is done by joining together the top1 target for that sample, the feature-value pair and the
         suffix '_imp'
-        If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, containing for each sample all its feature-value pairs together with their importance
         """
@@ -163,6 +164,19 @@ class Explainer(object):
             return df_local_feature_value_explainability
 
     @property
+    def sample_ids_to_display(self):
+        """
+        Property that retrieves the sample ids which will be used to build the interactive visualization. The verbal
+        explanation provided by the Why module for these samples, will be displayed too
+
+        :return: pd.Series containing the ids for the chosen samples
+        """
+        if self.__sample_ids_to_display is None:
+            print(WARN_MSG.format('\"sample_ids_to_display\"'))
+        else:
+            return pd.to_numeric(pd.Series(self.__sample_ids_to_display, name=ID), downcast="unsigned")
+
+    @property
     def top_features(self):
         """
         Property that returns all the features ranked by the `FeatureSelector`. Ranking is calculated as follows:
@@ -177,7 +191,7 @@ class Explainer(object):
          - Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with
          the largest aggregated rank will rank the first in the top K features (note that when talking about ranks,
          1 is greater than 2)
-         If the method `explain()` from the `Explainer` class has not been executed, it will return a warning message.
+         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
         Modified Jensen Shannon distance calculation:
          - The formula can be found
@@ -224,7 +238,7 @@ class Explainer(object):
          - Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with
          the largest aggregated rank will rank the first in the top K features (note that when talking about ranks,
          1 is greater than 2)
-         If the method "explain()" from the "Explainer" class has not been executed, it will return a warning message.
+         If the method "fit()" from the "Explainer" class has not been executed, it will return a warning message.
 
         Modified Jensen Shannon distance calculation:
          - The formula can be found
@@ -271,8 +285,8 @@ class Explainer(object):
 
         return features_info, target_info
 
-    def explain(self, feature_cols: List[str], target_cols: List[str], num_samples_local_expl: int = 100,
-                num_samples_global_expl: int = 50000, batch_size_expl: int = 5000, train_stratify: bool = True):
+    def fit(self, feature_cols: List[str], target_cols: List[str], num_samples_local_expl: int = 100,
+            num_samples_global_expl: int = 50000, batch_size_expl: int = 5000, train_stratify: bool = True):
         if num_samples_global_expl < num_samples_local_expl:
             print('ERROR: num_samples_global_expl ({}) < num_samples_local_exp ({}): Number of samples for global '
                   'explainability must be larger than the number of samples for local explainability'
@@ -320,6 +334,7 @@ class Explainer(object):
                                                        num_samples=num_samples_local_expl,
                                                        target_probs=target_info.target_probs,
                                                        target_cols=target_info.target_columns)
+        self.__sample_ids_to_display = sample_ids
 
         # local_dataset_reliability property is computed
         self.__local_dataset_reliability = np.concatenate((df_explanation_global[ID].values.reshape(-1, 1),
@@ -357,8 +372,6 @@ class Explainer(object):
         #   Mixing calculated statistics and calculated importance when needed
         #   Calculating weights in pixels
         #   Persisting results
-        # TODO: Al igual que un hipotético fichero con IDs, o un número de samples...habría que meter como parámetro
-        #  el path donde se quieren guardar los ficheros
         exporter = Exporter(df_explanation_sample=df_explanation_sample, destination_path=self.__destination_path,
                             verbose=self.__verbose)
         exporter.export(features_info=features_info, target_info=target_info, sample_ids_mask=sample_ids_mask,
