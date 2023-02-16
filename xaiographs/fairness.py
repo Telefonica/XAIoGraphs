@@ -98,10 +98,10 @@ class Fairness(object):
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.fairness_global_info
               sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
             0            gender                   0.416667                     E                    0.375                   E                  0.216667                    D
@@ -125,7 +125,7 @@ class Fairness(object):
     @property
     def target_values(self):
         """Property that returns a list with the different values of the target of the dataset. \
-        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+        If the main method "fit()" has not been executed, it will return a warning message.
 
         :return: List[str], with target values
 
@@ -149,10 +149,10 @@ class Fairness(object):
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.target_values
             array(['YES', 'NO'], dtype=object)
         """
@@ -164,7 +164,7 @@ class Fairness(object):
     @property
     def confusion_matrix(self):
         """Property that returns a confusion matrix. \
-        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+        If the main method "fit()" has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, with Confusion Matrix
 
@@ -188,10 +188,10 @@ class Fairness(object):
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.confusion_matrix
             y_predict  NO  YES
             y_true
@@ -206,7 +206,7 @@ class Fairness(object):
     @property
     def correlation_matrix(self):
         """Property that returns correlation matrix (pearson correlation) between features. \
-        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+        If the main method "fit()" has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, with correlation matrix
 
@@ -232,10 +232,10 @@ class Fairness(object):
             9  WOMAN   WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.correlation_matrix
                      gender  gender2     color
             gender      NaN      1.0  0.228218
@@ -252,7 +252,7 @@ class Fairness(object):
         """Property that returns the pairs of features that have a pearson correlation value above a threshold (0.9). \
         If one of these features is a sensitive features, it will be marked with a flag. In the event that there are \
         no highly correlated features, an empty DataFrame will be returned. \
-        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+        If the main method "fit()" has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, with highest correlation features
 
@@ -278,10 +278,10 @@ class Fairness(object):
             9  WOMAN   WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.highest_correlation_features
               feature_1 feature_2  correlation_value  is_correlation_sensible
             0   gender2    gender                1.0                     True
@@ -378,10 +378,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.fairness_info
               sensitive_feature sensitive_value  is_binary_sensitive_feature target_label  independence_score  ... separation_category  separation_score_weight  sufficiency_score sufficiency_category  sufficiency_score_weight
@@ -435,10 +435,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.independence_info
               sensitive_feature sensitive_value target_label  independence_score independence_category
@@ -492,10 +492,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.separation_info
               sensitive_feature sensitive_value target_label  separation_score separation_category
@@ -549,10 +549,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.sufficiency_info
               sensitive_feature sensitive_value target_label  sufficiency_score sufficiency_category
@@ -610,10 +610,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.fairness_global_info
               sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
@@ -1014,7 +1014,7 @@ class Fairness(object):
                     break
             return category
 
-    def fit_fairness(self, df: pd.DataFrame, sensitive_cols: List[str], target_col: str, predict_col: str) -> None:
+    def fit(self, df: pd.DataFrame, sensitive_cols: List[str], target_col: str, predict_col: str) -> None:
         """Main function that performs all the calculations of the Fairness class. The calculated results are \
         accessible via the **property** functions of the class.
 
