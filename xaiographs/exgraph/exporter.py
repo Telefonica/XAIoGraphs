@@ -19,6 +19,7 @@ IMPORTANCE_FEATURE = 'importance_feature'
 MAX_EDGE_WEIGHT = 10
 MAX_FEATURE_WEIGHT = 5
 MAX_NODE_WEIGHT = 50
+MEAN = 'mean'
 MIN_EDGE_WEIGHT = 1
 MIN_FEATURE_WEIGHT = 1
 MIN_NODE_WEIGHT = 10
@@ -28,18 +29,20 @@ N_BINS_NODE_WEIGHT = 9
 NODE_NAME_RATIO_WEIGHT = 'node_name_ratio_weight'
 NODE_WEIGHT = 'node_weight'
 NUM_FEATURES = 'num_features'
+TARGET_FEATURE_COUNT = 'target_feature_count'
 
 # FILE CONSTANTS
 EXPLAINER_GLOBAL_GRAPH_DESCRIPTION_FILE = 'global_graph_description.json'
 EXPLAINER_GLOBAL_EXPLAINABILITY_FILE = 'global_explainability.json'
 EXPLAINER_GLOBAL_GRAPH_NODES_FILE = 'global_graph_nodes.json'
-EXPLAINER_GLOBAL_TARGET_DISTRIBUTION = 'global_target_distribution.json'
-EXPLAINER_GLOBAL_TARGET_EXPLAINABILITY = 'deprecated_global_target_explainability.json'
-EXPLAINER_LOCAL_DATASET_RELIABILITY = 'local_dataset_reliability.json'
-EXPLAINER_LOCAL_EXPLAINABILITY = 'local_explainability.json'
-EXPLAINER_LOCAL_GRAPH_NODES = 'local_graph_nodes.json'
-EXPLAINER_LOCAL_GRAPH_EDGES = 'local_graph_edges.json'
-EXPLAINER_GLOBAL_GRAPH_EDGES = 'global_graph_edges.json'
+EXPLAINER_GLOBAL_TARGET_DISTRIBUTION_FILE = 'global_target_distribution.json'
+EXPLAINER_GLOBAL_TARGET_EXPLAINABILITY_FILE = 'global_target_explainability.json'
+EXPLAINER_LOCAL_DATASET_RELIABILITY_FILE = 'local_dataset_reliability.json'
+EXPLAINER_LOCAL_EXPLAINABILITY_FILE = 'local_explainability.json'
+EXPLAINER_LOCAL_GRAPH_NODES_FILE = 'local_graph_nodes.json'
+EXPLAINER_LOCAL_GRAPH_EDGES_FILE = 'local_graph_edges.json'
+EXPLAINER_GLOBAL_GRAPH_EDGES_FILE = 'global_graph_edges.json'
+EXPLAINER_GLOBAL_HEATMAP_FILE = 'global_heatmap_feat_val.json'
 
 
 class Exporter(object):
@@ -197,6 +200,44 @@ class Exporter(object):
         df_importance.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
         return df_importance
 
+    def __export_global_nodes_heatmap_info(self, df_local_nodes: pd.DataFrame, features_info: FeaturesInfo,
+                                           target_info: TargetInfo, filename: str = EXPLAINER_GLOBAL_HEATMAP_FILE):
+        """
+        This function takes as main input the importance for each of the individual feature-value pair (node) and its
+        corresponding target for each individual sample of the local sample. From here it generates the following
+        statistics for each node (feature-value) and target pair: the frequency and the mean of the importances
+
+        :param features_info:  NamedTuple containing all the feature column names lists which will be used all
+                               through the execution flow
+        :param target_info:    NamedTuple containing a numpy array listing the top1 target for each DataFrame row,
+                               another numpy array listing a probability for each possible target value and a third
+                               numpy array showing the top1 targets indexes
+        :param df_local_nodes: Pandas DataFrame providing the importance calculated for each individual node from the
+                               local sample
+        :param filename:       String, representing the name of the file used to persist the information
+        """
+        # Target values are count and divided by the number of features. This result will be used as the divisor to
+        # compute each target-node frequency
+        for t in target_info.target_columns:
+            df_local_nodes.loc[df_local_nodes[TARGET] == t, TARGET_FEATURE_COUNT] = (
+                        len(df_local_nodes[df_local_nodes[TARGET] == t]) / len(features_info.feature_columns))
+
+        # The count for each target-node pairs is calculated together with the mean of their importances. Count will be
+        # divided by the previous result to compute target-node frequency
+        df_local_nodes = df_local_nodes.groupby([TARGET, NODE_NAME, TARGET_FEATURE_COUNT])[NODE_IMPORTANCE].agg(
+            ['count', 'mean']).reset_index()
+        df_local_nodes[FREQUENCY] = df_local_nodes[COUNT] / df_local_nodes[TARGET_FEATURE_COUNT]
+        df_local_nodes.rename(columns={MEAN: IMPORTANCE}, inplace=True)
+
+        # Feature name and feature value are extracted from each node name
+        for f in features_info.feature_columns:
+            df_local_nodes.loc[df_local_nodes[NODE_NAME].str.startswith(f), FEATURE_NAME] = f
+        df_local_nodes[FEATURE_VALUE] = df_local_nodes.apply(lambda x: x[NODE_NAME][len(x[FEATURE_NAME]) + 1:], axis=1)
+
+        df_local_nodes[[TARGET, FEATURE_NAME, FEATURE_VALUE, IMPORTANCE, FREQUENCY]].sort_values(
+            by=[TARGET, FEATURE_NAME, FEATURE_VALUE], ascending=False).to_json(
+            path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
+
     def __export_global_nodes(self, df_stats: pd.DataFrame, df_importance: pd.DataFrame,
                               filename=EXPLAINER_GLOBAL_GRAPH_NODES_FILE) -> pd.DataFrame:
         """
@@ -229,7 +270,7 @@ class Exporter(object):
         return global_node_info
 
     def __export_global_target_distribution(self, df_global_target_distribution: pd.DataFrame,
-                                            filename=EXPLAINER_GLOBAL_TARGET_DISTRIBUTION):
+                                            filename=EXPLAINER_GLOBAL_TARGET_DISTRIBUTION_FILE):
         """
         This function persists the information related to the number of appearances of each possible target value
 
@@ -241,7 +282,7 @@ class Exporter(object):
                                               orient='records')
 
     def __export_global_target_explainability(self, df_importance: pd.DataFrame,
-                                              filename: str = EXPLAINER_GLOBAL_TARGET_EXPLAINABILITY):
+                                              filename: str = EXPLAINER_GLOBAL_TARGET_EXPLAINABILITY_FILE):
         """
         This function persists the global target explainability information. Note that his file will be deprecated
 
@@ -252,7 +293,7 @@ class Exporter(object):
 
     def __export_local_dataset_reliability(self, features_info: FeaturesInfo, target_info: TargetInfo,
                                            sample_ids_mask: np.ndarray,
-                                           filename: str = EXPLAINER_LOCAL_DATASET_RELIABILITY):
+                                           filename: str = EXPLAINER_LOCAL_DATASET_RELIABILITY_FILE):
         """
         This function collects the reliability for each row and for its correspondent top1 target, then, information
         is persisted
@@ -295,7 +336,7 @@ class Exporter(object):
             path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
     def __export_local_explainability(self, features_info: FeaturesInfo, target_info: TargetInfo,
-                                      sample_ids_mask: np.ndarray, filename: str = EXPLAINER_LOCAL_EXPLAINABILITY):
+                                      sample_ids_mask: np.ndarray, filename: str = EXPLAINER_LOCAL_EXPLAINABILITY_FILE):
         """
         This function collects for each row the importance for each feature and for the top1 target. Then, this
         information is persisted
@@ -337,7 +378,7 @@ class Exporter(object):
             path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
     def __export_local_nodes(self, df_stats: pd.DataFrame, features_info: FeaturesInfo,
-                             filename=EXPLAINER_LOCAL_GRAPH_NODES):
+                             filename=EXPLAINER_LOCAL_GRAPH_NODES_FILE) -> pd.DataFrame:
         """
         This function combines the previously calculated local statistics for the nodes, with the calculated importance.
         It calculates the weight in pixels for the node importance too and, finally, persists the resulting information
@@ -346,6 +387,10 @@ class Exporter(object):
         :param features_info:   NamedTuple containing all the feature column names lists which will be used all through
                                 the execution flow
         :param filename:        String representing the name of the file used to persist the information
+
+        :return:                Pandas DataFrame providing the importance calculated for each individual node from the
+                                local sample, needed to generate another file to export to display a heatmap
+                                visualization
         """
         importance_values = np.repeat(self.__df_explanation_sample.values, len(features_info.feature_columns), axis=0)
         df_stats[IMPORTANCE_FEATURE] = df_stats[TARGET] + '_' + df_stats[FEATURE_NAME] + IMPORTANCE_SUFFIX
@@ -356,7 +401,6 @@ class Exporter(object):
         local_nodes_info = df_stats[[ID, NODE_NAME, NODE_IMPORTANCE, TARGET]].copy()
         local_nodes_info[RANK] = local_nodes_info.groupby(ID)[NODE_IMPORTANCE].rank(method='dense',
                                                                                     ascending=False).astype(int)
-        local_nodes_info.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
         local_nodes_info[NODE_WEIGHT] = pd.cut(local_nodes_info[NODE_IMPORTANCE].abs(),
                                                bins=N_BINS_NODE_WEIGHT,
                                                labels=list(range(
@@ -365,6 +409,7 @@ class Exporter(object):
                                                    BIN_WIDTH_NODE_WEIGHT)))
         local_nodes_info.sort_values(by=[ID, RANK]).to_json(path_or_buf=os.path.join(self.__destination_path, filename),
                                                             orient='records')
+        return local_nodes_info.drop([NODE_WEIGHT, RANK], axis=1)
 
     def export(self, features_info: FeaturesInfo, target_info: TargetInfo, sample_ids_mask: np.ndarray,
                global_target_explainability: pd.DataFrame, global_explainability: pd.DataFrame,
@@ -381,9 +426,12 @@ class Exporter(object):
         self.__export_local_dataset_reliability(features_info=features_info, target_info=target_info,
                                                 sample_ids_mask=sample_ids_mask)
 
-        self.__export_local_nodes(df_stats=nodes_info.local_stats, features_info=features_info)
+        local_nodes_info = self.__export_local_nodes(df_stats=nodes_info.local_stats, features_info=features_info)
 
-        self.__export_edges(df_stats=edges_info.local_stats, filename=EXPLAINER_LOCAL_GRAPH_EDGES)
+        self.__export_global_nodes_heatmap_info(df_local_nodes=local_nodes_info, features_info=features_info,
+                                                target_info=target_info)
+
+        self.__export_edges(df_stats=edges_info.local_stats, filename=EXPLAINER_LOCAL_GRAPH_EDGES_FILE)
 
         self.__export_global_target_explainability(df_importance=global_target_explainability)
 
@@ -396,4 +444,4 @@ class Exporter(object):
 
         self.__export_global_target_distribution(df_global_target_distribution=target_distribution)
 
-        self.__export_edges(df_stats=edges_info.global_stats, filename=EXPLAINER_GLOBAL_GRAPH_EDGES)
+        self.__export_edges(df_stats=edges_info.global_stats, filename=EXPLAINER_GLOBAL_GRAPH_EDGES_FILE)
