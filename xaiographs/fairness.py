@@ -335,7 +335,7 @@ class Fairness(object):
         """Returns a DataFrame with all information of fairness criterias. For each sensitive feature, for each \
         value of the sensitive feature and for each value of the target, returns (for each fairness criterion) \
         its Score, its Category and its Weight (percentage of the value of the variable and the value target). \
-        The datadrame contains the following columns:
+        The dataframe contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **sensitive_value:** value of sensitive feature
@@ -403,7 +403,7 @@ class Fairness(object):
     def independence_info(self):
         """Returns a DataFrame with all information of Independence criterion. For each sensitive feature, for each \
         value of the sensitive feature and for each value of the target, returns (for Independence criterion) \
-        its Score and its Category. The datadrame contains the following columns:
+        its Score and its Category. The dataframe contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **sensitive_value:** value of sensitive feature
@@ -460,7 +460,7 @@ class Fairness(object):
     def separation_info(self):
         """Returns a DataFrame with all information of Separation criterion. For each sensitive feature, for each \
         value of the sensitive feature and for each value of the target, returns (for Separation criterion) \
-        its Score and its Category. The datadrame contains the following columns:
+        its Score and its Category. The dataframe contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **sensitive_value:** value of sensitive feature
@@ -517,7 +517,7 @@ class Fairness(object):
     def sufficiency_info(self):
         """Returns a DataFrame with all information of Sufficiency criterion. For each sensitive feature, for each \
         value of the sensitive feature and for each value of the target, returns (for Sufficiency criterion) \
-        its Score and its Category. The datadrame contains the following columns:
+        its Score and its Category. The dataframe contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **sensitive_value:** value of sensitive feature
@@ -574,7 +574,7 @@ class Fairness(object):
     def fairness_global_info(self):
         """Returns a DataFrame with "Global Scores" (weighted aggregation of the scores for each fairness criteria) \
         for each sensitive feature and assigns it a category *{A+, A, B, C, D, E}*. \
-        The datadrame contains the following columns:
+        The DataFrame contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **independence_global_score:** Independence global criterion score
@@ -637,9 +637,9 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, independence score value
@@ -716,10 +716,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, separation score value
@@ -799,10 +799,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, sufficiency score value
@@ -884,10 +884,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: Tuple[float, float, float], fairness score metrics (independence score, separation score, \
@@ -952,10 +952,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param groupby_cols: List[str], with columns to aggregate
         :return: float
@@ -1022,7 +1022,7 @@ class Fairness(object):
         a *real target* column and *prediction* column.
         :param sensitive_cols: List[str], with the sensitive features (df column names) to evaluate the \
         Fairness criteria
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
         """
         self.__pre_processing(df=df, sensitive_cols=sensitive_cols, target_col=target_col, predict_col=predict_col)
@@ -1040,14 +1040,14 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: None
         """
-        # Check if sensitive_col, predict_col or target_col column is in dataframe
+        # Check if sensitive_col, predict_col or target_col column is in DataFrame
         columns_df = df.columns
         columns_2_check = ({sensitive_col, predict_col} if target_col is None
                            else {sensitive_col, predict_col, target_col})
@@ -1074,7 +1074,7 @@ class Fairness(object):
         a *real target* column and *prediction* column.
         :param sensitive_cols: List[str], with the sensitive features (df column names) to evaluate the \
         Fairness criteria
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
         :return: None
         """
@@ -1103,7 +1103,7 @@ class Fairness(object):
         a *real target* column and *prediction* column.
         :param sensitive_cols: List[str], with the sensitive features (df column names) to evaluate the \
         Fairness criteria
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
         :return: None
         """
@@ -1236,10 +1236,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :param is_sensitive_col_binary: bool, indicates whether the sensitive feature is binary or not

@@ -26,10 +26,7 @@ class Explainer(object):
     def __init__(self, dataset: pd.DataFrame, importance_engine: str, destination_path: str = './xaioweb_files',
                  number_of_features: int = 8, verbose: int = 0):
         """
-        Constructor method for Explainer.
-        - Property `__top_features` provides a list with the all the original features ranked
-        - Property `__top_features_by_target` provides distance and rank information for each feature and target value,
-         so that results can be understood
+        Constructor method for `Explainer` class
 
         :param dataset:                  Pandas DataFrame, containing the whole dataset
         :param importance_engine:        String, representing the name of the method use to compute feature importance
@@ -61,10 +58,33 @@ class Explainer(object):
         and each of the importance values previously obtained, are multiplied by their corresponding probability for
         each target. Finally, the resulting values for each feature (one value per target) are averaged, so a single
         number representing each feature importance is obtained.
+
         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
+        The DataFrame contains the following columns:
+
+            + **feature:** feature name
+            + **importance:** feature importance considering all possible target values and all the samples
+            + **rank:** position of the feature when sorted by its importance. The lower the rank the higher the \
+            importance
 
         :return: pd.DataFrame, containing each feature ranked by its global importance
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.global_explainability
+                    feature  importance  rank
+            0        gender    0.124936     1
+            1         title    0.122790     2
+            2         class    0.089931     3
+            3  ticket_price    0.062145     4
+            7           age    0.059930     5
+            4      embarked    0.059490     6
+            5   family_size    0.042980     7
+            6      is_alone    0.031692     8
         """
         if self.__global_explainability is None:
             print(WARN_MSG.format('\"global_explainability\"'))
@@ -74,11 +94,50 @@ class Explainer(object):
     @property
     def global_frequency_feature_value(self):
         """
-        Property that returns the number of occurrences for each feature-value pair. This is computed by adding up each
-         feature-value pair occurrence.
+        Property that returns the number of occurrences for each feature-value pair. This is computed by adding up
+        each feature-value pair occurrence.
+
         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
+        The DataFrame contains the following columns:
+
+            + **feature_value:** feature name together with each of its possible values
+            + **frequency:** total number of occurrences for each feature name-value pairs
+
         :return: pd.DataFrame, containing the number of times each feature-value occurs
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.global_frequency_feature_value
+                    feature_value  frequency
+            28     family_size_>5         35
+            8       age_>60_years         33
+            32        gender_male        843
+            44           title_Mr        818
+            30      gender_female        466
+            46          title_Mrs        457
+            6       age_<12_years         98
+            14            class_3        709
+            40   ticket_price_Low        433
+            48         title_rare         34
+            10            class_1        323
+            0     age_12_18_years        105
+            26    family_size_3-5         90
+            16         embarked_C        270
+            18         embarked_Q        123
+            20         embarked_S        916
+            24      family_size_2        159
+            12            class_2        277
+            4     age_30_60_years        522
+            42   ticket_price_Mid        399
+            2     age_18_30_years        551
+            38  ticket_price_High        477
+            22      family_size_1       1025
+            36         is_alone_1       1025
+            34         is_alone_0        284
         """
         if self.__global_frequency_feature_value is None:
             print(WARN_MSG.format('\"global_frequency_feature_value\"'))
@@ -90,10 +149,42 @@ class Explainer(object):
         """
         Property that returns all the features to be explained, ranked by their global importance by target value. This
         is achieved by computing the mean of each feature importance for each of the top1 targets.
+
         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
+        The DataFrame contains the following columns:
+
+            + **target:** each of the possible target values
+            + **feature:** feature name
+            + **importance:** feature importance with respect to each possible target values
+            + **rank:** position of the feature when sorted by its importance. The lower the rank the higher the \
+            importance
 
         :return: pd.DataFrame, containing each feature ranked by its global importance by target value
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.global_target_explainability
+                     target       feature  importance  rank
+            0   NO_SURVIVED        gender    0.108512     1
+            1   NO_SURVIVED         title    0.107290     2
+            2   NO_SURVIVED         class    0.074033     3
+            3   NO_SURVIVED  ticket_price    0.056893     4
+            7   NO_SURVIVED           age    0.052081     5
+            4   NO_SURVIVED      embarked    0.050245     6
+            5   NO_SURVIVED   family_size    0.037737     7
+            6   NO_SURVIVED      is_alone    0.027281     8
+            8      SURVIVED        gender    0.151681     1
+            9      SURVIVED         title    0.148033     2
+            10     SURVIVED         class    0.115822     3
+            12     SURVIVED      embarked    0.074544     4
+            15     SURVIVED           age    0.072711     5
+            11     SURVIVED  ticket_price    0.070697     6
+            13     SURVIVED   family_size    0.051519     7
+            14     SURVIVED      is_alone    0.038876     8
         """
         if self.__global_target_explainability is None:
             print(WARN_MSG.format('\"global_target_explainability\"'))
@@ -107,12 +198,71 @@ class Explainer(object):
         This is achieved by computing the mean of the importance/s of each feature-value pair for all those samples
         whose top1 target matches the target value being processed. Again, it's important to remark that this is done
         for each possible target value.
+
         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, containing for each target value all the feature-value pairs occurring in all those
                  samples whose top1 target is equal to the target value being processed. Feature-value pair importance
                  is computed by averaging the importance of all the occurrences of that feature-value pair linked to
                  the target value being processed
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.global_target_feature_value_explainability
+                    target      feature_value  importance  rank
+            28  NO_SURVIVED     family_size_>5    0.190344     1
+            8   NO_SURVIVED      age_>60_years    0.189757     2
+            32  NO_SURVIVED        gender_male    0.109828     3
+            44  NO_SURVIVED           title_Mr    0.109525     4
+            30  NO_SURVIVED      gender_female    0.100472     5
+            46  NO_SURVIVED          title_Mrs    0.099421     6
+            6   NO_SURVIVED      age_<12_years    0.090704     7
+            14  NO_SURVIVED            class_3    0.083974     8
+            40  NO_SURVIVED   ticket_price_Low    0.076323     9
+            48  NO_SURVIVED         title_rare    0.074205    10
+            10  NO_SURVIVED            class_1    0.067447    11
+            0   NO_SURVIVED    age_12_18_years    0.063259    12
+            26  NO_SURVIVED    family_size_3-5    0.059982    13
+            16  NO_SURVIVED         embarked_C    0.057053    14
+            18  NO_SURVIVED         embarked_Q    0.052446    15
+            20  NO_SURVIVED         embarked_S    0.048659    16
+            24  NO_SURVIVED      family_size_2    0.047822    17
+            12  NO_SURVIVED            class_2    0.046022    18
+            4   NO_SURVIVED    age_30_60_years    0.045329    19
+            42  NO_SURVIVED   ticket_price_Mid    0.043899    20
+            2   NO_SURVIVED    age_18_30_years    0.042602    21
+            38  NO_SURVIVED  ticket_price_High    0.042125    22
+            22  NO_SURVIVED      family_size_1    0.027983    23
+            36  NO_SURVIVED         is_alone_1    0.027983    23
+            34  NO_SURVIVED         is_alone_0    0.024083    24
+            7      SURVIVED      age_<12_years    0.253344     1
+            31     SURVIVED      gender_female    0.195549     2
+            47     SURVIVED          title_Mrs    0.191031     3
+            11     SURVIVED            class_1    0.145615     4
+            13     SURVIVED            class_2    0.143814     5
+            17     SURVIVED         embarked_C    0.136277     6
+            19     SURVIVED         embarked_Q    0.121356     7
+            49     SURVIVED         title_rare    0.118885     8
+            25     SURVIVED      family_size_2    0.114187     9
+            9      SURVIVED      age_>60_years    0.112574    10
+            1      SURVIVED    age_12_18_years    0.099684    11
+            39     SURVIVED  ticket_price_High    0.096772    12
+            29     SURVIVED     family_size_>5    0.091483    13
+            15     SURVIVED            class_3    0.064828    14
+            33     SURVIVED        gender_male    0.045918    15
+            3      SURVIVED    age_18_30_years    0.045671    16
+            45     SURVIVED           title_Mr    0.044766    17
+            35     SURVIVED         is_alone_0    0.043574    18
+            41     SURVIVED   ticket_price_Low    0.042836    19
+            43     SURVIVED   ticket_price_Mid    0.042553    20
+            5      SURVIVED    age_30_60_years    0.037263    21
+            23     SURVIVED      family_size_1    0.037075    22
+            37     SURVIVED         is_alone_1    0.037075    22
+            21     SURVIVED         embarked_S    0.036138    23
+            27     SURVIVED    family_size_3-5    0.032299    24
         """
         if self.__global_target_feature_value_explainability is None:
             print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
@@ -126,6 +276,26 @@ class Explainer(object):
         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, containing for each sample all its feature-value pairs together with their importance
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.local_dataset_reliability
+                    id       target  reliability
+            0        0     SURVIVED         1.00
+            1        1     SURVIVED         1.00
+            2        2  NO_SURVIVED         1.00
+            3        3  NO_SURVIVED         1.00
+            4        4  NO_SURVIVED         0.20
+            ...    ...          ...          ...
+            1304  1304  NO_SURVIVED         0.60
+            1305  1305  NO_SURVIVED         1.00
+            1306  1306  NO_SURVIVED         0.87
+            1307  1307  NO_SURVIVED         0.87
+            1308  1308  NO_SURVIVED         0.89
+            [1309 rows x 3 columns]
         """
         if self.__local_dataset_reliability is None:
             print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
@@ -147,8 +317,27 @@ class Explainer(object):
         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, containing for each sample all its feature-value pairs together with their importance
-        """
 
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.local_feature_value_explainability
+                     id      feature_value  importance  rank
+            0         0      gender_female    0.191029     1
+            1         0          title_Mrs    0.189320     2
+            2         0            class_1    0.147101     3
+            3         0  ticket_price_High    0.101550     4
+            4         0         embarked_S   -0.027895     8
+            ...     ...                ...         ...   ...
+            10467  1308   ticket_price_Low    0.065827     3
+            10468  1308         embarked_S    0.034272     5
+            10469  1308      family_size_1    0.020183     7
+            10470  1308         is_alone_1    0.020183     7
+            10471  1308    age_18_30_years    0.029921     6
+            [10472 rows x 4 columns]
+        """
         if self.__local_feature_value_explainability is None:
             print(WARN_MSG.format('\"local_feature_value_explainability\"'))
         else:
@@ -170,6 +359,25 @@ class Explainer(object):
         explanation provided by the Why module for these samples, will be displayed too
 
         :return: pd.Series containing the ids for the chosen samples
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.sample_ids_to_display
+            0     519
+            1     998
+            2     493
+            3     614
+            4     951
+                 ...
+            94      5
+            95    647
+            96    120
+            97    350
+            98    293
+            Name: id, Length: 99, dtype: uint16
         """
         if self.__sample_ids_to_display is None:
             print(WARN_MSG.format('\"sample_ids_to_display\"'))
@@ -181,42 +389,60 @@ class Explainer(object):
         """
         Property that returns all the features ranked by the `FeatureSelector`. Ranking is calculated as follows:
 
-         - For each target value and for all the features, two histograms are calculated per feature. The first one
-         considering the input pandas DataFrame filtered by the target value and the second one considering the opposite
-        (DataFrame filtered by the absence of target value)
-         - Modified Jensen Shannon distance (see below for details) is calculated between the resulting two
+         + For each target value and for all the features, two histograms are calculated per feature. The first one \
+         considering the input pandas DataFrame filtered by the target value and the second one considering the \
+         opposite (DataFrame filtered by the absence of target value)
+         + Modified Jensen Shannon distance (see below for details) is calculated between the resulting two \
          distributions
-         - Once all distances have been computed for all the features for a given target value, they're ranked, so that
-         the larger the distance, the higher the rank
-         - Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with
-         the largest aggregated rank will rank the first in the top K features (note that when talking about ranks,
+         + Once all distances have been computed for all the features for a given target value, they're ranked, so \
+         that the larger the distance, the higher the rank
+         + Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with \
+         the largest aggregated rank will rank the first in the top K features (note that when talking about ranks, \
          1 is greater than 2)
          If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
 
-        Modified Jensen Shannon distance calculation:
-         - The formula can be found
-        `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_
-         - However the used formula is a modified version which returns a four element numpy array:
+         Modified Jensen Shannon distance calculation:
+
+          + The formula can be found
+            `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_
+          + However the used formula is a modified version which returns a four element numpy array:
+
              + First element replaces the square root by the square root of the median
              + Second element replaces the square root by the square root of the mean
              + Third element replaces the square root by the square root of the max
              + Fourth element replaces the square root by the square root of the sum
-         - An numpy array as explained above will be returned per feature and all of them stacked up becoming a
+          + An numpy array as explained above will be returned per feature and all of them stacked up becoming a \
         `number_of_features x 4` matrix
-         - Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding
+          + Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding \
          column
-         - For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a
+          + For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a \
          vector containing one element per feature
-         - Finally each element is normalized by dividing it by the sum of all the elements. These are the distances
-         taken into account to compute the rank so that the higher the distance the more discriminative the feature
-         is considered, thus, the more interesting from the predictive point of view. The feature with the highest
+          + Finally each element is normalized by dividing it by the sum of all the elements. These are the distances \
+         taken into account to compute the rank so that the higher the distance the more discriminative the feature \
+         is considered, thus, the more interesting from the predictive point of view. The feature with the highest \
          distance will be ranked first while the feature with the smallest distance will be ranked last
-         - A vector like the one described in the step above will be obtained for each target value, this means that
+          + A vector like the one described in the step above will be obtained for each target value, this means that \
          a ranking will be obtained for each target value
-         - In order to obtain a final ranking, partial ranks per target value are added for each feature, so that,
+          + In order to obtain a final ranking, partial ranks per target value are added for each feature, so that, \
          the higher the rank sum for each feature, the less relevant it will be considered
 
         :return: pd.DataFrame, with all the features ranked by the `FeatureSelector`
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.top_features
+                    feature  rank
+            0        gender     1
+            1         title     2
+            2         class     3
+            3  ticket_price     4
+            4      embarked     5
+            5   family_size     6
+            6      is_alone     7
+            7           age     8
         """
         if self.__top_features is None:
             print(WARN_MSG.format('\"top_features\"'))
@@ -228,42 +454,60 @@ class Explainer(object):
         """
         Property that returns all the features ranked by the "FeatureSelector". Ranking is calculated as follows:
 
-         - For each target value and for all the features, two histograms are calculated per feature. The first one
-         considering the input pandas DataFrame filtered by the target value and the second one considering the opposite
-        (DataFrame filtered by the absence of target value)
-         - Modified Jensen Shannon distance (see below for details) is calculated between the resulting two
+         + For each target value and for all the features, two histograms are calculated per feature. The first one \
+         considering the input pandas DataFrame filtered by the target value and the second one considering the \
+         opposite (DataFrame filtered by the absence of target value)
+         + Modified Jensen Shannon distance (see below for details) is calculated between the resulting two \
          distributions
-         - Once all distances have been computed for all the features for a given target value, they're ranked, so that
-         the larger the distance, the higher the rank
-         - Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with
-         the largest aggregated rank will rank the first in the top K features (note that when talking about ranks,
-         1 is greater than 2)
-         If the method "fit()" from the "Explainer" class has not been executed, it will return a warning message.
+         + Once all distances have been computed for all the features for a given target value, they're ranked, so \
+         that the larger the distance, the higher the rank
+         + Finally, for each feature, its ranks for all of the targets are taken into account so that the feature \
+         with the largest aggregated rank will rank the first in the top K features (note that when talking about \
+         ranks, 1 is greater than 2)
 
-        Modified Jensen Shannon distance calculation:
-         - The formula can be found
-        `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_
-         - However the used formula is a modified version which returns a four element numpy array:
+         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+
+         Modified Jensen Shannon distance calculation:
+
+          + The formula can be found
+            `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_
+          + However the used formula is a modified version which returns a four element numpy array:
+
              + First element replaces the square root by the square root of the median
              + Second element replaces the square root by the square root of the mean
              + Third element replaces the square root by the square root of the max
              + Fourth element replaces the square root by the square root of the sum
-         - An numpy array as explained above will be returned per feature and all of them stacked up becoming a
-        `number_of_features x 4` matrix
-         - Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding
+          + An numpy array as explained above will be returned per feature and all of them stacked up becoming a \
+         `number_of_features x 4` matrix
+         - Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding \
          column
-         - For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a
+         - For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a \
          vector containing one element per feature
-         - Finally each element is normalized by dividing it by the sum of all the elements. These are the distances
-         taken into account to compute the rank so that the higher the distance the more discriminative the feature
-         is considered, thus, the more interesting from the predictive point of view. The feature with the highest
+         - Finally each element is normalized by dividing it by the sum of all the elements. These are the distances \
+         taken into account to compute the rank so that the higher the distance the more discriminative the feature \
+         is considered, thus, the more interesting from the predictive point of view. The feature with the highest \
          distance will be ranked first while the feature with the smallest distance will be ranked last
-         - A vector like the one described in the step above will be obtained for each target value, this means that
+         - A vector like the one described in the step above will be obtained for each target value, this means that \
          a ranking will be obtained for each target value
-
 
         :return: pd.DataFrame, providing for each feature its rank per target calculated by the "FeatureSelector".
                  Furthermore, the distance for each feature and target value, is provided along with its rank
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.top_features_by_target
+                    target       feature  distance
+            0  NO_SURVIVED        gender  0.262507
+            1  NO_SURVIVED         title  0.241172
+            2  NO_SURVIVED         class  0.128430
+            3  NO_SURVIVED  ticket_price  0.117809
+            4  NO_SURVIVED      embarked  0.076622
+            5  NO_SURVIVED   family_size  0.069195
+            6  NO_SURVIVED      is_alone  0.053045
+            7  NO_SURVIVED           age  0.051220
         """
         if self.__top_features_by_target is None:
             print(WARN_MSG.format('\"top_features_by_target\"'))
