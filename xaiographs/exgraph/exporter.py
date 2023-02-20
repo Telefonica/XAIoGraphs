@@ -79,7 +79,8 @@ class Exporter(object):
         """
         if self.__global_explainability is not None:
             self.__global_explainability[RANK] = pd.to_numeric(
-                self.__global_explainability[FEATURE_IMPORTANCE].rank().astype('int'), downcast="unsigned")
+                self.__global_explainability[FEATURE_IMPORTANCE].rank(ascending=False).astype('int'),
+                downcast="unsigned")
             self.__global_explainability[FEATURE_IMPORTANCE] = pd.to_numeric(
                 self.__global_explainability[FEATURE_IMPORTANCE], downcast="float")
             return self.__global_explainability[[FEATURE_NAME, FEATURE_IMPORTANCE, RANK]].rename(
