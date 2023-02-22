@@ -206,7 +206,7 @@ class Exporter(object):
         """
         This function takes as main input the importance for each of the individual feature-value pair (node) and its
         corresponding target for each individual sample of the local sample. From here it generates the following
-        statistics for each node (feature-value) and target pair: the frequency and the mean of the importances
+        statistics for each node (feature-value) and target pair: the frequency and the mean of the importance values
 
         :param features_info:  NamedTuple containing all the feature column names lists which will be used all
                                through the execution flow
@@ -223,8 +223,8 @@ class Exporter(object):
             df_local_nodes.loc[df_local_nodes[TARGET] == t, TARGET_FEATURE_COUNT] = (
                         len(df_local_nodes[df_local_nodes[TARGET] == t]) / len(features_info.feature_columns))
 
-        # The count for each target-node pairs is calculated together with the mean of their importances. Count will be
-        # divided by the previous result to compute target-node frequency
+        # The count for each target-node pairs is calculated together with the mean of their importance values. Count
+        # will be divided by the previous result to compute target-node frequency
         df_local_nodes = df_local_nodes.groupby([TARGET, NODE_NAME, TARGET_FEATURE_COUNT])[NODE_IMPORTANCE].agg(
             ['count', 'mean']).reset_index()
         df_local_nodes[FREQUENCY] = df_local_nodes[COUNT] / df_local_nodes[TARGET_FEATURE_COUNT]
