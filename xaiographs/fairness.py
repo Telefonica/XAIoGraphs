@@ -98,10 +98,10 @@ class Fairness(object):
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.fairness_global_info
               sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
             0            gender                   0.416667                     E                    0.375                   E                  0.216667                    D
@@ -125,7 +125,7 @@ class Fairness(object):
     @property
     def target_values(self):
         """Property that returns a list with the different values of the target of the dataset. \
-        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+        If the main method "fit()" has not been executed, it will return a warning message.
 
         :return: List[str], with target values
 
@@ -149,10 +149,10 @@ class Fairness(object):
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.target_values
             array(['YES', 'NO'], dtype=object)
         """
@@ -164,7 +164,7 @@ class Fairness(object):
     @property
     def confusion_matrix(self):
         """Property that returns a confusion matrix. \
-        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+        If the main method "fit()" has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, with Confusion Matrix
 
@@ -188,10 +188,10 @@ class Fairness(object):
             9  WOMAN     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.confusion_matrix
             y_predict  NO  YES
             y_true
@@ -206,7 +206,7 @@ class Fairness(object):
     @property
     def correlation_matrix(self):
         """Property that returns correlation matrix (pearson correlation) between features. \
-        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+        If the main method "fit()" has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, with correlation matrix
 
@@ -232,10 +232,10 @@ class Fairness(object):
             9  WOMAN   WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.correlation_matrix
                      gender  gender2     color
             gender      NaN      1.0  0.228218
@@ -252,7 +252,7 @@ class Fairness(object):
         """Property that returns the pairs of features that have a pearson correlation value above a threshold (0.9). \
         If one of these features is a sensitive features, it will be marked with a flag. In the event that there are \
         no highly correlated features, an empty DataFrame will be returned. \
-        If the main method "fit_fairness()" has not been executed, it will return a warning message.
+        If the main method "fit()" has not been executed, it will return a warning message.
 
         :return: pd.DataFrame, with highest correlation features
 
@@ -278,10 +278,10 @@ class Fairness(object):
             9  WOMAN   WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             >>> f.highest_correlation_features
               feature_1 feature_2  correlation_value  is_correlation_sensible
             0   gender2    gender                1.0                     True
@@ -335,7 +335,7 @@ class Fairness(object):
         """Returns a DataFrame with all information of fairness criterias. For each sensitive feature, for each \
         value of the sensitive feature and for each value of the target, returns (for each fairness criterion) \
         its Score, its Category and its Weight (percentage of the value of the variable and the value target). \
-        The datadrame contains the following columns:
+        The dataframe contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **sensitive_value:** value of sensitive feature
@@ -378,10 +378,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.fairness_info
               sensitive_feature sensitive_value  is_binary_sensitive_feature target_label  independence_score  ... separation_category  separation_score_weight  sufficiency_score sufficiency_category  sufficiency_score_weight
@@ -403,7 +403,7 @@ class Fairness(object):
     def independence_info(self):
         """Returns a DataFrame with all information of Independence criterion. For each sensitive feature, for each \
         value of the sensitive feature and for each value of the target, returns (for Independence criterion) \
-        its Score and its Category. The datadrame contains the following columns:
+        its Score and its Category. The dataframe contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **sensitive_value:** value of sensitive feature
@@ -435,10 +435,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.independence_info
               sensitive_feature sensitive_value target_label  independence_score independence_category
@@ -460,7 +460,7 @@ class Fairness(object):
     def separation_info(self):
         """Returns a DataFrame with all information of Separation criterion. For each sensitive feature, for each \
         value of the sensitive feature and for each value of the target, returns (for Separation criterion) \
-        its Score and its Category. The datadrame contains the following columns:
+        its Score and its Category. The dataframe contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **sensitive_value:** value of sensitive feature
@@ -492,10 +492,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.separation_info
               sensitive_feature sensitive_value target_label  separation_score separation_category
@@ -517,7 +517,7 @@ class Fairness(object):
     def sufficiency_info(self):
         """Returns a DataFrame with all information of Sufficiency criterion. For each sensitive feature, for each \
         value of the sensitive feature and for each value of the target, returns (for Sufficiency criterion) \
-        its Score and its Category. The datadrame contains the following columns:
+        its Score and its Category. The dataframe contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **sensitive_value:** value of sensitive feature
@@ -549,10 +549,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.sufficiency_info
               sensitive_feature sensitive_value target_label  sufficiency_score sufficiency_category
@@ -574,7 +574,7 @@ class Fairness(object):
     def fairness_global_info(self):
         """Returns a DataFrame with "Global Scores" (weighted aggregation of the scores for each fairness criteria) \
         for each sensitive feature and assigns it a category *{A+, A, B, C, D, E}*. \
-        The datadrame contains the following columns:
+        The DataFrame contains the following columns:
 
             + **sensitive_feature:** sensitive feature name
             + **independence_global_score:** Independence global criterion score
@@ -610,10 +610,10 @@ class Fairness(object):
             9  WOMAN    RED     NO        NO
             >>> from xaiographs import Fairness
             >>> f = Fairness()
-            >>> f.fit_fairness(df=df,
-            ...                sensitive_cols=['gender', 'color'],
-            ...                target_col='y_true',
-            ...                predict_col='y_predict')
+            >>> f.fit(df=df,
+            ...       sensitive_cols=['gender', 'color'],
+            ...       target_col='y_true',
+            ...       predict_col='y_predict')
             WARNING: Probability P(T=YES|Y=YES, A=GREEN) result is Zero, because ZeroDivisionError
             >>> f.fairness_global_info
               sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
@@ -637,9 +637,9 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, independence score value
@@ -716,10 +716,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, separation score value
@@ -799,10 +799,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: float, sufficiency score value
@@ -884,10 +884,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: Tuple[float, float, float], fairness score metrics (independence score, separation score, \
@@ -952,10 +952,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param groupby_cols: List[str], with columns to aggregate
         :return: float
@@ -1014,7 +1014,7 @@ class Fairness(object):
                     break
             return category
 
-    def fit_fairness(self, df: pd.DataFrame, sensitive_cols: List[str], target_col: str, predict_col: str) -> None:
+    def fit(self, df: pd.DataFrame, sensitive_cols: List[str], target_col: str, predict_col: str) -> None:
         """Main function that performs all the calculations of the Fairness class. The calculated results are \
         accessible via the **property** functions of the class.
 
@@ -1022,7 +1022,7 @@ class Fairness(object):
         a *real target* column and *prediction* column.
         :param sensitive_cols: List[str], with the sensitive features (df column names) to evaluate the \
         Fairness criteria
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
         """
         self.__pre_processing(df=df, sensitive_cols=sensitive_cols, target_col=target_col, predict_col=predict_col)
@@ -1040,14 +1040,14 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :return: None
         """
-        # Check if sensitive_col, predict_col or target_col column is in dataframe
+        # Check if sensitive_col, predict_col or target_col column is in DataFrame
         columns_df = df.columns
         columns_2_check = ({sensitive_col, predict_col} if target_col is None
                            else {sensitive_col, predict_col, target_col})
@@ -1074,7 +1074,7 @@ class Fairness(object):
         a *real target* column and *prediction* column.
         :param sensitive_cols: List[str], with the sensitive features (df column names) to evaluate the \
         Fairness criteria
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
         :return: None
         """
@@ -1103,7 +1103,7 @@ class Fairness(object):
         a *real target* column and *prediction* column.
         :param sensitive_cols: List[str], with the sensitive features (df column names) to evaluate the \
         Fairness criteria
-        :param target_col: str, Name of the dataframe (df) that contains target (ground truth or y_real)
+        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
         :return: None
         """
@@ -1236,10 +1236,10 @@ class Fairness(object):
 
         :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
         a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the dataframe (df) column with the sensitive feature
+        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
         :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the dataframe column (df) that contains target (ground truth or y_real) \
+        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
         of each element
         :param sensitive_value: str, Value of the sensitive feature for the score calculation
         :param is_sensitive_col_binary: bool, indicates whether the sensitive feature is binary or not
