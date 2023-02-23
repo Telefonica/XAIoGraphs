@@ -247,9 +247,9 @@ class FairnessUnitTest(unittest.TestCase):
         f = Fairness(destination_path='./', verbose=0)
         df = f._Fairness__encoder_dataset(df=self.df_dataset).astype(np.int64)
 
-        print("\nDataset to Encoder:\n{}".format(self.df_dataset.head(5)))
-        print("encoder_dataset_unit_test -> Result DataFrame:\n{}".format(df.head(5)))
-        print("encoder_dataset_unit_test -> Expected DataFrame:\n{}".format(df_expected.head(5)))
+        print("\nDataset to Encoder:\n{}".format(self.df_dataset))
+        print("encoder_dataset_unit_test -> Result DataFrame:\n{}".format(df))
+        print("encoder_dataset_unit_test -> Expected DataFrame:\n{}".format(df_expected))
 
         pd.testing.assert_frame_equal(df, df_expected)
 
