@@ -3,8 +3,8 @@ from xaiographs import Why
 from xaiographs import Fairness
 from xaiographs.datasets import load_titanic_discretized, load_titanic_why
 
-
 LANG = 'en'
+
 
 def main():
     # LOAD DATASETS & SEMANTICS
