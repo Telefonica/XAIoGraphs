@@ -1,0 +1,39 @@
+<div fxFlex fxLayout="column" fxLayoutGap="5px">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <label class="globalFeatureTargetTitle">Features Importance Heatmap</label>
+        <label class="globalFeatureTargetSubTitle">target selected: {{ currentTarget }}</label>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutGap="5px">
+        <div fxFlex fxLayout="column">
+            <div fxFlex fxLayout="row" *ngFor="let features of dataSource" fxLayoutAlign="center center">
+                <label class="globalHeatMapFeature">{{ features.feature }}</label>
+                <div fxFlex style="height: 100%;" [style.background-color]="heatMapDefaultBg">
+                    <div [fxFlex]="values.frecuency" fxLayout="column" *ngFor="let values of features.values" fxLayoutAlign="center center" fxLayoutGap="5px" class="globalHeatMapValue" [style.background-color]="values.temperature" (mouseover)="tooltipHover(features.feature, values.value)" (mouseout)="tooltipHover('', '')">
+                        <div fxFlex class="tooltipLink" fxLayoutAlign="center center">
+                            <label *ngIf="values.frecuency > 10" [style.color]="values.fontColor" style="cursor: pointer">{{ values.value }}</label>
+                            <div fxFlex fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="center center" class="tooltip" *ngIf="values.value == tooltipValue && features.feature == tooltipFeature">
+                                <div fxLayout="row" style="width: 100%;" fxLayoutAlign="space-between center">
+                                    <label class="tooltipHeader">{{ features.feature }}</label>
+                                    <label class="tooltipHeader" style="text-align: right;">{{ values.value }}</label>
+                                </div>
+
+                                <div fxLayout="row" style="width: 100%;" fxLayoutAlign="space-between center">
+                                    <label class="tooltipLabel">Importance</label>
+                                    <label class="tooltipValue">{{ values.importanceLabeled }}</label>
+                                </div>
+                                <div fxLayout="row" style="width: 100%;" fxLayoutAlign="space-between center">
+                                    <label class="tooltipLabel">Frecuency</label>
+                                    <label class="tooltipValue">{{ values.frecuency }}%</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div fxFlex="3" fxLayout="column" style="border: 1px solid black" [style.background-image]="heatMapLegendStyle" fxLayoutAlign="space-between center">
+            <label [style.color]="heatMapLegendPositive">+</label>
+            <label [style.color]="heatMapLegendNegative">-</label>
+        </div>
+    </div>
+</div>

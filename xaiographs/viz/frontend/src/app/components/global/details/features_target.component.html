@@ -1,6 +1,6 @@
 <div fxFlex fxLayout="column" fxLayoutGap="25px">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-        <label class="globalFeatureTargetTitle">Features importance</label>
+        <label class="globalFeatureTargetTitle">Features-values importance</label>
         <label class="globalFeatureTargetSubTitle">target selected: {{ currentTarget }}</label>
     </div>
     <google-chart class="globalFeatureTargetChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>

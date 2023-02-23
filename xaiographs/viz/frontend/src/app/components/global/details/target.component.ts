@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
@@ -15,7 +14,8 @@ import { ctsGlobal } from '../../../constants/global';
 })
 export class GlobalTargetComponent implements OnInit {
 
-    filterTarget = new FormControl();
+    currentTargetIndex: number = 0
+
     listTarget: string[] = [];
     listFeatures: number[] = [];
 
@@ -39,7 +39,7 @@ export class GlobalTargetComponent implements OnInit {
                 });
             },
             complete: () => {
-                this.filterTarget.setValue(0);
+                this.currentTargetIndex = 0;
                 this.setValueLimits(0)
             },
             error: (err) => {
@@ -48,8 +48,9 @@ export class GlobalTargetComponent implements OnInit {
         });
     }
 
-    updateTarget() {
-        this.setValueLimits(this.filterTarget.value);
+    updateTarget(index) {
+        this.currentTargetIndex = index;
+        this.setValueLimits(index);
     }
 
     updateFeatures(event) {
@@ -59,7 +60,7 @@ export class GlobalTargetComponent implements OnInit {
     updateFrecuency(event) {
         this._apiEmitter.setGlobalFrecuency(event.value);
         this.maxFeatures = event.value;
-        if(this.numFeatures > this.maxFeatures) {
+        if (this.numFeatures > this.maxFeatures) {
             this.numFeatures = this.maxFeatures
         }
     }

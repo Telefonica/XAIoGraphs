@@ -62,6 +62,8 @@ import { FeatureCorrelationComponent } from './components/fairness/details/featu
 import { LegendComponent } from './components/fairness/details/legend.component';
 import { LocalFilterComponent } from './components/local/details/filter.component';
 import { DatasetGraphComponent } from './components/data/details/graph.component';
+import { GlobalTargetExplainabilityComponent } from './components/global/details/target-explainability.component';
+import { GlobalHeatmapComponent } from './components/global/details/heatmap.component';
 
 @NgModule({
     declarations: [
@@ -94,6 +96,8 @@ import { DatasetGraphComponent } from './components/data/details/graph.component
         LegendComponent,
         LocalFilterComponent,
         DatasetGraphComponent,
+        GlobalTargetExplainabilityComponent,
+        GlobalHeatmapComponent,
     ],
     imports: [
         BrowserModule,

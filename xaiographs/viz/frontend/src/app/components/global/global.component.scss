@@ -53,10 +53,22 @@
     @extend .fontBold;
 }
 
+.globalTargetFilter {
+    padding: 20px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.globalTargetFilterSelected {
+    @extend .fontBold;
+    border-bottom: 3px solid navy;
+}
+
 .globalFeatureChart,
 .globalDistributionChart {
     @extend .width100;
-    height: 300px;
+    min-height: 300px;
+    height: 100%;
 }
 .globalNetGraphChart,
 .globalFeatureTargetChart {
@@ -71,3 +83,46 @@
     width: 50%;
 }
 
+.globalHeatMapFeature {
+    width: 150px !important;
+    text-align: right;
+    padding: 5px;
+}
+
+.globalHeatMapValue {
+    width: 100%;
+    border:1px solid white;
+    height: 40px;
+    cursor: pointer;
+}
+
+.tooltipLink {
+    position: relative;
+}
+
+.tooltip {
+    padding: 10px;
+    background-color: white;
+    border: 1px solid gray;
+    position: absolute;
+    top: 50px;
+    width: 200px;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition: opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+    z-index: 10;
+    font-size: 13px;
+}
+
+.tooltipHeader {
+    @extend .fontBold;
+    border-bottom: 1px solid gray;
+    width: 100%;
+    padding-bottom: 5px;
+    color:#008e9b
+}
+.tooltipLabel {
+    @extend .fontBold;
+}
