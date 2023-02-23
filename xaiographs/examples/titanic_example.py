@@ -4,17 +4,19 @@ from xaiographs import Fairness
 from xaiographs.datasets import load_titanic_discretized, load_titanic_why
 
 
+LANG = 'en'
+
 def main():
     # LOAD DATASETS & SEMANTICS
     df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-    df_global_semantics, df_target_semantics, df_why_templates = load_titanic_why(language='es')
+    df_global_semantics, df_target_semantics, df_why_templates = load_titanic_why(language=LANG)
 
     # EXPLAINER
     explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
     explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
 
     # WHY
-    why = Why(language='es',
+    why = Why(language=LANG,
               local_reliability=explainer.local_dataset_reliability,
               local_feat_val_expl=explainer.local_feature_value_explainability,
               why_elements=df_global_semantics,

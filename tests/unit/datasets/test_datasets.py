@@ -41,12 +41,12 @@ class DatasetsUnitTest(unittest.TestCase):
                                     'embarked': ['S', 'S', 'S'],
                                     'class': [1, 1, 1],
                                     'ticket_price': ['High', 'High', 'High'],
-                                    'NO_SURVIVED': [0, 0, 1],
                                     'SURVIVED': [1, 1, 0],
+                                    'NO_SURVIVED': [0, 0, 1],
                                     'y_true': ['SURVIVED', 'SURVIVED', 'NO_SURVIVED'],
                                     'y_predict': ['SURVIVED', 'SURVIVED', 'NO_SURVIVED']},
                                    columns=['id', 'gender', 'title', 'age', 'family_size', 'is_alone',
-                                            'embarked', 'class', 'ticket_price', 'NO_SURVIVED', 'SURVIVED', 'y_true',
+                                            'embarked', 'class', 'ticket_price', 'SURVIVED', 'NO_SURVIVED', 'y_true',
                                             'y_predict'])
 
         df_dataset, features_cols, target_cols, y_true, y_predict = load_titanic_discretized()

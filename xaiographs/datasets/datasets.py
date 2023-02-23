@@ -21,7 +21,7 @@ TITANIC_WHY_TEMPLATE_PATH = {
     LANG_ES: 'data/why_templates_es.csv'
 }
 FEATURE_COLS_TITANIC = ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
-TARGET_COLS_TITANIC = ['NO_SURVIVED', 'SURVIVED']
+TARGET_COLS_TITANIC = ['SURVIVED', 'NO_SURVIVED']
 
 # All datasets that include predictions must have a column with the prediction and another with its real target
 TARGET_COL = 'y_true'
@@ -91,16 +91,16 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_dataset, features_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> df_dataset.head(5)
-               id  gender title          age family_size  is_alone embarked  class ticket_price  NO_SURVIVED  SURVIVED       y_true    y_predict
-            0   0  female   Mrs  18_30_years           1         1        S      1         High            0         1     SURVIVED     SURVIVED
-            1   1    male    Mr    <12_years         3-5         0        S      1         High            0         1     SURVIVED     SURVIVED
-            2   2  female   Mrs    <12_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
-            3   3    male    Mr  18_30_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
-            4   4  female   Mrs  18_30_years         3-5         0        S      1         High            1         0  NO_SURVIVED  NO_SURVIVED
+               id  gender title          age family_size  is_alone embarked  class ticket_price  SURVIVED NO_SURVIVED       y_true    y_predict
+            0   0  female   Mrs  18_30_years           1         1        S      1         High         1           0     SURVIVED     SURVIVED
+            1   1    male    Mr    <12_years         3-5         0        S      1         High         1           0     SURVIVED     SURVIVED
+            2   2  female   Mrs    <12_years         3-5         0        S      1         High         0           1  NO_SURVIVED  NO_SURVIVED
+            3   3    male    Mr  18_30_years         3-5         0        S      1         High         0           1  NO_SURVIVED  NO_SURVIVED
+            4   4  female   Mrs  18_30_years         3-5         0        S      1         High         0           1  NO_SURVIVED  NO_SURVIVED
             >>> features_cols
             ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
             >>> target_cols
-            ['NO_SURVIVED', 'SURVIVED']
+            ['SURVIVED', 'NO_SURVIVED']
             >>> y_true
             'y_true'
             >>> y_predict
