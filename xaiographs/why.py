@@ -173,6 +173,7 @@ class Why(object):
         self.__n_global_features = n_global_features
         self.__min_reliability = min_reliability
         self.__destination_path = destination_path
+        self.__rng = random.SystemRandom()
         self.__sample_ids_to_export = sample_ids_to_export
         self.__verbose = verbose
         xgprint(self.__verbose, 'INFO: Instantiating Why. Language has been set to: {}'.format(self.__language))
@@ -202,14 +203,14 @@ class Why(object):
         i_list = [Template.delimiter + i for i in (items if isinstance(items, list) else list(items))]
         return (COMMA_SEP.join(i_list[:-1]) + sep_last + i_list[-1]) if len(i_list) > 1 else i_list[0]
 
-    def fit(self, key_column: str = ID, key_value: Any = None, template_index: Union[str, int] = RAND):
+    def fit(self, sample_id_column: str = ID, sample_id_value: Any = None, template_index: Union[str, int] = RAND):
         """
-        In case the argument `key_value` id None, builds a DataFrame with the sentences of the reason why each case has
-        been assigned a label; otherwise, simply gets the sentence with the reason why a given case has been assigned a
-        label
+        In case the argument `sample_id_value` id None, builds a DataFrame with the sentences of the reason why each
+        case has been assigned a label; otherwise, simply gets the sentence with the reason why a given case has been
+        assigned a label
 
-        :param key_column: Name of the column that holds the primary key
-        :param key_value: Value to select from the column specified in argument `key_column`
+        :param sample_id_column: Name of the column that holds the primary key
+        :param sample_id_value: Value to select from the column specified in argument `sample_id_column`
         :param template_index: Index of the template to be used to build the final sentence amongst the ones available
             in `why_templates` attribute; please note that: (1) index 0 is reserved for the default template, (2) if the
             requested index is greater than the last available one, the latter will be provided. Defaults to 'rand'
@@ -311,28 +312,28 @@ class Why(object):
             >>> why = Why(language='es', local_reliability=local_reliability, local_feat_val_expl=local_feat_val_expl,
             ...           why_elements=why_elements, why_target=why_target, why_templates=why_templates,
             ...           n_local_features=2, n_global_features=2, min_reliability=0.0)
-            >>> df_single_explanation = why.fit(key_column='id', key_value=5, template_index=1)
+            >>> df_single_explanation = why.fit(sample_id_column='id', sample_id_value=5, template_index=1)
             >>> df_single_explanation
             'Por viajar en 1ª clase y pagar mucho por el billete, este caso ha sido clasificado como survivor, teniendo en cuenta que muchos viajaban en 1ª clase y pagaron mucho por el billete.'
-            >>> why.fit(key_column='id', key_value=5, template_index=2)
+            >>> why.fit(sample_id_column='id', sample_id_value=5, template_index=2)
             >>> why.why_explanation
             'Por viajar en 1ª clase y pagar mucho por el billete, este caso ha sido clasificado como survivor, puesto que muchos viajaban en 1ª clase y pagaron mucho por el billete.'
-            >>> why.fit(key_column='id', key_value=5, template_index=3)
+            >>> why.fit(sample_id_column='id', sample_id_value=5, template_index=3)
             >>> why.why_explanation
             'Este caso ha sido clasificado como survivor por viajar en 1ª clase y pagar mucho por el billete, ya que muchos viajaban en 1ª clase y pagaron mucho por el billete.'
-            >>> why.fit(key_column='id', key_value=5, template_index=4)
+            >>> why.fit(sample_id_column='id', sample_id_value=5, template_index=4)
             >>> why.why_explanation
             'La clasificación de este caso como survivor se debe a viajar en 1ª clase y pagar mucho por el billete, ya que muchos viajaban en 1ª clase y pagaron mucho por el billete.'
-            >>> why.fit(key_column='id', key_value=5, template_index=5)
+            >>> why.fit(sample_id_column='id', sample_id_value=5, template_index=5)
             >>> why.why_explanation
             'Como muchos viajaban en 1ª clase y pagaron mucho por el billete, y este caso se caracteriza por viajar en 1ª clase y pagar mucho por el billete, ha sido clasificado como survivor.'
-            >>> why.fit(key_column='id', key_value=5, template_index='rand')
+            >>> why.fit(sample_id_column='id', sample_id_value=5, template_index='rand')
             >>> why.why_explanation
             'Por viajar en 1ª clase y pagar mucho por el billete, este caso ha sido clasificado como survivor, puesto que muchos viajaban en 1ª clase y pagaron mucho por el billete.'
-            >>> why.fit(key_column='id', key_value=62, template_index='rand')
+            >>> why.fit(sample_id_column='id', sample_id_value=62, template_index='rand')
             >>> why.why_explanation
             'Este caso ha sido clasificado como no_survivor por ser hombre y embarcar en un pueblo de clase baja, ya que han muerto muchos hombres y muchos embarcaron en southampton.'
-            >>> why.fit(key_column='id')
+            >>> why.fit(sample_id_column='id')
             >>> why.why_explanation
               id                                                                                                                                                                                     reason
             0  5        Como muchos viajaban en 1ª clase y pagaron mucho por el billete, y este caso se caracteriza por viajar en 1ª clase y pagar mucho por el billete, ha sido clasificado como survivor.
@@ -340,27 +341,29 @@ class Why(object):
 
         """
         xgprint(self.__verbose,
-                'INFO:     Why instance fitted with "{}" selected as primary key'.format(key_column))
+                'INFO:     Why instance fitted with "{}" selected as primary key'.format(sample_id_column))
         # Check case existence if a single case is requested
-        if key_value is None:
+        if sample_id_value is None:
             local_expl = self.__local_reliability
             xgprint(self.__verbose, 'INFO:     Explanation for all samples has been requested')
         else:
-            local_expl = self.__local_reliability[self.__local_reliability[key_column] == key_value]
+            local_expl = self.__local_reliability[self.__local_reliability[sample_id_column] == sample_id_value]
             xgprint(self.__verbose,
-                    'INFO:     Explanation for a single case ({}) has been requested'.format(key_value))
+                    'INFO:     Explanation for a single case ({}) has been requested'.format(sample_id_value))
             if local_expl.shape[0] == 0:
-                raise ValueError("Value {} does not exist in column \'{}\'".format(key_value, key_column))
+                raise ValueError("Value {} does not exist in column \'{}\'".format(sample_id_value, sample_id_column))
             elif local_expl.shape[0] > 1:
-                raise ValueError("More than one row with value {} in column \'{}\'".format(key_value, key_column))
+                raise ValueError("More than one row with value {} in column \'{}\'".format(sample_id_value,
+                                                                                           sample_id_column))
 
         # Build a DataFrame with all the case information
-        df = (local_expl[[key_column, RELIABILITY, TARGET]]
-              .merge(self.__local_feat_val_expl[[key_column, FEATURE_VALUE, IMPORTANCE]], on=key_column, how='inner')
+        df = (local_expl[[sample_id_column, RELIABILITY, TARGET]]
+              .merge(self.__local_feat_val_expl[[sample_id_column, FEATURE_VALUE, IMPORTANCE]], on=sample_id_column,
+                     how='inner')
               .merge(self.__why_elements, on=FEATURE_VALUE, how='inner')
               .merge(self.__why_target, on=[TARGET, FEATURE_VALUE], how='inner',
                      suffixes=['_' + self._LOCAL, '_' + self._GLOBAL]))
-        df[RANK] = df.groupby(key_column)[IMPORTANCE].rank(method='dense', ascending=False).astype(int)
+        df[RANK] = df.groupby(sample_id_column)[IMPORTANCE].rank(method='dense', ascending=False).astype(int)
 
         max_n_features = max(self.__n_local_features, self.__n_global_features)
         df_rank = df[df[RANK] <= max_n_features]
@@ -387,7 +390,8 @@ class Why(object):
             temp_global_explain = self.__build_template(items=list(kw_global))
 
             temp_idx_max = self.__why_templates.shape[0] - 1
-            temp_idx = random.randint(1, temp_idx_max) if template_index == RAND else min(template_index, temp_idx_max)
+            temp_idx = self.__rng.randint(1, temp_idx_max) if template_index == RAND else min(template_index,
+                                                                                              temp_idx_max)
             temp_why_str = (Template(Template(self.__why_templates.iloc[temp_idx, 0])
                                      .substitute(temp_local_explain=temp_local_explain,
                                                  temp_global_explain=temp_global_explain,
@@ -396,7 +400,7 @@ class Why(object):
                             .capitalize())
             return temp_why_str
 
-        df_final = df_rank.groupby(key_column).apply(__get_single_why).to_frame(REASON).reset_index()
+        df_final = df_rank.groupby(sample_id_column).apply(__get_single_why).to_frame(REASON).reset_index()
 
         # Writing files for the web interface
         if self.__sample_ids_to_export is not None:
@@ -404,7 +408,7 @@ class Why(object):
                 os.mkdir(self.__destination_path)
             xgprint(self.__verbose,
                     'INFO:     Exporting explanation for the given sample ids to {}'.format(self.__destination_path))
-            df_final.merge(self.__sample_ids_to_export, left_on=key_column, right_on=ID, how='inner').to_json(
+            df_final.merge(self.__sample_ids_to_export, left_on=sample_id_column, right_on=ID, how='inner').to_json(
                 path_or_buf=os.path.join(self.__destination_path, WHY_XAIOWEB_FILE), orient='records')
         else:
             xgprint(self.__verbose, 'WARN:     Explanation wont be exported since sample ids have not been provided'
