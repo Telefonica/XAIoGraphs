@@ -150,7 +150,6 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
     df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_EN])))
-
     df_why_templates = (pd.read_fwf(os.path.join(SRC_DIR, TITANIC_WHY_TEMPLATE_PATH[LANG_ES]), header=None)
                         if language == LANG_ES
                         else pd.read_fwf(os.path.join(SRC_DIR, TITANIC_WHY_TEMPLATE_PATH[LANG_EN]), header=None))
