@@ -25,7 +25,8 @@ setup(
     tests_require=['nose'],
     entry_points={
         "console_scripts": [
-            "{} = xaiographs.viz.launcher:main".format(WEB_ENTRY_POINT)
+            "{} = xaiographs.viz.launcher:main".format(WEB_ENTRY_POINT),
+            "titanic_example = xaiographs.examples.titanic_example:main"
         ]
     }
 )
