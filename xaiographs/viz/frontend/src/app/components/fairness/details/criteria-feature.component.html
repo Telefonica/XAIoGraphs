@@ -1,22 +1,17 @@
 <div fxFlex fxLayout="column" fxLayoutGap="25px">
     <label class="fairnessCriteriaFeatureTitle">Features Fairness Criterias</label>
-    <div fxLayout="row" fxLayoutGap="50px" style="padding: 0px 20px;">
-        <div fxFlex="20" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
-            <label class="fairnessCriteriaSelect">Feature</label>
-            <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-                <mat-select placeholder="Feature" [formControl]="filterFeature" (selectionChange)="updateFeature()" style="min-width: 150px;">
-                    <mat-option [value]="index" *ngFor="let feature of listFeatures; let index = index">{{ feature }}</mat-option>
-                </mat-select>
-            </div>
+    <div fxFlex fxLayout="column" style="padding: 0px 20px" fxLayoutGap="20px">
+        <div fxFlex fxLayout="row" fxLayoutGap="5px" style="border-bottom: 1px solid grey;">
+            <label *ngFor="let feature of listFeatures; index as index" class="fairnessFeatureFilter" [ngClass]="{fairnessFeatureFilterSelected: (currentFeatureIndex == index)}" (click)="updateFeature(index)">{{ feature }}</label>
         </div>
         <app-feature-correlation fxFlex [currentFeature]="featNameSelected" style="padding: 0px 35px"></app-feature-correlation>
-    </div>
-    <div fxFlex fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="15px" style="padding: 0px 20px;">
-        <app-feature-independence fxFlex [currentFeature]="featNameSelected"></app-feature-independence>
-        <app-feature-separation fxFlex [currentFeature]="featNameSelected"></app-feature-separation>
-        <app-feature-sufficience fxFlex [currentFeature]="featNameSelected"></app-feature-sufficience>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="center center">
-        <app-legend style="width: 50%;"></app-legend>
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="15px" style="padding: 0px 20px;">
+            <app-feature-independence fxFlex [currentFeature]="featNameSelected"></app-feature-independence>
+            <app-feature-separation fxFlex [currentFeature]="featNameSelected"></app-feature-separation>
+            <app-feature-sufficience fxFlex [currentFeature]="featNameSelected"></app-feature-sufficience>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <app-legend style="width: 50%;"></app-legend>
+        </div>
     </div>
 </div>
