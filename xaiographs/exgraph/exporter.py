@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -166,7 +167,7 @@ class Exporter(object):
                                                     MAX_EDGE_WEIGHT + BIN_WIDTH_EDGE_WEIGHT))
         df_stats.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
-    def __export_global_description(self, df_global_nodes_info: pd.DataFrame,
+    def __export_global_description(self, df_global_nodes_info: pd.DataFrame, target_cols: List[str],
                                     filename: str = EXPLAINER_GLOBAL_GRAPH_DESCRIPTION_FILE):
         """
         This function calculates the number of different feature - value pairs associated to each target value. It
@@ -174,11 +175,15 @@ class Exporter(object):
 
         :param df_global_nodes_info:    Pandas DataFrame, containing the node global info resulting from combining the
                                         calculated statistics and the calculated importance
+        :param target_cols:             List of strings, containing the possible target values according to the original
+                                        column order
         :param filename:                String, representing the name of the file used to persist the information
         """
         df_global_nodes_info[[TARGET, RANK]].drop_duplicates(subset=[TARGET], keep='last').rename(
-            columns={RANK: NUM_FEATURES}).to_json(path_or_buf=os.path.join(self.__destination_path, filename),
-                                                  orient='records')
+            columns={RANK: NUM_FEATURES}).sort_values(by=TARGET, key=lambda column: column.map(
+                    lambda e: target_cols.index(e))).to_json(path_or_buf=os.path.join(self.__destination_path,
+                                                                                      filename),
+                                                             orient='records')
 
     def __export_global_explainability(self, df_importance: pd.DataFrame,
                                        filename: str = EXPLAINER_GLOBAL_EXPLAINABILITY_FILE) -> pd.DataFrame:
@@ -441,7 +446,8 @@ class Exporter(object):
         self.__global_nodes_info = self.__export_global_nodes(df_stats=nodes_info.global_stats,
                                                               df_importance=global_nodes_importance)
 
-        self.__export_global_description(df_global_nodes_info=self.__global_nodes_info)
+        self.__export_global_description(df_global_nodes_info=self.__global_nodes_info,
+                                         target_cols=target_info.target_columns)
 
         self.__export_global_target_distribution(df_global_target_distribution=target_distribution)
 
