@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { ctsFairness } from 'src/app/constants/fairness';
 
 import { ReaderService } from 'src/app/services/reader.service';
@@ -14,10 +13,11 @@ import { jsonFiles } from '../../../constants/jsonFiles';
 })
 export class CriteriaFeatureComponent implements OnInit {
 
-    filterFeature = new FormControl();
     listFeatures: string[] = [];
     featureSelected: string = ''
     featNameSelected: string = ''
+
+    currentFeatureIndex: number = 0
 
     constructor(
         private _apiReader: ReaderService,
@@ -32,8 +32,7 @@ export class CriteriaFeatureComponent implements OnInit {
                 });
             },
             complete: () => {
-                this.filterFeature.setValue(0);
-                this.updateFeature()
+                this.updateFeature(0)
             },
             error: (err) => {
                 this._apiSnackBar.openSnackBar(JSON.stringify(err));
@@ -41,9 +40,9 @@ export class CriteriaFeatureComponent implements OnInit {
         });
     }
 
-    updateFeature() {
-        this.featureSelected = this.filterFeature.value;
-        this.featNameSelected = this.listFeatures[parseInt(this.filterFeature.value)]
+    updateFeature(index) {
+        this.currentFeatureIndex = index;
+        this.featNameSelected = this.listFeatures[index]
     }
 
 }
