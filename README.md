@@ -1,4 +1,4 @@
-# XAIoGraphs
+# <img src="docs/imgs/icon.png" align="left" height="30" width="30"/>  XAIoGraphs
 
 ![python versions](https://img.shields.io/badge/python-3.7%2C%203.8%2C%203.9-blue.svg)
 
@@ -25,7 +25,6 @@ which shows the results of the explanations in 3 sections: Global, Local and Fai
     <img src="docs/imgs/XAIoWeb.png" width="800px" />
 </p>
 
-<hr>
 
 # 🚀 Quickstart 
 
@@ -115,7 +114,8 @@ This entry point takes the following parameters:
 - `-p` o `--port` [OPTIONAL]: Web server port. 8080 by default
 - `-o` o `--open` [OPTIONAL]: Open web in browser
 
-<hr>
+
+
 
 # 🤝 Contributors
 
@@ -129,7 +129,8 @@ XAIoGraphs has been developed by the AI Products department (Chief Data Officer 
 * [Mario Villaizan](https://github.com/mvvmvv)
 * [Cesar García](https://github.com/cesarggtid)
 
-<hr>
+
+
 
 # 📥  Contact
 
