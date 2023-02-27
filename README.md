@@ -7,7 +7,7 @@ Python library for classification problems with tabulated and discretized data.
 
 
 <p align="center">
-    <img src="docs/imgs/XAIoGraphs_schema.png" width="500px" />
+    <img src="docs/imgs/XAIoGraphs_schema2.png" width="800px" />
 </p>
 
 This library offers the following functionalities:
