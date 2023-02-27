@@ -1,4 +1,4 @@
-# <img src="docs/imgs/icon.png" align="left" height="30" width="30"/>  XAIoGraphs
+# <img src="docs/imgs/icon.png" align="left"/>  XAIoGraphs
 
 ![python versions](https://img.shields.io/badge/python-3.7%2C%203.8%2C%203.9-blue.svg)
 
