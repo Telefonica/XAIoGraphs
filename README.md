@@ -59,7 +59,7 @@ With the virtual environment enabled, you can run the following entry point to s
 titanic_example
 ```
 
-Or if you prefer, you can execute the following code to see a complete execution of all the XAIoGraphs functionalities
+Or if you prefer, you can execute the following code to see a complete execution of all the XAIoGraphs functionalities:
 
 ```python
 from xaiographs import Explainer
