@@ -29,6 +29,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatGridListModule } from '@angular/material/grid-list';
 
 import { GoogleChartsModule } from 'angular-google-charts';
+import { NgApexchartsModule } from 'ng-apexcharts'
 import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -131,6 +132,7 @@ import { GlobalHeatmapComponent } from './components/global/details/heatmap.comp
         MatGridListModule,
         GoogleChartsModule,
         TableVirtualScrollModule,
+        NgApexchartsModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

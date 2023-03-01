@@ -1,8 +1,20 @@
 <div fxFlex fxLayout="column" fxLayoutGap="5px">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
         <label class="globalFeatureTargetTitle">Features importance</label>
-        <label class="globalFeatureTargetSubTitle">target selected: {{ currentTarget }}</label>
+        <div fxLayout="row" fxLayoutAlign="center center" class="globalTheme" fxLayoutGap="10px">
+            <label>Global Comparative</label>
+            <mat-slide-toggle [(ngModel)]="showRadar" (change)="generateRadar()"></mat-slide-toggle>
+        </div>
     </div>
-    <google-chart class="globalFeatureChart" style="height:100%" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>
+    <google-chart class="globalFeatureChart" style="height:100%" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph && !showRadar"> </google-chart>
     <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
+    <div fxFlex fxLayout="column" fxLayoutAlign="start center" *ngIf="showRadar">
+        <apx-chart [series]="seriesRadar" [chart]="chartRadar" [xaxis]="xaxisRadar" [yaxis]="yaxisRadar" [fill]="fillRadar" [stroke]="strokeRadar" [markers]="markersRadar" [legend]="legendRadar" style="width: 100%;"></apx-chart>
+        <div fxLayout="row" fxLayoutGap="10px">
+            <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="globalRadarStyle"></div>
+            <label>Global Features</label>
+            <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="targetRadarStyle"></div>
+            <label>Target Features</label>
+        </div>
+    </div>
 </div>
