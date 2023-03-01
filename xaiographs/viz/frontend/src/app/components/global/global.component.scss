@@ -91,16 +91,22 @@
 
 .globalHeatMapValue {
     width: 100%;
-    border:1px solid white;
+    border:1px solid grey;
     height: 40px;
     cursor: pointer;
 }
 
-.tooltipLink {
+.globalHeatMapIndArea {
+    cursor: pointer;
+    font-size: 12px;
+    text-align: center;
+}
+
+.globalTooltipLink {
     position: relative;
 }
 
-.tooltip {
+.globalTooltip {
     padding: 10px;
     background-color: white;
     border: 1px solid gray;
@@ -116,13 +122,13 @@
     font-size: 13px;
 }
 
-.tooltipHeader {
+.globalTooltipHeader {
     @extend .fontBold;
     border-bottom: 1px solid gray;
     width: 100%;
     padding-bottom: 5px;
     color:#008e9b
 }
-.tooltipLabel {
+.globalTooltipLabel {
     @extend .fontBold;
 }
