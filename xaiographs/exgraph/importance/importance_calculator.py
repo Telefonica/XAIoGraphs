@@ -4,9 +4,9 @@ from typing import Dict, List, Tuple, Union
 import numpy as np
 import pandas as pd
 
-from xaiographs.common.constants import FEATURE_IMPORTANCE, FEATURE_NAME, ID, IMPORTANCE_SUFFIX, NODE_IMPORTANCE, \
+from xaiographs.common.constants import FEATURE_IMPORTANCE, FEATURE_NAME, ID, NODE_IMPORTANCE, NODE_IMPORTANCE_ABS,\
     NODE_NAME, RANK, TARGET
-from xaiographs.common.utils import FeaturesInfo, TargetInfo, filter_by_ids, get_target_info, xgprint
+from xaiographs.common.utils import FeaturesInfo, TargetInfo, filter_by_ids, xgprint
 
 # CONSTANTS
 EPS_ERROR = 0.000001
@@ -54,40 +54,36 @@ class ImportanceCalculator(metaclass=ABCMeta):
         raise NotImplementedError
 
     @staticmethod
-    def __compute_global_explainability(global_target_explainability: pd.DataFrame, feature_cols: List[str],
-                                        top1_targets: np.ndarray) -> pd.DataFrame:
+    def __compute_global_explainability(global_target_explainability: pd.DataFrame,
+                                        feature_cols: List[str]) -> pd.DataFrame:
         """
         This function computes the mean of each feature importance throughout all the targets
 
         :param global_target_explainability: Pandas DataFrame, containing the mean of each feature importance for each
                                              target
         :param feature_cols:                 List of strings, containing the column names for the features
-        :param top1_targets:                 Numpy array, containing the top1_target for each row
         :return:                             Pandas DataFrame, containing the mean of each feature importance throughout
                                              all the targets
         """
-        # To generate global_explainability.csv, the targets probabilities are computed and each of the rows of the
-        # previous DataFrame is multiplied by the corresponding probability. Finally, mean is computed for the resulting
-        # columns
-        target_probs = np.array([top1_targets.tolist().count(target) for target in
-                                 global_target_explainability[TARGET].values]) / len(top1_targets)
-
         return pd.DataFrame(np.concatenate((np.array(feature_cols).reshape(-1, 1),
-                                            (target_probs.reshape(-1, 1) * global_target_explainability.drop(
-                                                TARGET, axis=1).values).sum(axis=0).reshape(-1, 1)), axis=1),
+                                            global_target_explainability.drop(TARGET, axis=1).values.mean(
+                                                axis=0).reshape(-1, 1)), axis=1),
                             columns=[FEATURE_NAME, FEATURE_IMPORTANCE]).sort_values(by=[FEATURE_IMPORTANCE],
                                                                                     ascending=False)
 
     @staticmethod
     def __compute_global_graph_nodes_importance(df_explained: pd.DataFrame, feature_cols: List[str],
-                                                float_features: List[str], top1_targets: np.ndarray) -> pd.DataFrame:
+                                                float_features: List[str], target_cols: List[str],
+                                                importance_cols: List[str]) -> pd.DataFrame:
         """
         This function computes the global graph nodes information related to the calculation of the features importance
 
         :param df_explained:    Pandas DataFrame, which has been explained
         :param feature_cols:    List of strings, containing the column names for the features
         :param float_features:  List of strings, containing the column names for the float type features
-        :param top1_targets:    Numpy array, containing the top1_target for each row
+        :param target_cols:     List of strings, containing the column names for the target/s
+        :param importance_cols: List of strings, containing the columna names for the columns containing the calculated
+                                importance
         :return:                Pandas DataFrame, containing the graph nodes global information, related to the
                                 importance calculation
         """
@@ -95,8 +91,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
         df_explanation_values = df_explained.values
         graph_nodes_values = []
 
-        # Each feature_value pair is computed (NODE_NAME) and the importance value associated to its top1 target is
-        # retrieved as the NODE_IMPORTANCE
+        # Each feature_value pair is computed (NODE_NAME)
         for i, row in enumerate(df_explanation_values):
             for feature_col in feature_cols:
                 feature_value_raw = row[all_columns.index(feature_col)]
@@ -104,48 +99,49 @@ class ImportanceCalculator(metaclass=ABCMeta):
                     feature_value = '_'.join([feature_col, "{:.02f}".format(feature_value_raw)])
                 else:
                     feature_value = '_'.join([feature_col, str(feature_value_raw)])
-                feature_target_shap_col = '{}_{}{}'.format(top1_targets[i], feature_col, IMPORTANCE_SUFFIX)
-                graph_nodes_values.append([row[0], feature_value, row[all_columns.index(feature_target_shap_col)],
-                                           top1_targets[i]])
+                graph_nodes_values.append([row[0], feature_value])
 
-        graph_nodes = pd.DataFrame(graph_nodes_values, columns=[ID, NODE_NAME, NODE_IMPORTANCE, TARGET])
-        graph_nodes[NODE_IMPORTANCE] = graph_nodes[NODE_IMPORTANCE].abs()
-        global_graph_nodes = graph_nodes[[TARGET, NODE_NAME, NODE_IMPORTANCE]].groupby(
-            [TARGET, NODE_NAME]).mean().reset_index()
+        # For each feature value pair an row per target is generated, each row will contain the importance associated
+        # to that feature value pair and the corresponding target. That target will be included within each row
+        graph_nodes = pd.DataFrame(np.concatenate((np.repeat(graph_nodes_values, len(target_cols), axis=0),
+                                                   df_explained[importance_cols].values.reshape(-1, 1),
+                                                   np.tile(target_cols, len(graph_nodes_values)).reshape(-1, 1)),
+                                                  axis=1),
+                                   columns=[ID, NODE_NAME, NODE_IMPORTANCE, TARGET])
+        graph_nodes[NODE_IMPORTANCE] = pd.to_numeric(graph_nodes[NODE_IMPORTANCE])
 
-        # Rank is calculated based on NODE_IMPORTANCE and grouping by TARGET
+        # Node importance will be averaged through for each node and each target
+        global_graph_nodes = graph_nodes.groupby([TARGET, NODE_NAME])[NODE_IMPORTANCE].mean().reset_index()
+        global_graph_nodes[NODE_IMPORTANCE_ABS] = global_graph_nodes[NODE_IMPORTANCE].abs()
+
+        # Rank is calculated based on the node importance absolute value and grouping by TARGET
         global_graph_nodes[RANK] = (
-            global_graph_nodes.groupby([TARGET])[NODE_IMPORTANCE].rank(method='dense', ascending=False).astype(int))
+            global_graph_nodes.groupby([TARGET])[NODE_IMPORTANCE_ABS].rank(method='dense', ascending=False).astype(int))
 
         return global_graph_nodes
 
     @staticmethod
-    def __compute_global_target_explainability(df_importance_values: pd.DataFrame, feature_cols: List[str],
-                                               target_cols: List[str], top1_targets: np.ndarray) -> pd.DataFrame:
+    def __compute_global_target_explainability(importance_values: np.ndarray, feature_cols: List[str],
+                                               target_cols: List[str]) -> pd.DataFrame:
         """
         This function computes the mean of each feature importance for each target
 
-        :param df_importance_values:    Pandas DataFrame, containing (among others) the importance columns
+        :param importance_values:       Numpy matrix, containing (among others) the importance columns
         :param feature_cols:            List of strings, containing the column names for the features
         :param target_cols:             List of strings, containing the column names for the target/s
-        :param top1_targets:            Numpy array, containing the top1_target for each row
         :return:                        Pandas DataFrame, containing the mean of each feature importance for each target
         """
-        # A boolean mask is generated from the top1_targets, this mask is then applied to the importance values
-        # DataFrame so that only those values related to each top1 target, are taken into account. The resulting matrix
-        # does have as many rows as observations and as many columns as features
-        target_mask = np.repeat(pd.get_dummies(pd.Series(top1_targets)).values,
-                                len(feature_cols), axis=0).reshape(-1, len(feature_cols),
-                                                                   len(target_cols)).astype('bool')
-        top1_importance = np.abs(df_importance_values[target_mask]).reshape(-1, len(feature_cols))
+        # For all samples from the global sampling the mean of the importance for each of their features are computed
+        # by target
+        importance_values = np.abs(importance_values)
+        importances_mean_by_target = []
+        for idx, target_col in enumerate(target_cols):
+            importances_mean_by_target.append(np.mean(importance_values[:, :, idx], axis=0))
 
         # Pandas DataFrame is built from the matrix and an additional column with the target names is prepended
-        top1_importance_features = pd.DataFrame(np.concatenate((top1_targets.reshape(-1, 1), top1_importance), axis=1),
-                                                columns=[TARGET] + feature_cols)
-
-        # Column mean is calculated groping by target. The result does have as many rows as targets and as many columns
-        # as features
-        return top1_importance_features.apply(pd.to_numeric, errors='ignore').groupby(TARGET).mean().reset_index()
+        return pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1),
+                                            np.stack(importances_mean_by_target, axis=0)), axis=1),
+                            columns=[TARGET] + feature_cols).apply(pd.to_numeric, errors='ignore')
 
     @staticmethod
     def _sanity_check(ground_truth: np.ndarray, prediction: np.ndarray, target_cols: List[str], scope: str):
@@ -225,7 +221,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
 
             return pd.concat(df_agg_per_target).drop(target_col, axis=1).sort_values(by=[ID])
 
-    def __global_explain(self, float_features: List[str], target_cols: List[str],
+    def __global_explain(self, float_features: List[str], target_cols: List[str], importance_cols: List[str],
                          **params) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """
         This function computes the global explanation. This is made of several pandas DataFrames:
@@ -242,23 +238,21 @@ class ImportanceCalculator(metaclass=ABCMeta):
                                  throughout all the targets and a pandas DataFrame, containing the global graph nodes
                                   information related to the calculation of the features
         """
-        target_info = get_target_info(df=params[ImportanceCalculator._DF_EXPLANATION], target_cols=target_cols)
         top1_importance_features = ImportanceCalculator.__compute_global_target_explainability(
-            df_importance_values=params[ImportanceCalculator._IMPORTANCE_VALUES],
+            importance_values=params[ImportanceCalculator._IMPORTANCE_VALUES],
             feature_cols=self._feature_cols,
-            target_cols=target_cols,
-            top1_targets=target_info.top1_targets)
+            target_cols=target_cols)
 
         global_explainability = ImportanceCalculator.__compute_global_explainability(
             global_target_explainability=top1_importance_features,
-            feature_cols=self._feature_cols,
-            top1_targets=target_info.top1_targets)
+            feature_cols=self._feature_cols)
 
         global_graph_nodes = ImportanceCalculator.__compute_global_graph_nodes_importance(
             df_explained=params[ImportanceCalculator._DF_EXPLANATION],
             feature_cols=self._feature_cols,
             float_features=float_features,
-            top1_targets=target_info.top1_targets)
+            target_cols=target_cols,
+            importance_cols=importance_cols)
 
         return top1_importance_features, global_explainability, global_graph_nodes
 
@@ -295,6 +289,6 @@ class ImportanceCalculator(metaclass=ABCMeta):
         #   explanation
         top1_importance_features, global_explainability, global_nodes_importance = self.__global_explain(
             float_features=features_info.float_feature_columns, target_cols=self._target_info.target_columns,
-            **local_importance)
+            importance_cols=features_info.importance_columns, **local_importance)
         return top1_importance_features, global_explainability, global_nodes_importance, local_importance[
             ImportanceCalculator._DF_EXPLANATION].sort_values(by=[ID])
