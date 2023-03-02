@@ -1,5 +1,18 @@
 <div fxFlex fxLayout="column" fxLayoutGap="5px">
-    <label class="globalFeatureTitle">Features importance</label>
-    <google-chart class="globalFeatureChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>
-    <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+        <label class="globalFeatureTitle">Features importance</label>
+        <div fxLayout="row" fxLayoutAlign="center center" class="globalTheme" fxLayoutGap="10px">
+            <label>Target breakdown</label>
+            <mat-slide-toggle [(ngModel)]="showBreakdown"></mat-slide-toggle>
+        </div>
+    </div>
+    <div fxFlex *ngIf="!showBreakdown">
+        <google-chart class="globalFeatureChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>
+        <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
+    </div>
+
+    <div fxFlex *ngIf="showBreakdown">
+        <google-chart class="globalFeatureChart" #chart [type]="type" [data]="dataBreakDownGraph" [columns]="columnBreakDownNames" [options]="optionsBreakDown" *ngIf="displayGraph"> </google-chart>
+        <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
+    </div>
 </div>
