@@ -65,6 +65,7 @@ import { LocalFilterComponent } from './components/local/details/filter.componen
 import { DatasetGraphComponent } from './components/data/details/graph.component';
 import { GlobalTargetExplainabilityComponent } from './components/global/details/target-explainability.component';
 import { GlobalHeatmapComponent } from './components/global/details/heatmap.component';
+import { KatexModule } from 'ng-katex';
 
 @NgModule({
     declarations: [
@@ -133,6 +134,7 @@ import { GlobalHeatmapComponent } from './components/global/details/heatmap.comp
         GoogleChartsModule,
         TableVirtualScrollModule,
         NgApexchartsModule,
+        KatexModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
