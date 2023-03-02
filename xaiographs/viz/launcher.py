@@ -185,8 +185,9 @@ def main():
     process_json_files(path=args.get('data'))
 
     my_handler = MyHttpRequestHandler
-    with socketserver.TCPServer(("", args.get('port')), my_handler) as httpd:
+    with socketserver.TCPServer((MY_HOST_NAME, args.get('port')), my_handler) as httpd:
 
+        httpd.server_bind = MY_HOST_NAME
         print("Http Server Serving at port", args.get('port'))
         url_domain = '{}{}:{}'.format(MY_PROTOCOL, MY_HOST_NAME, str(args.get('port')))
         if args.get('open'):
