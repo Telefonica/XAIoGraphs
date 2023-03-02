@@ -18,7 +18,7 @@ This library offers the following functionalities:
 + **Resaon Why:** *explanation in natural language* of the classification of each element.
 + **Fairness Scoring**: identifies possible discriminations in the classifications made on certain sensitive variables.
 
-To ***interpret the explanations*** we have ***XAIoWeb***, which is a ***web interface*** executed in local mode (localhost:8080), 
+To ***interpret the explanations*** we have ***XAIoWeb***, which is a ***web interface*** executed in local mode (127.0.0.1:8080), 
 which shows the results of the explanations in 3 sections: Global, Local and Fairness:
 
 <p align="center">
