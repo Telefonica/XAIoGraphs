@@ -7,7 +7,7 @@ Python library for classification problems with tabulated and discretized data.
 
 
 <p align="center">
-    <img src="docs/imgs/XAIoGraphs_schema2.png" width="800px" />
+    <img src="docs/imgs/XAIoGraphs_schema2.png" width="900px" />
 </p>
 
 This library offers the following functionalities:
@@ -130,6 +130,8 @@ XAIoGraphs has been developed by the AI Products team (Telefónica I+D - Chief D
 * [Cesar García](https://github.com/cesarggtid)
 * David Cadenas
 * Alejandra Maria Alonso
+* [Miguel Angel Martín](https://github.com/mamj-telefonica)
+* [Oriol Arnau](https://github.com/oarnau)
 
 
 
