@@ -128,6 +128,8 @@ XAIoGraphs has been developed by the AI Products department (Telefónica I+D - C
 * [Manuel Martín](https://github.com/mmarmar)
 * [Mario Villaizan](https://github.com/mvvmvv)
 * [Cesar García](https://github.com/cesarggtid)
+* David Cadenas
+* Alejandra Maria Alonso
 
 
 
