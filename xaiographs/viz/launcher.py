@@ -11,7 +11,7 @@ import webbrowser
 from copy import deepcopy
 
 MY_PROTOCOL = 'http://'
-MY_HOST_NAME = 'localhost'
+MY_HOST_NAME = '127.0.0.1'
 MY_HTML_FOLDER_PATH = 'frontpiled'
 MY_HOME_PAGE_FILE_PATH = 'index.html'
 COL_HEIGHT_LEFT = 50
@@ -48,7 +48,8 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.path = os.path.join(HIDDEN_DIR, MY_HOME_PAGE_FILE_PATH).replace("\\", "/")
-        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+        if HIDDEN_DIR in self.path:
+            return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 
 def print_upper_line():
