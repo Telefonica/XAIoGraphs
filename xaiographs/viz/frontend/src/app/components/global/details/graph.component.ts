@@ -7,8 +7,8 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import cytoscape from 'cytoscape';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { nodeGraphStyle0, edgeGraphStyle0 } from '../themes/global0';
-import { nodeGraphStyle1, edgeGraphStyle1 } from '../themes/global1';
+import { nodePositiveGraphStyle0, nodeNegativeGraphStyle0, edgeGraphStyle0 } from '../themes/global0';
+import { nodePositiveGraphStyle1, nodeNegativeGraphStyle1, edgeGraphStyle1 } from '../themes/global1';
 
 @Component({
     selector: 'app-global-target-graph',
@@ -30,7 +30,8 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
     edgeList = [];
     nodeNames = [];
 
-    nodeGraphStyle: any;
+    nodePositiveGraphStyle: any;
+    nodeNegativeGraphStyle: any;
     edgeGraphStyle: any;
 
     nodesJson = []
@@ -87,10 +88,12 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
 
     prepareTheme() {
         if (!this._apiEmitter.getTheme()) {
-            this.nodeGraphStyle = nodeGraphStyle0
+            this.nodePositiveGraphStyle = nodePositiveGraphStyle0
+            this.nodeNegativeGraphStyle = nodeNegativeGraphStyle0
             this.edgeGraphStyle = edgeGraphStyle0
         } else {
-            this.nodeGraphStyle = nodeGraphStyle1
+            this.nodePositiveGraphStyle = nodePositiveGraphStyle1
+            this.nodeNegativeGraphStyle = nodeNegativeGraphStyle1
             this.edgeGraphStyle = edgeGraphStyle1
         }
     }
@@ -120,8 +123,9 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
             let elements: any[] = [];
 
             this.nodeList.forEach((node: any) => {
+                const importance = parseFloat(node.node_importance)
                 const weightNode = parseFloat(node.node_weight);
-                const weightNodeIndex = (Math.trunc(weightNode / 10) - 1) % this.nodeGraphStyle.length;
+                const weightNodeIndex = (importance > 0) ? (Math.trunc(weightNode / 10) - 1) % this.nodePositiveGraphStyle.length : (Math.trunc(weightNode / 10) - 1) % this.nodeNegativeGraphStyle.length;
 
                 elements.push({
                     data: {
@@ -129,7 +133,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
                         label: node.node_name,
                     },
                     style: {
-                        'background-color': this.nodeGraphStyle[weightNodeIndex],
+                        'background-color': (importance > 0) ? this.nodePositiveGraphStyle[weightNodeIndex] : this.nodeNegativeGraphStyle[weightNodeIndex],
                         height: weightNode,
                         width: weightNode,
                     }

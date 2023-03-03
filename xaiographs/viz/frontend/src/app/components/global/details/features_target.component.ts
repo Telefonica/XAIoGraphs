@@ -7,8 +7,8 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ChartType } from 'angular-google-charts';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { featuresImportanceTargetGraphStyle0, featuresFrecuencyTargetGraphStyle0 } from '../themes/global0';
-import { featuresImportanceTargetGraphStyle1, featuresFrecuencyTargetGraphStyle1 } from '../themes/global1';
+import { featuresPositiveImportanceTargetGraphStyle0, featuresNegativeImportanceTargetGraphStyle0, featuresFrecuencyTargetGraphStyle0 } from '../themes/global0';
+import { featuresPositiveImportanceTargetGraphStyle1, featuresNegativeImportanceTargetGraphStyle1, featuresFrecuencyTargetGraphStyle1 } from '../themes/global1';
 
 @Component({
     selector: 'app-global-target-features',
@@ -35,7 +35,8 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
     options: any = {};
     displayGraph: boolean = false;
 
-    featuresImportanceTargetGraphStyle: any;
+    featuresPositiveImportanceTargetGraphStyle: any;
+    featuresNegativeImportanceTargetGraphStyle: any;
     featuresFrecuencyTargetGraphStyle: any;
 
     constructor(
@@ -87,10 +88,12 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
 
     prepareTheme() {
         if (!this._apiEmitter.getTheme()) {
-            this.featuresImportanceTargetGraphStyle = featuresImportanceTargetGraphStyle0
+            this.featuresPositiveImportanceTargetGraphStyle = featuresPositiveImportanceTargetGraphStyle0
+            this.featuresNegativeImportanceTargetGraphStyle = featuresNegativeImportanceTargetGraphStyle0
             this.featuresFrecuencyTargetGraphStyle = featuresFrecuencyTargetGraphStyle0
         } else {
-            this.featuresImportanceTargetGraphStyle = featuresImportanceTargetGraphStyle1
+            this.featuresPositiveImportanceTargetGraphStyle = featuresPositiveImportanceTargetGraphStyle1
+            this.featuresNegativeImportanceTargetGraphStyle = featuresNegativeImportanceTargetGraphStyle1
             this.featuresFrecuencyTargetGraphStyle = featuresFrecuencyTargetGraphStyle1
         }
     }
@@ -142,15 +145,15 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
             const count = parseInt(data.node_count);
             const frecuency = parseFloat(data.node_name_ratio);
 
-            const barStyleIMPIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.featuresImportanceTargetGraphStyle.length;
+            const barStyleIMPIndex =  (importance > 0) ? (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.featuresPositiveImportanceTargetGraphStyle.length : (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.featuresNegativeImportanceTargetGraphStyle.length;
             const barStyleFRECIndex = (Math.trunc(parseFloat(data.node_name_ratio_weight) / 10) - 1) % this.featuresFrecuencyTargetGraphStyle.length;
 
-            const barStyleIMP = this.JSONCleaner(this.featuresImportanceTargetGraphStyle[barStyleIMPIndex]);
+            const barStyleIMP = (importance > 0) ? this.JSONCleaner(this.featuresPositiveImportanceTargetGraphStyle[barStyleIMPIndex]) : this.JSONCleaner(this.featuresNegativeImportanceTargetGraphStyle[barStyleIMPIndex]);
             const barStyleFREC = this.JSONCleaner(this.featuresFrecuencyTargetGraphStyle[barStyleFRECIndex]);
 
             transformDataSet.push([
                 data.node_name,
-                importance,
+                Math.abs(importance),
                 barStyleIMP,
                 '<table style="padding:5px; width:150px;"><tr>' +
                 '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.node_name + '</td>' +

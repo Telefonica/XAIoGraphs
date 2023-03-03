@@ -32,12 +32,22 @@ export const featuresGraphStyle0 = [
     }
 ];
 
-export const featuresImportanceTargetGraphStyle0 = [
+export const featuresPositiveImportanceTargetGraphStyle0 = [
     {
         "stroke-color": "#D07697",
         "stroke-width": 0,
         "stroke-opacity": 0,
         "fill-color": "#D07697",
+        "fill-opacity": 1,
+    }
+];
+
+export const featuresNegativeImportanceTargetGraphStyle0 = [
+    {
+        "stroke-color": "#43857C",
+        "stroke-width": 0,
+        "stroke-opacity": 0,
+        "fill-color": "#43857C",
         "fill-opacity": 1,
     }
 ];
@@ -69,8 +79,11 @@ export const distributionGraphStyle0 = [
 export const distributionGraph3D0 = false;
 export const distributionGraphPieHole0 = 0.2;
 
-export const nodeGraphStyle0 = [
+export const nodePositiveGraphStyle0 = [
     "#D07697",
+];
+export const nodeNegativeGraphStyle0 = [
+    "#ED9D0A",
 ];
 export const edgeGraphStyle0 = [
     "#CDC1E0",
