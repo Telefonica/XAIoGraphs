@@ -5,8 +5,8 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { heatMapPositiveStyle0, heatMapNegativeStyle0 } from '../themes/global0';
-import { heatMapPositiveStyle1, heatMapNegativeStyle1 } from '../themes/global1';
+import { heatMapPositiveStyle0, heatMapNegativeStyle0, heatMapDefaultStyle0 } from '../themes/global0';
+import { heatMapPositiveStyle1, heatMapNegativeStyle1, heatMapDefaultStyle1 } from '../themes/global1';
 
 @Component({
     selector: 'app-global-heatmap',
@@ -80,12 +80,14 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
         if (!this._apiEmitter.getTheme()) {
             this.heatMapPositiveStyle = heatMapPositiveStyle0
             this.heatMapNegativeStyle = heatMapNegativeStyle0
+            this.heatMapDefaultBg = 'rgb(' + heatMapDefaultStyle0.join(', ') + ')'
         } else {
             this.heatMapPositiveStyle = heatMapPositiveStyle1
             this.heatMapNegativeStyle = heatMapNegativeStyle1
+            this.heatMapDefaultBg = 'rgb(' + heatMapDefaultStyle1.join(', ') + ')'
         }
-        this.heatMapLegendStyle = 'linear-gradient(to bottom, rgb(' + this.heatMapPositiveStyle.join(', ') + '),  rgb(' + this.heatMapNegativeStyle.join(', ') + '))'
-        this.heatMapDefaultBg = 'rgb(' + this.heatMapNegativeStyle.join(', ') + ')'
+        this.heatMapLegendStyle = 'linear-gradient(to bottom, rgb(' + this.heatMapPositiveStyle.join(', ') + '),  ' + this.heatMapDefaultBg + ', rgb(' + this.heatMapNegativeStyle.join(', ') + '))'
+        // this.heatMapDefaultBg = 'rgb(' + this.heatMapNegativeStyle.join(', ') + ')'
         this.heatMapLegendPositive = 'rgb(' + this.heatMapNegativeStyle.join(', ') + ')'
         this.heatMapLegendNegative = 'rgb(' + this.heatMapPositiveStyle.join(', ') + ')'
     }
@@ -114,12 +116,13 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
 
         this.filteredData.forEach((features: any) => {
             const importance = parseFloat(features.importance)
-            const tempPercent = ((importance + Math.abs(this.minValue)) / (Math.abs(this.maxValue) + Math.abs(this.minValue))).toFixed(1)
-            let colorBase = Object.create(this.heatMapPositiveStyle)
+            const limitTemp = (Math.abs(this.maxValue) > Math.abs(this.minValue)) ? Math.abs(this.maxValue) : Math.abs(this.minValue)
+            const tempPercent: string = (Math.abs(importance) / limitTemp).toFixed(2)
+            let colorBase: string[] = (importance > 0) ? Object.create(this.heatMapPositiveStyle) : Object.create(this.heatMapNegativeStyle)
             colorBase.push(tempPercent)
 
             const currentTemperature = 'rgba(' + colorBase.join(', ') + ')'
-            const fontColor = (parseFloat(tempPercent) > 0.5) ? 'rgb(' + this.heatMapNegativeStyle.join(',') + ')' : 'rgb(' + this.heatMapPositiveStyle.join(',') + ')'
+            const fontColor = (Math.abs(importance) < (limitTemp * 0.2)) ? 'rgb(255, 255, 255)' : ((importance > 0) ? 'rgb(' + this.heatMapNegativeStyle.join(',') + ')' : 'rgb(' + this.heatMapPositiveStyle.join(',') + ')')
 
             if (featuresList.indexOf(features.feature_name) < 0) {
                 featuresList.push(features.feature_name)
@@ -144,7 +147,8 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
                             importanceLabeled: importance.toFixed(5),
                             frecuency: Math.trunc(parseFloat(features.frequency) * 100),
                             fontColor: fontColor,
-                            temperature: currentTemperature
+                            temperature: currentTemperature,
+                            tempPercent: tempPercent
                         })
                         return false
                     }

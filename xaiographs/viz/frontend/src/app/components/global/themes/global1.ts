@@ -134,8 +134,9 @@ export const explainabilityGraphStyle1 = [
     },
 ];
 
-export const heatMapPositiveStyle1 = [162, 0, 8]
-export const heatMapNegativeStyle1 = [255, 255, 255]
+export const heatMapDefaultStyle1 = [255, 237, 162]
+export const heatMapPositiveStyle1 = [254, 68, 58]
+export const heatMapNegativeStyle1 = [51, 93, 169]
 
 export const globalRadarColor1 = '#B40C03'
 export const targetRadarColor1 = '#ABC864'
