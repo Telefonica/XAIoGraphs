@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 
 from xaiographs.common.constants import COUNT, FEATURE, FEATURE_IMPORTANCE, FEATURE_NAME, ID, IMPORTANCE, \
-    IMPORTANCE_SUFFIX, FEATURE_VALUE, NODE_COUNT, NODE_IMPORTANCE, NODE_NAME, NODE_NAME_RATIO, RELIABILITY, RANK, TARGET
+    IMPORTANCE_SUFFIX, FEATURE_VALUE, NODE_COUNT, NODE_IMPORTANCE, NODE_IMPORTANCE_ABS, NODE_NAME, NODE_NAME_RATIO, \
+    RELIABILITY, RANK, TARGET
 from xaiographs.common.utils import FeaturesInfo, TargetInfo, xgprint
 from xaiographs.exgraph.stats_calculator import StatsResults
 
@@ -206,41 +207,31 @@ class Exporter(object):
         df_importance.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
         return df_importance
 
-    def __export_global_nodes_heatmap_info(self, df_local_nodes: pd.DataFrame, features_info: FeaturesInfo,
-                                           target_info: TargetInfo, filename: str = EXPLAINER_GLOBAL_HEATMAP_FILE):
+    def __export_global_nodes_heatmap_info(self, df_stats: pd.DataFrame, df_importance: pd.DataFrame,
+                                           feature_columns: List[str], filename: str = EXPLAINER_GLOBAL_HEATMAP_FILE):
         """
-        This function takes as main input the importance for each of the individual feature-value pair (node) and its
-        corresponding target for each individual sample of the local sample. From here it generates the following
-        statistics for each node (feature-value) and target pair: the frequency and the mean of the importance values
+        This function combines the global node information resulting from statistic calculation and from importance
+        calculation. From here it picks up the necessary columns and splits feature from value for each node
 
-        :param features_info:  NamedTuple containing all the feature column names lists which will be used all
-                               through the execution flow
-        :param target_info:    NamedTuple containing a numpy array listing the top1 target for each DataFrame row,
-                               another numpy array listing a probability for each possible target value and a third
-                               numpy array showing the top1 targets indexes
-        :param df_local_nodes: Pandas DataFrame providing the importance calculated for each individual node from the
-                               local sample
-        :param filename:       String, representing the name of the file used to persist the information
+        :param df_stats:         Pandas DataFrame containing previously calculated nodes global statistics
+        :param df_importance:    Pandas DataFrame containing previously calculated nodes global importance
+        :param feature_columns:  List of str containing the feature column name of the dataset being processed
+        :param filename:         String representing the name of the file used to persist the information
         """
         # Target values are count and divided by the number of features. This result will be used as the divisor to
         # compute each target-node frequency
-        for t in target_info.target_columns:
-            df_local_nodes.loc[df_local_nodes[TARGET] == t, TARGET_FEATURE_COUNT] = (
-                        len(df_local_nodes[df_local_nodes[TARGET] == t]) / len(features_info.feature_columns))
-
-        # The count for each target-node pairs is calculated together with the mean of their importance values. Count
-        # will be divided by the previous result to compute target-node frequency
-        df_local_nodes = df_local_nodes.groupby([TARGET, NODE_NAME, TARGET_FEATURE_COUNT])[NODE_IMPORTANCE].agg(
-            ['count', 'mean']).reset_index()
-        df_local_nodes[FREQUENCY] = df_local_nodes[COUNT] / df_local_nodes[TARGET_FEATURE_COUNT]
-        df_local_nodes.rename(columns={MEAN: IMPORTANCE}, inplace=True)
+        global_node_info = df_importance.merge(df_stats, how="inner", on=[NODE_NAME])[[TARGET, NODE_NAME,
+                                                                                       NODE_NAME_RATIO,
+                                                                                       NODE_IMPORTANCE]]
+        global_node_info.rename(columns={NODE_NAME_RATIO: FREQUENCY, NODE_IMPORTANCE: IMPORTANCE}, inplace=True)
 
         # Feature name and feature value are extracted from each node name
-        for f in features_info.feature_columns:
-            df_local_nodes.loc[df_local_nodes[NODE_NAME].str.startswith(f), FEATURE_NAME] = f
-        df_local_nodes[FEATURE_VALUE] = df_local_nodes.apply(lambda x: x[NODE_NAME][len(x[FEATURE_NAME]) + 1:], axis=1)
+        for f in feature_columns:
+            global_node_info.loc[global_node_info[NODE_NAME].str.startswith(f), FEATURE_NAME] = f
+        global_node_info[FEATURE_VALUE] = global_node_info.apply(lambda x: x[NODE_NAME][len(x[FEATURE_NAME]) + 1:],
+                                                                 axis=1)
 
-        df_local_nodes[[TARGET, FEATURE_NAME, FEATURE_VALUE, IMPORTANCE, FREQUENCY]].sort_values(
+        global_node_info[[TARGET, FEATURE_NAME, FEATURE_VALUE, IMPORTANCE, FREQUENCY]].sort_values(
             by=[TARGET, FEATURE_NAME, FEATURE_VALUE], ascending=False).to_json(
             path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
@@ -248,8 +239,8 @@ class Exporter(object):
                               filename=EXPLAINER_GLOBAL_GRAPH_NODES_FILE) -> pd.DataFrame:
         """
         This function combines the global node information resulting from statistic calculation and from importance
-        calculation. It also calculates weights in pixels for the nodes importance and for the nodes frequency and
-        persists the information
+        calculation. It also calculates weights in pixels for the nodes importance (in absoulte value) and for the nodes
+         frequency and  persists the information
 
         :param df_stats:        Pandas DataFrame containing previously calculated nodes global statistics
         :param df_importance:   Pandas DataFrame containing previously calculated nodes global importance
@@ -257,19 +248,22 @@ class Exporter(object):
         :return:                Pandas DataFrame containing the node global info resulting from combining the
                                 calculated statistics and the calculated importance
         """
-        global_node_info = df_importance.merge(df_stats, how="right", on=NODE_NAME)
+        global_node_info = df_importance.merge(df_stats, how="inner", on=NODE_NAME)
         global_node_info[NODE_NAME_RATIO_WEIGHT] = pd.cut(global_node_info[NODE_NAME_RATIO],
                                                           bins=N_BINS_NODE_WEIGHT,
                                                           labels=list(range(
                                                               MIN_NODE_WEIGHT,
                                                               MAX_NODE_WEIGHT + BIN_WIDTH_NODE_WEIGHT,
                                                               BIN_WIDTH_NODE_WEIGHT)))
-        global_node_info[NODE_WEIGHT] = pd.cut(global_node_info[NODE_IMPORTANCE],
+        global_node_info[NODE_WEIGHT] = pd.cut(global_node_info[NODE_IMPORTANCE_ABS],
                                                bins=N_BINS_NODE_WEIGHT,
                                                labels=list(range(
                                                    MIN_NODE_WEIGHT,
                                                    MAX_NODE_WEIGHT + BIN_WIDTH_NODE_WEIGHT,
                                                    BIN_WIDTH_NODE_WEIGHT)))
+
+        # Feature node importance in absolute value is only used to compute
+        global_node_info.drop(NODE_IMPORTANCE_ABS, axis=1, inplace=True)
         global_node_info.sort_values(by=[TARGET, RANK], inplace=True)
         global_node_info.to_json(path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
@@ -384,7 +378,7 @@ class Exporter(object):
             path_or_buf=os.path.join(self.__destination_path, filename), orient='records')
 
     def __export_local_nodes(self, df_stats: pd.DataFrame, features_info: FeaturesInfo,
-                             filename=EXPLAINER_LOCAL_GRAPH_NODES_FILE) -> pd.DataFrame:
+                             filename=EXPLAINER_LOCAL_GRAPH_NODES_FILE):
         """
         This function combines the previously calculated local statistics for the nodes, with the calculated importance.
         It calculates the weight in pixels for the node importance too and, finally, persists the resulting information
@@ -393,10 +387,6 @@ class Exporter(object):
         :param features_info:   NamedTuple containing all the feature column names lists which will be used all through
                                 the execution flow
         :param filename:        String representing the name of the file used to persist the information
-
-        :return:                Pandas DataFrame providing the importance calculated for each individual node from the
-                                local sample, needed to generate another file to export to display a heatmap
-                                visualization
         """
         importance_values = np.repeat(self.__df_explanation_sample.values, len(features_info.feature_columns), axis=0)
         df_stats[IMPORTANCE_FEATURE] = df_stats[TARGET] + '_' + df_stats[FEATURE_NAME] + IMPORTANCE_SUFFIX
@@ -415,7 +405,6 @@ class Exporter(object):
                                                    BIN_WIDTH_NODE_WEIGHT)))
         local_nodes_info.sort_values(by=[ID, RANK]).to_json(path_or_buf=os.path.join(self.__destination_path, filename),
                                                             orient='records')
-        return local_nodes_info.drop([NODE_WEIGHT, RANK], axis=1)
 
     def export(self, features_info: FeaturesInfo, target_info: TargetInfo, sample_ids_mask: np.ndarray,
                global_target_explainability: pd.DataFrame, global_explainability: pd.DataFrame,
@@ -432,10 +421,11 @@ class Exporter(object):
         self.__export_local_dataset_reliability(features_info=features_info, target_info=target_info,
                                                 sample_ids_mask=sample_ids_mask)
 
-        local_nodes_info = self.__export_local_nodes(df_stats=nodes_info.local_stats, features_info=features_info)
+        self.__export_local_nodes(df_stats=nodes_info.local_stats, features_info=features_info)
 
-        self.__export_global_nodes_heatmap_info(df_local_nodes=local_nodes_info, features_info=features_info,
-                                                target_info=target_info)
+        self.__export_global_nodes_heatmap_info(df_stats=nodes_info.global_stats,
+                                                df_importance=global_nodes_importance,
+                                                feature_columns=features_info.feature_columns)
 
         self.__export_edges(df_stats=edges_info.local_stats, filename=EXPLAINER_LOCAL_GRAPH_EDGES_FILE)
 
