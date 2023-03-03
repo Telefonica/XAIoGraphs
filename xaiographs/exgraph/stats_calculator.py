@@ -162,6 +162,14 @@ class StatsCalculator(object):
         # For the moment this is all the information for the local graph nodes statistics. This will be used later,
         # combined with the Importance calculation part
         df_local_graph_nodes = pd.DataFrame(graph_nodes_info[:, :-1], columns=[ID, NODE_NAME, FEATURE_NAME, TARGET])
+        # Sample ids mask is applied to the local nodes before returning the information
+        df_local_graph_nodes_sample = filter_by_ids(df=df_local_graph_nodes,
+                                                    sample_id_mask=self.__sample_ids_mask,
+                                                    n_repetitions=int(len(df_local_graph_nodes) / len(self.__df)))
+
+        # IDs present in resulting sample must match te sample ids
+        assert np.array_equal(np.unique(np.sort(df_local_graph_nodes_sample[ID].astype('str').values)),
+                              np.sort(self.__sample_ids)), "Something went wrong when sampling local nodes"
 
         # For the global part, feature_value frequencies are computed. Note that thw whole local nodes information is
         # taken into account
@@ -171,14 +179,8 @@ class StatsCalculator(object):
         df_global_graph_nodes[NODE_NAME_RATIO_RANK] = (
             df_global_graph_nodes[NODE_NAME_RATIO].rank(method='dense', ascending=False).astype(int))
 
-        # Sample ids mask is applied to the local nodes before returning the information
-        df_local_graph_nodes_sample = filter_by_ids(df=df_local_graph_nodes,
-                                                    sample_id_mask=self.__sample_ids_mask,
-                                                    n_repetitions=int(len(df_local_graph_nodes) / len(self.__df)))
-
-        # IDs present in resulting sample must match te sample ids
-        assert np.array_equal(np.unique(np.sort(df_local_graph_nodes_sample[ID].astype('str').values)),
-                              np.sort(self.__sample_ids)), "Something went wrong when sampling local nodes"
+        np.save('/home/cx02747/Data/xaiographs_test/nodes_importance_columns.npy',
+                np.delete(graph_nodes_info, [2, 3], axis=1))
 
         return StatsResults(global_stats=df_global_graph_nodes, local_stats=df_local_graph_nodes_sample), np.delete(
             graph_nodes_info, [2, 3], axis=1)
