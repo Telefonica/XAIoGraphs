@@ -1,9 +1,0 @@
-,incomes_high,incomes_mid,incomes_low,economic_class_first,economic_class_second,economic_class_third,gender_male,gender_female
-incomes_high,1,0.63,0.51,0.37,0.74,0.01,0.12,0.00
-incomes_mid,0.63,1,0.87,0.22,0.75,0.86,0.13,0.57
-incomes_low,0.51,0.87,1,0.96,0.03,0.09,0.18,0.21
-economic_class_first,0.37,0.22,0.96,1,0.90,0.03,0.72,0.94
-economic_class_second,0.74,0.75,0.03,0.03,1,0.74,0.45,0.07
-economic_class_third,0.01,0.86,0.09,0.03,0.74,1,0.35,0.67
-gender_male,0.12,0.13,0.18,0.72,0.03,0.35,1,0.98
-gender_female,0.00,0.57,0.21,0.94,0.07,0.67,0.98,1
