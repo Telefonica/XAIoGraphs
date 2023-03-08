@@ -1,12 +1,14 @@
 /* ANGULAR CORE */
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 
 /* ANGULAR SERVICES */
+import { ReaderService } from './services/reader.service';
 import { SnackbarService } from './services/snackbar.service';
 
 /* LOCAL FILES */
 import { ctsGlobal } from './constants/global';
+import { ctsTheme } from './constants/theme';
 
 @Component({
     selector: 'app-root',
@@ -19,8 +21,10 @@ export class AppComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private _apiReader: ReaderService,
+        private _apiSnackBar: SnackbarService
     ) {
-        this.router.navigate(['/global'], {skipLocationChange: true});
+        this.router.navigate(['/global'], { skipLocationChange: true });
     }
 
     ngOnInit() {
@@ -31,5 +35,21 @@ export class AppComponent implements OnInit {
                 }
             }
         });
+
+        let colors = localStorage.getItem(ctsTheme.storageName)
+        if (!colors) {
+            this._apiReader.readColors().subscribe({
+                next: (response: any) => {
+                    colors = response
+                },
+                complete: () => {
+                    localStorage.setItem(ctsTheme.storageName, JSON.stringify(colors));
+                },
+                error: (err) => {
+                    this._apiSnackBar.openSnackBar(JSON.stringify(err));
+                }
+            })
+
+        }
     }
 }

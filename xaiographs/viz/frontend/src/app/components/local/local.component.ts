@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { EmitterService } from 'src/app/services/emitter.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { EmitterService } from 'src/app/services/emitter.service';
     templateUrl: './local.component.html',
     styleUrls: ['./local.component.scss']
 })
-export class LocalComponent implements OnInit {
+export class LocalComponent {
 
     theme: boolean = false
 
@@ -14,12 +14,8 @@ export class LocalComponent implements OnInit {
         private _apiEmitter: EmitterService,
     ) { }
 
-    ngOnInit(): void {
-        this.theme = this._apiEmitter.getTheme();
-    }
-
-    changeTheme() {
-        this._apiEmitter.setTheme(this.theme);
+    openPalette() {
+        this._apiEmitter.setTheme('');
     }
 
 }

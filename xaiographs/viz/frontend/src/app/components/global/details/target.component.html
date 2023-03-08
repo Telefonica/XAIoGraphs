@@ -1,6 +1,6 @@
 <div fxFlex fxLayout="column" style="padding: 0px 20px;">
     <div fxFlex fxLayout="row" fxLayoutGap="5px" class="globalFeatureTitleBorder">
-        <label *ngFor="let target of listTarget; index as index" class="globalTargetFilter" [ngClass]="{globalTargetFilterSelected: (currentTargetIndex == index)}" (click)="updateTarget(index)">{{target}}</label>
+        <label *ngFor="let target of listTarget; index as index" class="globalTargetFilter" [ngClass]="{globalTargetFilterSelected: (currentTargetIndex == index)}" (click)="updateTarget(index)" [style.color]="target.color">{{ target.target }}</label>
     </div>
     <div fxFlex fxLayout="row" fxLayoutGap="20px" style="padding: 20px 0px;">
         <app-global-target-explainability fxFlex class="globalCard"></app-global-target-explainability>

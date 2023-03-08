@@ -7,8 +7,7 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { distributionGraphStyle0, distributionGraph3D0, distributionGraphPieHole0 } from '../themes/global0';
-import { distributionGraphStyle1, distributionGraph3D1, distributionGraphPieHole1 } from '../themes/global1';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-global-distribution',
@@ -25,10 +24,8 @@ export class GlobalDistributionComponent implements OnInit, OnDestroy {
 
     serviceResponse: any;
 
-    distributionGraphStyle
-    distributionGraph3D
-    distributionGraphPieHole
     themeSubscription
+    colorTheme: any;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -40,6 +37,7 @@ export class GlobalDistributionComponent implements OnInit, OnDestroy {
             this.initGraph();
             this.createGraph();
         });
+        this.prepareTheme();
     }
 
     ngOnInit(): void {
@@ -50,7 +48,6 @@ export class GlobalDistributionComponent implements OnInit, OnDestroy {
             complete: () => {
                 if (this.serviceResponse.length > 0) {
                     this.serviceResponse.sort((element1, element2) => parseInt(element2.count) - parseInt(element1.count));
-                    this.prepareTheme();
                     this.initGraph();
                     this.createGraph();
                     this.displayGraph = true;
@@ -66,23 +63,15 @@ export class GlobalDistributionComponent implements OnInit, OnDestroy {
     }
 
     prepareTheme() {
-        if (!this._apiEmitter.getTheme()) {
-            this.distributionGraphStyle = distributionGraphStyle0
-            this.distributionGraph3D = distributionGraph3D0
-            this.distributionGraphPieHole = distributionGraphPieHole0
-        } else {
-            this.distributionGraphStyle = distributionGraphStyle1
-            this.distributionGraph3D = distributionGraph3D1
-            this.distributionGraphPieHole = distributionGraphPieHole1
-        }
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
     }
 
     initGraph() {
         this.dataGraph = [];
         this.options = {
-            is3D: this.distributionGraph3D,
-            pieHole: this.distributionGraphPieHole,
-            slices: this.distributionGraphStyle,
+            is3D: false,
+            pieHole: 0.3,
+            colors: this.colorTheme.targets,
             chartArea: { top: 15, width: '90%', height: '80%' },
             tooltip: { type: 'string', isHtml: true },
             legend: { position: 'bottom' },

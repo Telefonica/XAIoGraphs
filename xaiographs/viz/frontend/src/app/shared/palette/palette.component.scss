@@ -1,0 +1,9 @@
+@import "../../../styles.scss";
+
+.colorPicker {
+    width: 20px; height: 20px; cursor: pointer; border-radius: 3px; border:1px solid black
+}
+
+.colorTitle {
+    width: 150px; text-align: right; font-weight: bold
+}
