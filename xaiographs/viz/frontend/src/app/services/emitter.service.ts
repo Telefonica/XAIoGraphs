@@ -1,5 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
+import { ctsTheme } from '../constants/theme';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -10,7 +12,6 @@ export class EmitterService {
     currentGlobalFrencuency;
     currentLocalTarget;
     currentLocalFeatures;
-    currentTheme = false;
 
     globalTargetChangeEmitter = new EventEmitter();
     globalFeaturesChangeEmitter = new EventEmitter();
@@ -75,11 +76,9 @@ export class EmitterService {
         this.localTargetChangeEmitter.emit();
     }
 
-    setTheme(current: any) {
-        this.currentTheme = current;
+    setTheme(newColors) {
+        localStorage.removeItem(ctsTheme.storageName)
+        localStorage.setItem(ctsTheme.storageName, JSON.stringify(newColors));
         this.themeChangeEmitter.emit();
-    }
-    getTheme() {
-        return this.currentTheme;
     }
 }

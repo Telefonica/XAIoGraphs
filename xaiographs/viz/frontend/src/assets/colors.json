@@ -1,0 +1,19 @@
+{
+    "globalFeature": "#212736",
+    "positiveValue": "#FF0049",
+    "zeroValue": "#FFF",
+    "negativeValue": "#0082F6",
+    "frecuencyValue": "#7C849F",
+    "targets": [
+        "#fd8705",
+        "#168813",
+        "#850087",
+        "#1087ba",
+        "#d12b65",
+        "#579e06",
+        "#a61c24",
+        "#658aba",
+        "#284fc0",
+        "#d12310"
+    ]
+}

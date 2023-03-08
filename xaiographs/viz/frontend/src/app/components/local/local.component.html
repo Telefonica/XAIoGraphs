@@ -3,11 +3,7 @@
         <label>Local explainability</label>
         <div fxLayout="column" fxLayoutAlign="center center" class="localTheme">
             <label>Theme</label>
-            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
-                <label>1</label>
-                <mat-slide-toggle [(ngModel)]="theme" (change)="changeTheme()"></mat-slide-toggle>
-                <label>2</label>
-            </div>
+            <mat-icon (click)="openPalette()">palette</mat-icon>
         </div>
     </div>
     <div fxFlex fxLayout="column" fxLayoutGap="20px" class="localBody">

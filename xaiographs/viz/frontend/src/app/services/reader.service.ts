@@ -5,11 +5,26 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
 })
 export class ReaderService {
-    jsonPath = 'assets/public/';
+    assetsPath = 'assets/'
+    jsonPath = 'public/';
+    colors = 'colors.json';
+
+    orderedTarget: string[] = []
 
     constructor(private http: HttpClient) { }
 
+    setOrderedTarget(targets: string[]) {
+        this.orderedTarget = targets
+    }
+
+    getOrderedTarget(target: string) {
+        return this.orderedTarget.indexOf(target)
+    }
+
     readJSON(fileName: any) {
-        return this.http.get(this.jsonPath + fileName);
+        return this.http.get(this.assetsPath + this.jsonPath + fileName);
+    }
+    readColors() {
+        return this.http.get(this.assetsPath + this.colors);
     }
 }

@@ -9,8 +9,7 @@ import { ChartType } from 'angular-google-charts';
 import { ApexChart, ApexAxisChartSeries, ApexXAxis, ApexYAxis, ApexFill, ApexStroke, ApexMarkers, ApexLegend } from 'ng-apexcharts'
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { explainabilityGraphStyle0, globalRadarColor0, targetRadarColor0 } from '../themes/global0';
-import { explainabilityGraphStyle1, globalRadarColor1, targetRadarColor1 } from '../themes/global1';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-global-target-explainability',
@@ -37,6 +36,7 @@ export class GlobalTargetExplainabilityComponent implements OnInit, OnDestroy {
     explainabilityGraphStyle: any;
     globalRadarStyle: any;
     targetRadarStyle: any;
+    colorTheme: any;
 
     showRadar: boolean = false;
     seriesRadar: ApexAxisChartSeries = []
@@ -67,6 +67,7 @@ export class GlobalTargetExplainabilityComponent implements OnInit, OnDestroy {
     legendRadar: ApexLegend = {
         show: false
     }
+    colorsRadar: string[] = []
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -79,12 +80,12 @@ export class GlobalTargetExplainabilityComponent implements OnInit, OnDestroy {
             this.generateRadar();
         });
         this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
-            this.showRadar = false;
             this.prepareTheme();
             this.initGraph();
             this.generateGraph();
             this.generateRadar();
         });
+        this.prepareTheme();
     }
 
     ngOnInit(): void {
@@ -99,7 +100,6 @@ export class GlobalTargetExplainabilityComponent implements OnInit, OnDestroy {
                     },
                     complete: () => {
                         if (this.serviceResponse.length > 0) {
-                            this.prepareTheme();
                             this.initGraph();
                             this.filterData();
                             this.generateGraph();
@@ -123,15 +123,7 @@ export class GlobalTargetExplainabilityComponent implements OnInit, OnDestroy {
     }
 
     prepareTheme() {
-        if (!this._apiEmitter.getTheme()) {
-            this.explainabilityGraphStyle = explainabilityGraphStyle0
-            this.globalRadarStyle = globalRadarColor0
-            this.targetRadarStyle = targetRadarColor0
-        } else {
-            this.explainabilityGraphStyle = explainabilityGraphStyle1
-            this.globalRadarStyle = globalRadarColor1
-            this.targetRadarStyle = targetRadarColor1
-        }
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
     }
 
     initGraph() {
@@ -189,7 +181,7 @@ export class GlobalTargetExplainabilityComponent implements OnInit, OnDestroy {
             transformDataSet.push([
                 feature.key,
                 feature.value,
-                this.JSONCleaner(this.explainabilityGraphStyle[feature.weight]),
+                "fill-color: " + this.colorTheme.targets[this._apiReader.getOrderedTarget(this.currentTarget)] + "; fill-opacity: " + (parseInt(feature.weight) + 1) / 5,
                 '<table style="padding:5px; width:150px;"><tr>' +
                 '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + feature.key + '</td>' +
                 '</tr><tr>' +
@@ -208,11 +200,16 @@ export class GlobalTargetExplainabilityComponent implements OnInit, OnDestroy {
         let targetFeatValues: number[] = []
         this.xaxisRadar['categories'] = []
 
+        this.fillRadar['colors'] = []
+        this.strokeRadar['colors'] = []
+        this.markersRadar['colors'] = []
+
         const radarColorSchema = [
-            this.globalRadarStyle,
-            this.targetRadarStyle
+            this.colorTheme.globalFeature,
+            this.colorTheme.targets[this._apiReader.getOrderedTarget(this.currentTarget)]
         ]
 
+        this.colorsRadar = radarColorSchema
         this.fillRadar['colors'] = radarColorSchema
         this.strokeRadar['colors'] = radarColorSchema
         this.markersRadar['colors'] = radarColorSchema

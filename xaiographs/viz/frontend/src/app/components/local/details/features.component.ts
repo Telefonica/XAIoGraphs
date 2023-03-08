@@ -7,8 +7,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ChartType } from 'angular-google-charts';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { positiveFeaturesGraphStyle0, negativeFeaturesGraphStyle0 } from '../themes/local0';
-import { positiveFeaturesGraphStyle1, negativeFeaturesGraphStyle1 } from '../themes/local1';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-local-features',
@@ -33,8 +32,7 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
     options: any = {};
     displayGraph: boolean = false;
 
-    positiveFeaturesGraphStyle: any;
-    negativeFeaturesGraphStyle: any;
+    colorTheme: any;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -80,13 +78,7 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
     }
 
     prepareTheme() {
-        if (!this._apiEmitter.getTheme()) {
-            this.positiveFeaturesGraphStyle = positiveFeaturesGraphStyle0
-            this.negativeFeaturesGraphStyle = negativeFeaturesGraphStyle0
-        } else {
-            this.positiveFeaturesGraphStyle = positiveFeaturesGraphStyle1
-            this.negativeFeaturesGraphStyle = negativeFeaturesGraphStyle1
-        }
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
     }
 
     initGraph() {
@@ -119,20 +111,11 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
         ];
 
         this.dataSource.forEach((data: any, index: number) => {
-            let barStyle = '';
             const nodeImportance = parseFloat(data.node_importance);
-
-            if (nodeImportance > 0) {
-                const barStyleIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.positiveFeaturesGraphStyle.length;
-                barStyle = this.JSONCleaner(this.positiveFeaturesGraphStyle[barStyleIndex]);
-            } else {
-                const barStyleIndex = (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.negativeFeaturesGraphStyle.length;
-                barStyle = this.JSONCleaner(this.negativeFeaturesGraphStyle[barStyleIndex]);
-            }
             transformDataSet.push([
                 data.node_name,
                 nodeImportance,
-                barStyle,
+                (nodeImportance > 0) ? "fill-color: " + this.colorTheme.positiveValue : "fill-color: " + this.colorTheme.negativeValue,
                 '<table style="padding:5px; width:150px;"><tr>' +
                 '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.node_name + '</td>' +
                 '</tr><tr>' +
@@ -145,14 +128,6 @@ export class LocalFeaturesComponent implements OnInit, OnDestroy {
         });
 
         this.dataGraph = transformDataSet;
-    }
-
-    JSONCleaner(value) {
-        return JSON.stringify(value)
-            .replace('{', '')
-            .replace('}', '')
-            .replace(/"/g, '')
-            .replace(/,/g, ';')
     }
 
     ngOnDestroy(): void {

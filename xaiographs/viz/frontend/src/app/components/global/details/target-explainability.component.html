@@ -8,12 +8,12 @@
     </div>
     <google-chart class="globalFeatureChart" style="height:100%" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph && !showRadar"> </google-chart>
     <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
-    <div fxFlex fxLayout="column" fxLayoutAlign="start center" *ngIf="showRadar">
-        <apx-chart [series]="seriesRadar" [chart]="chartRadar" [xaxis]="xaxisRadar" [yaxis]="yaxisRadar" [fill]="fillRadar" [stroke]="strokeRadar" [markers]="markersRadar" [legend]="legendRadar" style="width: 100%;"></apx-chart>
+    <div fxFlex fxLayout="column" fxLayoutAlign="start center" *ngIf="displayGraph && showRadar">
+        <apx-chart [series]="seriesRadar" [chart]="chartRadar" [xaxis]="xaxisRadar" [yaxis]="yaxisRadar" [colors]="colorsRadar" [fill]="fillRadar" [stroke]="strokeRadar" [markers]="markersRadar" [legend]="legendRadar" style="width: 100%;"></apx-chart>
         <div fxLayout="row" fxLayoutGap="10px">
-            <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="globalRadarStyle"></div>
+            <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px; opacity: 75%;" [style.background-color]="colorsRadar[0]"></div>
             <label>Global Features</label>
-            <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="targetRadarStyle"></div>
+            <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px; opacity: 75%;" [style.background-color]="colorsRadar[1]"></div>
             <label>Target Features</label>
         </div>
     </div>
