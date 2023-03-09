@@ -179,9 +179,6 @@ class StatsCalculator(object):
         df_global_graph_nodes[NODE_NAME_RATIO_RANK] = (
             df_global_graph_nodes[NODE_NAME_RATIO].rank(method='dense', ascending=False).astype(int))
 
-        np.save('/home/cx02747/Data/xaiographs_test/nodes_importance_columns.npy',
-                np.delete(graph_nodes_info, [2, 3], axis=1))
-
         return StatsResults(global_stats=df_global_graph_nodes, local_stats=df_local_graph_nodes_sample), np.delete(
             graph_nodes_info, [2, 3], axis=1)
 
