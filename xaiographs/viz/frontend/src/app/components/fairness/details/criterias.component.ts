@@ -52,23 +52,20 @@ export class CriteriasComponent implements OnInit {
 
     openIndependence() {
         this.dialog.open(DefIndependenceComponent, {
-            width: '50%',
-            height: '80%',
+            width: '40%',
             autoFocus: false
         });
     }
     openSeparation() {
         this.dialog.open(DefSeparationComponent, {
-            width: '50%',
-            height: '80%',
+            width: '40%',
             autoFocus: false
         });
 
     }
     openSufficiency() {
         this.dialog.open(DefSufficienceComponent, {
-            width: '50%',
-            height: '80%',
+            width: '40%',
             autoFocus: false
         });
     }
