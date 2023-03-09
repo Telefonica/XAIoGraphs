@@ -1,10 +1,17 @@
 <div fxFlex fxLayout="column" fxLayoutGap="25px">
     <div fxFlex fxLayout="row" class="brdGrey3_bottom">
-        <div fxFlex fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
-            <label class="dialog_title" style="padding: 10px">Separation definition</label>
+        <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" style="padding:5px">
+            <label class="dialog_title">Separation Score</label>
+            <label class="dialog_subtitle">(Equal Opportunity)</label>
         </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxLayout="row" fxLayoutAlign="center start">
             <mat-icon class="close" (click)="dialogRef.close()">close</mat-icon>
         </div>
     </div>
+    <label>We say the random variables (Y, A, T) satisfy separation if the sensitive characteristics 'A' are statistically independent of the prediction 'Y' given the target value 'T'.</label>
+    <label>That is, the probability of being classified by the model in each of the classes is the same for two elements with different sensitive feature values, given that both belong to the same group (Equal opportunities).</label>
+    <label class="example">The probability of predicting a true positive or a false positive<br/>for each group (A=a, A=b) must be the same.</label>
+    <label>We define the separation score as: </label>
+
+    <ng-katex [equation]="equation" [options]="options" class="formulation"></ng-katex>
 </div>

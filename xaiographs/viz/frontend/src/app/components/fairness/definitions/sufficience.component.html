@@ -1,10 +1,17 @@
 <div fxFlex fxLayout="column" fxLayoutGap="25px">
     <div fxFlex fxLayout="row" class="brdGrey3_bottom">
-        <div fxFlex fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
-            <label class="dialog_title" style="padding: 10px">Sufficience definition</label>
+        <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" style="padding:5px">
+            <label class="dialog_title">Sufficiency Score</label>
+            <label class="dialog_subtitle">(Predictive Parity)</label>
         </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxLayout="row" fxLayoutAlign="center start">
             <mat-icon class="close" (click)="dialogRef.close()">close</mat-icon>
         </div>
     </div>
+    <label>We say the random variables (Y, A, T) satisfy sufficiency if the sensitive characteristics 'A' are statistically independent of the target value 'T' given the prediction 'Y'.</label>
+    <label>That is, the probability of being classified by the model in each of the classes is the same for two elements with different sensitive feature values, since the prediction includes them in the same group (Predictive Parity).</label>
+    <label class="example">The probability that two elements with different values of the sensitive<br/>variable are well classified must be the same.</label>
+    <label>We define the sufficiency score as: </label>
+
+    <ng-katex [equation]="equation" [options]="options" class="formulation"></ng-katex>
 </div>
