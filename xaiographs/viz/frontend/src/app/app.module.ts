@@ -31,6 +31,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { NgApexchartsModule } from 'ng-apexcharts'
 import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -66,6 +67,7 @@ import { DatasetGraphComponent } from './components/data/details/graph.component
 import { GlobalTargetExplainabilityComponent } from './components/global/details/target-explainability.component';
 import { GlobalHeatmapComponent } from './components/global/details/heatmap.component';
 import { KatexModule } from 'ng-katex';
+import { PaletteComponent } from './shared/palette/palette.component';
 
 @NgModule({
     declarations: [
@@ -100,6 +102,7 @@ import { KatexModule } from 'ng-katex';
         DatasetGraphComponent,
         GlobalTargetExplainabilityComponent,
         GlobalHeatmapComponent,
+        PaletteComponent,
     ],
     imports: [
         BrowserModule,
@@ -135,6 +138,7 @@ import { KatexModule } from 'ng-katex';
         TableVirtualScrollModule,
         NgApexchartsModule,
         KatexModule,
+        ColorPickerModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

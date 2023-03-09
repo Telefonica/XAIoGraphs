@@ -7,8 +7,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import cytoscape from 'cytoscape';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { nodePositiveGraphStyle0, nodeNegativeGraphStyle0, edgeGraphStyle0 } from '../themes/global0';
-import { nodePositiveGraphStyle1, nodeNegativeGraphStyle1, edgeGraphStyle1 } from '../themes/global1';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-global-target-graph',
@@ -30,9 +29,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
     edgeList = [];
     nodeNames = [];
 
-    nodePositiveGraphStyle: any;
-    nodeNegativeGraphStyle: any;
-    edgeGraphStyle: any;
+    colorTheme: any;
 
     nodesJson = []
     edgesJson = []
@@ -87,15 +84,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
     }
 
     prepareTheme() {
-        if (!this._apiEmitter.getTheme()) {
-            this.nodePositiveGraphStyle = nodePositiveGraphStyle0
-            this.nodeNegativeGraphStyle = nodeNegativeGraphStyle0
-            this.edgeGraphStyle = edgeGraphStyle0
-        } else {
-            this.nodePositiveGraphStyle = nodePositiveGraphStyle1
-            this.nodeNegativeGraphStyle = nodeNegativeGraphStyle1
-            this.edgeGraphStyle = edgeGraphStyle1
-        }
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
     }
 
     filterData() {
@@ -125,7 +114,6 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
             this.nodeList.forEach((node: any) => {
                 const importance = parseFloat(node.node_importance)
                 const weightNode = parseFloat(node.node_weight);
-                const weightNodeIndex = (importance > 0) ? (Math.trunc(weightNode / 10) - 1) % this.nodePositiveGraphStyle.length : (Math.trunc(weightNode / 10) - 1) % this.nodeNegativeGraphStyle.length;
 
                 elements.push({
                     data: {
@@ -133,7 +121,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
                         label: node.node_name,
                     },
                     style: {
-                        'background-color': (importance > 0) ? this.nodePositiveGraphStyle[weightNodeIndex] : this.nodeNegativeGraphStyle[weightNodeIndex],
+                        'background-color': (importance > 0) ? this.colorTheme.positiveValue : this.colorTheme.negativeValue,
                         height: weightNode,
                         width: weightNode,
                     }
@@ -143,7 +131,6 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
 
             this.edgeList.forEach((edge: any) => {
                 const weightEdge = parseFloat(edge.edge_weight);
-                const weightEdgeIndex = (Math.trunc(weightEdge / 2)) % this.edgeGraphStyle.length;
 
                 if (
                     (this.nodeList.filter((node: any) => node.node_name === edge.node_1).length > 0) &&
@@ -157,7 +144,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
                         },
                         style: {
                             width: weightEdge,
-                            'line-color': this.edgeGraphStyle[weightEdgeIndex],
+                            'line-color': this.colorTheme.frecuencyValue
                         }
                     });
                 }

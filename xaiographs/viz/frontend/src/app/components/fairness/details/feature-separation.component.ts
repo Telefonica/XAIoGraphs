@@ -69,23 +69,20 @@ export class FeatureSeparationComponent implements OnChanges {
 
     openIndependence() {
         this.dialog.open(DefIndependenceComponent, {
-            width: '50%',
-            height: '80%',
+            width: '40%',
             autoFocus: false
         });
     }
     openSeparation() {
         this.dialog.open(DefSeparationComponent, {
-            width: '50%',
-            height: '80%',
+            width: '40%',
             autoFocus: false
         });
 
     }
     openSufficience() {
         this.dialog.open(DefSufficienceComponent, {
-            width: '50%',
-            height: '80%',
+            width: '40%',
             autoFocus: false
         });
     }

@@ -7,8 +7,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import { ChartType } from 'angular-google-charts';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { featuresPositiveImportanceTargetGraphStyle0, featuresNegativeImportanceTargetGraphStyle0, featuresFrecuencyTargetGraphStyle0 } from '../themes/global0';
-import { featuresPositiveImportanceTargetGraphStyle1, featuresNegativeImportanceTargetGraphStyle1, featuresFrecuencyTargetGraphStyle1 } from '../themes/global1';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-global-target-features',
@@ -31,13 +30,16 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
 
     type = ChartType.BarChart;
     dataGraph: any[] = [];
+    dataGraphNoFrec: any[] = [];
     columnNames: any[] = [];
+    columnNamesNoFrec: any[] = [];
     options: any = {};
+    optionsNoFrec: any = {};
     displayGraph: boolean = false;
 
-    featuresPositiveImportanceTargetGraphStyle: any;
-    featuresNegativeImportanceTargetGraphStyle: any;
-    featuresFrecuencyTargetGraphStyle: any;
+    colorTheme: any;
+
+    showFrecuency: boolean = true;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -47,20 +49,25 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
         this.targetSubscription = this._apiEmitter.globalTargetChangeEmitter.subscribe(() => {
             this.filterData();
             this.generateGraph();
+            this.generateGraphNoFrec();
         });
         this.featuresSubscription = this._apiEmitter.globalFeaturesChangeEmitter.subscribe(() => {
             this.filterData();
             this.generateGraph();
+            this.generateGraphNoFrec();
         });
         this.frecuencySubscription = this._apiEmitter.globalFrecuencyChangeEmitter.subscribe(() => {
             this.filterData();
             this.generateGraph();
+            this.generateGraphNoFrec();
         });
         this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
             this.prepareTheme();
             this.initGraph();
             this.generateGraph();
+            this.generateGraphNoFrec();
         });
+        this.prepareTheme();
     }
 
     ngOnInit() {
@@ -70,10 +77,10 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
             },
             complete: () => {
                 if (this.serviceResponse.length > 0) {
-                    this.prepareTheme();
                     this.initGraph();
                     this.filterData();
                     this.generateGraph();
+                    this.generateGraphNoFrec();
                     this.displayGraph = true;
                 } else {
                     this.displayGraph = false;
@@ -87,19 +94,13 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
     }
 
     prepareTheme() {
-        if (!this._apiEmitter.getTheme()) {
-            this.featuresPositiveImportanceTargetGraphStyle = featuresPositiveImportanceTargetGraphStyle0
-            this.featuresNegativeImportanceTargetGraphStyle = featuresNegativeImportanceTargetGraphStyle0
-            this.featuresFrecuencyTargetGraphStyle = featuresFrecuencyTargetGraphStyle0
-        } else {
-            this.featuresPositiveImportanceTargetGraphStyle = featuresPositiveImportanceTargetGraphStyle1
-            this.featuresNegativeImportanceTargetGraphStyle = featuresNegativeImportanceTargetGraphStyle1
-            this.featuresFrecuencyTargetGraphStyle = featuresFrecuencyTargetGraphStyle1
-        }
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
     }
 
     initGraph() {
         this.dataGraph = [];
+        this.dataGraphNoFrec = [];
+
         this.options = {
             legend: 'none',
             bar: { groupWidth: '90%' },
@@ -112,6 +113,13 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
                 0: { title: 'importance' },
                 1: { title: 'frecuency' }
             },
+            tooltip: { type: 'string', isHtml: true },
+        };
+
+        this.optionsNoFrec = {
+            legend: 'none',
+            bar: { groupWidth: '90%' },
+            chartArea: { right: 20, top: 20, width: '75%', height: '90%' },
             tooltip: { type: 'string', isHtml: true },
         };
     }
@@ -142,19 +150,11 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
 
         this.dataSource.forEach((data: any) => {
             const importance = parseFloat(data.node_importance);
-            const count = parseInt(data.node_count);
-            const frecuency = parseFloat(data.node_name_ratio);
-
-            const barStyleIMPIndex =  (importance > 0) ? (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.featuresPositiveImportanceTargetGraphStyle.length : (Math.trunc(parseFloat(data.node_weight) / 10) - 1) % this.featuresNegativeImportanceTargetGraphStyle.length;
-            const barStyleFRECIndex = (Math.trunc(parseFloat(data.node_name_ratio_weight) / 10) - 1) % this.featuresFrecuencyTargetGraphStyle.length;
-
-            const barStyleIMP = (importance > 0) ? this.JSONCleaner(this.featuresPositiveImportanceTargetGraphStyle[barStyleIMPIndex]) : this.JSONCleaner(this.featuresNegativeImportanceTargetGraphStyle[barStyleIMPIndex]);
-            const barStyleFREC = this.JSONCleaner(this.featuresFrecuencyTargetGraphStyle[barStyleFRECIndex]);
 
             transformDataSet.push([
                 data.node_name,
                 Math.abs(importance),
-                barStyleIMP,
+                (importance > 0) ? "fill-color: " + this.colorTheme.positiveValue : "fill-color: " + this.colorTheme.negativeValue,
                 '<table style="padding:5px; width:150px;"><tr>' +
                 '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.node_name + '</td>' +
                 '</tr><tr>' +
@@ -164,17 +164,17 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
                 '<td style="text-align:right; padding-right: 5px">' + importance.toFixed(5) + '</td>' +
                 '</tr></table>',
                 parseFloat(data.node_name_ratio),
-                barStyleFREC,
+                "fill-color: " + this.colorTheme.frecuencyValue,
                 '<table style="padding:5px; width:150px;"><tr>' +
                 '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.node_name + '</td>' +
                 '</tr><tr>' +
                 '<td colspan="2" style="border-bottom: 1px solid black; margin:10px;"></td>' +
                 '</tr><tr>' +
                 '<td style="font-weight:bold; padding-left: 5px">Count</td>' +
-                '<td style="text-align:right; padding-right: 5px">' + count + '</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + parseInt(data.node_count) + '</td>' +
                 '</tr><tr>' +
                 '<td style="font-weight:bold; padding-left: 5px">Frecuency</td>' +
-                '<td style="text-align:right; padding-right: 5px">' + (frecuency * 100).toFixed(2) + '%' + '</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + (parseFloat(data.node_name_ratio) * 100).toFixed(2) + '%' + '</td>' +
                 '</tr></table>',
             ]);
         });
@@ -182,12 +182,35 @@ export class GlobalFeaturesTargetComponent implements OnInit, OnDestroy {
         this.dataGraph = transformDataSet;
     }
 
-    JSONCleaner(value) {
-        return JSON.stringify(value)
-            .replace('{', '')
-            .replace('}', '')
-            .replace(/"/g, '')
-            .replace(/,/g, ';')
+    generateGraphNoFrec() {
+        let transformDataSet: any[] = [];
+
+        this.columnNamesNoFrec = [
+            'Feature',
+            'Weight',
+            { role: 'style' },
+            { 'type': 'string', 'role': 'tooltip', 'p': { 'html': true } },
+        ];
+
+        this.dataSource.forEach((data: any) => {
+            const importance = parseFloat(data.node_importance);
+
+            transformDataSet.push([
+                data.node_name,
+                Math.abs(importance),
+                (importance > 0) ? "fill-color: " + this.colorTheme.positiveValue : "fill-color: " + this.colorTheme.negativeValue,
+                '<table style="padding:5px; width:150px;"><tr>' +
+                '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + data.node_name + '</td>' +
+                '</tr><tr>' +
+                '<td colspan="2" style="border-bottom: 1px solid black; margin:10px;"></td>' +
+                '</tr><tr>' +
+                '<td style="font-weight:bold; padding-left: 5px">Importance</td>' +
+                '<td style="text-align:right; padding-right: 5px">' + importance.toFixed(5) + '</td>' +
+                '</tr></table>',
+            ]);
+        });
+
+        this.dataGraphNoFrec = transformDataSet;
     }
 
     ngOnDestroy(): void {

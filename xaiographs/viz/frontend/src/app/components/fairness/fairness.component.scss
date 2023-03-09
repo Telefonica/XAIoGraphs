@@ -135,7 +135,11 @@
 }
 
 .dialog_title {
-    font-size: 21px;
+    font-size: 25px;
+    font-weight: bold;
+}
+.dialog_subtitle {
+    font-size: 20px;
 }
 
 .brdGrey3_bottom {
@@ -258,4 +262,20 @@
 .fairnessFeatureFilterSelected {
     @extend .fontBold;
     border-bottom: 3px solid navy;
+}
+
+.formulation {
+    text-align: center;
+    font-size: 18px !important;
+    font-weight: bold;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.example {
+    font-style: italic;
+    font-weight: bold;
+    color: rgb(206, 40, 40);
+    text-align: center;
 }

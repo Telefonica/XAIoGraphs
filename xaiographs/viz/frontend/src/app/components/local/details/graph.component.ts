@@ -7,8 +7,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 import cytoscape from 'cytoscape';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { positiveNodeGraphStyle0, negativeNodeGraphStyle0, edgeGraphStyle0 } from '../themes/local0';
-import { positiveNodeGraphStyle1, negativeNodeGraphStyle1, edgeGraphStyle1 } from '../themes/local1';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-local-graph',
@@ -31,9 +30,7 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
     nodesJson = [];
     edgesJson = [];
 
-    positiveNodeGraphStyle: any;
-    negativeNodeGraphStyle: any;
-    edgeGraphStyle: any;
+    colorTheme: any;
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -81,15 +78,7 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
     }
 
     prepareTheme() {
-        if (!this._apiEmitter.getTheme()) {
-            this.positiveNodeGraphStyle = positiveNodeGraphStyle0
-            this.negativeNodeGraphStyle = negativeNodeGraphStyle0
-            this.edgeGraphStyle = edgeGraphStyle0
-        } else {
-            this.positiveNodeGraphStyle = positiveNodeGraphStyle1
-            this.negativeNodeGraphStyle = negativeNodeGraphStyle1
-            this.edgeGraphStyle = edgeGraphStyle1
-        }
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
     }
 
     filterData() {
@@ -118,23 +107,13 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
                 const weightNode = parseFloat(node.node_weight);
                 const importance = parseFloat(node.node_importance);
 
-                let backgroundColor = '';
-
-                if (importance > 0) {
-                    const graphStyleIndex = (Math.trunc(weightNode / 10) - 1) % this.positiveNodeGraphStyle.length;
-                    backgroundColor = this.positiveNodeGraphStyle[graphStyleIndex];
-                } else {
-                    const graphStyleIndex = (Math.trunc(weightNode / 10) - 1) % this.negativeNodeGraphStyle.length;
-                    backgroundColor = this.negativeNodeGraphStyle[graphStyleIndex]
-                }
-
                 elements.push({
                     data: {
                         id: node.node_name,
                         label: node.node_name,
                     },
                     style: {
-                        'background-color': backgroundColor,
+                        'background-color': (importance > 0) ? this.colorTheme.positiveValue : this.colorTheme.negativeValue,
                         height: weightNode,
                         width: weightNode,
                     }
@@ -142,8 +121,6 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
             });
 
             this.edgeList.forEach((edge: any) => {
-                const weightEdge = parseFloat(edge.edge_weight);
-                const weightIndex = (Math.trunc(weightEdge / 2)) % this.edgeGraphStyle.length;
                 elements.push({
                     data: {
                         id: edge.node_1 + '-' + edge.node_2,
@@ -151,8 +128,8 @@ export class LocalGraphComponent implements OnInit, OnDestroy {
                         target: edge.node_2,
                     },
                     style: {
-                        width: weightEdge,
-                        'line-color': this.edgeGraphStyle[weightIndex],
+                        width: parseFloat(edge.edge_weight),
+                        'line-color': this.colorTheme.frecuencyValue
 
                     }
                 });

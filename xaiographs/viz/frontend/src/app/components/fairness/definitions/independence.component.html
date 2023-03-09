@@ -1,13 +1,16 @@
 <div fxFlex fxLayout="column" fxLayoutGap="25px">
     <div fxFlex fxLayout="row" class="brdGrey3_bottom">
-        <div fxFlex fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
-            <label class="dialog_title" style="padding: 10px">Independence definition</label>
+        <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" style="padding:5px">
+            <label class="dialog_title">Independende Score</label>
+            <label class="dialog_subtitle">(Demographic Parity)</label>
         </div>
-        <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxLayout="row" fxLayoutAlign="center start">
             <mat-icon class="close" (click)="dialogRef.close()">close</mat-icon>
         </div>
     </div>
-    <label>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure neque eaque alias optio, nobis nam nesciunt natus? Veritatis at voluptate quo aliquam quae, ut quod corrupti enim necessitatibus debitis delectus?</label>
-    <ng-katex [equation]="equation" [options]="options" style="text-align: center;"></ng-katex>
-    <label>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure neque eaque alias optio, nobis nam nesciunt natus? Veritatis at voluptate quo aliquam quae, ut quod corrupti enim necessitatibus debitis delectus?</label>
+    <label>We say that the random variables (Y, A) satisfy independence if the sensitive feature 'A' are statistically independent of the prediction 'Y'.</label>
+    <label>That is, the probability of being classified by the model in each of the classes must be the same for two elements with different sensitive feature values (Demographic Parity).</label>
+    <label class="example">The acceptance rate must be equal for each group (A=a, A=b)</label>
+    <label>We define the independence score as:</label>
+    <ng-katex [equation]="equation" [options]="options" class="formulation"></ng-katex>
 </div>

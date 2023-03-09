@@ -5,8 +5,7 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { heatMapPositiveStyle0, heatMapNegativeStyle0, heatMapDefaultStyle0 } from '../themes/global0';
-import { heatMapPositiveStyle1, heatMapNegativeStyle1, heatMapDefaultStyle1 } from '../themes/global1';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-global-heatmap',
@@ -26,12 +25,9 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
 
     displayMap: boolean = false;
 
-    heatMapPositiveStyle: any;
-    heatMapNegativeStyle: any;
+    colorTheme: any;
     heatMapLegendStyle: any;
     heatMapDefaultBg: string = ''
-    heatMapLegendPositive: string = ''
-    heatMapLegendNegative: string = ''
 
     minValue: number = 0
     maxValue: number = 0
@@ -77,19 +73,8 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
     }
 
     prepareTheme() {
-        if (!this._apiEmitter.getTheme()) {
-            this.heatMapPositiveStyle = heatMapPositiveStyle0
-            this.heatMapNegativeStyle = heatMapNegativeStyle0
-            this.heatMapDefaultBg = 'rgb(' + heatMapDefaultStyle0.join(', ') + ')'
-        } else {
-            this.heatMapPositiveStyle = heatMapPositiveStyle1
-            this.heatMapNegativeStyle = heatMapNegativeStyle1
-            this.heatMapDefaultBg = 'rgb(' + heatMapDefaultStyle1.join(', ') + ')'
-        }
-        this.heatMapLegendStyle = 'linear-gradient(to bottom, rgb(' + this.heatMapPositiveStyle.join(', ') + '),  ' + this.heatMapDefaultBg + ', rgb(' + this.heatMapNegativeStyle.join(', ') + '))'
-        // this.heatMapDefaultBg = 'rgb(' + this.heatMapNegativeStyle.join(', ') + ')'
-        this.heatMapLegendPositive = 'rgb(' + this.heatMapNegativeStyle.join(', ') + ')'
-        this.heatMapLegendNegative = 'rgb(' + this.heatMapPositiveStyle.join(', ') + ')'
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
+        this.heatMapLegendStyle = 'linear-gradient(to bottom, ' + this.colorTheme.positiveValue +',  ' + this.colorTheme.zeroValue + ', ' + this.colorTheme.negativeValue + ')'
     }
 
     filterData() {
@@ -117,12 +102,8 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
         this.filteredData.forEach((features: any) => {
             const importance = parseFloat(features.importance)
             const limitTemp = (Math.abs(this.maxValue) > Math.abs(this.minValue)) ? Math.abs(this.maxValue) : Math.abs(this.minValue)
-            const tempPercent: string = (Math.abs(importance) / limitTemp).toFixed(2)
-            let colorBase: string[] = (importance > 0) ? Object.create(this.heatMapPositiveStyle) : Object.create(this.heatMapNegativeStyle)
-            colorBase.push(tempPercent)
-
-            const currentTemperature = 'rgba(' + colorBase.join(', ') + ')'
-            const fontColor = (Math.abs(importance) < (limitTemp * 0.2)) ? 'rgb(255, 255, 255)' : ((importance > 0) ? 'rgb(' + this.heatMapNegativeStyle.join(',') + ')' : 'rgb(' + this.heatMapPositiveStyle.join(',') + ')')
+            const tempPercent = Math.floor((Math.abs(importance) / limitTemp) * 255).toString(16)
+            const colorBase = (importance > 0) ? this.colorTheme.positiveValue : this.colorTheme.negativeValue
 
             if (featuresList.indexOf(features.feature_name) < 0) {
                 featuresList.push(features.feature_name)
@@ -133,9 +114,7 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
                         importance: features.importance,
                         importanceLabeled: importance.toFixed(5),
                         frecuency: Math.trunc(parseFloat(features.frequency) * 100),
-                        fontColor: fontColor,
-                        temperature: currentTemperature,
-                        tempPercent: tempPercent
+                        colorBase: colorBase + tempPercent
                     }]
                 })
             } else {
@@ -146,9 +125,7 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
                             importance: features.importance,
                             importanceLabeled: importance.toFixed(5),
                             frecuency: Math.trunc(parseFloat(features.frequency) * 100),
-                            fontColor: fontColor,
-                            temperature: currentTemperature,
-                            tempPercent: tempPercent
+                            colorBase: colorBase + tempPercent
                         })
                         return false
                     }

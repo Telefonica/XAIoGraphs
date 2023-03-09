@@ -1,0 +1,57 @@
+<div fxFlex fxLayout="column" fxLayoutGap="25px">
+    <div fxFlex fxLayout="row" class="brdGrey3_bottom">
+        <div fxFlex fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+            <label class="dialog_title" style="padding: 10px">Palette configuration</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="close" (click)="dialogRef.close()">close</mat-icon>
+        </div>
+    </div>
+    <div fxFlex fxLayout="row" class="brdGrey3_bottom" style="padding-bottom: 20px;">
+        <div fxFlex fxLayout="column" fxLayoutGap="12px">
+            <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                <label class="colorTitle">Global Features</label>
+                <div fxLayout="row" fxLayoutAlign="start center" class="colorPicker" [(colorPicker)]="globalFeature" [style.background]="globalFeature">
+                </div>
+                <label>Color used to represent the importance of global features.</label>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                <label class="colorTitle">Positive Value</label>
+                <div fxLayout="row" fxLayoutAlign="start center" class="colorPicker" [(colorPicker)]="positiveValue" [style.background]="positiveValue">
+                </div>
+                <label>Color used to represent positive values.</label>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                <label class="colorTitle">Zero Value</label>
+                <div fxLayout="row" fxLayoutAlign="start center" class="colorPicker" [(colorPicker)]="zeroValue" [style.background]="zeroValue">
+                </div>
+                <label>Color used to represent values close to 0 in the HeatMap.</label>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                <label class="colorTitle">Negative Value</label>
+                <div fxLayout="row" fxLayoutAlign="start center" class="colorPicker" [(colorPicker)]="negativeValue" [style.background]="negativeValue">
+                </div>
+                <label>Color used to represent negative values.</label>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                <label class="colorTitle">Frecuency Value</label>
+                <div fxLayout="row" fxLayoutAlign="start center" class="colorPicker" [(colorPicker)]="frecuencyValue" [style.background]="frecuencyValue">
+                </div>
+                <label>Color used to represent the feature frecuency.</label>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                <label class="colorTitle">Target palette</label>
+                <div *ngFor="let target of targets; let i = index;">
+                    <div fxLayout="row" fxLayoutAlign="start center" class="colorPicker" [(colorPicker)]="targets[i]" [style.background]="target" ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-around center">
+        <button mat-flat-button color="primary" class="button-height" (click)="restorePalette()">Restore default</button>
+        <button mat-flat-button color="primary" class="button-height" (click)="updatePalette()">Update palette</button>
+    </div>
+
+
+</div>

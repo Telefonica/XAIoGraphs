@@ -7,8 +7,7 @@ import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
-import { featuresGraphStyle0,  } from '../themes/global0';
-import { featuresGraphStyle1 } from '../themes/global1';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-global-features',
@@ -31,9 +30,10 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
     featureList: string[] = [];
 
     themeSubscription: any;
-    featuresGraphStyle: any;
+    colorTheme: any;
 
     showBreakdown: boolean = false;
+    legendTarget: any[] = [];
 
     constructor(
         private _apiEmitter: EmitterService,
@@ -45,6 +45,7 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
             this.initGraph();
             this.createGraph();
         });
+        this.prepareTheme();
     }
 
     ngOnInit(): void {
@@ -54,7 +55,6 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
             },
             complete: () => {
                 if (this.serviceResponse.length > 0) {
-                    this.prepareTheme();
                     this.initGraph();
                     this.createGraph();
                     this.displayGraph = true;
@@ -84,11 +84,7 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
     }
 
     prepareTheme() {
-        if (!this._apiEmitter.getTheme()) {
-            this.featuresGraphStyle = featuresGraphStyle0
-        } else {
-            this.featuresGraphStyle = featuresGraphStyle1
-        }
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
     }
 
     initGraph() {
@@ -104,12 +100,12 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
     initBreakDownGraph() {
         this.dataBreakDownGraph = [];
         this.optionsBreakDown = {
+            legend: 'none',
             bar: { groupWidth: '90%' },
             chartArea: { right: 20, top: 20, width: '75%', height: '85%' },
             tooltip: { type: 'string', isHtml: true },
             isStacked: true,
             hAxis: { textPosition: 'none' },
-            legend: { position: 'bottom' },
         };
     }
 
@@ -125,14 +121,12 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
 
         this.serviceResponse.map((node: any) => {
             this.featureList.push(node.feature_name);
-            const weight = parseFloat(node.feature_weight);
             const importance = parseFloat(node.feature_importance);
 
-            const barStyle = JSON.stringify(this.featuresGraphStyle[weight - 1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';');
             transformDataSet.push([
                 node.feature_name,
                 importance,
-                barStyle,
+                "fill-color: " + this.colorTheme.globalFeature  + "; fill-opacity: " + parseFloat(node.feature_weight) / 5,
                 '<table style="padding:5px; width:150px;"><tr>' +
                 '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + node.feature_name + '</td>' +
                 '</tr><tr>' +
@@ -158,17 +152,14 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
             )
         });
 
-        const targetLength = this.serviceResponseTarget.length
-
-
         this.featureList.forEach((featName: any) => {
             let featRow: any[] = [];
             featRow.push(featName)
 
-            this.serviceResponseTarget.forEach((targetInfo: any, index: number) => {
+            this.serviceResponseTarget.forEach((targetInfo: any) => {
                 featRow.push(
                     targetInfo[featName],
-                    JSON.stringify(this.featuresGraphStyle[targetLength - index -1]).replace('{', '').replace('}', '').replace(/"/g, '').replace(/,/g, ';'),
+                    "fill-color: " + this.colorTheme.targets[this._apiReader.getOrderedTarget(targetInfo.target)],
                     '<table style="padding:5px; width:150px;"><tr>' +
                     '<td colspan="2" style="font-weight:bold; text-align:center; font-size:13px; color: #019ba9;">' + targetInfo.target + '</td>' +
                     '</tr><tr>' +
@@ -183,7 +174,12 @@ export class GlobalFeaturesComponent implements OnInit, OnDestroy {
             this.dataBreakDownGraph.push(featRow);
         });
 
-        console.log(this.dataBreakDownGraph);
+        this.serviceResponseTarget.forEach((targetInfo: any) => {
+            this.legendTarget.push({
+                target: targetInfo.target,
+                color: this.colorTheme.targets[this._apiReader.getOrderedTarget(targetInfo.target)]
+            })
+        })
     }
 
     ngOnDestroy(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
@@ -6,17 +6,18 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
 import { ctsGlobal } from '../../../constants/global';
+import { ctsTheme } from '../../../constants/theme';
 
 @Component({
     selector: 'app-global-target',
     templateUrl: './target.component.html',
     styleUrls: ['../global.component.scss']
 })
-export class GlobalTargetComponent implements OnInit {
+export class GlobalTargetComponent implements OnInit, OnDestroy {
 
     currentTargetIndex: number = 0
 
-    listTarget: string[] = [];
+    listTarget: any[] = [];
     listFeatures: number[] = [];
 
     maxFeatures = 0;
@@ -24,17 +25,40 @@ export class GlobalTargetComponent implements OnInit {
     numFeatures = 0;
     numFrecuency = 0;
 
+    themeSubscription: any;
+    colorTheme: any;
+
     constructor(
         private _apiEmitter: EmitterService,
         private _apiReader: ReaderService,
         private _apiSnackBar: SnackbarService,
-    ) { }
+    ) {
+        this.themeSubscription = this._apiEmitter.themeChangeEmitter.subscribe(() => {
+            this.prepareTheme();
+            this.getData();
+        });
+        this.prepareTheme();
+    }
 
     ngOnInit(): void {
+        this.getData();
+    }
+
+    prepareTheme() {
+        this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
+    }
+
+    getData() {
+        this.listTarget = []
+        this.listFeatures = []
+
         this._apiReader.readJSON(jsonFiles.global_graph_description).subscribe({
             next: (response: any) => {
                 response.forEach(description => {
-                    this.listTarget.push(description.target)
+                    this.listTarget.push({
+                        target: description.target,
+                        color: this.colorTheme.targets[this._apiReader.getOrderedTarget(description.target)],
+                    })
                     this.listFeatures.push(description.num_features)
                 });
             },
@@ -79,6 +103,10 @@ export class GlobalTargetComponent implements OnInit {
         else
             this.numFeatures = this.maxFeatures
 
-        this._apiEmitter.setAllGlobal(this.listTarget[index], this.numFeatures, this.numFrecuency);
+        this._apiEmitter.setAllGlobal(this.listTarget[index]['target'], this.numFeatures, this.numFrecuency);
+    }
+
+    ngOnDestroy(): void {
+        this.themeSubscription.unsubscribe();
     }
 }

@@ -11,8 +11,15 @@
         <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
     </div>
 
-    <div fxFlex *ngIf="showBreakdown">
+    <div fxFlex fxLayout="column" *ngIf="showBreakdown">
         <google-chart class="globalFeatureChart" #chart [type]="type" [data]="dataBreakDownGraph" [columns]="columnBreakDownNames" [options]="optionsBreakDown" *ngIf="displayGraph"> </google-chart>
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px" style="font-size: 12px;">
+            <div fxLayout="row" *ngFor="let target of legendTarget" fxLayoutGap="5px">
+                <div style="width: 14px; height: 14px; border-radius: 7px;" [style.background-color]="target.color"></div>
+                <label>{{ target.target }}</label>
+
+            </div>
+        </div>
         <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
     </div>
 </div>
