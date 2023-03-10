@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
-import { SnackbarService } from 'src/app/services/snackbar.service';
+
 import { PaletteComponent } from 'src/app/shared/palette/palette.component';
 
 import { jsonFiles } from '../../constants/jsonFiles';
@@ -16,12 +16,12 @@ import { jsonFiles } from '../../constants/jsonFiles';
 export class GlobalComponent implements OnInit {
 
     serviceResponse: any;
+    fileExists: boolean = false;
 
     constructor(
         private dialog: MatDialog,
         private _apiEmitter: EmitterService,
         private _apiReader: ReaderService,
-        private _apiSnackBar: SnackbarService,
     ) { }
 
     ngOnInit(): void {
@@ -38,10 +38,10 @@ export class GlobalComponent implements OnInit {
                     });
                 }
                 this._apiReader.setOrderedTarget(orderedTarget)
-
+                this.fileExists = true
             },
             error: (err) => {
-                this._apiSnackBar.openSnackBar(JSON.stringify(err));
+                this.fileExists = false
             }
         });
     }

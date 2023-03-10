@@ -1,13 +1,19 @@
 <div fxFlex fxLayout="column" style="height: 100vh;">
-    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="start center" class="fairnessTitle">
+    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="start center" class="fairnessTitle" *ngIf="fileExists">
         <label>Fairness explainability</label>
     </div>
-    <div fxFlex fxLayout="column" fxLayoutGap="20px" class="fairnessBody">
+    <div fxFlex fxLayout="column" fxLayoutGap="20px" class="fairnessBody" *ngIf="fileExists">
         <div fxFlex fxLayout="row" fxLayoutGap="20px">
             <app-fairness-criterias fxFlex class="fairnessCard"></app-fairness-criterias>
             <app-fairness-conf-matrix fxFlex class="fairnessCard"></app-fairness-conf-matrix>
         </div>
 
         <app-fairness-criteria-feature fxFlex class="fairnessCard"></app-fairness-criteria-feature>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="center center" class="fairnessBody" *ngIf="!fileExists">
+        <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+            <img src="assets/20221029_lamb_icon.png" style="height: 40%; width: 40%;" alt="missing files"/>
+            <label class="missingAlert">Missing important files</label>
+        </div>
     </div>
 </div>

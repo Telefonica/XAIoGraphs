@@ -46,10 +46,10 @@ JSON_FILES = ["global_explainability.json",
 
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/':
+        if self.path == '/' or HIDDEN_DIR not in self.path:
             self.path = os.path.join(HIDDEN_DIR, MY_HOME_PAGE_FILE_PATH).replace("\\", "/")
-        if HIDDEN_DIR in self.path:
-            return http.server.SimpleHTTPRequestHandler.do_GET(self)
+
+        return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 
 def print_upper_line():
