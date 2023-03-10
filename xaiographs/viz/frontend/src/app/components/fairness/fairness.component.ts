@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ReaderService } from 'src/app/services/reader.service';
+
+import { jsonFiles } from '../../constants/jsonFiles'
 
 @Component({
     selector: 'app-fairness',
@@ -7,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FairnessComponent implements OnInit {
 
-    constructor() { }
+    fileExists: boolean = false;
+
+    constructor(
+        private _apiReader: ReaderService,
+    ) { }
 
     ngOnInit(): void {
+        this._apiReader.readJSON(jsonFiles.fairness_confusion_matrix).subscribe({
+            complete: () => {
+                this.fileExists = true
+            },
+            error: (err) => {
+                this.fileExists = false
+            }
+        });
     }
 
 }

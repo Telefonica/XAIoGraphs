@@ -1,12 +1,12 @@
 <div fxFlex fxLayout="column" style="height: 100vh;">
-    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="space-between center" class="localTitle">
+    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="space-between center" class="localTitle"  *ngIf="fileExists">
         <label>Local explainability</label>
         <div fxLayout="column" fxLayoutAlign="center center" class="localTheme">
             <label>Theme</label>
             <mat-icon (click)="openPalette()">palette</mat-icon>
         </div>
     </div>
-    <div fxFlex fxLayout="column" fxLayoutGap="20px" class="localBody">
+    <div fxFlex fxLayout="column" fxLayoutGap="20px" class="localBody" *ngIf="fileExists">
         <app-local-dataset fxFlex class=""></app-local-dataset>
 
         <div fxFlex fxLayout="column" fxLayoutGap="20px" class="localCard">
@@ -16,6 +16,13 @@
                 <app-local-graph fxFlex class="localCard"></app-local-graph>
                 <app-local-features fxFlex class="localCard"></app-local-features>
             </div>
+        </div>
+    </div>
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="center center" class="localBody" *ngIf="!fileExists">
+        <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+            <img src="assets/20221029_lamb_icon.png" style="height: 40%; width: 40%;" alt="missing files"/>
+            <label class="missingAlert">Missing important files</label>
         </div>
     </div>
 </div>

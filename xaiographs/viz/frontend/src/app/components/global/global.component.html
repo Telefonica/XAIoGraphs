@@ -1,12 +1,12 @@
 <div fxFlex fxLayout="column" style="height: 100vh;">
-    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="space-between center" class="globalTitle">
+    <div fxFlex="60px" fxLayout="row" fxLayoutAlign="space-between center" class="globalTitle" *ngIf="fileExists">
         <label>Global explainability</label>
         <div fxLayout="column" fxLayoutAlign="center center" class="globalTheme">
             <label>Theme</label>
             <mat-icon (click)="openPalette()">palette</mat-icon>
         </div>
     </div>
-    <div fxFlex fxLayout="column" fxLayoutGap="20px" class="globalBody">
+    <div fxFlex fxLayout="column" fxLayoutGap="20px" class="globalBody" *ngIf="fileExists">
         <div fxFlex fxLayout="row" fxLayoutGap="20px">
             <app-global-features fxFlex class="globalCard"></app-global-features>
             <app-global-distribution fxFlex class="globalCard"></app-global-distribution>
@@ -15,6 +15,13 @@
         <div fxFlex fxLayout="column" fxLayoutGap="10px" class="globalCard">
             <label class="globalFeatByTarget globalFeatureTitleBorder">Feature distribution by target</label>
             <app-global-target fxFlex></app-global-target>
+        </div>
+    </div>
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="center center" class="globalBody" *ngIf="!fileExists">
+        <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+            <img src="assets/20221029_lamb_icon.png" style="height: 40%; width: 40%;" alt="missing files"/>
+            <label class="missingAlert">Missing important files</label>
         </div>
     </div>
 </div>

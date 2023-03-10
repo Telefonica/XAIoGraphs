@@ -49,7 +49,6 @@ export class AppComponent implements OnInit {
                     this._apiSnackBar.openSnackBar(JSON.stringify(err));
                 }
             })
-
         }
     }
 }
