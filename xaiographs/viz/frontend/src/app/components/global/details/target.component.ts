@@ -19,6 +19,7 @@ export class GlobalTargetComponent implements OnInit, OnDestroy {
 
     listTarget: any[] = [];
     listFeatures: number[] = [];
+    isBinary: boolean = false;
 
     maxFeatures = 0;
     maxFrecuency = 0;
@@ -60,6 +61,7 @@ export class GlobalTargetComponent implements OnInit, OnDestroy {
                         color: this.colorTheme.targets[this._apiReader.getOrderedTarget(description.target)],
                     })
                     this.listFeatures.push(description.num_features)
+                    this.isBinary = this.listTarget.length == 2;
                 });
             },
             complete: () => {
