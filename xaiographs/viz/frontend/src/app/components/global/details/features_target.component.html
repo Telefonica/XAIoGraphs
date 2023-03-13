@@ -10,6 +10,22 @@
         </div>
         <google-chart class="globalFeatureTargetChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph && showFrecuency"> </google-chart>
         <google-chart class="globalFeatureTargetChart" #chart [type]="type" [data]="dataGraphNoFrec" [columns]="columnNamesNoFrec" [options]="optionsNoFrec" *ngIf="displayGraph && !showFrecuency"> </google-chart>
+        <div fxFlex fxLayout="row" fxLayoutAlign="center center"  *ngIf="displayGraph">
+            <div fxFlex fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center" style="padding-top: 15px;">
+                <div fxLayout="row" fxLayoutGap="5px">
+                    <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.positiveValue"></div>
+                    <label>Positive values</label>
+                </div>
+                <div fxLayout="row" fxLayoutGap="5px">
+                    <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.negativeValue"></div>
+                    <label>Negative values</label>
+                </div>
+                <div fxLayout="row" fxLayoutGap="5px" *ngIf="showFrecuency">
+                    <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.frecuencyValue"></div>
+                    <label>Frecuency</label>
+                </div>
+            </div>
+        </div>
         <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
     </div>
 </div>

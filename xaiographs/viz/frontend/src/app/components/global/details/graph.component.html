@@ -4,4 +4,16 @@
         <label class="globalNetGraphSubTitle">target selected: {{ currentTarget }}</label>
     </div>
     <div id="divGraph" class="globalNetGraphChart"></div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center">
+            <div fxLayout="row" fxLayoutGap="5px">
+                <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.positiveValue"></div>
+                <label>Positive values</label>
+            </div>
+            <div fxLayout="row" fxLayoutGap="5px">
+                <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.negativeValue"></div>
+                <label>Negative values</label>
+            </div>
+        </div>
+    </div>
 </div>
