@@ -1,6 +1,12 @@
 <div fxFlex fxLayout="column" style="padding: 0px 20px;">
-    <div fxFlex fxLayout="row" fxLayoutGap="5px" class="globalFeatureTitleBorder">
-        <label *ngFor="let target of listTarget; index as index" class="globalTargetFilter" [ngClass]="{globalTargetFilterSelected: (currentTargetIndex == index)}" (click)="updateTarget(index)" [style.color]="target.color">{{ target.target }}</label>
+    <div fxFlex fxLayout="row" fxLayoutGap="5px" class="globalFeatureTitleBorder" fxLayoutAlign="space-between center">
+        <div fxFlex fxLayout="row" fxLayoutGap="5px">
+            <label *ngFor="let target of listTarget; index as index" class="globalTargetFilter" [ngClass]="{globalTargetFilterSelected: (currentTargetIndex == index)}" (click)="updateTarget(index)" [style.color]="target.color">{{ target.target }}</label>
+        </div>
+        <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end center" fxLayoutGap="5px" *ngIf="isBinary">
+            <mat-icon  style="color:red">error</mat-icon>
+            <label  style="color:navy; font-weight: bold;">The current case study presents a binary target, so it must be taken into account that both targets are complementary to each other.</label>
+        </div>
     </div>
     <div fxFlex fxLayout="row" fxLayoutGap="20px" style="padding: 20px 0px;">
         <app-global-target-explainability fxFlex class="globalCard"></app-global-target-explainability>
