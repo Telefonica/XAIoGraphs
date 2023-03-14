@@ -17,6 +17,8 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
     currentTarget = '';
 
     serviceResponse = [];
+    serviceResponseExplainability = [];
+    orderedFeatures: string[] = [];
     filteredData: any[] = []
     dataSource: any[] = [];
 
@@ -51,33 +53,72 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this._apiReader.readJSON(jsonFiles.global_heat_map).subscribe({
-            next: (response: any) => {
-                this.serviceResponse = response;
+        this._apiReader.readJSON(jsonFiles.global_target_explainability).subscribe({
+            next: (responseExplainability: any) => {
+                this.serviceResponseExplainability = responseExplainability;
             },
             complete: () => {
-                if (this.serviceResponse.length > 0) {
-                    this.prepareTheme();
-                    this.filterData();
-                    this.generateMap();
-                    this.displayMap = true;
-                } else {
-                    this.displayMap = false;
-                }
+
+                this._apiReader.readJSON(jsonFiles.global_heat_map).subscribe({
+                    next: (response: any) => {
+                        this.serviceResponse = response;
+                    },
+                    complete: () => {
+                        if (this.serviceResponse.length > 0) {
+                            this.prepareTheme();
+                            this.filterData();
+                            this.generateMap();
+                            this.displayMap = true;
+                        } else {
+                            this.displayMap = false;
+                        }
+                    },
+                    error: (err) => {
+                        this.displayMap = false;
+                        this._apiSnackBar.openSnackBar(JSON.stringify(err));
+                    }
+                });
             },
-            error: (err) => {
-                this.displayMap = false;
-                this._apiSnackBar.openSnackBar(JSON.stringify(err));
+            error: (errExplainability) => {
+                this._apiSnackBar.openSnackBar(JSON.stringify(errExplainability));
             }
         });
     }
 
     prepareTheme() {
         this.colorTheme = JSON.parse('' + localStorage.getItem(ctsTheme.storageName))
-        this.heatMapLegendStyle = 'linear-gradient(to bottom, ' + this.colorTheme.positiveValue +',  ' + this.colorTheme.zeroValue + ', ' + this.colorTheme.negativeValue + ')'
+        this.heatMapLegendStyle = 'linear-gradient(to bottom, ' + this.colorTheme.positiveValue + ',  ' + this.colorTheme.zeroValue + ', ' + this.colorTheme.negativeValue + ')'
     }
 
+
     filterData() {
+        let orderedFeatExplain: any[] = []
+
+        this.serviceResponseExplainability.forEach((row: any) => {
+            if (row.target == this.currentTarget) {
+                let valuesArray: any[] = [];
+                Object.keys(row).forEach((key) => {
+                    if (key != 'target') {
+                        valuesArray.push({
+                            key: key,
+                            value: row[key]
+                        })
+                    }
+                })
+                orderedFeatExplain = valuesArray
+            }
+        });
+
+        orderedFeatExplain.sort((element1: any, element2: any) => {
+            return element2.value - element1.value
+        })
+
+
+
+        orderedFeatExplain.forEach((feature: any) => {
+            this.orderedFeatures.push(feature['key'])
+        })
+
         this.filteredData = []
 
         const listValues: number[] = []
@@ -99,40 +140,32 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
         let featuresList: string[] = []
         this.dataSource = []
 
+        this.orderedFeatures.forEach((featName: string) => {
+            this.dataSource.push({
+                feature: featName,
+                values: []
+            })
+        })
+
         this.filteredData.forEach((features: any) => {
             const importance = parseFloat(features.importance)
             const limitTemp = (Math.abs(this.maxValue) > Math.abs(this.minValue)) ? Math.abs(this.maxValue) : Math.abs(this.minValue)
             const tempPercent = Math.floor((Math.abs(importance) / limitTemp) * 255).toString(16)
             const colorBase = (importance > 0) ? this.colorTheme.positiveValue : this.colorTheme.negativeValue
 
-            if (featuresList.indexOf(features.feature_name) < 0) {
-                featuresList.push(features.feature_name)
-                this.dataSource.push({
-                    feature: features.feature_name,
-                    values: [{
-                        value: features.feature_value,
-                        importance: features.importance,
-                        importanceLabeled: importance.toFixed(5),
-                        frecuency: Math.trunc(parseFloat(features.frequency) * 100),
-                        colorBase: colorBase + tempPercent
-                    }]
-                })
-            } else {
-                this.dataSource.every((feat: any) => {
-                    if (feat.feature == features.feature_name) {
-                        feat.values.push({
-                            value: features.feature_value,
-                            importance: features.importance,
-                            importanceLabeled: importance.toFixed(5),
-                            frecuency: Math.trunc(parseFloat(features.frequency) * 100),
-                            colorBase: colorBase + tempPercent
-                        })
-                        return false
-                    }
-                    return true
-                })
-            }
+            const dataSourceIndex = this.orderedFeatures.indexOf(features.feature_name)
+            this.dataSource[dataSourceIndex].values.push({
+                value: features.feature_value,
+                importance: features.importance,
+                importanceLabeled: importance.toFixed(5),
+                frecuency: Math.trunc(parseFloat(features.frequency) * 100),
+                colorBase: colorBase + tempPercent
+            })
         });
+
+        this.dataSource.forEach((feature:any) => {
+            feature.values.sort((element1: any, element2: any) => element2.importance - element1.importance)
+        })
     }
 
     tooltipHover(feature, value) {
