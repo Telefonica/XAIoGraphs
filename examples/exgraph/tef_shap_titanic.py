@@ -312,6 +312,9 @@ def main():
     xgprint(verbosity, 'INFO:     explainer.top_features_by_target')
     xgprint(verbosity, explainer.top_features_by_target.shape)
     xgprint(verbosity, explainer.top_features_by_target.head(10))
+    xgprint(verbosity, 'INFO:     explainer.importance_values')
+    xgprint(verbosity, explainer.importance_values.shape)
+    xgprint(verbosity, explainer.importance_values[:10, :, :])
 
 
 if __name__ == '__main__':

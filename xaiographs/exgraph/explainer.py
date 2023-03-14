@@ -39,6 +39,7 @@ class Explainer(object):
         self.__global_frequency_feature_value = None
         self.__global_target_feature_value_explainability = None
         self.__global_target_explainability = None
+        self.__importance_values = None
         self.__local_dataset_reliability = None
         self.__local_feature_value_explainability = None
         self.__sample_ids_to_display = list()
@@ -268,6 +269,76 @@ class Explainer(object):
             print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
         else:
             return self.__global_target_feature_value_explainability
+
+    @property
+    def importance_values(self):
+        """
+        Property that returns a three dimensional Nunmpy matrix (n_samples X n_features X n_target_values), containing
+        for each sample, feature and target value, the computed importance values. Prior to invoking this
+        property, the `local_explain()` method from an `ImportanceCalculator` child class must have been invoked
+
+        :return: np,ndarray, with the computed importance values
+
+        Example:
+            >>> from xaiographs.datasets import load_titanic_discretized
+            >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+            >>> explainer.importance_values
+            [[[ 0.19102919 -0.19102919]
+              [ 0.18931973 -0.18931973]
+              [ 0.14710146 -0.14710146]
+              ...
+              [ 0.0049198  -0.0049198 ]
+              [ 0.0049198  -0.0049198 ]
+              [ 0.00861183 -0.00861183]]
+
+             [[-0.05596649  0.05596649]
+              [-0.05863524  0.05863524]
+              [ 0.38645767 -0.38645767]
+              ...
+              [-0.01077448  0.01077448]
+              [ 0.0291813  -0.0291813 ]
+              [ 0.31177627 -0.31177627]]
+
+             [[ 0.04319279 -0.04319279]
+              [ 0.04255799 -0.04255799]
+              [-0.09668253  0.09668253]
+              ...
+              [-0.02768731  0.02768731]
+              [ 0.00612063 -0.00612063]
+              [-0.34010499  0.34010499]]
+
+             ...
+
+             [[-0.09110644  0.09110644]
+              [-0.09225141  0.09225141]
+              [-0.06639871  0.06639871]
+              ...
+              [-0.02507825  0.02507825]
+              [-0.02507825  0.02507825]
+              [-0.03583761  0.03583761]]
+
+             [[-0.09110644  0.09110644]
+              [-0.09225141  0.09225141]
+              [-0.06639871  0.06639871]
+              ...
+              [-0.02507825  0.02507825]
+              [-0.02507825  0.02507825]
+              [-0.03583761  0.03583761]]
+
+             [[-0.08246317  0.08246317]
+              [-0.08290531  0.08290531]
+              [-0.04468906  0.04468906]
+              ...
+              [-0.02018317  0.02018317]
+              [-0.02018317  0.02018317]
+              [-0.02992086  0.02992086]]]
+        """
+        if self.__importance_values is None:
+            print(WARN_MSG.format('\"importance_values\"'))
+        else:
+            return self.__importance_values
 
     @property
     def local_dataset_reliability(self):
@@ -569,6 +640,7 @@ class Explainer(object):
         top1_importance_features, global_explainability, global_nodes_importance, df_explanation_global = (
             importance_calculator.calculate_importance(df=self.__df, features_info=features_info,
                                                        num_samples=num_samples_global_expl, batch_size=batch_size_expl))
+        self.__importance_values = importance_calculator.importance_values
 
         # Here, the row IDs to be sampled for local explanation are generated. A sample ids mask will be used for id
         # filtering, (the list of sample ids is retrieved too to perform consistency checks)
