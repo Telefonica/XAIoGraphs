@@ -10,7 +10,6 @@ from xaiographs.common.utils import FeaturesInfo, TargetInfo, filter_by_ids, xgp
 
 # CONSTANTS
 EPS_ERROR = 0.000001
-IMPORTANCE_VALUES_N_DIMS = 3
 
 
 class ImportanceCalculator(metaclass=ABCMeta):
