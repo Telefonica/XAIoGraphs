@@ -337,8 +337,9 @@ class TefShap(ImportanceCalculator):
                                                 coalition by the computed degree for the input coalitions (nodes)
 
         :return:            Dictionary containing two elements:
-                            - df_explanation:
-                            - importance_values:
+                            - df_explanation:    Pandas DataFrame, which has been explained
+                            - importance_values: Numpy matrix, containing for each sample the importance of each feature
+                                                 associated to each target value
         """
         # Fifth step (continuing from train method), in this step importance is calculated. The result does have the
         # following shape (rows to explain x features x targets)
@@ -395,8 +396,8 @@ class TefShap(ImportanceCalculator):
         ImportanceCalculator._sanity_check(ground_truth=y, prediction=y_hat_reduced,
                                            target_cols=self._target_info.target_columns, scope='original')
         return {
-           ImportanceCalculator._DF_EXPLANATION: df_explanation,
-           ImportanceCalculator._IMPORTANCE_VALUES: adapted_importance
+           ImportanceCalculator._DF_EXPLANATION_IC: df_explanation,
+           ImportanceCalculator._IMPORTANCE_VALUES_IC: adapted_importance
         }
 
     def train(self, df: pd.DataFrame,

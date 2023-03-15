@@ -18,8 +18,8 @@ class ImportanceCalculator(metaclass=ABCMeta):
     methods are abstract, so that they must be implemented depending on the strategy used to calculate importance and
     some other are given, representing those tasks which stay always the same, independently of the strategy
     """
-    _DF_EXPLANATION = 'df_explanation'
-    _IMPORTANCE_VALUES = 'importance_values'
+    _DF_EXPLANATION_IC = 'df_explanation'
+    _IMPORTANCE_VALUES_IC = 'importance_values'
 
     def __init__(self, feature_cols: List[str], target_info: TargetInfo, train_size: float, train_stratify: bool,
                  verbose: int = 0):
@@ -38,12 +38,24 @@ class ImportanceCalculator(metaclass=ABCMeta):
         :param verbose:                     Verbosity level, where any value greater than 0 means the message is printed
 
         """
+        self._importance_values = None
         self._feature_cols = feature_cols
         self._target_info = target_info
         self._train_size = train_size
         self._train_stratify = train_stratify
         self._verbose = verbose
         xgprint(self._verbose, 'INFO:     Instantiating ImportanceCalculator:')
+
+    @property
+    def importance_values(self):
+        """
+        Property that returns a three dimensional Nunmpy matrix (n_samples X n_features X n_target_values), containing
+        for each sample, feature and target value, the computed importance values. Prior to invoking this
+        property, the `local_explain()` method from an `ImportanceCalculator` child class must have been invoked
+
+        :return: np,ndarray, with the computed importance values
+        """
+        return self._importance_values
 
     @abstractmethod
     def local_explain(self, batch_size: int, **params) -> Dict[str, Union[pd.DataFrame, np.ndarray]]:
@@ -126,7 +138,8 @@ class ImportanceCalculator(metaclass=ABCMeta):
         """
         This function computes the mean of each feature importance for each target
 
-        :param importance_values:       Numpy matrix, containing (among others) the importance columns
+        :param importance_values:       Numpy matrix, containing for each sample the importance of each feature
+                                        associated to each target value
         :param feature_cols:            List of strings, containing the column names for the features
         :param target_cols:             List of strings, containing the column names for the target/s
         :return:                        Pandas DataFrame, containing the mean of each feature importance for each target
@@ -239,7 +252,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
                                   information related to the calculation of the features
         """
         top1_importance_features = ImportanceCalculator.__compute_global_target_explainability(
-            importance_values=params[ImportanceCalculator._IMPORTANCE_VALUES],
+            importance_values=params[ImportanceCalculator._IMPORTANCE_VALUES_IC],
             feature_cols=self._feature_cols,
             target_cols=target_cols)
 
@@ -248,7 +261,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
             feature_cols=self._feature_cols)
 
         global_graph_nodes = ImportanceCalculator.__compute_global_graph_nodes_importance(
-            df_explained=params[ImportanceCalculator._DF_EXPLANATION],
+            df_explained=params[ImportanceCalculator._DF_EXPLANATION_IC],
             feature_cols=self._feature_cols,
             float_features=float_features,
             target_cols=target_cols,
@@ -278,17 +291,22 @@ class ImportanceCalculator(metaclass=ABCMeta):
                                 sample mask
 
         """
-        #   ImportanceCalculator is trained here. Just like in Machine Learning, the dataset must accurately represent
-        #   the problem domain to obtain valid results
+        # ImportanceCalculator is trained here. Just like in Machine Learning, the dataset must accurately represent
+        # the problem domain to obtain valid results
         importance_calculator_trained = self.train(df=df, num_samples_to_explain=num_samples)
 
-        #   Once trained, the ImportanceCalculator is used to provide local explainability
+        # Once trained, the ImportanceCalculator is used to provide local explainability
         local_importance = self.local_explain(batch_size=batch_size, **importance_calculator_trained)
+        if isinstance(local_importance, dict):
+            try:
+                self._importance_values = local_importance[self._IMPORTANCE_VALUES_IC]
+            except KeyError:
+                self._importance_values = None
 
-        #   StatsCalculator results such as the explained DataFrame are used to compute information related to global
-        #   explanation
+        # StatsCalculator results such as the explained DataFrame are used to compute information related to global
+        # explanation
         top1_importance_features, global_explainability, global_nodes_importance = self.__global_explain(
             float_features=features_info.float_feature_columns, target_cols=self._target_info.target_columns,
             importance_cols=features_info.importance_columns, **local_importance)
         return top1_importance_features, global_explainability, global_nodes_importance, local_importance[
-            ImportanceCalculator._DF_EXPLANATION].sort_values(by=[ID])
+            ImportanceCalculator._DF_EXPLANATION_IC].sort_values(by=[ID])
