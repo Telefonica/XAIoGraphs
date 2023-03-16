@@ -125,6 +125,26 @@
     font-size: 13px;
 }
 
+.globalGraphTooltipLink {
+    position: relative;
+}
+
+.globalGraphTooltip {
+    padding: 10px;
+    background-color: white;
+    border: 1px solid gray;
+    position: absolute;
+    top: 50px;
+    width: 200px;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition: opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+    z-index: 10;
+    font-size: 13px;
+}
+
 .globalTooltipHeader {
     @extend .fontBold;
     border-bottom: 1px solid gray;

@@ -1,11 +1,29 @@
-<div fxFlex fxLayout="column" fxLayoutGap="25px">
+<div fxFlex fxLayout="column" fxLayoutGap="5px">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
         <label class="globalNetGraphTitle">Features-values relations</label>
         <label class="globalNetGraphSubTitle">target selected: {{ currentTarget }}</label>
     </div>
-    <div id="divGraph" class="globalNetGraphChart"></div>
-    <div fxFlex fxLayout="row" fxLayoutAlign="center center">
-        <div fxFlex fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center">
+    <label *ngIf="detailedNode == ''">To access <b>Detail View</b>, click on an specific node</label>
+    <label *ngIf="detailedNode != ''">To exit Detail View, click on selected node [<b>{{ detailedNode }}</b>]</label>
+    <div class="globalGraphTooltipLink">
+        <div id="divGraph" class="globalNetGraphChart" (mousemove)="mouseMoved($event)"></div>
+        <div fxFlex fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="center center" class="globalGraphTooltip" *ngIf="nodeOver" [style.top.px]="nodeTopOver" [style.left.px]="nodeLeftOver">
+            <div fxLayout="row" style="width: 100%;">
+                <label class="globalTooltipHeader" style="text-align: center;">{{ nodeNameOver }}</label>
+            </div>
+
+            <div fxLayout="row" style="width: 100%;" fxLayoutAlign="space-between center">
+                <label class="globalTooltipLabel">Importance</label>
+                <label class="globalTooltipValue">{{ nodeImportanceOver }}</label>
+            </div>
+            <div fxLayout="row" style="width: 100%;" fxLayoutAlign="space-between center">
+                <label class="globalTooltipLabel">Ratio</label>
+                <label class="globalTooltipValue">{{ nodeRatioOver }}</label>
+            </div>
+        </div>
+    </div>
+    <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+        <div fxFlex fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center" *ngIf="showLegend">
             <div fxLayout="row" fxLayoutGap="5px">
                 <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.positiveValue"></div>
                 <label>Positive values</label>
