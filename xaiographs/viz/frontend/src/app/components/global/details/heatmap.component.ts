@@ -93,6 +93,7 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
 
     filterData() {
         let orderedFeatExplain: any[] = []
+        this.orderedFeatures = []
 
         this.serviceResponseExplainability.forEach((row: any) => {
             if (row.target == this.currentTarget) {
@@ -112,8 +113,6 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
         orderedFeatExplain.sort((element1: any, element2: any) => {
             return element2.value - element1.value
         })
-
-
 
         orderedFeatExplain.forEach((feature: any) => {
             this.orderedFeatures.push(feature['key'])
@@ -137,7 +136,6 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
     }
 
     generateMap() {
-        let featuresList: string[] = []
         this.dataSource = []
 
         this.orderedFeatures.forEach((featName: string) => {
@@ -150,8 +148,9 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
         this.filteredData.forEach((features: any) => {
             const importance = parseFloat(features.importance)
             const limitTemp = (Math.abs(this.maxValue) > Math.abs(this.minValue)) ? Math.abs(this.maxValue) : Math.abs(this.minValue)
-            const tempPercent = Math.floor((Math.abs(importance) / limitTemp) * 255).toString(16)
+            const tempPercent = Math.abs(importance) / limitTemp
             const colorBase = (importance > 0) ? this.colorTheme.positiveValue : this.colorTheme.negativeValue
+            const colorFont = (tempPercent > 0.5) ? this.colorTheme.zeroValue : this.colorTheme.frecuencyValue
 
             const dataSourceIndex = this.orderedFeatures.indexOf(features.feature_name)
             this.dataSource[dataSourceIndex].values.push({
@@ -159,11 +158,12 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
                 importance: features.importance,
                 importanceLabeled: importance.toFixed(5),
                 frecuency: Math.trunc(parseFloat(features.frequency) * 100),
-                colorBase: colorBase + tempPercent
+                colorBase: colorBase + Math.floor(tempPercent * 255).toString(16),
+                fontColor: colorFont
             })
         });
 
-        this.dataSource.forEach((feature:any) => {
+        this.dataSource.forEach((feature: any) => {
             feature.values.sort((element1: any, element2: any) => element2.importance - element1.importance)
         })
     }
