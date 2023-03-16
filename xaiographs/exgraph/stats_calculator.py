@@ -91,11 +91,11 @@ class StatsCalculator(object):
             df_local_graph_edges_list.append(df_example[[ID, TARGET] + feature_cols_pair].rename(
                 columns={feature_cols_pair[0]: NODE_1, feature_cols_pair[1]: NODE_2}))
             df_global_graph_edges_list.append(
-                df_example[[TARGET] + feature_cols_pair].value_counts().reset_index(name=COUNT).rename(
+                df_example[feature_cols_pair].value_counts().reset_index(name=COUNT).rename(
                     columns={feature_cols_pair[0]: NODE_1, feature_cols_pair[1]: NODE_2}))
 
         df_global_graph_edges = pd.concat(df_global_graph_edges_list).sort_values(
-            by=[TARGET, NODE_1, NODE_2]).reset_index(drop=True)
+            by=[NODE_1, NODE_2]).reset_index(drop=True)
 
         # Once global stats are ready, local examples can be joined on those, so that the global count can be applied
         # to them
@@ -111,7 +111,7 @@ class StatsCalculator(object):
         assert np.array_equal(np.unique(np.sort(df_local_graph_edges_sample_raw[ID].astype('str').values)),
                               np.sort(self.__sample_ids)), "Something went wrong when sampling local edges"
         df_local_graph_edges_sample = df_local_graph_edges_sample_raw.merge(df_global_graph_edges, how='left',
-                                                                            on=[TARGET, NODE_1, NODE_2])
+                                                                            on=[NODE_1, NODE_2])
         return StatsResults(global_stats=df_global_graph_edges, local_stats=df_local_graph_edges_sample)
 
     def __calculate_global_target_distribution(self) -> pd.DataFrame:
