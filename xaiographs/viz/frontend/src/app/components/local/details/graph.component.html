@@ -3,5 +3,32 @@
         <label class="localNetGraphTitle">Features relations</label>
         <label class="localExplanationFilter">target selected: {{ currentTarget.target }}</label>
     </div>
-    <div id="divGraph" class="localNetGraphChart"></div>
+    <label *ngIf="detailedNode == ''">To access <b>Detail View</b>, click on an specific node</label>
+    <label *ngIf="detailedNode != ''">To exit Detail View, click on selected node [<b>{{ detailedNode }}</b>]</label>
+    <div class="localGraphTooltipLink">
+        <div id="divGraph" class="localNetGraphChart" (mousemove)="mouseMoved($event)"></div>
+        <div fxFlex fxLayout="column" fxLayoutGap="5px" fxLayoutAlign="center center" class="localGraphTooltip" *ngIf="nodeOver" [style.top.px]="nodeTopOver" [style.left.px]="nodeLeftOver">
+            <div fxLayout="row" style="width: 100%;">
+                <label class="localTooltipHeader" style="text-align: center;">{{ nodeNameOver }}</label>
+            </div>
+
+            <div fxLayout="row" style="width: 100%;" fxLayoutAlign="space-between center">
+                <label class="localTooltipLabel">Importance</label>
+                <label class="localTooltipValue">{{ nodeImportanceOver }}</label>
+            </div>
+        </div>
+    </div>
+
+    <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px">
+        <div fxFlex fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center" *ngIf="showLegend">
+            <div fxLayout="row" fxLayoutGap="5px">
+                <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.positiveValue"></div>
+                <label>Positive values</label>
+            </div>
+            <div fxLayout="row" fxLayoutGap="5px">
+                <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.negativeValue"></div>
+                <label>Negative values</label>
+            </div>
+        </div>
+    </div>
 </div>
