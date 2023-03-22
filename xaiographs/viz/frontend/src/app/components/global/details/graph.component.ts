@@ -62,10 +62,7 @@ export class GlobalGraphComponent implements OnInit, OnDestroy {
         this.targetSubscription = this._apiEmitter.globalTargetChangeEmitter.subscribe(() => {
             this.filterData();
             this.generateGraph();
-            if (this.detailedNode != '') {
-                this.filterDetailData();
-                this.generateDetailGraph();
-            }
+            this.detailedNode = ''
         });
         this.featuresSubscription = this._apiEmitter.globalFeaturesChangeEmitter.subscribe(() => {
             this.filterData();
