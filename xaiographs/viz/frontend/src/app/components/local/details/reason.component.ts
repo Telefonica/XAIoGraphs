@@ -40,9 +40,7 @@ export class LocalReasonComponent implements OnInit, OnDestroy {
             complete: () => {
                 this.filterData();
             },
-            error: (err) => {
-                this._apiSnackBar.openSnackBar(JSON.stringify(err));
-            }
+            error: (err) => { }
         });
     }
 

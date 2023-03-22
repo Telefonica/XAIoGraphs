@@ -97,6 +97,8 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
 
 
     filterData() {
+        this.currentTarget = this._apiEmitter.getGlobalTarget();
+
         let orderedFeatExplain: any[] = []
         this.orderedFeatures = []
 
@@ -127,7 +129,6 @@ export class GlobalHeatmapComponent implements OnInit, OnDestroy {
 
         const listValues: number[] = []
 
-        this.currentTarget = this._apiEmitter.getGlobalTarget();
         this.filteredData = this.serviceResponse.filter((node: any) => {
             if (node.target == this.currentTarget) {
                 listValues.push(parseFloat(node.importance))
