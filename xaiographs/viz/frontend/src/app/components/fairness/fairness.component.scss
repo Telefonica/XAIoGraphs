@@ -9,6 +9,10 @@
     font-size: 30px;
 }
 
+.fairnessTitleBorder {
+    border-bottom: 1px solid gray;
+}
+
 .fairnessBody {
     @extend .bodyComponent;
     overflow: auto;
@@ -27,7 +31,6 @@
     @extend .fontBold;
     font-size: 25px;
     padding: 10px;
-    border-bottom: 1px solid gray;
 }
 
 .fairnessCorrelationTitle {

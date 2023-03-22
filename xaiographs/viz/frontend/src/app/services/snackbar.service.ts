@@ -20,4 +20,20 @@ export class SnackbarService {
         }
         this.snackBar.open(message, '', config);
     }
+
+    openDownloadSnackBar(message: any, error = true) {
+        return new Promise((resolve, reject) => {
+            const config = new MatSnackBarConfig();
+            if (error) {
+                config.panelClass = ['snackBarBody', 'snackBarError', 'fontWhite'];
+                config.duration = 10000;
+            } else {
+                config.panelClass = ['snackBarBody', 'snackBarMessage', 'fontWhite'];
+                config.duration = 3000;
+            }
+            this.snackBar.open(message, '', config).afterOpened().subscribe(()=> {
+                resolve(true)
+            })
+        })
+    }
 }

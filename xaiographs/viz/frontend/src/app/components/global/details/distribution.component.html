@@ -1,5 +1,12 @@
-<div fxFlex fxLayout="column" fxLayoutGap="5px">
-    <label class="globalDistributionTitle globalFeatureTitleBorder">Target distribution</label>
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="5px" class="globalCard">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" class="globalFeatureTitleBorder">
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="globalDistributionTitle">Target distribution</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
+        </div>
+    </div>
     <google-chart class="globalDistributionChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>
     <img src="../../../../assets/empty.png" class="globalNoData" *ngIf="!displayGraph" alt="No data" />
 </div>

@@ -1,13 +1,16 @@
-<div fxFlex fxLayout="column" fxLayoutGap="20px">
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="5px" class="globalCard">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-        <label class="globalFeatureTargetTitle">Features-values importance</label>
-        <label class="globalFeatureTargetSubTitle">target selected: {{ currentTarget }}</label>
-    </div>
-    <div fxLayout="column">
-        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="globalFeatureTargetTitle">Features-values importance</label>
+            <label class="globalFeatureTargetSubTitle">( {{ currentTarget }} )</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
             <label>Display frecuency</label>
             <mat-slide-toggle [(ngModel)]="showFrecuency"></mat-slide-toggle>
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
         </div>
+    </div>
+    <div fxLayout="column">
         <google-chart class="globalFeatureTargetChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph && showFrecuency"> </google-chart>
         <google-chart class="globalFeatureTargetChart" #chart [type]="type" [data]="dataGraphNoFrec" [columns]="columnNamesNoFrec" [options]="optionsNoFrec" *ngIf="displayGraph && !showFrecuency"> </google-chart>
         <div fxFlex fxLayout="row" fxLayoutAlign="center center"  *ngIf="displayGraph">

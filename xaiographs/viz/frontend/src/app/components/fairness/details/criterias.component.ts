@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ReaderService } from 'src/app/services/reader.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 
+import html2canvas from "html2canvas";
+
 import { jsonFiles } from '../../../constants/jsonFiles'
+import { ctsGlobal } from '../../../constants/global'
 
 import { DefIndependenceComponent } from '../definitions/independence.component';
 import { DefSeparationComponent } from '../definitions/separation.component';
@@ -16,6 +19,8 @@ import { DefSufficienceComponent } from '../definitions/sufficience.component';
     styleUrls: ['../fairness.component.scss']
 })
 export class CriteriasComponent implements OnInit {
+    @ViewChild('exportableArea') exportableArea;
+    hidePicture: boolean = false;
 
     listCriterias: any[] = []
     headers: string[] = []
@@ -68,6 +73,26 @@ export class CriteriasComponent implements OnInit {
             width: '40%',
             autoFocus: false
         });
+    }
+
+    downloadPicture() {
+        this.hidePicture = true
+        this.generateImage2Download()
+    }
+    generateImage2Download() {
+        this._apiSnackBar.openDownloadSnackBar(ctsGlobal.downloading_message, false).finally(() => {
+            html2canvas(this.exportableArea.nativeElement).then(exportCanvas => {
+                const canvas = exportCanvas.toDataURL().replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+                let link = document.createElement('a');
+                link.download = ctsGlobal.label_fairness_criteria_score + ctsGlobal.image_extension;
+                link.href = canvas;
+                link.click();
+                this.hidePicture = false
+            }).catch((err) => {
+                this._apiSnackBar.openSnackBar(JSON.stringify(err));
+                this.hidePicture = false
+            });
+        })
     }
 
 }

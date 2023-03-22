@@ -1,9 +1,13 @@
-<div fxFlex fxLayout="column" fxLayoutGap="5px">
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="5px" class="globalCard">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-        <label class="globalFeatureTargetTitle">Features importance</label>
-        <div fxLayout="row" fxLayoutAlign="center center" class="globalTheme" fxLayoutGap="10px">
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="globalFeatureTargetTitle">Features importance</label>
+            <label class="globalFeatureTargetSubTitle">( {{ currentTarget }} )</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="globalTheme" fxLayoutGap="10px" *ngIf="!hidePicture">
             <label>Global Comparative</label>
             <mat-slide-toggle [(ngModel)]="showRadar" (change)="generateRadar()"></mat-slide-toggle>
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
         </div>
     </div>
     <google-chart class="globalFeatureChart" style="height:100%" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph && !showRadar"> </google-chart>

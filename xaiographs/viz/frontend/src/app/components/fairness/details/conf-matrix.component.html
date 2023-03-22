@@ -1,11 +1,15 @@
-<div fxFlex fxLayout="column" fxLayoutGap="25px">
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="fairnessConfMatrixTitle">
-        <label>Confussion Matrix</label>
-        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" class="fairnesConfMatrixMode">
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="25px" class="fairnessCard">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="fairnessTitleBorder">
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="fairnessConfMatrixTitle">Confussion Matrix</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
             <label>Display percentaje values</label>
             <mat-slide-toggle [(ngModel)]="displayPercent">%</mat-slide-toggle>
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
         </div>
     </div>
+
     <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
         <label>PREDICT</label>
         <div fxLayout="row" fxLayoutAlign="center center" style="width: 100%;" fxLayoutGap="15px">

@@ -1,9 +1,12 @@
-<div fxFlex fxLayout="column" fxLayoutGap="5px">
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="5px" class="globalCard">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" class="globalFeatureTitleBorder">
-        <label class="globalFeatureTitle">Features importance</label>
-        <div fxLayout="row" fxLayoutAlign="center center" class="globalTheme" fxLayoutGap="10px">
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="globalFeatureTitle">Features importance</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="globalTheme" fxLayoutGap="10px" *ngIf="!hidePicture">
             <label>Target breakdown</label>
             <mat-slide-toggle [(ngModel)]="showBreakdown"></mat-slide-toggle>
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
         </div>
     </div>
     <div fxFlex *ngIf="!showBreakdown">

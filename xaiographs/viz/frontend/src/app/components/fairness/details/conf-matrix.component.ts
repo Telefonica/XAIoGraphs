@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { ReaderService } from 'src/app/services/reader.service'
 import { SnackbarService } from 'src/app/services/snackbar.service'
 
+import html2canvas from "html2canvas";
+
 import { jsonFiles } from '../../../constants/jsonFiles'
 import { ctsFairness } from '../../../constants/fairness'
+import { ctsGlobal } from '../../../constants/global'
 
 @Component({
     selector: 'app-fairness-conf-matrix',
@@ -12,6 +15,8 @@ import { ctsFairness } from '../../../constants/fairness'
     styleUrls: ['../fairness.component.scss']
 })
 export class ConfMatrixComponent implements OnInit {
+    @ViewChild('exportableArea') exportableArea;
+    hidePicture: boolean = false;
 
     listLabels: string[] = []
     dataSource: any[] = []
@@ -87,6 +92,26 @@ export class ConfMatrixComponent implements OnInit {
         const fontColor = { 'color': 'White' }
 
         return (parseFloat(opacity) < 0.5) ? bgColor : { ...bgColor, ...fontColor }
+    }
+
+    downloadPicture() {
+        this.hidePicture = true
+        this.generateImage2Download()
+    }
+    generateImage2Download() {
+        this._apiSnackBar.openDownloadSnackBar(ctsGlobal.downloading_message, false).finally(() => {
+            html2canvas(this.exportableArea.nativeElement).then(exportCanvas => {
+                const canvas = exportCanvas.toDataURL().replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+                let link = document.createElement('a');
+                link.download = ctsGlobal.label_fairness_confussion_matrix + ctsGlobal.image_extension;
+                link.href = canvas;
+                link.click();
+                this.hidePicture = false
+            }).catch((err) => {
+                this._apiSnackBar.openSnackBar(JSON.stringify(err));
+                this.hidePicture = false
+            });
+        })
     }
 
 }

@@ -23,6 +23,7 @@ export class FeatureIndependenceComponent implements OnChanges {
     moduleName: string = 'independence'
 
     @Input() currentFeature = '';
+    @Input() hidePicture = false;
 
     constructor(
         private _apiReader: ReaderService,
