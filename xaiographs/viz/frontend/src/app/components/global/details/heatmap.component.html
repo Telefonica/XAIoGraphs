@@ -1,7 +1,12 @@
-<div fxFlex fxLayout="column" fxLayoutGap="5px">
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-        <label class="globalFeatureTargetTitle">Features Importance Heatmap</label>
-        <label class="globalFeatureTargetSubTitle">target selected: {{ currentTarget }}</label>
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="5px" class="globalCard">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="globalFeatureTargetTitle">Features Heatmap</label>
+            <label class="globalFeatureTargetSubTitle">( {{ currentTarget }} )</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
+        </div>
     </div>
     <div fxFlex fxLayout="row" fxLayoutGap="5px">
         <div fxFlex fxLayout="column">

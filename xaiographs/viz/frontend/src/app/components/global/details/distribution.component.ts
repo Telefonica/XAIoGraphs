@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 
 import { ChartType } from 'angular-google-charts';
+import html2canvas from "html2canvas";
 
 import { EmitterService } from 'src/app/services/emitter.service';
 import { ReaderService } from 'src/app/services/reader.service';
@@ -8,6 +9,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
 import { ctsTheme } from '../../../constants/theme';
+import { ctsGlobal } from '../../../constants/global';
 
 @Component({
     selector: 'app-global-distribution',
@@ -15,6 +17,8 @@ import { ctsTheme } from '../../../constants/theme';
     styleUrls: ['../global.component.scss']
 })
 export class GlobalDistributionComponent implements OnInit, OnDestroy {
+    @ViewChild('exportableArea') exportableArea;
+    hidePicture: boolean = false;
 
     type = ChartType.PieChart;
     dataGraph: any[] = [];
@@ -111,6 +115,26 @@ export class GlobalDistributionComponent implements OnInit, OnDestroy {
         });
 
         this.dataGraph = transformDataSet;
+    }
+
+    downloadPicture() {
+        this.hidePicture = true
+        this.generateImage2Download()
+    }
+    generateImage2Download() {
+        this._apiSnackBar.openDownloadSnackBar(ctsGlobal.downloading_message, false).finally(() => {
+            html2canvas(this.exportableArea.nativeElement).then(exportCanvas => {
+                const canvas = exportCanvas.toDataURL().replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+                let link = document.createElement('a');
+                link.download = ctsGlobal.label_global_distribution + ctsGlobal.image_extension;
+                link.href = canvas;
+                link.click();
+                this.hidePicture = false
+            }).catch((err) => {
+                this._apiSnackBar.openSnackBar(JSON.stringify(err));
+                this.hidePicture = false
+            });
+        })
     }
 
     ngOnDestroy(): void {

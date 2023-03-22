@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ctsFairness } from 'src/app/constants/fairness';
+
+import html2canvas from "html2canvas";
 
 import { ReaderService } from 'src/app/services/reader.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 
 import { jsonFiles } from '../../../constants/jsonFiles';
+import { ctsGlobal } from '../../../constants/global'
 
 @Component({
     selector: 'app-fairness-criteria-feature',
@@ -12,6 +15,8 @@ import { jsonFiles } from '../../../constants/jsonFiles';
     styleUrls: ['../fairness.component.scss']
 })
 export class CriteriaFeatureComponent implements OnInit {
+    @ViewChild('exportableArea') exportableArea;
+    hidePicture: boolean = false;
 
     listFeatures: string[] = [];
     featureSelected: string = ''
@@ -43,6 +48,26 @@ export class CriteriaFeatureComponent implements OnInit {
     updateFeature(index) {
         this.currentFeatureIndex = index;
         this.featNameSelected = this.listFeatures[index]
+    }
+
+    downloadPicture() {
+        this.hidePicture = true
+        this.generateImage2Download()
+    }
+    generateImage2Download() {
+        this._apiSnackBar.openDownloadSnackBar(ctsGlobal.downloading_message, false).finally(() => {
+            html2canvas(this.exportableArea.nativeElement).then(exportCanvas => {
+                const canvas = exportCanvas.toDataURL().replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+                let link = document.createElement('a');
+                link.download = ctsGlobal.label_fairness_feature_fairness_criterias + ctsGlobal.image_extension;
+                link.href = canvas;
+                link.click();
+                this.hidePicture = false
+            }).catch((err) => {
+                this._apiSnackBar.openSnackBar(JSON.stringify(err));
+                this.hidePicture = false
+            });
+        })
     }
 
 }

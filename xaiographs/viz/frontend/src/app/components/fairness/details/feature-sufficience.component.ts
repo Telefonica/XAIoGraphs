@@ -23,6 +23,7 @@ export class FeatureSufficienceComponent implements OnChanges {
     moduleName: string = 'sufficiency'
 
     @Input() currentFeature = '';
+    @Input() hidePicture = false;
 
     constructor(
         private _apiReader: ReaderService,

@@ -4,11 +4,11 @@
     </div>
     <div fxFlex fxLayout="column" fxLayoutGap="20px" class="fairnessBody" *ngIf="fileExists">
         <div fxFlex fxLayout="row" fxLayoutGap="20px">
-            <app-fairness-criterias fxFlex class="fairnessCard"></app-fairness-criterias>
-            <app-fairness-conf-matrix fxFlex class="fairnessCard"></app-fairness-conf-matrix>
+            <app-fairness-criterias fxFlex></app-fairness-criterias>
+            <app-fairness-conf-matrix fxFlex></app-fairness-conf-matrix>
         </div>
 
-        <app-fairness-criteria-feature fxFlex class="fairnessCard"></app-fairness-criteria-feature>
+        <app-fairness-criteria-feature fxFlex></app-fairness-criteria-feature>
     </div>
     <div fxFlex fxLayout="row" fxLayoutAlign="center center" class="fairnessBody" *ngIf="!fileExists">
         <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">

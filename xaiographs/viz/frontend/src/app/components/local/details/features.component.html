@@ -1,9 +1,26 @@
-<div fxFlex fxLayout="column" fxLayoutGap="25px" *ngIf="currentTarget">
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="5px" class="localCard">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-        <label class="localDistributionTitle">Features importance</label>
-        <label class="localExplanationFilter">target selected: {{ currentTarget.target }}</label>
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="localDistributionTitle">Features-values importance</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
+        </div>
     </div>
-
-    <google-chart class="localDistributionChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>
-    <img src="../../../../assets/empty.png" class="localNoData" *ngIf="!displayGraph" alt="No data" />
+    <div fxLayout="column">
+        <google-chart class="localDistributionChart" #chart [type]="type" [data]="dataGraph" [columns]="columnNames" [options]="options" *ngIf="displayGraph"> </google-chart>
+        <div fxFlex fxLayout="row" fxLayoutAlign="center center" *ngIf="displayGraph">
+            <div fxFlex fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="center center" style="padding-top: 15px;">
+                <div fxLayout="row" fxLayoutGap="5px">
+                    <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.positiveValue"></div>
+                    <label>Positive values</label>
+                </div>
+                <div fxLayout="row" fxLayoutGap="5px">
+                    <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.negativeValue"></div>
+                    <label>Negative values</label>
+                </div>
+            </div>
+        </div>
+        <img src="../../../../assets/empty.png" class="localNoData" *ngIf="!displayGraph" alt="No data" />
+    </div>
 </div>

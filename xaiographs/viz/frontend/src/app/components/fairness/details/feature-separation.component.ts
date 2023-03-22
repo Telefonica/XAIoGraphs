@@ -23,6 +23,7 @@ export class FeatureSeparationComponent implements OnChanges {
     moduleName: string = 'separation'
 
     @Input() currentFeature = '';
+    @Input() hidePicture = false;
 
     constructor(
         private _apiReader: ReaderService,

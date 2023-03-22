@@ -1,14 +1,24 @@
-<div fxFlex fxLayout="column" fxLayoutGap="25px">
-    <label class="fairnessCriteriaFeatureTitle">Features Fairness Criterias</label>
-    <div fxFlex fxLayout="column" style="padding: 0px 20px" fxLayoutGap="20px">
-        <div fxFlex fxLayout="row" fxLayoutGap="5px" style="border-bottom: 1px solid grey;">
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="25px" class="fairnessCard">
+    <div fxLayout="row" fxLayoutAlign="space-between center" >
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="fairnessCriteriaFeatureTitle">Features Fairness Criterias</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
+        </div>
+    </div>
+    <div fxFlex fxLayout="column" style="padding: 0px 20px" fxLayoutGap="10px">
+        <div fxFlex fxLayout="row" fxLayoutGap="5px" style="border-bottom: 1px solid grey;" *ngIf="!hidePicture">
             <label *ngFor="let feature of listFeatures; index as index" class="fairnessFeatureFilter" [ngClass]="{fairnessFeatureFilterSelected: (currentFeatureIndex == index)}" (click)="updateFeature(index)">{{ feature }}</label>
         </div>
-        <app-feature-correlation fxFlex [currentFeature]="featNameSelected" style="padding: 0px 35px"></app-feature-correlation>
+        <div fxFlex fxLayout="row" fxLayoutGap="5px" style="border-bottom: 1px solid grey;" *ngIf="hidePicture">
+            <label class="fairnessFeatureFilter fairnessFeatureFilterSelected">{{ featNameSelected }}</label>
+        </div>
+        <app-feature-correlation fxFlex [currentFeature]="featNameSelected" style="padding: 0px 35px;"></app-feature-correlation>
         <div fxFlex fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="15px" style="padding: 0px 20px;">
-            <app-feature-independence fxFlex [currentFeature]="featNameSelected"></app-feature-independence>
-            <app-feature-separation fxFlex [currentFeature]="featNameSelected"></app-feature-separation>
-            <app-feature-sufficience fxFlex [currentFeature]="featNameSelected"></app-feature-sufficience>
+            <app-feature-independence fxFlex [currentFeature]="featNameSelected" [hidePicture]="hidePicture"></app-feature-independence>
+            <app-feature-separation fxFlex [currentFeature]="featNameSelected" [hidePicture]="hidePicture"></app-feature-separation>
+            <app-feature-sufficience fxFlex [currentFeature]="featNameSelected" [hidePicture]="hidePicture"></app-feature-sufficience>
         </div>
         <div fxLayout="row" fxLayoutAlign="center center">
             <app-legend style="width: 50%;"></app-legend>

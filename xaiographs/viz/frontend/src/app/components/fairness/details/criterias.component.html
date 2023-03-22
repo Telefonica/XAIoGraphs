@@ -1,23 +1,30 @@
-<div fxFlex fxLayout="column" fxLayoutGap="25px">
-    <label class="fairnessCriteriasTitle">Fairness Criterias Score</label>
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="25px" class="fairnessCard">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="fairnessTitleBorder">
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="fairnessCriteriasTitle">Fairness Criterias Score</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
+        </div>
+    </div>
     <mat-grid-list cols="4" rowHeight="50px">
         <mat-grid-tile><label class="criterias_title" style="border:1px solid  rgb(75, 15, 85)">Feature</label></mat-grid-tile>
         <mat-grid-tile>
             <div fxLayout="row" fxLayoutGap="5px" class="criterias_title" fxLayoutAlign="center center">
-                <label >Independence</label>
-                <mat-icon class="criterias_help" (click)="openIndependence()">help</mat-icon>
+                <label>Independence</label>
+                <mat-icon class="criterias_help" (click)="openIndependence()" *ngIf="!hidePicture">help</mat-icon>
             </div>
         </mat-grid-tile>
         <mat-grid-tile>
             <div fxLayout="row" fxLayoutGap="5px" class="criterias_title" fxLayoutAlign="center center">
-                <label >Separation</label>
-                <mat-icon class="criterias_help" (click)="openSeparation()">help</mat-icon>
+                <label>Separation</label>
+                <mat-icon class="criterias_help" (click)="openSeparation()" *ngIf="!hidePicture">help</mat-icon>
             </div>
         </mat-grid-tile>
         <mat-grid-tile>
             <div fxLayout="row" fxLayoutGap="5px" class="criterias_title" fxLayoutAlign="center center">
-                <label >Sufficiency</label>
-                <mat-icon class="criterias_help" (click)="openSufficiency()">help</mat-icon>
+                <label>Sufficiency</label>
+                <mat-icon class="criterias_help" (click)="openSufficiency()" *ngIf="!hidePicture">help</mat-icon>
             </div>
         </mat-grid-tile>
         <ng-container *ngFor="let criteria of listCriterias">

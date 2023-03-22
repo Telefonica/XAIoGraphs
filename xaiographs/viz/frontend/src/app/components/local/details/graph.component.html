@@ -1,7 +1,11 @@
-<div fxFlex fxLayout="column" fxLayoutGap="25px" *ngIf="currentTarget">
+<div #exportableArea fxFlex fxLayout="column" fxLayoutGap="5px" class="localCard">
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-        <label class="localNetGraphTitle">Features relations</label>
-        <label class="localExplanationFilter">target selected: {{ currentTarget.target }}</label>
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+            <label class="localNetGraphTitle">Features-values relations</label>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
+            <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>
+        </div>
     </div>
     <label *ngIf="detailedNode == ''">To access <b>Detail View</b>, click on an specific node</label>
     <label *ngIf="detailedNode != ''">To exit Detail View, click on selected node [<b>{{ detailedNode }}</b>]</label>
@@ -28,6 +32,10 @@
             <div fxLayout="row" fxLayoutGap="5px">
                 <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.negativeValue"></div>
                 <label>Negative values</label>
+            </div>
+            <div fxLayout="row" fxLayoutGap="5px">
+                <div style="width: 15px; height: 15px; border: 1px solid black; border-radius: 3px;" [style.background-color]="colorTheme.frecuencyValue"></div>
+                <label>Relation</label>
             </div>
         </div>
     </div>

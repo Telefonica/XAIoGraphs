@@ -1,7 +1,7 @@
 <div fxFlex fxLayout="column" fxLayoutGap="25px">
     <div fxFlex fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
         <label class="fairnessCriteriaConcept" style="text-transform: uppercase;">{{ moduleName }}</label>
-        <mat-icon class="criterias_help_contrast" (click)="openSeparation()">help</mat-icon>
+        <mat-icon class="criterias_help_contrast" (click)="openSeparation()" *ngIf="!hidePicture">help</mat-icon>
     </div>
     <mat-grid-list [cols]="headers.length + 1" rowHeight="50px">
         <mat-grid-tile><label class="criterias_title">{{ currentFeature }}</label></mat-grid-tile>
