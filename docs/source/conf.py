@@ -22,7 +22,9 @@ copyright = '2022, Telefonica'
 author = 'Telefonica'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+__VERSION__ = open('../../VERSION').read().strip()
+release = __VERSION__
+version = __VERSION__
 
 # -- General configuration ---------------------------------------------------
 
@@ -31,8 +33,10 @@ release = '0.0.1'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.napoleon',
-    'sphinx.ext.coverage'
+    'sphinx.ext.coverage',
+    'myst_parser'
 ]
 
 # Configuration of sphinx.ext.coverage
@@ -57,7 +61,7 @@ exclude_patterns = ['build', 'Thumbs.db', '.DS_Store', '**tests**', '**test**']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'furo'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -72,3 +76,9 @@ autodoc_default_options = {
     'undoc-members': True,
     'exclude-members': '__weakref__'
 }
+
+# The name of an image file (relative to this directory) to place at the top
+# of the sidebar.
+html_logo = '../imgs/icon.png'
+html_favicon = '../imgs/favicon.ico'
+html_title = 'XAIoGraphs <br/> {}'.format(__VERSION__)

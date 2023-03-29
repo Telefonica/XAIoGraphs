@@ -23,7 +23,7 @@ rm -rf ${BUILDDIR}/*
 mkdir -p ${BUILDDIR}/log
 
 # Build documentation
-sphinx-apidoc -o ${SOURCEDIR} ${CODEDIR}
+#sphinx-apidoc -o ${SOURCEDIR} ${CODEDIR}
 sphinx-build -b html -c ${SOURCEDIR} ${SOURCEDIR} ${BUILDDIR}/html | tee ${BUILDDIR}/log/output.txt
 
 # Pack documentation into tar file
