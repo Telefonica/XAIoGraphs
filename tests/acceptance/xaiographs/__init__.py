@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
 
 u"""
-(c) Copyright 2022 Telefónica. All Rights Reserved.
-The copyright to the software program(s) is property of Telefónica.
-The program(s) may be used and or copied only with the express written consent
-of Telefónica or in accordance with the terms and conditions stipulated in the
-agreement/contract under which the program(s) have been supplied."""
+© 2023 Telefónica Digital España S.L.
+This file is part of XAIoGraphs.
+
+XAIoGraphs is free software: you can redistribute it and/or modify it under the terms of the Affero GNU General Public
+License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
+later version.
+
+XAIoGraphs is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the Affero GNU General Public License
+for more details.
+
+You should have received a copy of the Affero GNU General Public License along with XAIoGraphs. If not,
+see https://www.gnu.org/licenses/."""
