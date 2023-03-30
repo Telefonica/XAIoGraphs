@@ -188,7 +188,7 @@ class ImportanceCalculator(metaclass=ABCMeta):
         """
         error = np.abs(ground_truth - prediction) > EPS_ERROR
         for i, target_col in enumerate(target_cols):
-            print('INFO:     ImportanceCalculator: Number of detected discrepancies (original model prediction != SHAP '
+            print('INFO:     ImportanceCalculator: Number of detected discrepancies (original model prediction != LIDE '
                   'prediction) for target {} in the {} dataset: {}'.format(target_col, scope, sum(error[:, i])))
 
     @staticmethod
