@@ -30,7 +30,7 @@ from xaiographs.common.utils import TargetInfo, xgprint
 from xaiographs.exgraph.importance.importance_calculator import ImportanceCalculator
 
 
-class TefShap(ImportanceCalculator):
+class LIDE(ImportanceCalculator):
     """
     This class implements ImportanceCalculator based on the mathematical Shapley values formula
     """
@@ -48,7 +48,7 @@ class TefShap(ImportanceCalculator):
     def __init__(self, explainer_params: Dict, feature_cols: List[str], target_info: TargetInfo,
                  train_size: float = 0.0, train_stratify: bool = False, verbose: int = 0):
         """
-        Constructor method for TefShap ImportanceCalculator
+        Constructor method for LIDE ImportanceCalculator
 
         :param explainer_params:            Dictionary, containing potentially useful information for this importance
                                             calculator
@@ -62,8 +62,8 @@ class TefShap(ImportanceCalculator):
                                             account when splitting the data (if train_size > 0.0)
         :param verbose:                     Verbosity level, where any value greater than 0 means the message is printed
         """
-        super(TefShap, self).__init__(feature_cols=feature_cols, target_info=target_info, train_size=train_size,
-                                      train_stratify=train_stratify, verbose=verbose)
+        super(LIDE, self).__init__(feature_cols=feature_cols, target_info=target_info, train_size=train_size,
+                                   train_stratify=train_stratify, verbose=verbose)
         self.explainer_params: Dict = explainer_params
 
     @staticmethod
@@ -104,10 +104,10 @@ class TefShap(ImportanceCalculator):
 
             # For all possible combinations of i features (from 0 to num_features)
             for combination in list(combinations(feature_list, i)):
-                coalition_name = [TefShap._E]
+                coalition_name = [LIDE._E]
                 for el in combination:
                     coalition_name.append(str(el))
-                coalition_names.append(TefShap._COALITION_NAME_SEP.join(coalition_name))
+                coalition_names.append(LIDE._COALITION_NAME_SEP.join(coalition_name))
                 coalition_ids_by_length.append(coalition_id)
                 coalition_ids.append(coalition_id)
                 coalition_id += 1
@@ -139,7 +139,7 @@ class TefShap(ImportanceCalculator):
         weights = np.expand_dims(np.expand_dims([1 if j == 0
                                                  else 1 / (scipy.special.comb(features_num - 1,
                                                                               len(name.split(
-                                                                                  TefShap._COALITION_NAME_SEP)) - 2) * (
+                                                                                  LIDE._COALITION_NAME_SEP)) - 2) * (
                                                                features_num)) for j, name in
                                                  enumerate(coalition_names)], axis=0), axis=2)
         edges_list = []
@@ -155,7 +155,7 @@ class TefShap(ImportanceCalculator):
                 # nodes are obtained for all the coalitions of the given length `i` and involving the given feature `f`
                 # For every output/input coalition pair, the output coalition won't contain the given feature `f` but
                 # the input coalition will
-                input_nodes, output_nodes = TefShap.__compute_edges(coalition_lengths=coalition_lengths,
+                input_nodes, output_nodes = LIDE.__compute_edges(coalition_lengths=coalition_lengths,
                                                                     coalition_names=coalition_names,
                                                                     coalition_length=i, feature=f)
                 if len(input_nodes):
@@ -172,7 +172,7 @@ class TefShap(ImportanceCalculator):
 
         # Degrees are computed for the input nodes
         for i in range(edges.shape[0]):
-            degrees.append(TefShap.__get_degree(edges[i, 1, :]))
+            degrees.append(LIDE.__get_degree(edges[i, 1, :]))
         degrees = np.stack(degrees, axis=0)
         filtered_degrees = []
         for i in range(edges.shape[0]):
@@ -203,10 +203,10 @@ class TefShap(ImportanceCalculator):
         # For each coalition its name will be processed
         for i in pbar:
             coalition_name = coalition_names[i]
-            coalition_features = coalition_name.split(TefShap._COALITION_NAME_SEP)
+            coalition_features = coalition_name.split(LIDE._COALITION_NAME_SEP)
 
             # Features list for that coalition are obtained
-            coalition_features.remove(TefShap._E)
+            coalition_features.remove(LIDE._E)
             if len(coalition_features) > 0:
 
                 # Aggregated targets are computed by grouping and averaging the coalition features on the
@@ -254,16 +254,16 @@ class TefShap(ImportanceCalculator):
         for output_node in coalition_lengths[coalition_length - 1]:
 
             # For an output node to be valid to be part of an edge, the processed feature can't be contained on its name
-            if feature in coalition_names[output_node].split(TefShap._COALITION_NAME_SEP):
+            if feature in coalition_names[output_node].split(LIDE._COALITION_NAME_SEP):
                 continue
             for input_node in coalition_lengths[coalition_length]:
 
                 # For an input node to be valid to be part of an edge, the processed feature must be contained on its
                 # name
-                if feature not in coalition_names[input_node].split(TefShap._COALITION_NAME_SEP):
+                if feature not in coalition_names[input_node].split(LIDE._COALITION_NAME_SEP):
                     continue
-                if set(coalition_names[output_node].split(TefShap._COALITION_NAME_SEP)).issubset(
-                        set(coalition_names[input_node].split(TefShap._COALITION_NAME_SEP))):
+                if set(coalition_names[output_node].split(LIDE._COALITION_NAME_SEP)).issubset(
+                        set(coalition_names[input_node].split(LIDE._COALITION_NAME_SEP))):
                     input_nodes.append(input_node)
                     output_nodes.append(output_node)
 
@@ -361,25 +361,25 @@ class TefShap(ImportanceCalculator):
         """
         # Fifth step (continuing from train method), in this step importance is calculated. The result does have the
         # following shape (rows to explain x features x targets)
-        calculated_importance = self.__graph_importance(features=params[TefShap._COALITIONS_WORTH],
-                                                        graph_edges=params[TefShap._EDGES],
-                                                        weights=params[TefShap._WEIGHTS],
+        calculated_importance = self.__graph_importance(features=params[LIDE._COALITIONS_WORTH],
+                                                        graph_edges=params[LIDE._EDGES],
+                                                        weights=params[LIDE._WEIGHTS],
                                                         batch_size=batch_size,
                                                         verbose=self._verbose)
 
         # In this sixth step, a consistency check is performed on local accuracy
         #    a) coalitions_worth[:, 0, :] --> phi0 = E(targets | empty coalition)
-        phi0 = params[TefShap._COALITIONS_WORTH][:, 0, :]
+        phi0 = params[LIDE._COALITIONS_WORTH][:, 0, :]
 
         #    b) coalitions_worth[:, -1, :] --> ground truth = E(targets | coalition to be justified)
         y_hat: np.ndarray = phi0 + calculated_importance.sum(axis=1)
-        ImportanceCalculator._sanity_check(ground_truth=params[TefShap._COALITIONS_WORTH][:, -1, :],
+        ImportanceCalculator._sanity_check(ground_truth=params[LIDE._COALITIONS_WORTH][:, -1, :],
                                            prediction=y_hat,
                                            target_cols=self._target_info.target_columns,
                                            scope='aggregated')
 
         # Ground truth is retrieved
-        y: np.ndarray = params[TefShap._DF_TO_EXPLAIN][self._target_info.target_columns].values
+        y: np.ndarray = params[LIDE._DF_TO_EXPLAIN][self._target_info.target_columns].values
 
         # Difference between ground truth and predictions
         reliability: np.ndarray = (y - y_hat)
@@ -390,9 +390,9 @@ class TefShap(ImportanceCalculator):
                                                                                 calculated_importance.shape[1], axis=1)
         reshaped_adapted_importance = adapted_importance.reshape(adapted_importance.shape[0], -1)
 
-        df_explanation = params[TefShap._DF_TO_EXPLAIN].rename(columns={str(k): v for k, v in
+        df_explanation = params[LIDE._DF_TO_EXPLAIN].rename(columns={str(k): v for k, v in
                                                                         enumerate(self._feature_cols)})
-        del params[TefShap._DF_TO_EXPLAIN]
+        del params[LIDE._DF_TO_EXPLAIN]
 
         importance_columns = []
         for c in self._feature_cols:
@@ -484,8 +484,8 @@ class TefShap(ImportanceCalculator):
                                                        coalition_names, self._verbose)
 
         return {
-            TefShap._DF_TO_EXPLAIN: df_2_explain,
-            TefShap._COALITIONS_WORTH: coalitions_worth,
-            TefShap._EDGES: edges,
-            TefShap._WEIGHTS: weights
+            LIDE._DF_TO_EXPLAIN: df_2_explain,
+            LIDE._COALITIONS_WORTH: coalitions_worth,
+            LIDE._EDGES: edges,
+            LIDE._WEIGHTS: weights
         }

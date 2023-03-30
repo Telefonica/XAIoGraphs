@@ -92,7 +92,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.global_explainability
                     feature  importance  rank
@@ -128,7 +128,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.global_frequency_feature_value
                     feature_value  frequency
@@ -184,7 +184,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.global_target_explainability
                      target       feature  importance  rank
@@ -228,7 +228,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.global_target_feature_value_explainability
                     target      feature_value  importance  rank
@@ -300,7 +300,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.importance_values
             [[[ 0.19102919 -0.19102919]
@@ -369,7 +369,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.local_dataset_reliability
                     id       target  reliability
@@ -410,7 +410,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.local_feature_value_explainability
                      id      feature_value  importance  rank
@@ -452,7 +452,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.sample_ids_to_display
             0     519
@@ -520,7 +520,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.top_features
                     feature  rank
@@ -585,7 +585,7 @@ class Explainer(object):
         Example:
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-            >>> explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+            >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.top_features_by_target
                     target       feature  distance

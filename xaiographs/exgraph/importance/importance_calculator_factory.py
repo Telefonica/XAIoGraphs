@@ -17,11 +17,11 @@ see https://www.gnu.org/licenses/."""
 
 
 from xaiographs.common.utils import xgprint
-from xaiographs.exgraph.importance.tef_shap import TefShap
+from xaiographs.exgraph.importance.lide import LIDE
 
 
 class ImportanceCalculatorFactory(object):
-    TEF_SHAP = 'TEF_SHAP'
+    LIDE = 'LIDE'
 
     def __init__(self):
         """Importance Calculator factory class
@@ -39,10 +39,10 @@ class ImportanceCalculatorFactory(object):
                                              ImportanceCalculator to be built
         :return:                             ImportanceCalculator object of the requested type
         """
-        if name == self.TEF_SHAP:
+        if name == self.LIDE:
             xgprint(importance_calculator_params['verbose'],
                     'INFO: {} importance calculator will be instantiated'.format(name))
-            return TefShap(**importance_calculator_params)
+            return LIDE(**importance_calculator_params)
         else:
             print('ERROR:{} is not a valid importance calculator!!'.format(name))
             return None
