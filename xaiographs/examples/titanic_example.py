@@ -30,7 +30,7 @@ def main():
     df_global_semantics, df_target_semantics, df_why_templates = load_titanic_why(language=LANG)
 
     # EXPLAINER
-    explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=1)
+    explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
     explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
 
     # WHY

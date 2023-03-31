@@ -587,7 +587,7 @@ def main():
     xgprint(verbosity, 'INFO: "{}" targets {}:'.format(dataset_name, target_cols))
 
     # The desired explainer is created
-    explainer = Explainer(dataset=df_devrec_cooked, importance_engine='TEF_SHAP', number_of_features=11,
+    explainer = Explainer(dataset=df_devrec_cooked, importance_engine='LIDE', number_of_features=11,
                           verbose=verbosity)
 
     # Explaining process is triggered

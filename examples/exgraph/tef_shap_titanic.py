@@ -278,7 +278,7 @@ def main():
         feature_cols.extend([RCAT, RNUM])
 
     # The desired explainer is created
-    explainer = Explainer(dataset=df_titanic, importance_engine='TEF_SHAP', verbose=verbosity)
+    explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=verbosity)
 
     # Explaining process is triggered
     explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
