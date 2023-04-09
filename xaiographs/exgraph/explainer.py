@@ -38,21 +38,35 @@ class Explainer(object):
     """
     This class is intended to provide an abstract layer which encapsulates everything related to the explanation process
     from statistics calculation, importance calculation (using the engine chosen by the user) and information export for
-    visualization tasks
+    visualization tasks.
+
+    Parameters
+    ----------
+    dataset : pandas.DataFrame
+        The structure containing the whole dataset.
+
+    importance_engine : str
+        The name of the method use to compute feature importance.
+
+        .. important::
+           LIDE is the available option for version 0.0.2
+
+    destination_path : str, default='./xaioweb_files'
+        The path where output files will be stored.
+
+    number_of_features : int
+        The number of top relevant features to be selected for importance calculation.
+
+    verbose : int, default=0
+        Verbosity level.
+
+        .. hint::
+           Any value greater than 0 means verbosity is on.
+
     """
 
     def __init__(self, dataset: pd.DataFrame, importance_engine: str, destination_path: str = './xaioweb_files',
                  number_of_features: int = 8, verbose: int = 0):
-        """
-        Constructor method for `Explainer` class
-
-        :param dataset:                  Pandas DataFrame, containing the whole dataset
-        :param importance_engine:        String, representing the name of the method use to compute feature importance
-        :param destination_path:         String, representing the path where output files will be stored
-        :param number_of_features:       Integer, representing the number of features to be selected
-        :param verbose:                  Verbosity level, where any value greater than 0 means the message is printed
-
-        """
         self.__global_explainability = None
         self.__global_frequency_feature_value = None
         self.__global_target_feature_value_explainability = None
@@ -71,25 +85,27 @@ class Explainer(object):
 
     @property
     def global_explainability(self):
-        """
-        Property that returns all the features to be explained, ranked by their global importance. Prior to this,
-        the mean of each feature importance for each target is computed. Then the targets probabilities are computed
-        and each of the importance values previously obtained, are multiplied by their corresponding probability for
-        each target. Finally, the resulting values for each feature (one value per target) are averaged, so a single
-        number representing each feature importance is obtained.
+        """Property containing each feature ranked by its global importance. This property is computed in two steps:
 
-        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+        - The mean of each feature importance for each target is computed.
+        - The mean of each feature importance is now computed throughout all the targets.
 
-        The DataFrame contains the following columns:
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-            + **feature:** feature name
-            + **importance:** feature importance considering all possible target values and all the samples
-            + **rank:** position of the feature when sorted by its importance. The lower the rank the higher the \
-            importance
+        Returns
+        -------
+        global_explainability : pandas.DataFrame
+            Structure containing each feature ranked by its global importance. It contains the following columns:
 
-        :return: pd.DataFrame, containing each feature ranked by its global importance
+                - **feature:** feature name.
+                - **importance:** feature importance considering all possible target values and all the samples.
+                - **rank:** position of the feature when sorted by its importance. The lower the rank the higher the \
+                importance.
 
-        Example:
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -104,6 +120,7 @@ class Explainer(object):
             4      embarked    0.059490     6
             5   family_size    0.042980     7
             6      is_alone    0.031692     8
+
         """
         if self.__global_explainability is None:
             print(WARN_MSG.format('\"global_explainability\"'))
@@ -112,20 +129,23 @@ class Explainer(object):
 
     @property
     def global_frequency_feature_value(self):
-        """
-        Property that returns the number of occurrences for each feature-value pair. This is computed by adding up
+        """Property that returns the number of occurrences for each feature-value pair. This is computed by adding up
         each feature-value pair occurrence.
 
-        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-        The DataFrame contains the following columns:
+        Returns
+        -------
+        global_frequency_feature_value : pandas.DataFrame
+            Structure containing the number of times each feature-value occurs. It contains the following columns:
 
-            + **feature_value:** feature name together with each of its possible values
-            + **frequency:** total number of occurrences for each feature name-value pairs
+                - **feature_value:** feature name together with each of its possible values.
+                - **frequency:** total number of occurrences for each feature name-value pairs.
 
-        :return: pd.DataFrame, containing the number of times each feature-value occurs
-
-        Example:
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -157,6 +177,7 @@ class Explainer(object):
             22      family_size_1       1025
             36         is_alone_1       1025
             34         is_alone_0        284
+
         """
         if self.__global_frequency_feature_value is None:
             print(WARN_MSG.format('\"global_frequency_feature_value\"'))
@@ -165,23 +186,27 @@ class Explainer(object):
 
     @property
     def global_target_explainability(self):
-        """
-        Property that returns all the features to be explained, ranked by their global importance by target value. This
-        is achieved by computing the mean of each feature importance for each of the top1 targets.
+        """Property that returns all the features to be explained, ranked by their global importance by target value. \
+        This is achieved by computing the mean of each feature importance for each target value.
 
-        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-        The DataFrame contains the following columns:
+        Returns
+        -------
+        global_target_explainability : pandas.DataFrame
+            Structure containing all the features to be explained, ranked by their global importance by target value. \
+            It contains the following columns:
 
-            + **target:** each of the possible target values
-            + **feature:** feature name
-            + **importance:** feature importance with respect to each possible target values
-            + **rank:** position of the feature when sorted by its importance. The lower the rank the higher the \
-            importance
+                - **target:** each of the possible target values
+                - **feature:** feature name
+                - **importance:** feature importance with respect to each possible target values
+                - **rank:** position of the feature when sorted by its importance. The lower the rank the higher the \
+                importance
 
-        :return: pd.DataFrame, containing each feature ranked by its global importance by target value
-
-        Example:
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -204,6 +229,7 @@ class Explainer(object):
             11     SURVIVED  ticket_price    0.070697     6
             13     SURVIVED   family_size    0.051519     7
             14     SURVIVED      is_alone    0.038876     8
+
         """
         if self.__global_target_explainability is None:
             print(WARN_MSG.format('\"global_target_explainability\"'))
@@ -212,20 +238,28 @@ class Explainer(object):
 
     @property
     def global_target_feature_value_explainability(self):
-        """
-        Property that, for each target value, returns all the pairs feature-value ranked by their global importance.
-        This is achieved by computing the mean of the importance/s of each feature-value pair for all those samples
-        whose top1 target matches the target value being processed. Again, it's important to remark that this is done
-        for each possible target value.
+        """Property that, for each target value, returns all the pairs feature-value ranked by their global \
+         importance. This is achieved by computing the mean of the importance/s of each feature-value pair linked to \
+         the target value being processed.
 
-        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-        :return: pd.DataFrame, containing for each target value all the feature-value pairs occurring in all those
-                 samples whose top1 target is equal to the target value being processed. Feature-value pair importance
-                 is computed by averaging the importance of all the occurrences of that feature-value pair linked to
-                 the target value being processed
+        Returns
+        -------
+        global_target_feature_value_explainability : pandas.DataFrame
+            Structure containing for each target value all the pairs feature-value ranked by their global importance. \
+            It contains the following columns:
 
-        Example:
+                - **target:** each of the possible target values
+                - **feature_value:** feature name together with each of its possible values.
+                - **importance:** feature importance with respect to each possible target values
+                - **rank:** position of the feature for each target value when sorted by its importance. The lower \
+                 the rank the higher the importance
+
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -282,6 +316,7 @@ class Explainer(object):
             37     SURVIVED         is_alone_1    0.037075    22
             21     SURVIVED         embarked_S    0.036138    23
             27     SURVIVED    family_size_3-5    0.032299    24
+
         """
         if self.__global_target_feature_value_explainability is None:
             print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
@@ -290,14 +325,19 @@ class Explainer(object):
 
     @property
     def importance_values(self):
-        """
-        Property that returns a three dimensional Nunmpy matrix (n_samples X n_features X n_target_values), containing
-        for each sample, feature and target value, the computed importance values. Prior to invoking this
-        property, the `local_explain()` method from an `ImportanceCalculator` child class must have been invoked
+        """Property that returns the computed importance values.
 
-        :return: np,ndarray, with the computed importance values
+        .. caution::
+           If the method :meth:`local_explain` from an :class:`ImportanceCalculator` child class has not been \
+           executed, it will return a warning message.
 
-        Example:
+        Returns
+        -------
+        importance_values : numpy.array, shape (n_samples, n_features, n_target_values)
+            Structure containing containing for each sample, feature and target value, the computed importance values
+
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -310,7 +350,7 @@ class Explainer(object):
               [ 0.0049198  -0.0049198 ]
               [ 0.0049198  -0.0049198 ]
               [ 0.00861183 -0.00861183]]
-
+              ...
              [[-0.05596649  0.05596649]
               [-0.05863524  0.05863524]
               [ 0.38645767 -0.38645767]
@@ -318,7 +358,7 @@ class Explainer(object):
               [-0.01077448  0.01077448]
               [ 0.0291813  -0.0291813 ]
               [ 0.31177627 -0.31177627]]
-
+              ...
              [[ 0.04319279 -0.04319279]
               [ 0.04255799 -0.04255799]
               [-0.09668253  0.09668253]
@@ -326,9 +366,7 @@ class Explainer(object):
               [-0.02768731  0.02768731]
               [ 0.00612063 -0.00612063]
               [-0.34010499  0.34010499]]
-
-             ...
-
+              ...
              [[-0.09110644  0.09110644]
               [-0.09225141  0.09225141]
               [-0.06639871  0.06639871]
@@ -336,7 +374,7 @@ class Explainer(object):
               [-0.02507825  0.02507825]
               [-0.02507825  0.02507825]
               [-0.03583761  0.03583761]]
-
+              ...
              [[-0.09110644  0.09110644]
               [-0.09225141  0.09225141]
               [-0.06639871  0.06639871]
@@ -344,7 +382,7 @@ class Explainer(object):
               [-0.02507825  0.02507825]
               [-0.02507825  0.02507825]
               [-0.03583761  0.03583761]]
-
+              ...
              [[-0.08246317  0.08246317]
               [-0.08290531  0.08290531]
               [-0.04468906  0.04468906]
@@ -352,6 +390,7 @@ class Explainer(object):
               [-0.02018317  0.02018317]
               [-0.02018317  0.02018317]
               [-0.02992086  0.02992086]]]
+
         """
         if self.__importance_values is None:
             print(WARN_MSG.format('\"importance_values\"'))
@@ -360,13 +399,24 @@ class Explainer(object):
 
     @property
     def local_dataset_reliability(self):
-        """
-        Property that, for each sample, returns its top1 target and the reliability value associated to that target
-        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+        """Property that, for each sample, returns its top1 target and the reliability value associated to that target.
 
-        :return: pd.DataFrame, containing for each sample all its feature-value pairs together with their importance
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-        Example:
+        Returns
+        -------
+        local_dataset_reliability :  pandas.DataFrame
+            Structure containing for each sample its top1 target and the reliability value associated to that target. \
+            It contains the following columns:
+
+                - **id:** identifier for each sample.
+                - **target:** each of the possible target values.
+                - **reliability:** associated reliability value.
+
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -385,6 +435,7 @@ class Explainer(object):
             1307  1307  NO_SURVIVED         0.87
             1308  1308  NO_SURVIVED         0.89
             [1309 rows x 3 columns]
+
         """
         if self.__local_dataset_reliability is None:
             print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
@@ -398,16 +449,27 @@ class Explainer(object):
 
     @property
     def local_feature_value_explainability(self):
-        """
-        Property that, for each sample, returns as many rows as feature-value pairs, together with their calculated
-        importance. In order to achieve this, the column name where the right importance value will be found must be
-        compounded. This is done by joining together the top1 target for that sample, the feature-value pair and the
-        suffix '_imp'
-        If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+        """Property that, for each sample, returns as many rows as feature-value pairs, together with their calculated
+        importance.
 
-        :return: pd.DataFrame, containing for each sample all its feature-value pairs together with their importance
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-        Example:
+        Returns
+        -------
+        local_feature_value_explainability : pandas.DataFrame
+            Structure containing for each sample all its feature-value pairs together with their importance. It \
+            contains the following columns:
+
+                - **id:** identifier for each sample.
+                - **feature_value:** feature name together with each of its possible values.
+                - **importance:** feature importance for each feature_value pair and the top1 target.
+                - **rank:** position of the feature_value pair for each sample when sorted by its importance. The \
+                lower the rank the higher the importance
+
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -426,6 +488,7 @@ class Explainer(object):
             10470  1308         is_alone_1    0.020183     7
             10471  1308    age_18_30_years    0.029921     6
             [10472 rows x 4 columns]
+
         """
         if self.__local_feature_value_explainability is None:
             print(WARN_MSG.format('\"local_feature_value_explainability\"'))
@@ -443,13 +506,19 @@ class Explainer(object):
 
     @property
     def sample_ids_to_display(self):
-        """
-        Property that retrieves the sample ids which will be used to build the interactive visualization. The verbal
-        explanation provided by the Why module for these samples, will be displayed too
+        """Property that retrieves the sample ids which will be used to build the interactive visualization.
 
-        :return: pd.Series containing the ids for the chosen samples
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-        Example:
+        Returns
+        -------
+        local_feature_value_explainability : pandas.Series
+            Structure containing the ids for the chosen samples.
+
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -467,6 +536,7 @@ class Explainer(object):
             97    350
             98    293
             Name: id, Length: 99, dtype: uint16
+
         """
         if self.__sample_ids_to_display is None:
             print(WARN_MSG.format('\"sample_ids_to_display\"'))
@@ -475,49 +545,55 @@ class Explainer(object):
 
     @property
     def top_features(self):
-        """
-        Property that returns all the features ranked by the `FeatureSelector`. Ranking is calculated as follows:
+        """Property that returns all the features ranked by the ``FeatureSelector``. Ranking is calculated as follows:
 
-         + For each target value and for all the features, two histograms are calculated per feature. The first one \
-         considering the input pandas DataFrame filtered by the target value and the second one considering the \
-         opposite (DataFrame filtered by the absence of target value)
-         + Modified Jensen Shannon distance (see below for details) is calculated between the resulting two \
-         distributions
-         + Once all distances have been computed for all the features for a given target value, they're ranked, so \
-         that the larger the distance, the higher the rank
-         + Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with \
-         the largest aggregated rank will rank the first in the top K features (note that when talking about ranks, \
-         1 is greater than 2)
-         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+        - For each target value and for all the features, two histograms are calculated per feature. The first one \
+        considering the input pandas DataFrame filtered by the target value and the second one considering the \
+        opposite (DataFrame filtered by the absence of target value).
+        - Modified Jensen Shannon distance (see below for details) is calculated between the resulting two \
+        distributions.
+        - Once all distances have been computed for all the features for a given target value, they're ranked, so \
+        that the larger the distance, the higher the rank.
+        - Finally, for each feature, its ranks for all of the targets are taken into account so that the feature with \
+        the largest aggregated rank will rank the first in the top K features (note that when talking about ranks, \
+        1 is greater than 2).
 
-         Modified Jensen Shannon distance calculation:
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-          + The formula can be found
-            `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_
-          + However the used formula is a modified version which returns a four element numpy array:
+        Modified Jensen Shannon distance calculation:
 
-             + First element replaces the square root by the square root of the median
-             + Second element replaces the square root by the square root of the mean
-             + Third element replaces the square root by the square root of the max
-             + Fourth element replaces the square root by the square root of the sum
-          + An numpy array as explained above will be returned per feature and all of them stacked up becoming a \
-        `number_of_features x 4` matrix
-          + Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding \
-         column
-          + For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a \
-         vector containing one element per feature
-          + Finally each element is normalized by dividing it by the sum of all the elements. These are the distances \
+        - The formula can be found
+          `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_.
+        - However the used formula is a modified version which returns a four element numpy array:
+
+             - First element replaces the square root by the square root of the median.
+             - Second element replaces the square root by the square root of the mean.
+             - Third element replaces the square root by the square root of the max.
+             - Fourth element replaces the square root by the square root of the sum.
+        - An numpy array as explained above will be returned per feature and all of them stacked up becoming a \
+        matrix of shape (number_of_features, 4).
+         - Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding \
+         column.
+         - For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a \
+         vector containing one element per feature.
+         - Finally each element is normalized by dividing it by the sum of all the elements. These are the distances \
          taken into account to compute the rank so that the higher the distance the more discriminative the feature \
          is considered, thus, the more interesting from the predictive point of view. The feature with the highest \
-         distance will be ranked first while the feature with the smallest distance will be ranked last
-          + A vector like the one described in the step above will be obtained for each target value, this means that \
-         a ranking will be obtained for each target value
-          + In order to obtain a final ranking, partial ranks per target value are added for each feature, so that, \
-         the higher the rank sum for each feature, the less relevant it will be considered
+         distance will be ranked first while the feature with the smallest distance will be ranked last.
+         - A vector like the one described in the step above will be obtained for each target value, this means that \
+         a ranking will be obtained for each target value.
+         - In order to obtain a final ranking, partial ranks per target value are added for each feature, so that, \
+         the higher the rank sum for each feature, the less relevant it will be considered.
 
-        :return: pd.DataFrame, with all the features ranked by the `FeatureSelector`
+        Returns
+        -------
+        top_features : pd.DataFrame
+            Structure containing with all the features ranked by the ``FeatureSelector``.
 
-        Example:
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -532,6 +608,7 @@ class Explainer(object):
             5   family_size     6
             6      is_alone     7
             7           age     8
+
         """
         if self.__top_features is None:
             print(WARN_MSG.format('\"top_features\"'))
@@ -540,49 +617,24 @@ class Explainer(object):
 
     @property
     def top_features_by_target(self):
-        """
-        Property that returns all the features ranked by the "FeatureSelector". Ranking is calculated as follows:
+        """Property that returns all the features ranked by the ``FeatureSelector``.
 
-         + For each target value and for all the features, two histograms are calculated per feature. The first one \
-         considering the input pandas DataFrame filtered by the target value and the second one considering the \
-         opposite (DataFrame filtered by the absence of target value)
-         + Modified Jensen Shannon distance (see below for details) is calculated between the resulting two \
-         distributions
-         + Once all distances have been computed for all the features for a given target value, they're ranked, so \
-         that the larger the distance, the higher the rank
-         + Finally, for each feature, its ranks for all of the targets are taken into account so that the feature \
-         with the largest aggregated rank will rank the first in the top K features (note that when talking about \
-         ranks, 1 is greater than 2)
+        .. seealso::
+           For further information about how the selection process works, please refer to :attr:`top_features` from \
+           the :class:`Explainer` class.
 
-         If the method `fit()` from the `Explainer` class has not been executed, it will return a warning message.
+        .. caution::
+           If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
+           message.
 
-         Modified Jensen Shannon distance calculation:
+        Returns
+        -------
+        top_features : pd.DataFrame
+            Structure providing for each feature its rank per target calculated by the ``FeatureSelector``. \
+            Furthermore, the distance for each feature and target value, is provided along with its rank
 
-          + The formula can be found
-            `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html>`_
-          + However the used formula is a modified version which returns a four element numpy array:
-
-             + First element replaces the square root by the square root of the median
-             + Second element replaces the square root by the square root of the mean
-             + Third element replaces the square root by the square root of the max
-             + Fourth element replaces the square root by the square root of the sum
-          + An numpy array as explained above will be returned per feature and all of them stacked up becoming a \
-         `number_of_features x 4` matrix
-         - Each element of the matrix is normalized by dividing it by the sum of the elements of its corresponding \
-         column
-         - For each feature (each matrix row), its normalized statistics are added, as a result the matrix becomes a \
-         vector containing one element per feature
-         - Finally each element is normalized by dividing it by the sum of all the elements. These are the distances \
-         taken into account to compute the rank so that the higher the distance the more discriminative the feature \
-         is considered, thus, the more interesting from the predictive point of view. The feature with the highest \
-         distance will be ranked first while the feature with the smallest distance will be ranked last
-         - A vector like the one described in the step above will be obtained for each target value, this means that \
-         a ranking will be obtained for each target value
-
-        :return: pd.DataFrame, providing for each feature its rank per target calculated by the "FeatureSelector".
-                 Furthermore, the distance for each feature and target value, is provided along with its rank
-
-        Example:
+        Example
+        -------
             >>> from xaiographs.datasets import load_titanic_discretized
             >>> df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
@@ -597,6 +649,7 @@ class Explainer(object):
             5  NO_SURVIVED   family_size  0.069195
             6  NO_SURVIVED      is_alone  0.053045
             7  NO_SURVIVED           age  0.051220
+
         """
         if self.__top_features_by_target is None:
             print(WARN_MSG.format('\"top_features_by_target\"'))
@@ -620,6 +673,43 @@ class Explainer(object):
 
     def fit(self, feature_cols: List[str], target_cols: List[str], num_samples_local_expl: int = 100,
             num_samples_global_expl: int = 50000, batch_size_expl: int = 5000, train_stratify: bool = True):
+        """It coordinates all the steps of the explanation process which consists of the following parts:
+
+        - Feature selection, takes care of determining which are top K most relevant features. K is defined by the \
+        parameter ``number_of_features`` in the constructor of the :class:`Explainer` class.
+        - Importance calculation, takes care of computing importance for the remaining features from the previous step \
+        and the possible target values
+        - Stats calculation, takes care of computing different counts and ratios which are particularly important to \
+        feed those files used for visualization purposes
+        - Exporter, generates all those files realated to the Explanation process which will be used for visualization \
+        purposes
+
+        Parameters
+        ----------
+        feature_cols : List[str]
+            List containing the names of those columns representing features within the dataset DataFrame.
+
+        target_cols : List[str]
+            List containing the names of those columns representing the target values within the dataset DataFrame.
+
+        num_samples_local_expl : int, default=100
+            Number of samples to be taken into account for local explainability.
+
+        num_samples_global_expl : int, default=50000
+            Number of samples to be taken into account for global explainability.
+
+            .. hint::
+               Set up this parameter in case your dataset to be explained is too big. Global explanation will only \
+               take into account a number of samples equal to this parameter.
+
+        batch_size_expl: int, default=5000
+            Batch size to be used when computing the importance.
+
+        train_stratify: bool, default=True
+            When ``train_size`` is different from 0.0, this parameter can be set to True so that the train/test split \
+            will keep the target ratio in both of the resulting dataset partitions.
+
+        """
         if num_samples_global_expl < num_samples_local_expl:
             print('ERROR: num_samples_global_expl ({}) < num_samples_local_exp ({}): Number of samples for global '
                   'explainability must be larger than the number of samples for local explainability'
