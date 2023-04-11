@@ -42,10 +42,65 @@ WHY_TARGET_SEMANTICS_TEMPLATE = 'target_semantics.csv'
 
 class Why(object):
     """
-    Main class to provide an explanation on why a given case has been assigned a label (target value), combining
-    the local reason (case-specific), the global reason (model-specific) and the target itself.
+    This class is intended to provide an explanation on why a given case has been assigned a certain label
+    (target value), combining the local reason (case-specific), the global reason (model-specific) and the target
+    itself.
 
-    Example:
+    Parameters
+    ----------
+    language : str
+        Language identifier.
+
+        .. important::
+           Spanish (*'es'*) and English (*'en'*) are the available options for version 0.0.2
+
+    local_reliability : pandas.DataFrame
+        Structure containing, for each sample, its top1 target and the reliability value associated to that target.
+
+    local_feat_val_expl : pandas.DataFrame
+        Structure containing, for each sample, as many rows as feature-value pairs, together with their calculated \
+        importance.
+
+    why_elements : pandas.DataFrame
+        Structure containing the natural language explanation of the nodes to be used.
+
+    why_target : pandas.DataFrame
+        Structure containing the natural language explanation of the nodes we want to be used per target value.
+
+    why_templates : pandas.DataFrame
+        Structure containing the templates (following \
+        `Python template module <https://docs.python.org/3.7/library/string.html#template-strings>`_) of the sentences
+        with the explanation.
+
+    n_local_features : int, default=2
+        Number of local features to take into account for the explanation.
+
+    n_global_features : int, default=2
+        Number of global features to take into account for the explanation.
+
+    min_reliability : float, default=0.0
+        Minimum reliability value to give an explanation; for the cases with an associated reliability below this \
+        value, a default sentence will be provided.
+
+    destination_path : str, default='./xaioweb_files'
+        The path where output files will be stored.
+
+    sample_ids_to_export : List[int], default=None
+        Ids of those samples for which their explanation will be displayed in an interactive environment.
+
+    verbose : int, default=0
+        Verbosity level.
+
+        .. hint::
+           Any value greater than 0 means verbosity is on.
+
+    Raises
+    ------
+    NameError
+        Exception when the chosen language is not available.
+
+    Example
+    -------
         >>> import pandas as pd
         >>> local_reliability = pd.DataFrame(
         ...    {
@@ -155,29 +210,6 @@ class Why(object):
                  n_local_features: int = 2, n_global_features: int = 2, min_reliability: float = 0.0,
                  destination_path: str = './xaioweb_files', sample_ids_to_export: Optional[List[int]] = None,
                  verbose: int = 0):
-        """
-        Constructor method for Why
-
-        :param language: Language identifier
-        :param local_reliability: Pandas DataFrame containing, for each sample, its top1 target and the reliability
-                                  value associated to that target
-        :param local_feat_val_expl: Pandas DataFrame containing, for each sample, as many rows as feature-value pairs,
-                                    together with their calculated importance
-        :param why_elements: Pandas DataFrame with the natural language explanation of the nodes we want to use
-        :param why_target: Pandas DataFrame with the natural language explanation of the nodes we want to use per target
-            value
-        :param why_templates: Pandas DataFrame with the templates (following Python Template module) of the sentences
-            with the explanation
-        :param n_local_features: Number of local features to take into account for the explanation
-        :param n_global_features: Number of global features to take into account for the explanation
-        :param min_reliability: Minimum reliability value to give an explanation; for the cases with an associated
-            reliability below this value, a default sentence will be provided
-        :param destination_path: String representing the path where output files will be stored
-        :param sample_ids_to_export: List of integers representing the ids of those samples for which their explanation
-                                     will be displayed in an interactive environment
-        :param verbose: Verbosity level, where any value greater than 0 means the message is printed
-        :raises NameError: Raises an exception when the chosen language is not available
-        """
         self.__df_why = None
         self.__language = language
         if self.__language not in self._SEP_LAST.keys():
@@ -198,12 +230,18 @@ class Why(object):
 
     @property
     def why_explanation(self):
-        """
-        Property that returns the explanation provided by the Why module for either all samples or one of the user's
-        choice.
+        """Property that returns the explanation provided by the :class:`Why` module for either all samples or one of \
+        the user's choice.
 
-        :return: pd.DataFrame, containing a column indicating the sample ID and another column containing the verbal
-                 explanation
+        .. caution::
+           If the method :meth:`fit` from the :class:`Why` class has not been executed, it will return a warning \
+           message.
+
+        Returns
+        -------
+        why_explanation : pandas.DataFrame
+            Structure containing a column indicating the sample ID and another column containing the verbal explanation
+
         """
         if self.__df_why is None:
             print(WARN_MSG.format('\"why_explanation\"'))
@@ -222,21 +260,35 @@ class Why(object):
         return (COMMA_SEP.join(i_list[:-1]) + sep_last + i_list[-1]) if len(i_list) > 1 else i_list[0]
 
     def fit(self, sample_id_column: str = ID, sample_id_value: Any = None, template_index: Union[str, int] = RAND):
-        """
-        In case the argument `sample_id_value` id None, builds a DataFrame with the sentences of the reason why each
-        case has been assigned a label; otherwise, simply gets the sentence with the reason why a given case has been
-        assigned a label
+        """Depending on the value of ``sample_id_value`` parameter, this method proceeds as follows:
 
-        :param sample_id_column: Name of the column that holds the primary key
-        :param sample_id_value: Value to select from the column specified in argument `sample_id_column`
-        :param template_index: Index of the template to be used to build the final sentence amongst the ones available
-            in `why_templates` attribute; please note that: (1) index 0 is reserved for the default template, (2) if the
-            requested index is greater than the last available one, the latter will be provided. Defaults to 'rand'
-            (random selection excluding index 0)
-        :raises ValueError: Raises an exception either when the requested key does not exist or when there are more
-            than one row for the requested key
+        - If the mentioned parameter is None then builds a DataFrame with the sentences of the reason why each \
+        case has been assigned a label.
+        - Otherwise, simply gets the sentence with the reason why a given case has been assigned a label
 
-        Example:
+        Parameters
+        ----------
+        sample_id_column : str, default=ID
+            Name of the column that holds the primary key
+
+        sample_id_value : Any, default=None
+            Value to select from the column specified in argument ``sample_id_column``
+
+        template_index : str or int, default=RAND
+            Index of the template to be used to build the final sentence amongst the ones available in \
+            ``why_templates`` attribute; please note that:
+
+            - Index 0 is reserved for the default template.
+            - If the requested index is greater than the last available one, the latter will be provided.
+
+        Raises
+        ------
+        ValueError
+            Exception either when the requested key does not exist or when there are more than one row for the \
+            requested key.
+
+        Examples
+        --------
             >>> import pandas as pd
             >>> local_reliability = pd.DataFrame(
             ...    {
@@ -437,20 +489,31 @@ class Why(object):
     @staticmethod
     def build_semantic_templates(global_feat_val_expl: pd.DataFrame, destination_template_path: Optional[str] = None,
                                  verbose: int = 0) -> List[pd.DataFrame]:
-        """
-        Builds and saves (when requested) the template files for semantic information; the resulting files must be
+        """Builds and saves (when requested) the template files for semantic information; the resulting files must be
         filled up by the user and moved to the corresponding language folder.
 
-        :param global_feat_val_expl: Pandas DataFrame containing, for each feature value and target pairs its importance
-                                     and rank. The rank represents the importance of that feature value pair for the
-                                     given target value
-        :param destination_template_path: Path to save both: the element (feature-value) template file and the target
-                                          template file in CSV format
-        :param verbose: Verbosity level, where any value greater than 0 means the message is printed
-        :return: List of two Pandas DataFrames, being the first one the element template data and the second one the
-            target template data
+        Parameters
+        ----------
+        global_feat_val_expl : pandas.DataFrame
+            Structure containing, for each feature value and target pairs, its importance and rank. The rank \
+            represents the importance of that feature value pair for the given target value
 
-        Example:
+        destination_template_path : str
+            Path to save both: the element (feature-value) template file and the target template file in CSV format
+
+        verbose : int, default=0
+            Verbosity level.
+
+            .. hint::
+               Any value greater than 0 means verbosity is on.
+
+        Returns
+        -------
+        [df_element, df_target] : List of two pandas.DataFrames
+            Being the first one the element template data and the second one the target template data
+
+        Example
+        -------
             >>> import pandas as pd
             >>> global_feat_val_expl = pd.DataFrame(
             ...    {

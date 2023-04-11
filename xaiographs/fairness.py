@@ -81,56 +81,64 @@ WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute fi
 
 class Fairness(object):
     """The Fairness class offers functionalities to explain how fair or unfair are the classifications made by a \
-    (Deep) Machine Learning model on a set of features that we consider sensitive (gender, \
-    ethnic group, religion, age, etc.).
+    (Deep) Machine Learning model on a set of features that we consider sensitive (gender, ethnic group, religion, \
+    age, etc.).
 
     These explanations are based on the 3 fairness criteria (Independence, Separation, and Sufficiency) to assess if \
-    a classification model is fair. It will be considered fair if its predictions are not influenced by any \
-    of the sensitive features.
+    a classification model is fair. It will be considered fair if its predictions are not influenced by any of the \
+    sensitive features.
 
-    Based on definitions of each fairness criteria, fairness Scores and Categories are calculated in order to \
-    explain and identify what class and what value of the sensitive feature is committing a possible \
-    injustice in classification.
+    Based on definitions of each fairness criteria, fairness Scores and Categories are calculated in order to explain \
+     and identify what class and what value of the sensitive feature is committing a possible injustice in \
+     classification.
 
-    To be able to carry out these calculations, the dataset (pandas DataFrame) with features, target (y_true) and \
-    predictions (y_predict) of the model are mandatory. From a list with sensitive features to be evaluated, \
-    the fairness calculations are made. Here is a simple example of using this class:
+    To be able to carry out these calculations, the dataset (pandas.DataFrame) with features, target (``y_true`` ) and \
+    predictions (``y_predict``) of the model are mandatory. From a list with sensitive features to be evaluated, the \
+     fairness calculations are made.
 
-    Example:
-            >>> import pandas as pd
-            >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
-            ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
-            ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-            ...                   columns=['gender', 'y_true', 'y_predict'])
-            >>> df
-              gender y_true y_predict
-            0    MAN    YES       YES
-            1    MAN    YES       YES
-            2  WOMAN     NO        NO
-            3    MAN     NO       YES
-            4  WOMAN    YES        NO
-            5    MAN    YES        NO
-            6    MAN    YES       YES
-            7  WOMAN    YES       YES
-            8    MAN     NO        NO
-            9  WOMAN     NO        NO
-            >>> from xaiographs import Fairness
-            >>> f = Fairness()
-            >>> f.fit(df=df,
-            ...       sensitive_cols=['gender'],
-            ...       target_col='y_true',
-            ...       predict_col='y_predict')
-            >>> f.fairness_global_info
-              sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
-            0            gender                   0.416667                     E                    0.375                   E                  0.216667                    D
+    Parameters
+    ----------
+    destination_path : str, default='./xaioweb_files'
+        Path where output files will be stored.
+
+    verbose : int, default=0
+        Verbosity level.
+
+        .. hint::
+           Any value greater than 0 means verbosity is on.
+
+    Example
+    -------
+        >>> import pandas as pd
+        >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
+        ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
+        ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
+        ...                   columns=['gender', 'y_true', 'y_predict'])
+        >>> df
+          gender y_true y_predict
+        0    MAN    YES       YES
+        1    MAN    YES       YES
+        2  WOMAN     NO        NO
+        3    MAN     NO       YES
+        4  WOMAN    YES        NO
+        5    MAN    YES        NO
+        6    MAN    YES       YES
+        7  WOMAN    YES       YES
+        8    MAN     NO        NO
+        9  WOMAN     NO        NO
+        >>> from xaiographs import Fairness
+        >>> f = Fairness()
+        >>> f.fit(df=df,
+        ...       sensitive_cols=['gender'],
+        ...       target_col='y_true',
+        ...       predict_col='y_predict')
+        >>> f.fairness_global_info
+          sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
+        0            gender                   0.416667                     E                    0.375                   E                  0.216667                    D
+
     """
 
     def __init__(self, destination_path: str = './xaioweb_files', verbose: int = 0):
-        """Class Constructor
-
-        :param destination_path: String, representing the path where output files will be stored
-        :param verbose:          Verbosity level, where any value greater than 0 means the message is printed
-        """
         self.__destination_path = destination_path
         self.__target_values = None
         self.__confusion_matrix = None
@@ -142,12 +150,19 @@ class Fairness(object):
 
     @property
     def target_values(self):
-        """Property that returns a list with the different values of the target of the dataset. \
-        If the main method "fit()" has not been executed, it will return a warning message.
+        """Property that returns a list with the different values of the target of the dataset.
 
-        :return: List[str], with target values
+        .. caution::
+           If the method :meth:`fit` from the :class:`Fairness` class has not been executed, it will return a warning \
+           message.
 
-        Example:
+        Returns
+        -------
+        target_values : List[str]
+            List containing the target values.
+
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
@@ -173,6 +188,7 @@ class Fairness(object):
             ...       predict_col='y_predict')
             >>> f.target_values
             array(['YES', 'NO'], dtype=object)
+
         """
         if self.__target_values is None:
             print(WARN_MSG.format('\"target_values\"'))
@@ -181,12 +197,19 @@ class Fairness(object):
 
     @property
     def confusion_matrix(self):
-        """Property that returns a confusion matrix. \
-        If the main method "fit()" has not been executed, it will return a warning message.
+        """Property that returns a confusion matrix.
 
-        :return: pd.DataFrame, with Confusion Matrix
+        .. caution::
+           If the method :meth:`fit` from the :class:`Fairness` class has not been executed, it will return a warning \
+           message.
 
-        Example:
+        Returns
+        -------
+        confusion_matrix : pandas.DataFrame
+            Structure representing the Confusion Matrix.
+
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
@@ -215,6 +238,7 @@ class Fairness(object):
             y_true
             NO          3    1
             YES         2    4
+
         """
         if self.__confusion_matrix is None:
             print(WARN_MSG.format('\"confusion_matrix\"'))
@@ -224,9 +248,15 @@ class Fairness(object):
     @property
     def correlation_matrix(self):
         """Property that returns correlation matrix (pearson correlation) between features. \
-        If the main method "fit()" has not been executed, it will return a warning message.
 
-        :return: pd.DataFrame, with correlation matrix
+        .. caution::
+           If the method :meth:`fit` from the :class:`Fairness` class has not been executed, it will return a warning \
+           message.
+
+        Returns
+        -------
+        correlation_matrix : pandas.DataFrame
+            Structure representing the correlation matrix.
 
         Example:
             >>> import pandas as pd
@@ -259,6 +289,7 @@ class Fairness(object):
             gender      NaN      1.0  0.228218
             gender2     NaN      NaN  0.228218
             color       NaN      NaN       NaN
+
         """
         if self.__correlation_matrix is None:
             print(WARN_MSG.format('\"correlation_matrix\"'))
@@ -269,12 +300,19 @@ class Fairness(object):
     def highest_correlation_features(self):
         """Property that returns the pairs of features that have a pearson correlation value above a threshold (0.9). \
         If one of these features is a sensitive features, it will be marked with a flag. In the event that there are \
-        no highly correlated features, an empty DataFrame will be returned. \
-        If the main method "fit()" has not been executed, it will return a warning message.
+        no highly correlated features, an empty DataFrame will be returned.
 
-        :return: pd.DataFrame, with highest correlation features
+        .. caution::
+           If the method :meth:`fit` from the :class:`Fairness` class has not been executed, it will return a warning \
+           message.
 
-        Example:
+        Returns
+        -------
+        highest_correlation_features :  pandas.DataFrame
+            Structure containing the most highly correlated features.
+
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'gender2': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
@@ -303,6 +341,7 @@ class Fairness(object):
             >>> f.highest_correlation_features
               feature_1 feature_2  correlation_value  is_correlation_sensible
             0   gender2    gender                1.0                     True
+
         """
         if self.__highest_correlation_features is None:
             print(WARN_MSG.format('\"highest_correlation_features\"'))
@@ -332,9 +371,13 @@ class Fairness(object):
         |E       |0.25 < score <= 1.0 |
         +--------+--------------------+
 
-        :return: pd.DataFrame, with categories based on scores
+        Returns
+        -------
+        fairness_categories_score : pandas.DataFrame
+            Structure containing the categories based on scores.
 
-        Example:
+        Example
+        -------
             >>> from xaiographs import Fairness
             >>> Fairness().fairness_categories_score
               category  limit_score_pct
@@ -344,38 +387,43 @@ class Fairness(object):
             3        C             0.15
             4        D             0.25
             5        E             1.00
+
         """
         return pd.DataFrame({'category': FAIRNESS_CATEGORIES_SCORE.keys(),
                              'limit_score_pct': FAIRNESS_CATEGORIES_SCORE.values()})
 
     @property
     def fairness_info(self):
-        """Returns a DataFrame with all information of fairness criterias. For each sensitive feature, for each \
-        value of the sensitive feature and for each value of the target, returns (for each fairness criterion) \
-        its Score, its Category and its Weight (percentage of the value of the variable and the value target). \
-        The dataframe contains the following columns:
+        """Property that returns a DataFrame with all information of fairness criteria. For each sensitive feature, \
+        for each value of the sensitive feature and for each value of the target, returns (for each fairness \
+        criterion) its Score, its Category and its Weight (percentage of the value of the variable and the value \
+        target). The DataFrame contains the following columns:
 
-            + **sensitive_feature:** sensitive feature name
-            + **sensitive_value:** value of sensitive feature
-            + **is_binary_sensitive_feature:** indicates whether or not the sensitive feature is binary \
-            (if it has two values or more)
-            + **target_label:** value of prediction (y_predict)
-            + **independence_score:** Independence criterion score
-            + **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence \
-             criterion score
-            + **independence_score_weight:** Percentage (sensitive_value & predict_label)/all_rows_dataset
-            + **separation_score:** Separation criterion score
-            + **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation \
-            criterion score
-            + **separation_score_weight:** Percentage (sensitive_value & predict_label)/all_rows_dataset
-            + **sufficiency_score:** Sufficiency criterion score
-            + **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency \
-            criterion score
-            + **sufficiency_score_weight:** Percentage (sensitive_value & target_label)/all_rows_dataset
+            - **sensitive_feature:** sensitive feature name.
+            - **sensitive_value:** value of sensitive feature.
+            - **is_binary_sensitive_feature:** indicates whether or not the sensitive feature is binary \
+            (if it has two values or more).
+            - **target_label:** value of prediction (``y_predict``).
+            - **independence_score:** Independence criterion score.
+            - **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence \
+             criterion score.
+            - **independence_score_weight:** Percentage (sensitive_value & predict_label)/all_rows_dataset
+            - **separation_score:** Separation criterion score.
+            - **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation \
+            criterion score.
+            - **separation_score_weight:** Percentage (sensitive_value & predict_label)/all_rows_dataset.
+            - **sufficiency_score:** Sufficiency criterion score.
+            - **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency \
+            criterion score.
+            - **sufficiency_score_weight:** Percentage (sensitive_value & target_label)/all_rows_dataset.
 
-        :return: pd.DataFrame, with all information of fairness criterias
+        Returns
+        -------
+        fairness_info : pandas.DataFrame
+            Structure, with all information of fairness criteria.
 
-        Example:
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
@@ -411,6 +459,7 @@ class Fairness(object):
             5             color            BLUE                        False           NO            0.416667  ...                   E                      0.1           0.750000                    E                       0.1
             6             color           GREEN                        False           NO            0.625000  ...                   E                      0.2           0.166667                    D                       0.1
             7             color             RED                        False           NO            0.000000  ...                   E                      0.2           0.666667                    E                       0.2
+
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"fairness_info\"'))
@@ -419,20 +468,24 @@ class Fairness(object):
 
     @property
     def independence_info(self):
-        """Returns a DataFrame with all information of Independence criterion. For each sensitive feature, for each \
-        value of the sensitive feature and for each value of the target, returns (for Independence criterion) \
-        its Score and its Category. The dataframe contains the following columns:
+        """Property that returns a DataFrame with all information of Independence criterion. For each sensitive \
+        feature, for each value of the sensitive feature and for each value of the target, returns (for Independence \
+        criterion) its Score and its Category. The DataFrame contains the following columns:
 
-            + **sensitive_feature:** sensitive feature name
-            + **sensitive_value:** value of sensitive feature
-            + **target_label:** value of prediction (y_predict)
-            + **independence_score:** Independence criterion score
-            + **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence \
-             criterion score
+            - **sensitive_feature:** sensitive feature name.
+            - **sensitive_value:** value of sensitive feature.
+            - **target_label:** value of prediction (``y_predict``).
+            - **independence_score:** Independence criterion score.
+            - **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence \
+             criterion score.
 
-        :return: pd.DataFrame, with all information of Independence criterion
+        Returns
+        -------
+        independence_info : pandas.DataFrame
+            Structure with all information of Independence criterion.
 
-        Example:
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
@@ -468,6 +521,7 @@ class Fairness(object):
             5             color            BLUE           NO            0.416667                     E
             6             color           GREEN           NO            0.625000                     E
             7             color             RED           NO            0.000000                    A+
+
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"independence_info\"'))
@@ -476,20 +530,24 @@ class Fairness(object):
 
     @property
     def separation_info(self):
-        """Returns a DataFrame with all information of Separation criterion. For each sensitive feature, for each \
-        value of the sensitive feature and for each value of the target, returns (for Separation criterion) \
-        its Score and its Category. The dataframe contains the following columns:
+        """Property that returns a DataFrame with all information of Separation criterion. For each sensitive feature, \
+        for each value of the sensitive feature and for each value of the target, returns (for Separation criterion) \
+        its Score and its Category. The DataFrame contains the following columns:
 
-            + **sensitive_feature:** sensitive feature name
-            + **sensitive_value:** value of sensitive feature
-            + **target_label:** value of prediction (y_predict)
-            + **separation_score:** Separation criterion score
-            + **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation \
-            criterion score
+            - **sensitive_feature:** sensitive feature name.
+            - **sensitive_value:** value of sensitive feature.
+            - **target_label:** value of prediction (``y_predict``).
+            - **separation_score:** Separation criterion score.
+            - **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation \
+            criterion score.
 
-        :return: pd.DataFrame, with all information of Separation criterion
+        Returns
+        -------
+        separation_info : pandas.DataFrame
+            Structure with all information of Separation criterion.
 
-        Example:
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
@@ -525,6 +583,7 @@ class Fairness(object):
             5             color            BLUE           NO          1.000000                   E
             6             color           GREEN           NO          0.333333                   E
             7             color             RED           NO          0.500000                   E
+
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"separation_info\"'))
@@ -533,20 +592,24 @@ class Fairness(object):
 
     @property
     def sufficiency_info(self):
-        """Returns a DataFrame with all information of Sufficiency criterion. For each sensitive feature, for each \
-        value of the sensitive feature and for each value of the target, returns (for Sufficiency criterion) \
-        its Score and its Category. The dataframe contains the following columns:
+        """Property that returns a DataFrame with all information of Sufficiency criterion. For each sensitive \
+        feature, for each value of the sensitive feature and for each value of the target, returns (for Sufficiency \
+        criterion) its Score and its Category. The DataFrame contains the following columns:
 
-            + **sensitive_feature:** sensitive feature name
-            + **sensitive_value:** value of sensitive feature
-            + **target_label:** value of prediction (y_predict)
-            + **sufficiency_score:** Sufficiency criterion score
-            + **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency \
-            criterion score
+            - **sensitive_feature:** sensitive feature name.
+            - **sensitive_value:** value of sensitive feature.
+            - **target_label:** value of prediction (``y_predict``).
+            - **sufficiency_score:** Sufficiency criterion score.
+            - **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency \
+            criterion score.
 
-        :return: pd.DataFrame, with all information of Sufficiency criterion
+        Returns
+        -------
+        sufficiency_info : pandas.DataFrame
+            Structure with all information of Sufficiency criterion.
 
-        Example:
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
@@ -582,6 +645,7 @@ class Fairness(object):
             5             color            BLUE           NO           0.750000                    E
             6             color           GREEN           NO           0.166667                    D
             7             color             RED           NO           0.666667                    E
+
         """
         if len(self.__fairness_info) == 0:
             print(WARN_MSG.format('\"sufficiency_info\"'))
@@ -590,24 +654,28 @@ class Fairness(object):
 
     @property
     def fairness_global_info(self):
-        """Returns a DataFrame with "Global Scores" (weighted aggregation of the scores for each fairness criteria) \
-        for each sensitive feature and assigns it a category *{A+, A, B, C, D, E}*. \
+        """Property that returns a DataFrame with "Global Scores" (weighted aggregation of the scores for each \
+        fairness criteria) for each sensitive feature and assigns it a category *{A+, A, B, C, D, E}*. \
         The DataFrame contains the following columns:
 
-            + **sensitive_feature:** sensitive feature name
-            + **independence_global_score:** Independence global criterion score
-            + **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence global \
-             criterion score
-            + **separation_global_score:** Separation global criterion score
-            + **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation global \
-            criterion score
-            + **sufficiency_global_score:** Sufficiency global criterion score
-            + **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency global \
-            criterion score
+            - **sensitive_feature:** sensitive feature name.
+            - **independence_global_score:** Independence global criterion score.
+            - **independence_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Independence global \
+             criterion score.
+            - **separation_global_score:** Separation global criterion score.
+            - **separation_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Separation global \
+            criterion score.
+            - **sufficiency_global_score:** Sufficiency global criterion score.
+            - **sufficiency_category:** Category *{A+, A, B, C, D, E}* assigned to the value of Sufficiency global \
+            criterion score.
 
-        :return: pd.DataFrame, with "Global Scores"
+        Returns
+        -------
+        fairness_global_info : pandas.DataFrame
+            Structure with "Global Scores".
 
-        Example:
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'color': ['BLUE', 'BLUE', 'GREEN', 'BLUE', 'BLUE', 'GREEN', 'RED', 'RED', 'RED', 'RED'],
@@ -637,6 +705,7 @@ class Fairness(object):
               sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
             0            gender                   0.416667                     E                 0.375000                   E                  0.216667                    D
             1             color                   0.291667                     E                 0.366667                   E                  0.471667                    E
+
         """
         if len(self.__global_scores_info) == 0:
             print(WARN_MSG.format('\"fairness_global_info\"'))
@@ -653,16 +722,36 @@ class Fairness(object):
         .. math::
             independence\ score = | P(Y=y∣A=a) - P(Y=y∣A=b) |
 
-        :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
-        a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
-        :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
-        of each element
-        :param sensitive_value: str, Value of the sensitive feature for the score calculation
-        :return: float, independence score value
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            Structure containing the dataset to process. The dataset must have: *N feature columns*, a *real target* \
+             column and *prediction* column.
 
-        Example:
+        sensitive_col : str
+            Name of the DataFrame (df) column with the sensitive feature.
+
+        predict_col : str
+            Name of the column of the DataFrame (df) that contains predictions of each element.
+
+        target_label : str
+            Name of the DataFrame column (df) that contains target (ground truth or ``y_real``) of each element.
+
+        sensitive_value : str
+            Value of the sensitive feature for the score calculation.
+
+        Returns
+        -------
+        independence_score : float
+            independence score value.
+
+        Raises
+        ------
+        ZeroDivisionError
+            One of the conditional probabilities equals zero, this leads to a division by zero.
+
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
@@ -688,7 +777,7 @@ class Fairness(object):
             ...                      target_label='YES',
             ...                      sensitive_value='MAN')
             0.41666666666666663
-        Detail calculations:
+        Detailed calculations:
 
         .. math::
             P(Y = 'YES' | A = 'MAN') = 4 / 6 = 0.66
@@ -696,6 +785,7 @@ class Fairness(object):
             P(Y = 'YES' | A = 'WOMAN') = 1 / 4 = 0.25
         .. math::
             independence\ score = |0.66 - 0.25| = 0.41
+
         """
         self.__check_dataset_values(df=df,
                                     sensitive_col=sensitive_col,
@@ -732,17 +822,39 @@ class Fairness(object):
         .. math::
             separation\ score = | P(Y=y∣T=t,A=a) - P(Y=y∣T=t,A=b) |
 
-        :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
-        a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
-        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
-        :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
-        of each element
-        :param sensitive_value: str, Value of the sensitive feature for the score calculation
-        :return: float, separation score value
+         Parameters
+        ----------
+        df : pandas.DataFrame
+            Structure with dataset to process. The dataset must have: *N feature columns*, a *real target* column and \
+             *prediction* column.
 
-        Example:
+        sensitive_col : str
+            Name of the DataFrame (df) column with the sensitive feature.
+
+        target_col : str
+            Name of the DataFrame (df) that contains target (ground truth or ``y_real``).
+
+        predict_col : str
+            Name of the column of the DataFrame (df) that contains predictions of each element.
+
+        target_label : str
+            Name of the DataFrame column (df) that contains target (ground truth or ``y_real``) of each element.
+
+        sensitive_value : str
+            Value of the sensitive feature for the score calculation.
+
+        Returns
+        -------
+        separation_score : float
+            Separation score value.
+
+        Raises
+        ------
+        ZeroDivisionError
+            One of the conditional probabilities equals zero, this leads to a division by zero.
+
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
@@ -769,7 +881,7 @@ class Fairness(object):
             ...                    target_label='YES',
             ...                    sensitive_value='MAN')
             0.25
-        Detail calculations:
+        Detailed calculations:
 
         .. math::
             P(Y = 'YES' | T = 'YES', A = 'MAN') = 3 / 4 = 0.75
@@ -777,6 +889,7 @@ class Fairness(object):
             P(Y = 'YES' | T = 'YES', A = 'WOMAN') = 1 / 2 = 0.5
         .. math::
             separation\ score = |0.75 - 0.5| = 0.25
+
         """
         self.__check_dataset_values(df=df,
                                     sensitive_col=sensitive_col,
@@ -815,17 +928,39 @@ class Fairness(object):
         .. math::
             sufficiency\ score = | P(T=t∣Y=y,A=a) - P(T=t∣Y=y,A=b) |
 
-        :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
-        a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
-        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
-        :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
-        of each element
-        :param sensitive_value: str, Value of the sensitive feature for the score calculation
-        :return: float, sufficiency score value
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            Structure with the dataset to process. The dataset must have: *N feature columns*, a *real target* column \
+            and *prediction* column.
 
-        Example:
+        sensitive_col : str
+            Name of the DataFrame (df) column with the sensitive feature.
+
+        target_col : str
+            Name of the DataFrame (df) that contains target (ground truth or ``y_real``).
+
+        predict_col : str
+            Name of the column of the DataFrame (df) that contains predictions of each element.
+
+        target_label : str
+            Name of the DataFrame column (df) that contains target (ground truth or ``y_real``) of each element.
+
+        sensitive_value : str
+            Value of the sensitive feature for the score calculation.
+
+        Returns
+        -------
+        sufficiency_score : float
+            Sufficiency score value.
+
+        Raises
+        ------
+        ZeroDivisionError
+            One of the conditional probabilities equals zero, this leads to a division by zero.
+
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
@@ -852,7 +987,7 @@ class Fairness(object):
             ...                     target_label='YES',
             ...                     sensitive_value='MAN')
             0.25
-        Detail calculations:
+        Detailed calculations:
 
         .. math::
             P(T = 'YES' | Y = 'YES', A = 'MAN') = 3 / 4 = 0.75
@@ -860,6 +995,7 @@ class Fairness(object):
             P(T = 'YES' | Y = 'YES', A = 'WOMAN') = 1 / 1 = 1.0
         .. math::
             sufficiency\ score = |0.75 - 1.0| = 0.25
+
         """
         self.__check_dataset_values(df=df,
                                     sensitive_col=sensitive_col,
@@ -900,18 +1036,34 @@ class Fairness(object):
         .. math::
             sufficiency\ score = | P(T=1∣Y=1,A=a) - P(T=1∣Y=1,A=b) |
 
-        :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
-        a *real target* column and *prediction* column.
-        :param sensitive_col: str, Name of the DataFrame (df) column with the sensitive feature
-        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
-        :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
-        :param target_label: str, Name of the DataFrame column (df) that contains target (ground truth or y_real) \
-        of each element
-        :param sensitive_value: str, Value of the sensitive feature for the score calculation
-        :return: Tuple[float, float, float], fairness score metrics (independence score, separation score, \
-        sufficiency score)
+        Parameters
+        ----------
+        df : pd.DataFrame
+            Structure with dataset to process. The dataset must have: *N feature columns*, a *real target* column and \
+             *prediction* column.
 
-        Example:
+        sensitive_col : str
+            Name of the DataFrame (df) column with the sensitive feature.
+
+        target_col : str
+            Name of the DataFrame (df) that contains target (ground truth or ``y_real``).
+
+        predict_col : str
+            Name of the column of the DataFrame (df) that contains predictions of each element.
+
+        target_label : str
+            Name of the DataFrame column (df) that contains target (ground truth or ``y_real``) of each element.
+
+        sensitive_value : str
+            Value of the sensitive feature for the score calculation.
+
+        Returns
+        -------
+        fairness_metrics : Tuple[float, float, float]
+            Fairness score metrics (independence score, separation score, sufficiency score).
+
+        Example
+        -------
             >>> import pandas as pd
             >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
             ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
@@ -938,8 +1090,10 @@ class Fairness(object):
             ...                    target_label='YES',
             ...                    sensitive_value='MAN')
             (0.41666666666666663, 0.25, 0.25)
-        Detail calculations of each metrics in "independece_score()", "separation_score()" and "sufficiency_score()"
-        functions.
+
+        .. seealso::
+           For detailed calculations of each metrics, please refer to :meth:`independence_score`, \
+           :meth:`separation_score` and :meth:`sufficiency_score` from the :class:`Fairness` class.
 
         """
         independence = self.independence_score(df=df,
@@ -1013,8 +1167,16 @@ class Fairness(object):
         |E       |0.25 < score <= 1.0 |
         +--------+--------------------+
 
-        :param score: float, value of the score of the Fairness criterion
-        :return: str, category assigned to the score
+        Parameters
+        ----------
+        score : float
+            Value of the score of the Fairness criterion.
+
+        Returns
+        -------
+        category : str
+            Category assigned to the score.
+
         """
         fairness_category_score = sorted(FAIRNESS_CATEGORIES_SCORE.items(),
                                          key=lambda item: item[1],
@@ -1036,12 +1198,21 @@ class Fairness(object):
         """Main function that performs all the calculations of the Fairness class. The calculated results are \
         accessible via the **property** functions of the class.
 
-        :param df: pd.DataFrame, with dataset to process. The dataset must have: *N feature columns*, \
-        a *real target* column and *prediction* column.
-        :param sensitive_cols: List[str], with the sensitive features (df column names) to evaluate the \
-        Fairness criteria
-        :param target_col: str, Name of the DataFrame (df) that contains target (ground truth or y_real)
-        :param predict_col: str, Name of the column of the data frame (df) that contains predictions of each element
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            Structure with dataset to process. The dataset must have: *N feature columns*, a *real target* column and \
+            *prediction* column.
+
+        sensitive_cols : List[str]
+            List with the sensitive features (df column names) to evaluate the Fairness criteria.
+
+        target_col : str
+            Name of the DataFrame (df) that contains target (ground truth or ``y_real``).
+
+        predict_col : str
+            Name of the column of the DataFrame (df) that contains predictions of each element.
+
         """
         self.__pre_processing(df=df, sensitive_cols=sensitive_cols, target_col=target_col, predict_col=predict_col)
         self.__in_processing(df=df, sensitive_cols=sensitive_cols, target_col=target_col, predict_col=predict_col)

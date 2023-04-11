@@ -159,10 +159,8 @@ class Exporter(object):
         Property that, for each target value, returns all the pairs feature-value ranked by their global importance.
         Prior to invoking this property, the`export()` method from the `Exporter` class must have been invoked
 
-        :return: pd.DataFrame, containing for each target value all the feature-value pairs appearing in all those
-                 samples whose top1 target is equal to the target value being processed. Feature-value pair importance
-                 is computed by averaging the importance of all the occurrences of that feature-value pair linked to
-                 the target value being processed
+        :return: pd.DataFrame, feature-value pair importance is computed by averaging the importance of all the
+                 occurrences of that feature-value pair linked to the target value being processed
         """
         if self.__global_nodes_info is not None:
             self.__global_nodes_info[NODE_IMPORTANCE] = pd.to_numeric(self.__global_nodes_info[NODE_IMPORTANCE],
