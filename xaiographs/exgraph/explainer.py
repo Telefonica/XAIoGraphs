@@ -631,7 +631,7 @@ class Explainer(object):
         -------
         top_features : pd.DataFrame
             Structure providing for each feature its rank per target calculated by the ``FeatureSelector``. \
-            Furthermore, the distance for each feature and target value, is provided along with its rank
+            Furthermore, the distance for each feature and target value, is provided along with its rank.
 
         Example
         -------
@@ -678,11 +678,11 @@ class Explainer(object):
         - Feature selection, takes care of determining which are top K most relevant features. K is defined by the \
         parameter ``number_of_features`` in the constructor of the :class:`Explainer` class.
         - Importance calculation, takes care of computing importance for the remaining features from the previous step \
-        and the possible target values
+        and the possible target values.
         - Stats calculation, takes care of computing different counts and ratios which are particularly important to \
-        feed those files used for visualization purposes
-        - Exporter, generates all those files realated to the Explanation process which will be used for visualization \
-        purposes
+        feed those files used for visualization purposes.
+        - Exporter, generates all those files related to the Explanation process which will be used for visualization \
+        purposes.
 
         Parameters
         ----------
