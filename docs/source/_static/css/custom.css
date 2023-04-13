@@ -3,5 +3,11 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 0 3em;
-    width: 80%
+    width: 55em;
+}
+
+.user-guide-tittle{
+    background-color: #e7e7e7;
+    padding: 5px 5px 5px 20px;
+    color: #0450a3;
 }

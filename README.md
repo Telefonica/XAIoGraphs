@@ -6,7 +6,7 @@
 XAIoGraphs (e**X**plainability **A**rticicial **I**ntelligence **o**ver **Graphs**) is an Explicability and Fairness 
 Python library for classification problems with tabulated and discretized data.
 
-The explainability methods in this library don't make any form of hypothesis about the data, so it does not require the AI model.
+The explainability methods in this library don't make any hypotheses about the data, so it does not require the AI model.
 Simply need data and predictions (or decisions), being able to explain AI models, rule models, and reality.
 
 <p align="center">
