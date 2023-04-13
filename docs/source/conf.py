@@ -34,6 +34,7 @@ version = __VERSION__
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
+    'autodocsumm',
     'sphinx.ext.napoleon',
     'sphinx.ext.coverage',
     'myst_parser'
@@ -69,11 +70,18 @@ html_theme = 'furo'
 html_static_path = ['_static']
 
 # Force Sphinx to show __init__'s documentation
+# autodoc_default_options = {
+#     'members': True,
+#     'member-order': 'bysource',
+#     'undoc-members': True,
+#     'exclude-members': '__weakref__',
+#     'autosummary': True
+# }
+
 autodoc_default_options = {
     'members': True,
-    'member-order': 'bysource',
-    'undoc-members': True,
-    'exclude-members': '__weakref__'
+    'autosummary': True,
+    'inherited-members': True
 }
 
 # The name of an image file (relative to this directory) to place at the top
@@ -81,3 +89,4 @@ autodoc_default_options = {
 html_logo = '../imgs/icon.png'
 html_favicon = '../imgs/favicon.ico'
 html_title = 'XAIoGraphs <br/> {}'.format(__VERSION__)
+html_css_files = ['css/custom.css']
