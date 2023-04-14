@@ -25,7 +25,7 @@ This library includes the following functionalities:
 + **Fairness Scoring**: highlights potential discriminations in classifications based on sensitive features.
 
 To understand or ***interpret the explanations*** uses ***XAIoWeb***, a ***web interface*** running in local mode (127.0.0.1:8080). 
-It displays the explanations' outcomes in three sections: Global, Local and Fairness.
+It displays the explanations outcomes in three sections: Global, Local and Fairness.
 
 ```{image} ../imgs/XAIoWeb.png
 :alt: XAIoWeb

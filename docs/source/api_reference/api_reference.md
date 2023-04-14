@@ -1,12 +1,10 @@
+(api_reference/api_reference)=
 # 💎 API Reference
 
 This is the class and function reference of XAIoGraphs.
 
-For more information, please refer to the whole [User Guide](user_guide/user_guide.md) because the class and function
-raw specifications might
-not be sufficient to provide comprehensive instructions on how to utilize them.
-
-
+For more information, please refer to the whole [User Guide](user_guide/user_guide) because the class and function 
+raw specifications might not be sufficient to provide comprehensive instructions on how to utilize them.
 
 
 ## [xaiographs.Explainer](explainer.md)
@@ -48,6 +46,5 @@ not be sufficient to provide comprehensive instructions on how to utilize them.
     xaiographs.datasets.load_titanic
     xaiographs.datasets.load_titanic_discretized
     xaiographs.datasets.load_titanic_why
-
 ```
 

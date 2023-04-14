@@ -50,60 +50,72 @@ SRC_DIR = os.path.dirname(__file__)
 
 
 def load_titanic() -> pd.DataFrame:
-    """Function returns a DataFrame with the Titanic dataset with the following Features
+    """Returns Titanic dataset with the following Features:
 
-        + **id:** unique passenger identifier
-        + **gender:** passenger gender
-        + **title:** passenger title
-        + **age:** passenger age
-        + **family_size:** number of family members the passenger was traveling with
-        + **is_alone:** flag that indicates if the passenger was traveling alone or with a family
-        + **embarked:** city of embarkation {S: Southampton, C: Cherbourg, Q: Queenstown}
-        + **class:** class in which the passenger was traveling {1: first class, 2: second class, 3: third class}
-        + **ticket_price:** price that the passenger pays for the trip
-        + **survived:** flag that indicates if it survived or not {1: Survived, 0: No Survived}
+    + **id:** unique passenger identifier
+    + **gender:** passenger gender
+    + **title:** passenger title
+    + **age:** passenger age
+    + **family_size:** number of family members the passenger was traveling with
+    + **is_alone:** flag that indicates if the passenger was traveling alone or with a family
+    + **embarked:** city of embarkation {S: Southampton, C: Cherbourg, Q: Queenstown}
+    + **class:** class in which the passenger was traveling {1: first class, 2: second class, 3: third class}
+    + **ticket_price:** price that the passenger pays for the trip
+    + **survived:** flag that indicates if it survived or not {1: Survived, 0: No Survived}
 
-        :return:pd.DataFrame, with titanic dataset
+
+    Returns
+    -------
+    load_titanic : pd.DataFrame
+        Titanic dataset
+
 
         Example:
             >>> from xaiographs.datasets import load_titanic
             >>> df_dataset = load_titanic()
             >>> df_dataset.head(5)
-               id  gender title      age  family_size  is_alone embarked  class  ticket_price  survived
+                id  gender title      age  family_size  is_alone embarked  class  ticket_price  survived
             0   0  female   Mrs  29.0000            0         1        S      1      211.3375         1
             1   1    male    Mr   0.9167            3         0        S      1      151.5500         1
             2   2  female   Mrs   2.0000            3         0        S      1      151.5500         0
             3   3    male    Mr  30.0000            3         0        S      1      151.5500         0
             4   4  female   Mrs  25.0000            3         0        S      1      151.5500         0
-        """
+
+    """
     return pd.read_csv(os.path.join(SRC_DIR, TITANIC_PATH))
 
 
 def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
-    """Function returns the titanic dataset (and other metadata) to be tested in xaiographs. The dataset contains  \
+    """Returns titanic dataset (and other metadata) to be tested in xaiographs. The dataset contains  \
     a series of discretized features, two columns (SURVIVED and NO_SURVIVED) with the probability [0,1] of  \
     classification given by an ML model and two columns 'y_true' and 'y_predict' with GroundTruth and prediction \
-    given by ML model. To test the explainability module, it returns two lists, one with name of the feature  \
-    columns and another list with the name of the columns that show the probability of classification for each class. \
-    To test the Fairness module, return the name of columns that contain the GroundTruth and ML model prediction. \
-    Information on the dataset columns with the values they can take is shown below:
+    given by ML model.  \
+    Dataset contains the following columns:
 
-        + **id:** unique passenger identifier
-        + **gender:** passenger gender - {male, female}
-        + **title:** passenger title - {Mrs, Mr, rare}
-        + **age:** passenger age discretized - {<12_years, 12_18_years, 18_30_years, 30_60_years, >60_years}
-        + **family_size:** number of family members the passenger was traveling with - {1, 2, 3-5, >5}
-        + **is_alone:** flag that indicates if the passenger was traveling alone or with a family - {0, 1}
-        + **embarked:** city of embarkation - {S: Southampton, C: Cherbourg, Q: Queenstown}
-        + **class:** class in which the passenger was traveling - {1: first class, 2: second class, 3: third class}
-        + **ticket_price:** discretized price that the passenger pays for the trip - {high, mid, low}
-        + **NO_SURVIVED:** probability [0,1] that the passenger will not survive. Calculated by ML model
-        + **SURVIVED:** probability [0,1] that the passenger will survive. Calculated by ML model
-        + **y_true:** real target - {SURVIVED, NO_SURVIVED}
-        + **y_predict:** machine learning model prediction - {SURVIVED, NO_SURVIVED}
+    + **id:** unique passenger identifier
+    + **gender:** passenger gender - {male, female}
+    + **title:** passenger title - {Mrs, Mr, rare}
+    + **age:** passenger age discretized - {<12_years, 12_18_years, 18_30_years, 30_60_years, >60_years}
+    + **family_size:** number of family members the passenger was traveling with - {1, 2, 3-5, >5}
+    + **is_alone:** flag that indicates if the passenger was traveling alone or with a family - {0, 1}
+    + **embarked:** city of embarkation - {S: Southampton, C: Cherbourg, Q: Queenstown}
+    + **class:** class in which the passenger was traveling - {1: first class, 2: second class, 3: third class}
+    + **ticket_price:** discretized price that the passenger pays for the trip - {high, mid, low}
+    + **NO_SURVIVED:** probability [0,1] that the passenger will not survive. Calculated by ML model
+    + **SURVIVED:** probability [0,1] that the passenger will survive. Calculated by ML model
+    + **y_true:** real target - {SURVIVED, NO_SURVIVED}
+    + **y_predict:** machine learning model prediction - {SURVIVED, NO_SURVIVED}
 
-    :return: Tuple: 1) pd.DataFrame, with data, 2) List[str], with features name columns, \
-    3) List[str], with target names probabilities, 4) str, with GroundTruth, 5) str, with prediction ML model
+    Returns
+    -------
+    load_titanic_discretized : Tuple[pd.DataFrame, List[str], List[str], str, str]
+        + pd.DataFrame, with data
+        + List[str], with features name columns
+        + List[str], with target names probabilities
+        + str, with GroundTruth
+        + str, with prediction ML model
+
+
 
     Example:
             >>> from xaiographs.datasets import load_titanic_discretized
@@ -132,6 +144,21 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
     """Function that returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
     calculated with the Titanic dataset.
 
+
+    Parameters
+    ----------
+    language : str
+        Language identifier {es: Spanish, en: English}. Default uses English language
+
+
+    Returns
+    -------
+    load_titanic_why : Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
+        + pd.DataFrame with the natural language explanation of global feature-value we want to use
+        + pd.DataFrame with the natural language explanation of feature-value we want to use per target
+        + pd.DataFrame with the templates of the sentences with the explanation
+
+
     Example:
             >>> from xaiographs.datasets import load_titanic_why
             >>> df_global_semantics, df_target_semantics, df_why_templates = load_titanic_why()
@@ -157,10 +184,6 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
             3  This case has been classified as $target becau...
             4  The classification of this case as $target is ...
 
-    :param language: Language identifier {es: Spanish, en: English}. Default uses English language
-    :return: Tuple: 1) pd.DataFrame with the natural language explanation of global feature-value we want to use, \
-    2) pd.DataFrame with the natural language explanation of feature-value we want to use per target, \
-    3) pd.DataFrame with the templates of the sentences with the explanation
     """
     df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
