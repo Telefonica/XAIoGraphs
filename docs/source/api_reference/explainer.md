@@ -1,12 +1,9 @@
+[< 💎 API Reference](api_reference/api_reference)
+
 # Explainer
-
-* Texto de intro
-
-
-* Listado de funciones
-
-
 
 ```{eval-rst}
 .. autoclass:: xaiographs.Explainer
 ```
+
+[< 💎 API Reference](api_reference/api_reference)

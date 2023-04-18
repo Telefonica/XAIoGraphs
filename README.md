@@ -6,21 +6,23 @@
 XAIoGraphs (e**X**plainability **A**rticicial **I**ntelligence **o**ver **Graphs**) is an Explicability and Fairness 
 Python library for classification problems with tabulated and discretized data.
 
+The explainability methods in this library don't make any hypotheses about the data, so it does not require the AI model.
+Simply need data and predictions (or decisions), being able to explain AI models, rule models, and reality.
 
 <p align="center">
-    <img src="docs/imgs/XAIoGraphs_schema2.png" width="800px" />
+    <img src="docs/imgs/XAIoGraphs_schema.png" width="800px" />
 </p>
 
-This library offers the following functionalities:
+This library includes the following functionalities:
 
-+ **Global Explainability**: explains the results of the model as a whole, selecting the variables that have the greatest impact on the model.
-+ **Local Explainability**: explains the prediction of a single element.
++ **Global Explainability**: Explains predictions or decisions as a whole, focusing on the variables that have the most influence.
++ **Local Explainability**: Explains the prediction of a single element.
 + **Reliability Measure** of local explainability.
 + **Resaon Why:** *explanation in natural language* of the classification of each element.
-+ **Fairness Scoring**: identifies possible discriminations in the classifications made on certain sensitive variables.
++ **Fairness Scoring**: highlights potential discriminations in classifications based on sensitive features.
 
-To ***interpret the explanations*** we have ***XAIoWeb***, which is a ***web interface*** executed in local mode (127.0.0.1:8080), 
-which shows the results of the explanations in 3 sections: Global, Local and Fairness:
+To understand or ***interpret the explanations*** uses ***XAIoWeb***, a ***web interface*** running in local mode (127.0.0.1:8080). 
+It displays the explanations' outcomes in three sections: Global, Local and Fairness.
 
 <p align="center">
     <img src="docs/imgs/XAIoWeb.png" width="800px" />
@@ -35,32 +37,34 @@ Create a virtual environment using conda for easier management of dependencies a
 For installing conda, follow the instructions on the [official conda website](https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
 
 ```python
-conda create --name xaio_env python=3.7
-conda activate xaio_env
+>> conda create --name xaio_env python=3.7
+>> conda activate xaio_env
 ```
 
-⚠️ We recommend using Python 3.7 or above.
+```{warning} 
+Use a python version 3.7 or higher
+```
 
 
 **From PyPI repository** - NO DISPONIBLE HASTA PUBLICACIÓN DE LA LIBRERÍA
 ```python
-pip install xaiographs
+>> pip install xaiographs
 ```
 
 **Desde el Artifactory hasta publicación** - ELIMINAR ESTA PARTE AL PUBLICAR LA LIBRERÍA
 ```python
-pip install http://artifactory.hi.inet:80/artifactory/iuc-4pl/com/telefonica/xaiographs/XAIoGraphs-0.0.1-py3-none-any.whl
+>> pip install http://artifactory.hi.inet:80/artifactory/iuc-4pl/com/telefonica/xaiographs/XAIoGraphs-0.0.1-py3-none-any.whl
 ```
 
 ## 📝 Start with your first example
 
-With the virtual environment enabled, you can run the following entry point to see a sample run:
+Use the following entry point to view an example run with the virtual environment enabled:
 
 ```python
-titanic_example
+>> titanic_example
 ```
 
-Or if you prefer, you can execute the following code to see a complete execution of all the XAIoGraphs functionalities:
+Alternatively, you may run the code below to view a full implementation of all XAIoGraphs functionalities:
 
 ```python
 from xaiographs import Explainer
@@ -97,16 +101,16 @@ f.fit(df=df_titanic[feature_cols + [y_true] + [y_predict]],
       predict_col=y_predict)
 ```
 
-After execution, a folder called "xaioweb_files" is created that contains a series of .json files to display the 
-results in the XAIoWeb graphical interface.
+Following execution, a folder called "xaioweb files" is created, which contains a set of '.json' files that will 
+be used to present the results in the XAIoWeb graphical interface.
 
 ## 📊 Launching XAIoWeb
 
-XAIoWeb is a web interface executed in local mode, which shows the results of the explanations in 3 sections: Global, Local and Fairness. 
-To run the web (with the virtual environment activated), you must execute the following entry point:
+XAIoWeb is a local web interface that displays the outcomes of the explanations in three sections: Global, Local, 
+and Fairness. To launch the web (with the virtual environment enabled), run the following entry point:
 
 ```python
-xaioweb -d xaioweb_files -o
+>> xaioweb -d xaioweb_files -o
 ```
 
 This entry point takes the following parameters:

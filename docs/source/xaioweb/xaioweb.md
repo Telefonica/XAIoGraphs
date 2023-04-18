@@ -189,3 +189,4 @@ Therefore, green values are those with values closer to 0 and therefore do not p
 ![fairness_independence](../../imgs/XaioWeb_Fairness_Independence.png)
 ![fairness_separation](../../imgs/XaioWeb_Fairness_Separation.png)
 ![fairness_sufficiency](../../imgs/XaioWeb_Fairness_Sufficiency.png)
+

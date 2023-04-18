@@ -1,0 +1,41 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 3em;
+    width: 55em;
+}
+
+.user-guide-tittle {
+    background-color: #e7e7e7;
+    padding: 5px 5px 5px 20px;
+    color: #0450a3;
+}
+
+.sig:not(.sig-inline) {
+    background: #dfdfdf;
+    border-radius: 0.1rem;
+    font-family: var(--font-stack--monospace);
+    font-size: var(--api-font-size);
+    font-weight: 700;
+    padding: 1rem 1rem 1rem 3em;
+    text-indent: -2.5em;
+    border-left: 3px solid #656565;
+    margin: 40px 1px 15px 1px;
+}
+
+.table-wrapper {
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+    width: 100%;
+    padding: 0rem;
+}
+
+table.docutils {
+    border-collapse: collapse;
+    border-radius: 0.2rem;
+    border-spacing: 0;
+    border: 0.1px solid #b3b3b3;
+    text-align: left !important;
+}
