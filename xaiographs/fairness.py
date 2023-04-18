@@ -90,7 +90,7 @@ class Fairness(object):
     Parameters
     ----------
     destination_path : str, default='./xaioweb_files'
-        Path where output files will be stored.
+        Path where output XAIoWeb files will be stored.
 
     verbose : int, default=0
         Verbosity level.
@@ -98,34 +98,6 @@ class Fairness(object):
         .. hint::
            Any value greater than 0 means verbosity is on.
 
-    Example
-    -------
-        >>> import pandas as pd
-        >>> df = pd.DataFrame({'gender': ['MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN', 'MAN', 'MAN', 'WOMAN', 'MAN', 'WOMAN'],
-        ...                    'y_true': ['YES', 'YES', 'NO', 'NO', 'YES', 'YES', 'YES', 'YES', 'NO', 'NO'],
-        ...                    'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
-        ...                   columns=['gender', 'y_true', 'y_predict'])
-        >>> df
-          gender y_true y_predict
-        0    MAN    YES       YES
-        1    MAN    YES       YES
-        2  WOMAN     NO        NO
-        3    MAN     NO       YES
-        4  WOMAN    YES        NO
-        5    MAN    YES        NO
-        6    MAN    YES       YES
-        7  WOMAN    YES       YES
-        8    MAN     NO        NO
-        9  WOMAN     NO        NO
-        >>> from xaiographs import Fairness
-        >>> f = Fairness()
-        >>> f.fit(df=df,
-        ...       sensitive_cols=['gender'],
-        ...       target_col='y_true',
-        ...       predict_col='y_predict')
-        >>> f.fairness_global_info
-          sensitive_feature  independence_global_score independence_category  separation_global_score separation_category  sufficiency_global_score sufficiency_category
-        0            gender                   0.416667                     E                    0.375                   E                  0.216667                    D
 
     """
 

@@ -90,3 +90,6 @@ html_logo = '../imgs/icon.png'
 html_favicon = '../imgs/favicon.ico'
 html_title = 'XAIoGraphs <br/> {}'.format(__VERSION__)
 html_css_files = ['css/custom.css']
+
+# LaTeX
+myst_enable_extensions = ["dollarmath", "amsmath"]

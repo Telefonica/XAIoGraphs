@@ -13,6 +13,10 @@
 
 * [Sufficiency criterion](fairness.md#sufficiency-criterion)
 
+* [Fairness Category](fairness.md#fairness-category)
+
+* [Example](fairness.md#example)
+
 
 <h3 class="user-guide-tittle"><a href="datasets.html">4. Datasets</a></h3>
 

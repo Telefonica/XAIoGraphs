@@ -54,7 +54,7 @@ class Explainer(object):
            LIDE is the available option for version 0.0.2
 
     destination_path : str, default='./xaioweb_files'
-        The path where output files will be stored.
+        The path where output XAIoWeb files will be stored.
 
     number_of_features : int
         The number of top relevant features to be selected for importance calculation.

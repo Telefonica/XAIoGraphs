@@ -85,7 +85,7 @@ class Why(object):
         value, a default sentence will be provided.
 
     destination_path : str, default='./xaioweb_files'
-        The path where output files will be stored.
+        The path where output XAIoWeb files will be stored.
 
     sample_ids_to_export : List[int], default=None
         Ids of those samples for which their explanation will be displayed in an interactive environment.
