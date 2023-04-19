@@ -82,3 +82,4 @@ This entry point takes the following parameters:
 - `-d` o `--data` [REQUIRED]: JSON files path
 - `-p` o `--port` [OPTIONAL]: Web server port. 8080 by default
 - `-o` o `--open` [OPTIONAL]: Open web in browser
+- `-f` o `--force` [OPTIONAL]: Force building the web from scratch, overwriting the existing one

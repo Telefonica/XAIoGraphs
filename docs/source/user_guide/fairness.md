@@ -46,7 +46,7 @@ We say that the random variables (Y, A) satisfy independence if the sensitive fe
 independent of the prediction 'Y'.
 
 $$
-independence = \left | P\left ( Y=c \mid A=a \right )  \right |
+independence =  P\left ( Y=c \mid A=a \right )
 $$
 
 That is, the probability of being classified by the model in each of the classes must be the same for two elements 
@@ -83,7 +83,7 @@ We say the random variables (Y, A, T) satisfy separation if the sensitive charac
 independent of the prediction 'Y' given the target value 'T'.
 
 $$
-separation = \left | P\left ( Y=c \mid T=c, A=a \right )  \right |
+separation = P\left ( Y=c \mid T=c, A=a \right ) 
 $$
 
 That is, the probability of being classified by the model in each of the classes is the same for two elements with 
@@ -119,7 +119,7 @@ We say the random variables (Y, A, T) satisfy sufficiency if the sensitive chara
 independent of the target value 'T' given the prediction 'Y'.
 
 $$
-sufficiency\ score= \left | P\left ( T=c \mid Y=c, A=a \right ) \right |
+sufficiency\ score=  P\left ( T=c \mid Y=c, A=a \right ) 
 $$
 
 That is, the probability of being classified by the model in each of the classes is the same for two elements with 
