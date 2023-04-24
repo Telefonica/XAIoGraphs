@@ -152,7 +152,11 @@ $$
 
 ## Fairness Category
 
-TODO
+In order to make the equity results easier to grasp, some categories have been established that identify the 
+features and values on which You might be committing discrimination with a color code from green to red (similar 
+to that used in other industries like Nutriscore or energy efficiency).
+
+Below are the categories and theirs score ranges:
 
 
 |Category|     Range Score      |
@@ -163,6 +167,16 @@ TODO
 |C       | 0.08 < score <= 0.15 |
 |D       | 0.15 < score <= 0.25 |
 |E       | 0.25 < score <= 1.0  |
+
+
+Each of those categories has the following color designation:
+
+```{image} ../../imgs/XaioWeb_Fairness_Legend.png
+:alt: XaioWeb Fairness Legend
+:class: bg-primary
+:width: 600px
+:align: center
+```
 
 ## Example
 

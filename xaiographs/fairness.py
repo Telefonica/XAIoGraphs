@@ -176,7 +176,7 @@ class Fairness(object):
 
     @property
     def highest_correlation_features(self):
-        """Returns the pairs of features that have a pearson correlation value above a threshold (0.9). \
+        """DataFrame with pairs of features that have a pearson correlation value above a threshold (0.9). \
         If one of these features is a sensitive features, it will be marked with a flag. In the event that there are \
         no highly correlated features, an empty DataFrame will be returned.
 
@@ -415,7 +415,7 @@ class Fairness(object):
 
     def independence_score(self, df: pd.DataFrame, sensitive_col: str, predict_col: str, target_label: str,
                            sensitive_value: str) -> float:
-        """This function returns a score for the independence criterion.
+        """Calculate independence criterion's score.
         We say that the random variables (Y, A) satisfy independence if the sensitive feature 'A'
         are statistically independent of the prediction 'Y'. We define the score as the difference (in absolute value)
         of the probabilities:
@@ -480,7 +480,7 @@ class Fairness(object):
 
     def separation_score(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
                          target_label: str, sensitive_value: str) -> float:
-        """This function returns a score for the separation criterion.
+        """Calculate separation criterion's score.
         We say the random variables (Y, A, T) satisfy separation if the sensitive characteristics 'A' are
         statistically independent of the prediction 'Y' given the target value 'T'. We define the score as the
         difference (in absolute value) of the probabilities:
@@ -549,7 +549,7 @@ class Fairness(object):
 
     def sufficiency_score(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
                           target_label: str, sensitive_value: str) -> float:
-        """This function returns a score for the sufficiency criterion.
+        """Calculate sufficiency criterion's score.
         We say the random variables (Y,A,T) satisfy sufficiency if the sensitive characteristics 'A' are
         statistically independent of the target value 'T' given the prediction 'Y'. We define the score as the
         difference (in absolute value) of the probabilities:
@@ -705,7 +705,7 @@ class Fairness(object):
 
     @staticmethod
     def get_fairness_category(score: float) -> str:
-        """Given a Score for any Fairness criteria, it assigns a Category to it. The relationship between \
+        """It assigns a Category to any Fairness criterion given a Score. The relationship between \
         Score and Category is shown in the following table:
 
         +--------+--------------------+

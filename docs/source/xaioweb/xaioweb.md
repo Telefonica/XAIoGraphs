@@ -375,8 +375,8 @@ detail. While at the bottom, we enter the specific details of each of these vari
 &nbsp;
 
 To facilitate the understanding and reading of the data, a similar color scheme has been chosen to categorize the 
-results ([Fairness Category](fairness.md#fairness-category)) for employees in other fields such as the Nutriscore 
-Index in food or energy efficiency in household appliances or construction. It is a color scale from green to red. 
+results ([Fairness Category](../user_guide/fairness.md#fairness-category)) for employees in other fields such as the 
+Nutriscore Index in food or energy efficiency in household appliances or construction. It is a color scale from green to red. 
 The green colors are those with values closer to 0, so they do not present relevant anomalies. While the reds are 
 those that have exceeded a tolerance threshold and it is important to analyze them in detail.
 

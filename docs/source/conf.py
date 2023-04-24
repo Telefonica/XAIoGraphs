@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'XAIoGraphs'
-copyright = '2022, Telefonica'
+copyright = '2023, Telefonica'
 author = 'Telefonica'
 
 # The full version, including alpha/beta/rc tags
