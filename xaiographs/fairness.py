@@ -765,10 +765,10 @@ class Fairness(object):
             List with the sensitive features (df column names) to evaluate the Fairness criteria.
 
         target_col : str
-            Name of the DataFrame (df) that contains target (ground truth or ``y_real``).
+            Column of DataFrame that contains target (ground truth or ``y_real``).
 
         predict_col : str
-            Name of the column of the DataFrame (df) that contains predictions of each element.
+            Column of DataFrame that contains predictions (``y_predict``) of each element.
 
         """
         self.__pre_processing(df=df, sensitive_cols=sensitive_cols, target_col=target_col, predict_col=predict_col)
