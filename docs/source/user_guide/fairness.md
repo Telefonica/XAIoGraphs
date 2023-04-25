@@ -7,7 +7,7 @@
 classifications*** made by a (Deep) Machine Learning model on a set of features that we consider sensitive 
 (gender, age, ethnic group, religion, etc.).
 
-These explanations are based on three fairness criterias ([Independence](#independence-criterion), 
+These explanations are based on three fairness criterion ([Independence](#independence-criterion), 
 [Separation](#separation-criterion), and [Sufficiency](#sufficiency-criterion)) that are used to determine if a 
 classification model is fair. It will be regarded fair if none of the sensitive features influence 
 its predictions.
