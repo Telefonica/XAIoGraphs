@@ -46,15 +46,11 @@ Use a python version 3.7 or higher
 ```
 
 
-**From PyPI repository** - NO DISPONIBLE HASTA PUBLICACIÓN DE LA LIBRERÍA
+**From PyPI repository** 
 ```python
 >> pip install xaiographs
 ```
 
-**Desde el Artifactory hasta publicación** - ELIMINAR ESTA PARTE AL PUBLICAR LA LIBRERÍA
-```python
->> pip install http://artifactory.hi.inet:80/artifactory/iuc-4pl/com/telefonica/xaiographs/XAIoGraphs-0.0.1-py3-none-any.whl
-```
 
 ## 📝 Start with your first example
 
