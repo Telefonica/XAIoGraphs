@@ -45,7 +45,7 @@ setup(
             "{} = xaiographs.viz.launcher:main".format(WEB_ENTRY_POINT),
             "titanic_example = xaiographs.examples.titanic_example:main",
             "body_performance_example = xaiographs.examples.body_performance_example:main",
-            "education_performace_example = xaiographs.examples.education_performace_example:main"
+            "education_performance_example = xaiographs.examples.education_performance_example:main"
         ]
     }
 )
