@@ -4,12 +4,12 @@ XAIoGraphs contains a set of examples that can be executed as `entry points`:
 
 
 
-| Example                                                            | Entry Point                  |  Rows  | Num. Feats  |      Task       |
-|:-------------------------------------------------------------------|:-----------------------------|:------:|:-----------:|:---------------:|
-| [Titanic](examples.md#titanic-example)                             | titanic_example              |  1309  |      8      |     Binary      |
-| [Compas](examples.md#compas-example)                               | compas_example               |  ????  |    ????     |     Binary      |
-| [Body Performace](examples.md#body-performance-example)            | body_performance_example     | ????   |    ????     | Multi-Class (3) | 
-| [Education Performance](examples.md#education-performace-example)  | education_performace_example |  ????  |    ????     | Multi-Class (5) |
+| Example                                                            | Entry Point                  | Rows  | Num. Feats |      Task       |
+|:-------------------------------------------------------------------|:-----------------------------|:-----:|:----------:|:---------------:|
+| [Titanic](examples.md#titanic-example)                             | titanic_example              | 1309  |     8      |     Binary      |
+| [Compas](examples.md#compas-example)                               | compas_example               | ????  |    ????    |     Binary      |
+| [Body Performace](examples.md#body-performance-example)            | body_performance_example     | 13393 |     11     | Multi-Class (3) | 
+| [Education Performance](examples.md#education-performace-example)  | education_performace_example |  145  |     29     | Multi-Class (5) |
 
 
 Use the entry points to see an example run with the XAIoGraphs library installed in a Python virtual environment 
