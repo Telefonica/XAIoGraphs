@@ -1,0 +1,261 @@
+target,feature_value,reason
+A,accomodation_Other,live in other facilities
+A,accomodation_dormitory,living in a bedroom
+A,accomodation_rental,living in rental
+A,accomodation_with family,he lives with his family
+A,age_18-21,it is below the average age
+A,age_22-25,it is in the middle age
+A,age_above 26,it is above average age
+A,father_occup_government officer,his father is an official
+A,father_occup_other,his father is in a different job
+A,father_occup_private sector employee,his father is a worker on an external account
+A,father_occup_retired,his father is retired
+A,father_occup_self-employment,his father is a self-employed
+A,impact_of_projects_negative,the impact of the projects was negative
+A,impact_of_projects_neutral,the impact of the project is neutral
+A,impact_of_projects_positive,the impact of the projects has been positive
+A,mother_ed_MSc.,my mother has a master
+A,mother_ed_Ph.D.,her mother is a doctor
+A,mother_ed_high school,my mother has the school
+A,mother_ed_primary school,her mother has primary school
+A,mother_ed_secondary school,her mother has secondary school
+A,mother_ed_university,her mother has a university degree
+A,mother_occup_government officer,her mother is an official
+A,mother_occup_housewife,her mother is a home lover
+A,mother_occup_private sector employee,her mother is a worker on an external account
+A,mother_occup_retired,her mother is retired
+A,mother_occup_self-employment,her mother is a self-employed woman
+A,partner_No,you do not have a partner
+A,partner_Yes,you have a partner
+A,preparation_midterm_company_alone,he prepared his exams alone
+A,preparation_midterm_company_not applicable,since there is no information
+A,preparation_midterm_company_with friends,preparing for exams with friends
+A,scholarship_type_25%,he has completed a quarter of the school level
+A,scholarship_type_50%,half of the school level has been completed
+A,scholarship_type_75%,completed three quarters of the school level
+A,scholarship_type_Full,you have completed your school level
+A,scholarship_type_None,he has not completed any level of education
+A,sex_female,is a woman
+A,sex_male,is a man
+A,total_salary_USD 135-200,family income is the lowest
+A,total_salary_USD 201-270,family income is below average
+A,total_salary_USD 271-340,family income is on average
+A,total_salary_USD 341-410,family income is above average
+A,total_salary_above 410,family income is the highest
+A,transport_Bus,the bus is your usual means of transportation
+A,transport_Other,use of alternative means of transport
+A,transport_Private car/taxi,a taxi or car is your usual means of transportation
+A,transport_bicycle,the bicycle is the usual means of transportation
+A,weekly_study_hours_11-20 hours,their dedication to the study (in hours) is of the lowest
+A,weekly_study_hours_6-10 hours,their dedication to study (in hours) is below the average
+A,weekly_study_hours_<5 hours,study intensity (in hours above average)
+A,weekly_study_hours_None,his dedication to the study (in hours) is of the highest
+A,weekly_study_hours_more than 20 hours,your dedication to the study (in hours) is zero
+B,accomodation_Other,live in other facilities
+B,accomodation_dormitory,living in a bedroom
+B,accomodation_rental,living in rental
+B,accomodation_with family,he lives with his family
+B,age_18-21,it is below the average age
+B,age_22-25,it is in the middle age
+B,age_above 26,it is above average age
+B,father_occup_government officer,his father is an official
+B,father_occup_other,his father is in a different job
+B,father_occup_private sector employee,his father is a worker on an external account
+B,father_occup_retired,his father is retired
+B,father_occup_self-employment,his father is a self-employed
+B,impact_of_projects_negative,the impact of the projects was negative
+B,impact_of_projects_neutral,the impact of the project is neutral
+B,impact_of_projects_positive,the impact of the projects has been positive
+B,mother_ed_MSc.,my mother has a master
+B,mother_ed_Ph.D.,her mother is a doctor
+B,mother_ed_high school,my mother has the school
+B,mother_ed_primary school,her mother has primary school
+B,mother_ed_secondary school,her mother has secondary school
+B,mother_ed_university,her mother has a university degree
+B,mother_occup_government officer,her mother is an official
+B,mother_occup_housewife,her mother is a home lover
+B,mother_occup_private sector employee,her mother is a worker on an external account
+B,mother_occup_retired,her mother is retired
+B,mother_occup_self-employment,her mother is a self-employed woman
+B,partner_No,you do not have a partner
+B,partner_Yes,you have a partner
+B,preparation_midterm_company_alone,he prepared his exams alone
+B,preparation_midterm_company_not applicable,since there is no information
+B,preparation_midterm_company_with friends,preparing for exams with friends
+B,scholarship_type_25%,he has completed a quarter of the school level
+B,scholarship_type_50%,half of the school level has been completed
+B,scholarship_type_75%,completed three quarters of the school level
+B,scholarship_type_Full,you have completed your school level
+B,scholarship_type_None,he has not completed any level of education
+B,sex_female,is a woman
+B,sex_male,is a man
+B,total_salary_USD 135-200,family income is the lowest
+B,total_salary_USD 201-270,family income is below average
+B,total_salary_USD 271-340,family income is on average
+B,total_salary_USD 341-410,family income is above average
+B,total_salary_above 410,family income is the highest
+B,transport_Bus,the bus is your usual means of transportation
+B,transport_Other,use of alternative means of transport
+B,transport_Private car/taxi,a taxi or car is your usual means of transportation
+B,transport_bicycle,the bicycle is the usual means of transportation
+B,weekly_study_hours_11-20 hours,their dedication to the study (in hours) is of the lowest
+B,weekly_study_hours_6-10 hours,their dedication to study (in hours) is below the average
+B,weekly_study_hours_<5 hours,study intensity (in hours above average)
+B,weekly_study_hours_None,his dedication to the study (in hours) is of the highest
+B,weekly_study_hours_more than 20 hours,your dedication to the study (in hours) is zero
+C,accomodation_Other,live in other facilities
+C,accomodation_dormitory,living in a bedroom
+C,accomodation_rental,living in rental
+C,accomodation_with family,he lives with his family
+C,age_18-21,it is below the average age
+C,age_22-25,it is in the middle age
+C,age_above 26,it is above average age
+C,father_occup_government officer,his father is an official
+C,father_occup_other,his father is in a different job
+C,father_occup_private sector employee,his father is a worker on an external account
+C,father_occup_retired,his father is retired
+C,father_occup_self-employment,his father is a self-employed
+C,impact_of_projects_negative,the impact of the projects was negative
+C,impact_of_projects_neutral,the impact of the project is neutral
+C,impact_of_projects_positive,the impact of the projects has been positive
+C,mother_ed_MSc.,my mother has a master
+C,mother_ed_Ph.D.,her mother is a doctor
+C,mother_ed_high school,my mother has the school
+C,mother_ed_primary school,her mother has primary school
+C,mother_ed_secondary school,her mother has secondary school
+C,mother_ed_university,her mother has a university degree
+C,mother_occup_government officer,her mother is an official
+C,mother_occup_housewife,her mother is a home lover
+C,mother_occup_private sector employee,her mother is a worker on an external account
+C,mother_occup_retired,her mother is retired
+C,mother_occup_self-employment,her mother is a self-employed woman
+C,partner_No,you do not have a partner
+C,partner_Yes,you have a partner
+C,preparation_midterm_company_alone,he prepared his exams alone
+C,preparation_midterm_company_not applicable,since there is no information
+C,preparation_midterm_company_with friends,preparing for exams with friends
+C,scholarship_type_25%,he has completed a quarter of the school level
+C,scholarship_type_50%,half of the school level has been completed
+C,scholarship_type_75%,completed three quarters of the school level
+C,scholarship_type_Full,you have completed your school level
+C,scholarship_type_None,he has not completed any level of education
+C,sex_female,is a woman
+C,sex_male,is a man
+C,total_salary_USD 135-200,family income is the lowest
+C,total_salary_USD 201-270,family income is below average
+C,total_salary_USD 271-340,family income is on average
+C,total_salary_USD 341-410,family income is above average
+C,total_salary_above 410,family income is the highest
+C,transport_Bus,the bus is your usual means of transportation
+C,transport_Other,use of alternative means of transport
+C,transport_Private car/taxi,a taxi or car is your usual means of transportation
+C,transport_bicycle,the bicycle is the usual means of transportation
+C,weekly_study_hours_11-20 hours,their dedication to the study (in hours) is of the lowest
+C,weekly_study_hours_6-10 hours,their dedication to study (in hours) is below the average
+C,weekly_study_hours_<5 hours,study intensity (in hours above average)
+C,weekly_study_hours_None,his dedication to the study (in hours) is of the highest
+C,weekly_study_hours_more than 20 hours,your dedication to the study (in hours) is zero
+D,accomodation_Other,live in other facilities
+D,accomodation_dormitory,living in a bedroom
+D,accomodation_rental,living in rental
+D,accomodation_with family,he lives with his family
+D,age_18-21,it is below the average age
+D,age_22-25,it is in the middle age
+D,age_above 26,it is above average age
+D,father_occup_government officer,his father is an official
+D,father_occup_other,his father is in a different job
+D,father_occup_private sector employee,his father is a worker on an external account
+D,father_occup_retired,his father is retired
+D,father_occup_self-employment,his father is a self-employed
+D,impact_of_projects_negative,the impact of the projects was negative
+D,impact_of_projects_neutral,the impact of the project is neutral
+D,impact_of_projects_positive,the impact of the projects has been positive
+D,mother_ed_MSc.,my mother has a master
+D,mother_ed_Ph.D.,her mother is a doctor
+D,mother_ed_high school,my mother has the school
+D,mother_ed_primary school,her mother has primary school
+D,mother_ed_secondary school,her mother has secondary school
+D,mother_ed_university,her mother has a university degree
+D,mother_occup_government officer,her mother is an official
+D,mother_occup_housewife,her mother is a home lover
+D,mother_occup_private sector employee,her mother is a worker on an external account
+D,mother_occup_retired,her mother is retired
+D,mother_occup_self-employment,her mother is a self-employed woman
+D,partner_No,you do not have a partner
+D,partner_Yes,you have a partner
+D,preparation_midterm_company_alone,he prepared his exams alone
+D,preparation_midterm_company_not applicable,since there is no information
+D,preparation_midterm_company_with friends,preparing for exams with friends
+D,scholarship_type_25%,he has completed a quarter of the school level
+D,scholarship_type_50%,half of the school level has been completed
+D,scholarship_type_75%,completed three quarters of the school level
+D,scholarship_type_Full,you have completed your school level
+D,scholarship_type_None,he has not completed any level of education
+D,sex_female,is a woman
+D,sex_male,is a man
+D,total_salary_USD 135-200,family income is the lowest
+D,total_salary_USD 201-270,family income is below average
+D,total_salary_USD 271-340,family income is on average
+D,total_salary_USD 341-410,family income is above average
+D,total_salary_above 410,family income is the highest
+D,transport_Bus,the bus is your usual means of transportation
+D,transport_Other,use of alternative means of transport
+D,transport_Private car/taxi,a taxi or car is your usual means of transportation
+D,transport_bicycle,the bicycle is the usual means of transportation
+D,weekly_study_hours_11-20 hours,their dedication to the study (in hours) is of the lowest
+D,weekly_study_hours_6-10 hours,their dedication to study (in hours) is below the average
+D,weekly_study_hours_<5 hours,study intensity (in hours above average)
+D,weekly_study_hours_None,his dedication to the study (in hours) is of the highest
+D,weekly_study_hours_more than 20 hours,your dedication to the study (in hours) is zero
+Fail,accomodation_Other,live in other facilities
+Fail,accomodation_dormitory,living in a bedroom
+Fail,accomodation_rental,living in rental
+Fail,accomodation_with family,he lives with his family
+Fail,age_18-21,it is below the average age
+Fail,age_22-25,it is in the middle age
+Fail,age_above 26,it is above average age
+Fail,father_occup_government officer,his father is an official
+Fail,father_occup_other,his father is in a different job
+Fail,father_occup_private sector employee,his father is a worker on an external account
+Fail,father_occup_retired,his father is retired
+Fail,father_occup_self-employment,his father is a self-employed
+Fail,impact_of_projects_negative,the impact of the projects was negative
+Fail,impact_of_projects_neutral,the impact of the project is neutral
+Fail,impact_of_projects_positive,the impact of the projects has been positive
+Fail,mother_ed_MSc.,my mother has a master
+Fail,mother_ed_Ph.D.,her mother is a doctor
+Fail,mother_ed_high school,my mother has the school
+Fail,mother_ed_primary school,her mother has primary school
+Fail,mother_ed_secondary school,her mother has secondary school
+Fail,mother_ed_university,her mother has a university degree
+Fail,mother_occup_government officer,her mother is an official
+Fail,mother_occup_housewife,her mother is a home lover
+Fail,mother_occup_private sector employee,her mother is a worker on an external account
+Fail,mother_occup_retired,her mother is retired
+Fail,mother_occup_self-employment,her mother is a self-employed woman
+Fail,partner_No,you do not have a partner
+Fail,partner_Yes,you have a partner
+Fail,preparation_midterm_company_alone,he prepared his exams alone
+Fail,preparation_midterm_company_not applicable,since there is no information
+Fail,preparation_midterm_company_with friends,preparing for exams with friends
+Fail,scholarship_type_25%,he has completed a quarter of the school level
+Fail,scholarship_type_50%,half of the school level has been completed
+Fail,scholarship_type_75%,completed three quarters of the school level
+Fail,scholarship_type_Full,you have completed your school level
+Fail,scholarship_type_None,he has not completed any level of education
+Fail,sex_female,is a woman
+Fail,sex_male,is a man
+Fail,total_salary_USD 135-200,family income is the lowest
+Fail,total_salary_USD 201-270,family income is below average
+Fail,total_salary_USD 271-340,family income is on average
+Fail,total_salary_USD 341-410,family income is above average
+Fail,total_salary_above 410,family income is the highest
+Fail,transport_Bus,the bus is your usual means of transportation
+Fail,transport_Other,use of alternative means of transport
+Fail,transport_Private car/taxi,a taxi or car is your usual means of transportation
+Fail,transport_bicycle,the bicycle is the usual means of transportation
+Fail,weekly_study_hours_11-20 hours,their dedication to the study (in hours) is of the lowest
+Fail,weekly_study_hours_6-10 hours,their dedication to study (in hours) is below the average
+Fail,weekly_study_hours_<5 hours,study intensity (in hours above average)
+Fail,weekly_study_hours_None,his dedication to the study (in hours) is of the highest
+Fail,weekly_study_hours_more than 20 hours,your dedication to the study (in hours) is zero

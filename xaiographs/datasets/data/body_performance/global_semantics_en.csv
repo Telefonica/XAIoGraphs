@@ -1,0 +1,35 @@
+feature_value,reason
+age_26-35,being so young
+age_36-45,being young
+age_46-55,being adult
+age_<25,being adult
+age_>55,being an older person
+body_fat_%_15-mid-30,have a body fat index below 15%
+body_fat_%_over_30,average body fat index between 15% and 30%
+body_fat_%_under_15,have a body fat index greater than 30%
+broad_jump_cm_150-mid-229,take a jump of below 150 cm
+broad_jump_cm_over_229,take a jump between 150 and 229 cm
+broad_jump_cm_under_150,take a jump length greater than 229 cm
+diastolic_68-mid-89,diastolic pressure below 68 mmhg
+diastolic_over_89,diastolic pressure between 68 and 89 mmhg
+diastolic_under_68,diastolic pressure greater than 89 mmhg
+gender_F,being a woman
+gender_M,being a man
+gripForce_26-mid-47,have a grip on the hand below 26 pounds
+gripForce_over_47,have a grip on the hand between 26 and 89 pounds
+gripForce_under_26,have a grip force in the hand greater than 47 pounds
+height_cm_160-mid-176,have a waist width below 160 cm
+height_cm_over_176,have a waist width between 160 and 176 cm
+height_cm_under_160,have a waist width greater than 176 cm
+sit-ups_counts_25-mid-54,not being able to perform more than 25 abdominals
+sit-ups_counts_over_54,being able to perform between 25 and 54 abdominals
+sit-ups_counts_under_25,being able to perform more than 54 abdominals
+sit_and_bend_forward_cm_6-mid-23,not be able to exceed 6 cm in a flexibility test
+sit_and_bend_forward_cm_over_23,have obtained a score between 6 and 23 cm in a flexibility test
+sit_and_bend_forward_cm_under_6,be able to exceed 23 cm in a flexibility test
+systolic_115-mid-144,systolic pressure below 115 mmhg
+systolic_over_144,systolic pressure between 115 and 144 mmhg
+systolic_under_115,systolic pressure greater than 144 mmhg
+weight_kg_55-mid-79,weight below 55 kg
+weight_kg_over_79,weight between 55 and 79 kg
+weight_kg_under_55,weight greater than 79 kg

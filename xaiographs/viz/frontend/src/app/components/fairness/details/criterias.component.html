@@ -50,19 +50,19 @@
             <mat-grid-tile>
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[2]]">
                     <label class="criterias_value_class">{{ criteria[headers[2]].replace('P','+') }}</label>
-                    <label>{{ criteria[headers[1]] }}</label>
+                    <label class="criterias_percent_class">{{ criteria[headers[1]] }}</label>
                 </div>
             </mat-grid-tile>
             <mat-grid-tile>
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[4]]">
                     <label class="criterias_value_class">{{ criteria[headers[4]].replace('P','+') }}</label>
-                    <label>{{ criteria[headers[3]] }}</label>
+                    <label class="criterias_percent_class">{{ criteria[headers[3]] }}</label>
                 </div>
             </mat-grid-tile>
             <mat-grid-tile>
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria[headers[6]]">
                     <label class="criterias_value_class">{{ criteria[headers[6]].replace('P','+') }}</label>
-                    <label>{{ criteria[headers[5]] }}</label>
+                    <label class="criterias_percent_class">{{ criteria[headers[5]] }}</label>
                 </div>
             </mat-grid-tile>
         </ng-container>

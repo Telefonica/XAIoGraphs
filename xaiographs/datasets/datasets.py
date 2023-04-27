@@ -24,15 +24,15 @@ import pandas as pd
 from xaiographs.common.constants import LANG_EN, LANG_ES
 
 # Titanic Dataset
-TITANIC_PATH = 'data/titanic.csv'
-TITANIC_DISCRETIZED_PATH = 'data/titanic_discretized.csv'
+TITANIC_PATH = 'data/titanic/dataset.csv'
+TITANIC_DISCRETIZED_PATH = 'data/titanic/dataset_discretized.csv'
 TITANIC_GLOBAL_SEMANTICS_PATH = {
-    LANG_EN: 'data/global_semantics_en.csv',
-    LANG_ES: 'data/global_semantics_es.csv'
+    LANG_EN: 'data/titanic/global_semantics_en.csv',
+    LANG_ES: 'data/titanic/global_semantics_es.csv'
 }
 TITANIC_TARGET_SEMANTICS_PATH = {
-    LANG_EN: 'data/target_semantics_en.csv',
-    LANG_ES: 'data/target_semantics_es.csv'
+    LANG_EN: 'data/titanic/target_semantics_en.csv',
+    LANG_ES: 'data/titanic/target_semantics_es.csv'
 }
 TITANIC_WHY_TEMPLATE_PATH = {
     LANG_EN: 'data/why_templates_en.csv',
@@ -40,6 +40,53 @@ TITANIC_WHY_TEMPLATE_PATH = {
 }
 FEATURE_COLS_TITANIC = ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
 TARGET_COLS_TITANIC = ['SURVIVED', 'NO_SURVIVED']
+
+
+# Body Performance Dataset
+BODY_PERFORMANCE_PATH = 'data/body_performance/dataset.csv'
+BODY_PERFORMANCE_DISCRETIZED_PATH = 'data/body_performance/dataset_discretized.csv'
+BODY_PERFORMANCE_GLOBAL_SEMANTICS_PATH = {
+    LANG_EN: 'data/body_performance/global_semantics_en.csv',
+    LANG_ES: 'data/body_performance/global_semantics_es.csv'
+}
+BODY_PERFORMANCE_TARGET_SEMANTICS_PATH = {
+    LANG_EN: 'data/body_performance/target_semantics_en.csv',
+    LANG_ES: 'data/body_performance/target_semantics_es.csv'
+}
+BODY_PERFORMANCE_WHY_TEMPLATE_PATH = {
+    LANG_EN: 'data/why_templates_en.csv',
+    LANG_ES: 'data/why_templates_es.csv'
+}
+FEATURE_COLS_BODY_PERFORMANCE = ['age', 'gender', 'height_cm', 'weight_kg', 'body_fat_%', 'diastolic', 'systolic',
+                                 'gripForce', 'sit_and_bend_forward_cm', 'sit-ups_counts', 'broad_jump_cm']
+TARGET_COLS_BODY_PERFORMANCE = ['high_performance', 'mid_performance', 'low_performance']
+
+
+# Education Performance Dataset
+EDUCATION_PERFORMANCE_PATH = 'data/education_performance/dataset_performance.csv'
+EDUCATION_PERFORMANCE_DISCRETIZED_PATH = 'data/education_performance/dataset_discretized.csv'
+EDUCATION_PERFORMANCE_GLOBAL_SEMANTICS_PATH = {
+    LANG_EN: 'data/education_performance/global_semantics_en.csv',
+    LANG_ES: 'data/education_performance/global_semantics_es.csv'
+}
+EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH = {
+    LANG_EN: 'data/education_performance/target_semantics_en.csv',
+    LANG_ES: 'data/education_performance/target_semantics_es.csv'
+}
+EDUCATION_PERFORMANCE_WHY_TEMPLATE_PATH = {
+    LANG_EN: 'data/why_templates_en.csv',
+    LANG_ES: 'data/why_templates_es.csv'
+}
+FEATURE_COLS_EDUCATION_PERFORMANCE = ['age', 'sex', 'graduated_h_school_type', 'scholarship_type',
+                                      'additional_work', 'activity', 'partner', 'total_salary', 'transport',
+                                      'accomodation', 'mother_ed', 'farther_ed', 'parental_status',
+                                      'mother_occup', 'father_occup', 'weekly_study_hours',
+                                      'reading_non_scientific', 'reading_scientific',
+                                      'attendance_seminars_dep', 'impact_of_projects', 'attendances_classes',
+                                      'preparation_midterm_company', 'preparation_midterm_time',
+                                      'taking_notes', 'listenning', 'discussion_improves_interest',
+                                      'flip_classrom']
+TARGET_COLS_EDUCATION_PERFORMANCE = ['A', 'B', 'C', 'D', 'Fail']
 
 # All datasets that include predictions must have a column with the prediction and another with its real target
 TARGET_COL = 'y_true'
@@ -194,5 +241,340 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
     df_why_templates = (pd.read_fwf(os.path.join(SRC_DIR, TITANIC_WHY_TEMPLATE_PATH[LANG_ES]), header=None)
                         if language == LANG_ES
                         else pd.read_fwf(os.path.join(SRC_DIR, TITANIC_WHY_TEMPLATE_PATH[LANG_EN]), header=None))
+
+    return df_global_semantic, df_target_semantic, df_why_templates
+
+
+def load_body_performance() -> pd.DataFrame:
+    """Returns body performance dataset with the following Features:
+
+    + **id:** unique person identifier
+    + **age:** person age
+    + **gender:** person gender
+    + **height_cm:** Measurement of the waist expressed in centimeters
+    + **weight_kg:** Weight of the person expressed in kilograms
+    + **body_fat_%:** Percentage of body fat
+    + **diastolic:** diastolic blood pressure (min)
+    + **systolic:** systolic blood pressure (min)
+    + **gripForce:** Measure the grip force of the hands
+    + **sit_and_bend_forward_cm:** Distance expressed in centimeters from the length of the entire back, from the heels to the crown of the head
+    + **sit-ups_counts:** Num of repetitions of raising the torso to a sitting position and returning to the original position without using the arms or lifting the feet
+    + **broad_jump_cm:** Longest jump forward jump with a running start and a single leap, expressed in centimiters
+    + **class:** Grade of performance
+
+    Returns
+    -------
+    load_body_performance : pd.DataFrame
+        Body Performance dataset
+
+
+        Example:
+            >>> from xaiographs.datasets import load_body_performance
+            >>> df_dataset = load_body_performance()
+            >>> df_dataset.head(5
+                id   age  gender  height_cm  weight_kg  body_fat_%   diastolic  systolic  gripForce  sit_and_bend_forward_cm  sit-ups_counts  broad_jump_cm  class
+            0    0  27.0       M      172.3      75.24        21.3        80.0     130.0       54.9                     18.4            60.0          217.0      C
+            1    1  25.0       M      165.0       55.8        15.7        77.0     126.0       36.4                     16.3            53.0          229.0      A
+            2    2  31.0       M      179.6       78.0        20.1        92.0     152.0       44.8                     12.0            49.0          181.0      C
+            3    3  32.0       M      174.5       71.1        18.4        76.0     147.0       41.4                     15.2            53.0          219.0      B
+            4    4  28.0       M      173.8       67.7        17.1        70.0     127.0       43.5                     27.1            45.0          217.0      B
+
+    """
+
+    return pd.read_csv(os.path.join(SRC_DIR, TITANIC_PATH))
+
+
+def load_body_performance_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
+    """Returns body performance dataset (and other metadata) to be tested in xaiographs. The dataset contains  \
+    a series of discretized features, four columns (high_performance,mid-top_performance,mid-low_performance,low_performance) \
+    with the probability [0,1] of classification given by an ML model and two columns 'y_true' and 'y_predict' \
+    with GroundTruth and prediction given by ML model.  \
+    Dataset contains the following columns:
+
+    + **id:** unique person identifier
+    + **age:** person age
+    + **gender:** person gender
+    + **height_cm:** Measurement of the waist expressed in centimeters
+    + **weight_kg:** Weight of the person expressed in kilograms
+    + **body_fat_%:** Percentage of body fat
+    + **diastolic:** diastolic blood pressure (min)
+    + **systolic:** systolic blood pressure (min)
+    + **gripForce:** Measure the grip force of the hands
+    + **sit_and_bend_forward_cm:** Distance expressed in centimeters from the length of the entire back, from the heels to the crown of the head
+    + **sit-ups_counts:** Num of repetitions of raising the torso to a sitting position and returning to the original position without using the arms or lifting the feet
+    + **broad_jump_cm:** Longest jump forward jump with a running start and a single leap, expressed in centimiters
+    + **y_true:** real target - {high_performance,mid-top_performance,mid-low_performance,low_performance}
+    + **y_predict:** machine learning model prediction - {high_performance,mid-top_performance,mid-low_performance,low_performance}
+    + **high_performance:** probability [0,1] that the person has a high level of body performance. Calculated by ML model
+    + **mid-top_performance:** probability [0,1] that the person has a mid-top level of body performance. Calculated by ML model
+    + **mid-low_performance:** probability [0,1] that the person has a mid-low level of body performance. Calculated by ML model
+    + **low_performance:** probability [0,1] that the person has a low level of body performance. Calculated by ML model
+
+    Returns
+    -------
+    load_body_performance_discretized : Tuple[pd.DataFrame, List[str], List[str], str, str]
+        + pd.DataFrame, with data
+        + List[str], with features name columns
+        + List[str], with target names probabilities
+        + str, with GroundTruth
+        + str, with prediction ML model
+
+
+
+    Example:
+            >>> from xaiographs.datasets import load_body_performance_discretized
+            >>> df_dataset, features_cols, target_cols, y_true, y_predict = load_body_performance_discretized()
+            >>> df_dataset.head(5)
+                id   age  gender  height_cm  weight_kg  body_fat_%   diastolic  systolic  gripForce  sit_and_bend_forward_cm  sit-ups_counts  broad_jump_cm                y_true            y_predict high_performance  mid-top_performance  mid-low_performance  low_performance
+            0    0  27.0       M      172.3      75.24        21.3        80.0     130.0       54.9                     18.4            60.0          217.0   mid-low_performance  mid-low_performance                0                    0                    1                0
+            1    1  25.0       M      165.0       55.8        15.7        77.0     126.0       36.4                     16.3            53.0          229.0      high_performance     high_performance                1                    0                    0                0
+            2    2  31.0       M      179.6       78.0        20.1        92.0     152.0       44.8                     12.0            49.0          181.0   mid-low_performance  mid-low_performance                0                    0                    1                0
+            3    3  32.0       M      174.5       71.1        18.4        76.0     147.0       41.4                     15.2            53.0          219.0   mid-top_performance  mid-top_performance                0                    1                    0                0
+            4    4  28.0       M      173.8       67.7        17.1        70.0     127.0       43.5                     27.1            45.0          217.0   mid-top_performance  mid-top_performance                0                    1                    0                0
+            >>> features_cols
+            ['age', 'gender', 'height_cm', 'weight_kg', 'body_fat_%', 'diastolic', 'systolic',
+            'gripForce', 'sit_and_bend_forward_cm', 'sit-ups_counts', 'broad_jump_cm']
+            >>> target_cols
+            ['high_performance', 'mid-top_performance', 'mid-low_performance', 'low_performance']
+            >>> y_true
+            'y_true'
+            >>> y_predict
+            'y_predict'
+    """
+    df_dataset = pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_DISCRETIZED_PATH))
+    return df_dataset, FEATURE_COLS_BODY_PERFORMANCE, TARGET_COLS_BODY_PERFORMANCE, TARGET_COL, PREDICT_COL
+
+
+def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Function that returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
+    calculated with the Body Performance dataset.
+
+
+    Parameters
+    ----------
+    language : str
+        Language identifier {es: Spanish, en: English}. Default uses English language
+
+
+    Returns
+    -------
+    load_body_performance_why : Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
+        + pd.DataFrame with the natural language explanation of global feature-value we want to use
+        + pd.DataFrame with the natural language explanation of feature-value we want to use per target
+        + pd.DataFrame with the templates of the sentences with the explanation
+
+
+    Example:
+            >>> from xaiographs.datasets import load_body_performance_why
+            >>> df_global_semantics, df_target_semantics, df_why_templates = load_body_performance_why()
+            >>> df_global_semantics.head(5)
+                    feature_value	reason
+                0	    age_26-35	being a child
+                1	    age_36-45	being adolescent
+                2	    age_46-55	being young
+                3	      age_<25	to be adult
+                4	      age_>55   being an older person
+            >>> df_target_semantics.head(5)
+                    target	            feature_value	reason
+                0	high_performance	    age_26-35    a child with a physical condition above average
+                1	high_performance	    age_36-45    a teenager with a higher than average physical...
+                2	high_performance	    age_46-55    a young man with a physical condition above av...
+                3	high_performance	      age_<25    an adult with a physical condition above average
+                4	high_performance	      age_>55    an older person with a higher than average phy...
+            >>> df_why_templates.head(5)
+                0	An explanation cannot be offered for this case.
+                1	For $temp_local_explain, this case has been cl...
+                2	For $temp_local_explain, this case has been cl...
+                3	This case has been classified as $target becau...
+                4	The classification of this case as $target is ...
+
+    """
+    df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_ES]))
+                          if language == LANG_ES
+                          else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_EN])))
+    df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_ES]))
+                          if language == LANG_ES
+                          else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_EN])))
+    df_why_templates = (pd.read_fwf(os.path.join(SRC_DIR, BODY_PERFORMANCE_WHY_TEMPLATE_PATH[LANG_ES]), header=None)
+                        if language == LANG_ES
+                        else pd.read_fwf(os.path.join(SRC_DIR, BODY_PERFORMANCE_WHY_TEMPLATE_PATH[LANG_EN]), header=None))
+
+    return df_global_semantic, df_target_semantic, df_why_templates
+
+
+def load_education_performance() -> pd.DataFrame:
+    """Returns body performance dataset with the following Features:
+
+    + **id:** unique studen identifier
+    + **age:** Student Age
+    + **sex:** Sex
+    + **graduated_h_school_type:** Graduated high-school type
+    + **scholarship_type:** Scholarship type
+    + **additional_work:** Additional work
+    + **activity:**Regular artistic or sports activity
+    + **partner:** Do you have a partner
+    + **total_salary:** Total salary if available
+    + **transport:** Transportation to the university
+    + **accomodation:** Accommodation type in Cyprus
+    + **mother_ed:** Mother's education
+    + **farther_ed:** Father's education
+    + **siblings:** Number of sisters/brothers
+    + **parental_status:** Parental status
+    + **mother_occup:** Mother's occupation
+    + **father_occup:** Father's occupation
+    + **weekly_study_hours:** Weekly study hours
+    + **reading_non_scientific:** Reading frequency
+    + **reading_scientific:** Reading frequency
+    + **attendance_seminars_dep:**Attendance to the seminars/conferences related to the department
+    + **impact_of_projects:** Impact of your projects/activities on your success
+    + **attendances_classes:** Attendance to classes
+    + **preparation_midterm_company:** Preparation to midterm exams 1
+    + **preparation_midterm_time:** Preparation to midterm exams 2
+    + **taking_notes:** Taking notes in classes
+    + **listenning:** Listening in classes
+    + **discussion_improves_interest:** Discussion improves my interest and success in the course
+    + **flip_classrom:** Flip-classroom
+    + **grade:** Grade of performance
+
+    Returns
+    -------
+    load_education_performance : pd.DataFrame
+        Education Performance dataset
+
+
+        Example:
+            >>> from xaiographs.datasets import load_education_performance
+            >>> df_dataset = load_education_performance()
+            >>> df_dataset.head(5
+            id  age  sex  graduated_h_school_type  scholarship_type  additional_work  activity  partner  total_salary  transport  accomodation  mother_ed  farther_ed  siblings  parental_status  mother_occup  father_occup  weekly_study_hours  reading_non_scientific  reading_scientific  attendance_seminars_dep  impact_of_projects  attendances_classes  preparation_midterm_company  preparation_midterm_time  taking_notes  listenning  discussion_improves_interest  flip_classrom  course_id  grade
+            0     2    1                        2                 3                2         2        1             3          4             2          1           2         3                1             2             3                   2                       2                   2                        1                   1                    2                            1                         1             2           2                             2              2          1   Fail
+            1     1    1                        1                 4                1         1        2             4          2             3          4           4         1                1             3             2                   3                       3                   3                        1                   3                    1                            3                         2             3           1                             3              3          1   Fail
+            2     1    1                        1                 4                2         2        2             1          1             1          3           4         4                2             2             2                   3                       2                   2                        1                   1                    1                            1                         1             2           2                             2              3          1   Fail
+            3     2    1                        2                 3                1         1        1             1          2             1          1           1         5                3             2             4                   5                       3                   3                        1                   3                    1                            2                         1             1           1                             1              1          8   Fail
+    """
+        
+    return pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_PATH))
+
+
+def load_education_performance_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
+    """Returns education performance dataset (and other metadata) to be tested in xaiographs. The dataset contains  \
+    a series of discretized features, five columns (A, B, C, D, Fail) with the probability [0,1] of classification  \
+    given by an ML model and two columns 'y_true' & 'y_predict' with GroundTruth and prediction given by ML model.  \
+    Dataset contains the following columns:
+
+    + **id:** unique studen identifier
+    + **age:** Student Age
+    + **sex:** Sex
+    + **graduated_h_school_type:** Graduated high-school type
+    + **scholarship_type:** Scholarship type
+    + **additional_work:** Additional work
+    + **activity:**Regular artistic or sports activity
+    + **partner:** Do you have a partner
+    + **total_salary:** Total salary if available
+    + **transport:** Transportation to the university
+    + **accomodation:** Accommodation type in Cyprus
+    + **mother_ed:** Mother's education
+    + **farther_ed:** Father's education
+    + **siblings:** Number of sisters/brothers
+    + **parental_status:** Parental status
+    + **mother_occup:** Mother's occupation
+    + **father_occup:** Father's occupation
+    + **weekly_study_hours:** Weekly study hours
+    + **reading_non_scientific:** Reading frequency
+    + **reading_scientific:** Reading frequency
+    + **attendance_seminars_dep:**Attendance to the seminars/conferences related to the department
+    + **impact_of_projects:** Impact of your projects/activities on your success
+    + **attendances_classes:** Attendance to classes
+    + **preparation_midterm_company:** Preparation to midterm exams 1
+    + **preparation_midterm_time:** Preparation to midterm exams 2
+    + **taking_notes:** Taking notes in classes
+    + **listenning:** Listening in classes
+    + **discussion_improves_interest:** Discussion improves my interest and success in the course
+    + **flip_classrom:** Flip-classroom
+    + **y_true:** real target - {A, B, C, D, Fail}
+    + **y_predict:** machine learning model prediction - {A, B, C, D, Fail}
+    + **A:** probability [0,1] that the person has a better educational performance. Calculated by ML model
+    + **B:** probability [0,1] that the person has a second educational performance. Calculated by ML model
+    + **C:** probability [0,1] that the person has a third educational performance. Calculated by ML model
+    + **D:** probability [0,1] that the person has a fourth educational performance. Calculated by ML model
+    + **Fail:** probability [0,1] that the person has a lower educational performance. Calculated by ML model
+
+
+    Returns
+    -------
+    load_education_performance_discretized : Tuple[pd.DataFrame, List[str], List[str], str, str]
+        + pd.DataFrame, with data
+        + List[str], with features name columns
+        + List[str], with target names probabilities
+        + str, with GroundTruth
+        + str, with prediction ML model
+
+
+
+    Example:
+            >>> from xaiographs.datasets import load_education_performance_discretized
+            >>> df_dataset, features_cols, target_cols, y_true, y_predict = load_education_performance_discretized()
+            >>> df_dataset.head(5)
+            id   age     sex  graduated_h_school_type  scholarship_type  additional_work  activity  partner  total_salary         transport  accomodation       mother_ed        farther_ed             parental_status             mother_occup             father_occup  weekly_study_hours  reading_non_scientific  reading_scientific  attendance_seminars_dep  impact_of_projects  attendances_classes  preparation_midterm_company       preparation_midterm_time  taking_notes  listenning  discussion_improves_interest    flip_classrom  y_true  y_predict  A  B  C  D  Fail
+            0  22-25  female                    state               50%               No        No      Yes   USD 271-340             Other     dormitory  primary school  secondary school                     married                housewife  private sector employee            <5 hours               Sometimes           Sometimes                      Yes            positive            sometimes                        alone       closest date to the exam     sometimes   sometimes                     sometimes           useful    Fail       Fail  0  0  0  0  1
+            1  18-21  female                  private               75%              Yes       Yes       No   USD 341-410  Private car/taxi   with family      university        university                     married       government officer       government officer          6-10 hours                   Often               Often                      Yes             neutral               always               not applicable  regularly during the semester        always       never                        always   not applicable    Fail       Fail  0  0  0  0  1
+            2  18-21  female                  private               75%               No        No       No   USD 135-200               Bus        rental     high school        university                    divorced                housewife       government officer          6-10 hours               Sometimes           Sometimes                      Yes            positive               always                        alone       closest date to the exam     sometimes   sometimes                     sometimes   not applicable    Fail       Fail  0  0  0  0  1
+            3  22-25  female                    state               50%              Yes       Yes      Yes   USD 135-200  Private car/taxi        rental  primary school    primary school  died - one of them or both                housewife          self-employment  more than 20 hours                   Often               Often                      Yes             neutral               always                 with friends       closest date to the exam         never       never                         never       not useful    Fail       Fail  0  0  0  0  1
+            4  18-21  female                    state               75%               No       Yes      Yes   USD 135-200             Other   with family     high school        university                     married  private sector employee       government officer            <5 hours                    None                None                       No            positive               always                        alone       closest date to the exam        always   sometimes                     sometimes       not useful    Fail       Fail  0  0  0  0  1
+            >>> features_cols
+            ['age', 'sex', 'graduated_h_school_type', 'scholarship_type', 'additional_work', 'activity', 'partner', 
+            'total_salary', 'transport', 'accomodation', 'mother_ed', 'farther_ed', 'parental_status', 'mother_occup', 
+            'father_occup', 'weekly_study_hours', 'reading_non_scientific', 'reading_scientific', 'attendance_seminars_dep', 
+            'impact_of_projects', 'attendances_classes', 'preparation_midterm_company', 'preparation_midterm_time', 
+            'taking_notes', 'listenning', 'discussion_improves_interest', 'flip_classrom']
+            >>> target_cols
+            ['A', 'B', 'C', 'D', 'Fail']
+            >>> y_true
+            'y_true'
+            >>> y_predict
+            'y_predict'
+    """
+    df_dataset = pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_DISCRETIZED_PATH))
+    return df_dataset, FEATURE_COLS_EDUCATION_PERFORMANCE, TARGET_COLS_EDUCATION_PERFORMANCE, TARGET_COL, PREDICT_COL
+
+
+def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Function that returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
+    calculated with the Body Performance dataset.
+
+
+    Parameters
+    ----------
+    language : str
+        Language identifier {es: Spanish, en: English}. Default uses English language
+
+
+    Returns
+    -------
+    load_education_performance_why : Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
+        + pd.DataFrame with the natural language explanation of global feature-value we want to use
+        + pd.DataFrame with the natural language explanation of feature-value we want to use per target
+        + pd.DataFrame with the templates of the sentences with the explanation
+
+
+    Example:
+            >>> from xaiographs.datasets import load_education_performance_why
+            >>> df_global_semantics, df_target_semantics, df_why_templates = load_education_performance_why()
+            >>> df_global_semantics.head(5)
+
+            >>> df_target_semantics.head(5)
+
+            >>> df_why_templates.head(5)
+
+    """
+    df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_ES]))
+                          if language == LANG_ES
+                          else pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_EN])))
+    df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_ES]))
+                          if language == LANG_ES
+                          else pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_EN])))
+    df_why_templates = (pd.read_fwf(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_WHY_TEMPLATE_PATH[LANG_ES]), header=None)
+                        if language == LANG_ES
+                        else pd.read_fwf(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_WHY_TEMPLATE_PATH[LANG_EN]), header=None))
 
     return df_global_semantic, df_target_semantic, df_why_templates

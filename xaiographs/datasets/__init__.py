@@ -19,3 +19,11 @@ see https://www.gnu.org/licenses/."""
 from .datasets import load_titanic
 from .datasets import load_titanic_discretized
 from .datasets import load_titanic_why
+
+from .datasets import load_body_performance
+from .datasets import load_body_performance_discretized
+from .datasets import load_body_performance_why
+
+from .datasets import load_education_performance
+from .datasets import load_education_performance_discretized
+from .datasets import load_education_performance_why

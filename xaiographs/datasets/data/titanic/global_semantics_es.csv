@@ -1,0 +1,21 @@
+feature_value,reason
+gender_male,ser hombre
+gender_female,ser mujer
+is_alone_1,viajar solo
+family_size_2,ser de una familia de pocos miembros
+family_size_3-5,ser familia numerosa
+family_size_>5,ser una familia de muchos miembros
+age_<12_years,ser un niño
+age_12_18_years,ser un adolescente
+age_18_30_years,ser joven
+age_30_60_years,ser adulto
+age_>60_years,ser una persona mayor
+class_1,viajar en 1ª clase
+class_2,viajar en 2ª clase
+class_3,viajar en 3ª clase
+ticket_price_High,pagar mucho por el billete
+ticket_price_Mid,pagar un billete de coste medio
+ticket_price_Low,pagar poco por el billete
+embarked_S,embarcar en un pueblo de clase baja
+embarked_Q,embarcar en un pueblo de clase media
+embarked_C,embarcar en un pueblo de clase alta

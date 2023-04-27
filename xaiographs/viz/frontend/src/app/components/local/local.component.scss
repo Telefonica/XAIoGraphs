@@ -70,6 +70,13 @@
     font-size: 24px;
 }
 
+.localDistributionSubTitle,
+.localNetGraphSubTitle {
+    @extend .fontGrey4;
+    @extend .fontBold;
+    font-size: 15px !important;
+}
+
 .localNetGraphChart,
 .localDistributionChart {
     @extend .width100;

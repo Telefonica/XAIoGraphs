@@ -1,0 +1,35 @@
+feature_value,reason
+age_<25,ser muy joven
+age_26-35,ser joven
+age_36-45,ser adulto
+age_46-55,ser adulto
+age_>55,ser una persona mayor
+body_fat_%_under_15,tener un índice de grasa corporal por debajo del 15%
+body_fat_%_15-mid-30,tener un índice de grasa corporal comprendido entre el 15 y 30%
+body_fat_%_over_30,tener un índice de grasa corporal por encima del 30%
+broad_jump_cm_under_150,realiza un salto de longitud inferior a los 150 cm
+broad_jump_cm_150-mid-229,realiza un salto de longitud entre los 150 y 229 cm
+broad_jump_cm_over_229,realiza un salto de longitud superior a los 229 cm
+diastolic_under_68,tener una presión diastólica inferior a 68 mmHg
+diastolic_68-mid-89,tener una presión diastólica comprendida entre los 68 y 89 mmHg
+diastolic_over_89,tener una presión diastólica superior a 89 mmHg
+gender_F,ser una mujer
+gender_M,ser un hombre
+gripForce_under_26,tener una fuerza de agarre en la mano inferior a 26 libras
+gripForce_26-mid-47,tener una fuerza de agarre en la mano comprendida entre las 26 y las 47 libras
+gripForce_over_47,tener una fuerza de agarre en la mano superior a 47 libras
+height_cm_under_160,tener una anchura de cintura inferior a 160 cm
+height_cm_160-mid-176,tener una anchura de cintura comprendida entre 160 y 176 cm
+height_cm_over_176,tener una anchura de cintura superior a 176 cm
+sit-ups_counts_under_25,no ser capaz de realizar más de 25 abdominales
+sit-ups_counts_25-mid-54,ser capaz de realizar entre 25 y 54 abdominales
+sit-ups_counts_over_54,ser capaz de realizar más de 54 abdominales
+sit_and_bend_forward_cm_under_6,no ser capaz de superar los 6 cm en una prueba de flexibilidad
+sit_and_bend_forward_cm_6-mid-23,haber obtenido un resultado comprendido entre 6 y 23 cm en una prueba de flexibilidad
+sit_and_bend_forward_cm_over_23,ser capaz de superar 23 cm en una prueba de flexibilidad
+systolic_under_115,tener una presión sistólica inferior a 115 mmHg
+systolic_115-mid-144,tener una presión sistólica comprendida entre 115 y 144 mmHg
+systolic_over_144,tener una presión sistólica superior a 144 mmHg
+weight_kg_under_55,tener un peso inferior a 55 Kg
+weight_kg_55-mid-79,tener un peso comprendido entre los 55 y 79 Kg
+weight_kg_over_79,tener un peso superior a 79 Kg

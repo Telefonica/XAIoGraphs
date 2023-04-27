@@ -1,0 +1,103 @@
+target,feature_value,reason
+high_performance,age_<25,es un joven con una forma física superior a la media
+high_performance,age_26-35,es un joven con una forma física superior a la media
+high_performance,age_36-45,es un adulto con una forma física superior a la media
+high_performance,age_46-55,es un adulto con una forma física superior a la media
+high_performance,age_>55,es una persona mayor con una forma física superior a la media
+high_performance,body_fat_%_under_15,tiene un bajo porcentaje de grasa corporal
+high_performance,body_fat_%_15-mid-30,tiene un porcentaje normal de grasa corporal
+high_performance,body_fat_%_over_30,tiene un alto porcentaje de grasa corporal
+high_performance,broad_jump_cm_under_150,es capaz de realizar un salto de longitud por encima de la media
+high_performance,broad_jump_cm_150-mid-229,es capaz de realizar un salto de de logitud en la media
+high_performance,broad_jump_cm_over_229,es capaz de realizar un salto de longitud por debajo de la media
+high_performance,diastolic_under_68,su presión diastólica es inferior a la media
+high_performance,diastolic_68-mid-89,su presión diastólica se encuentra en la media
+high_performance,diastolic_over_89,su presión diastólica es superior a la media
+high_performance,gender_F,es una mujer
+high_performance,gender_M,es un hombre
+high_performance,gripForce_under_26,su fuerza de agarre es superior a la media
+high_performance,gripForce_26-mid-47,su fuerza de agarre se encuentra en la media
+high_performance,gripForce_over_47,su fuerza de agarre es inferior a la media
+high_performance,height_cm_under_160,su anchura de cintura es superior a la media
+high_performance,height_cm_160-mid-176,su anchura de cintura se encuentra en la media
+high_performance,height_cm_over_176,su anchura de cintura es inferior a la media
+high_performance,sit-ups_counts_under_25,su conteo de abdominales es inferior a la media
+high_performance,sit-ups_counts_25-mid-54,su conteo de abdominales se encuentra en la media
+high_performance,sit-ups_counts_over_54,su conteo de abdominales es superior a la media
+high_performance,sit_and_bend_forward_cm_under_6,su nivel de flexibilidad es inferior a la media
+high_performance,sit_and_bend_forward_cm_6-mid-23,su nivel de flexibilidad se encuentra en la media
+high_performance,sit_and_bend_forward_cm_over_23,su nivel de flexibilidad es superior a la media
+high_performance,systolic_under_115,su presión sistólica es inferior a la media
+high_performance,systolic_115-mid-144,su presión sistólica se encuentra en la media
+high_performance,systolic_over_144,su presión sistólica es superior a la media
+high_performance,weight_kg_under_55,presenta un peso inferior a la media
+high_performance,weight_kg_55-mid-79,presenta un peso en la media
+high_performance,weight_kg_over_79,presenta un peso superior a la media
+low_performance,age_<25,es un joven con una forma física inferior a la media
+low_performance,age_26-35,es un joven con una forma física inferior a la media
+low_performance,age_36-45,es un adulto con una forma física inferior a la media
+low_performance,age_46-55,es un adulto con una forma física inferior a la media
+low_performance,age_>55,es una persona mayor con una forma física inferior a la media
+low_performance,body_fat_%_under_15,tiene un bajo porcentaje de grasa corporal
+low_performance,body_fat_%_15-mid-30,tiene un porcentaje normal de grasa corporal
+low_performance,body_fat_%_over_30,tiene un alto porcentaje de grasa corporal
+low_performance,broad_jump_cm_under_150,es capaz de realizar un salto de longitud por encima de la media
+low_performance,broad_jump_cm_150-mid-229,es capaz de realizar un salto de de logitud en la media
+low_performance,broad_jump_cm_over_229,es capaz de realizar un salto de longitud por debajo de la media
+low_performance,diastolic_under_68,su presión diastólica es inferior a la media
+low_performance,diastolic_68-mid-89,su presión diastólica se encuentra en la media
+low_performance,diastolic_over_89,su presión diastólica es superior a la media
+low_performance,gender_F,es una mujer
+low_performance,gender_M,es un hombre
+low_performance,gripForce_under_26,su fuerza de agarre es superior a la media
+low_performance,gripForce_26-mid-47,su fuerza de agarre se encuentra en la media
+low_performance,gripForce_over_47,su fuerza de agarre es inferior a la media
+low_performance,height_cm_under_160,su anchura de cintura es superior a la media
+low_performance,height_cm_160-mid-176,su anchura de cintura se encuentra en la media
+low_performance,height_cm_over_176,su anchura de cintura es inferior a la media
+low_performance,sit-ups_counts_under_25,su conteo de abdominales es inferior a la media
+low_performance,sit-ups_counts_25-mid-54,su conteo de abdominales se encuentra en la media
+low_performance,sit-ups_counts_over_54,su conteo de abdominales es superior a la media
+low_performance,sit_and_bend_forward_cm_under_6,su nivel de flexibilidad es inferior a la media
+low_performance,sit_and_bend_forward_cm_6-mid-23,su nivel de flexibilidad se encuentra en la media
+low_performance,sit_and_bend_forward_cm_over_23,su nivel de flexibilidad es superior a la media
+low_performance,systolic_under_115,su presión sistólica es inferior a la media
+low_performance,systolic_115-mid-144,su presión sistólica se encuentra en la media
+low_performance,systolic_over_144,su presión sistólica es superior a la media
+low_performance,weight_kg_under_55,presenta un peso inferior a la media
+low_performance,weight_kg_55-mid-79,presenta un peso en la media
+low_performance,weight_kg_over_79,presenta un peso superior a la media
+mid_performance,age_<25,es un joven con una forma física dentro de la media
+mid_performance,age_26-35,es un joven con una forma física dentro de la media
+mid_performance,age_36-45,es un adulto con una forma física dentro de la media
+mid_performance,age_46-55,es un adulto con una forma física dentro de la media
+mid_performance,age_>55,es una persona mayor con una forma física dentro de la media
+mid_performance,body_fat_%_under_15,tiene un bajo porcentaje de grasa corporal
+mid_performance,body_fat_%_15-mid-30,tiene un porcentaje normal de grasa corporal
+mid_performance,body_fat_%_over_30,tiene un alto porcentaje de grasa corporal
+mid_performance,broad_jump_cm_under_150,es capaz de realizar un salto de longitud por encima de la media
+mid_performance,broad_jump_cm_150-mid-229,es capaz de realizar un salto de de logitud en la media
+mid_performance,broad_jump_cm_over_229,es capaz de realizar un salto de longitud por debajo de la media
+mid_performance,diastolic_under_68,su presión diastólica es inferior a la media
+mid_performance,diastolic_68-mid-89,su presión diastólica se encuentra en la media
+mid_performance,diastolic_over_89,su presión diastólica es superior a la media
+mid_performance,gender_F,es una mujer
+mid_performance,gender_M,es un hombre
+mid_performance,gripForce_under_26,su fuerza de agarre es superior a la media
+mid_performance,gripForce_26-mid-47,su fuerza de agarre se encuentra en la media
+mid_performance,gripForce_over_47,su fuerza de agarre es inferior a la media
+mid_performance,height_cm_under_160,su anchura de cintura es superior a la media
+mid_performance,height_cm_160-mid-176,su anchura de cintura se encuentra en la media
+mid_performance,height_cm_over_176,su anchura de cintura es inferior a la media
+mid_performance,sit-ups_counts_under_25,su conteo de abdominales es inferior a la media
+mid_performance,sit-ups_counts_25-mid-54,su conteo de abdominales se encuentra en la media
+mid_performance,sit-ups_counts_over_54,su conteo de abdominales es superior a la media
+mid_performance,sit_and_bend_forward_cm_under_6,su nivel de flexibilidad es inferior a la media
+mid_performance,sit_and_bend_forward_cm_6-mid-23,su nivel de flexibilidad se encuentra en la media
+mid_performance,sit_and_bend_forward_cm_over_23,su nivel de flexibilidad es superior a la media
+mid_performance,systolic_under_115,su presión sistólica es inferior a la media
+mid_performance,systolic_115-mid-144,su presión sistólica se encuentra en la media
+mid_performance,systolic_over_144,su presión sistólica es superior a la media
+mid_performance,weight_kg_under_55,presenta un peso inferior a la media
+mid_performance,weight_kg_55-mid-79,presenta un peso en la media
+mid_performance,weight_kg_over_79,presenta un peso superior a la media

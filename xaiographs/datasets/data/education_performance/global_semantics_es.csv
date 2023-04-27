@@ -1,0 +1,53 @@
+feature_value,reason
+accomodation_Other,haber estado en otro tipo de alojamiento
+accomodation_dormitory,haber estado alojado en un dormitorio
+accomodation_rental,haber estado en un alojamiento alquilado
+accomodation_with family,haber estado en un alojamiento familiar
+age_18-21,tener menos de 21 años
+age_22-25,tener entre 22 y 25 años
+age_above 26,tener más de 26 años
+father_occup_government officer,tener un padre trabajando como funcionario
+father_occup_other,tener un padre con otro tipo de actividad laboral
+father_occup_private sector employee, tener un padre trabajando en el sector privado
+father_occup_retired,tener un padre retirado de la vida laboral
+father_occup_self-employment,tener un padre con negocio propio
+impact_of_projects_negative,las actividades extraescolares realizadas han supuesto un impacto negativo
+impact_of_projects_neutral,las actividades extraescolares realizadas no han supuesto impacto alguno
+impact_of_projects_positive,las actividades extraescolares realizadas han supuesto un impacto positivo
+mother_ed_MSc.,tener una madre con un master
+mother_ed_Ph.D.,tener una madre con un doctorado
+mother_ed_high school,tener una madre que ha superado el institudo
+mother_ed_primary school,tener una madre que ha superado la escuela primaria
+mother_ed_secondary school,tener una madre que ha superado la escuela secundaria
+mother_ed_university,tener una madre con estudios universitarios
+mother_occup_government officer,tener una madre trabajando como funcionaria
+mother_occup_housewife,tener una madre que trabaja como ama de casa
+mother_occup_private sector employee,tener una madre trabajando en el sector privado
+mother_occup_retired,tener una madre retirada de la vida laboral
+mother_occup_self-employment,tener una madre con negocio propio
+partner_No,no disponer de un partner
+partner_Yes,disponer de un partner
+preparation_midterm_company_alone,preparar los exámenes semestrales en solitario
+preparation_midterm_company_not applicable,no aplica la preparación de los exámenes semestrales
+preparation_midterm_company_with friends,preparar los exámenes semestrales con amigos
+scholarship_type_25%,tener un 25% de tipo de escolarización
+scholarship_type_50%,tener un 50% de tipo de escolariación
+scholarship_type_75%,tener un 75% de tipo de escolariación
+scholarship_type_Full,tener un 100% de tipo de escolariación
+scholarship_type_None,tener un 0% de tipo de escolariación
+sex_female,ser una mujer
+sex_male,ser un hombre
+total_salary_USD 135-200,tener un salario comprendido entre 135k y 200k USD
+total_salary_USD 201-270,tener un salario comprendido entre 201k y 270k USD
+total_salary_USD 271-340,tener un salario comprendido entre 271k y 340k USD
+total_salary_USD 341-410,tener un salario comprendido entre 341k y 410k USD
+total_salary_above 410,tener un salario superior a 410k USD
+transport_Bus,realizar el transporte en autobus
+transport_Other,realizar el transporte en otro medio
+transport_Private car/taxi,realizar el transporte en vehículo privado o taxi
+transport_bicycle,realizar el transporte en bicicleta
+weekly_study_hours_11-20 hours,estudiar entre 11 y 20 horas semanales
+weekly_study_hours_6-10 hours,estudiar entre 6 y 10 horas semanales
+weekly_study_hours_<5 hours,estudiar menos de 5 horas semanales
+weekly_study_hours_None,no dedicar tiempo al estudio semanal
+weekly_study_hours_more than 20 hours,estudiar más de 20 horas semanales
