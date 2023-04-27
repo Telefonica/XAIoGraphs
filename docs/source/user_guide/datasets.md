@@ -4,3 +4,12 @@
 # Datasets
 
 ## Titanic
+
+
+## Compas
+
+
+## Body Performace
+
+
+## Education Performace

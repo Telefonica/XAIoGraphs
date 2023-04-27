@@ -8,16 +8,14 @@
 <h3 class="user-guide-tittle"><a href="fairness.html">3. Fairness</a></h3>
 
 * [Independence criterion](fairness.md#independence-criterion)
-
 * [Separation criterion](fairness.md#separation-criterion)
-
 * [Sufficiency criterion](fairness.md#sufficiency-criterion)
-
 * [Fairness Category](fairness.md#fairness-category)
-
 * [Example](fairness.md#example)
-
 
 <h3 class="user-guide-tittle"><a href="datasets.html">4. Datasets</a></h3>
 
 * [Titanic](datasets.md#titanic)
+* [Compas](datasets.md#compas)
+* [Body Performace](datasets.md#body-performace)
+* [Education Performance](datasets.md#education-performance)

@@ -275,7 +275,7 @@ each feature value:
 ```python
 >>> f.fairness_info
   sensitive_feature sensitive_value  is_binary_sensitive_feature target_label independence_score independence_category  independence_score_weight separation_score separation_category  separation_score_weight sufficiency_score sufficiency_category  sufficiency_score_weight
-0            gender     MAN | WOMAN                         True          YES           0.416667                     E                        0.5             0.25                   D                      0.5          0.250000                    D                       0.6
+0            gender     MAN | WOMAN                         True          YES           0.416667                     E                        0.5             0.25                   D                      0.5              0.25                    D                       0.6
 1            gender     MAN | WOMAN                         True           NO           0.416667                     E                        0.5             0.50                   E                      0.5          0.166667                    D                       0.4
 ```
 
@@ -283,21 +283,21 @@ each feature value:
 
 We have included a table to help you comprehend these recent results:
 
-|Column Name                 | elem 0        | elem 1       |
-|----------------------------|---------------|--------------|
-|sensitive_feature           | gender        | gender       |
-|sensitive_value             | MAN - WOMAN   | MAN - WOMAN  |
-|is_binary_sensitive_feature | True          | True         |
-|target_label                | YES           | NO           |
-|independence_score          | 0.416667      | 0.416667     |
-|independence_category       | E             | E            |
-|independence_score_weight   | 0.5           | 0.5          |
-|separation_score            | 0.25          | 0.50         |
-|separation_category         | D             | E            |
-|separation_score_weight     | 0.5           | 0.5          |
-|sufficiency_score           | 0.250000      | 0.166667     |
-|sufficiency_category        | D             | D            |
-|sufficiency_score_weight    | 0.6           | 0.4          |
+|Column Name                 | elem 0      | elem 1       |
+|----------------------------|-------------|--------------|
+|sensitive_feature           | gender      | gender       |
+|sensitive_value             | MAN - WOMAN | MAN - WOMAN  |
+|is_binary_sensitive_feature | True        | True         |
+|target_label                | YES         | NO           |
+|independence_score          | 0.416667    | 0.416667     |
+|independence_category       | E           | E            |
+|independence_score_weight   | 0.5         | 0.5          |
+|separation_score            | 0.25        | 0.50         |
+|separation_category         | D           | E            |
+|separation_score_weight     | 0.5         | 0.5          |
+|sufficiency_score           | 0.25        | 0.166667     |
+|sufficiency_category        | D           | D            |
+|sufficiency_score_weight    | 0.6         | 0.4          |
 
 
 The Fairness class also offers complementary information such as:
