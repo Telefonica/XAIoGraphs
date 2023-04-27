@@ -1,0 +1,261 @@
+target,feature_value,reason
+A,accomodation_Other,vive en otras instalaciones
+A,accomodation_dormitory,vive en un dormitorio
+A,accomodation_rental,vive de alquiler
+A,accomodation_with family,vive con su familia
+A,age_18-21,se encuentra por debajo de la media de edad
+A,age_22-25,se encuentra en la media de edad
+A,age_above 26,se encuentra por encima de la media de edad
+A,father_occup_government officer,su padre es funcionario
+A,father_occup_other,su padre se encuentra en otra situación laboral
+A,father_occup_private sector employee,su padre es trabajador por cuenta ajena
+A,father_occup_retired,su padre está jubilado
+A,father_occup_self-employment,su padre es trabajador por cuenta propia
+A,impact_of_projects_negative,el impacto de los proyectos ha sido negativo
+A,impact_of_projects_neutral,el impacto de los proyectos ha sido neutro
+A,impact_of_projects_positive,el impacto de los proyectos ha sido positivo
+A,mother_ed_MSc.,su madre posee un master
+A,mother_ed_Ph.D.,su madre es doctora
+A,mother_ed_high school,su madre tiene el instituto
+A,mother_ed_primary school,su madre tiene la escuela primaria
+A,mother_ed_secondary school,su madre tiene la escuela secundaria
+A,mother_ed_university,su madre tiene un título universitario
+A,mother_occup_government officer,su madre es funcionaria
+A,mother_occup_housewife,su madre es ama de casa
+A,mother_occup_private sector employee,su madre es trabajadora por cuenta ajena
+A,mother_occup_retired,su madre está jubilada
+A,mother_occup_self-employment,su madre es trabajadora por cuenta propia
+A,partner_No,no dispone de Partner
+A,partner_Yes,dispone de Partner
+A,preparation_midterm_company_alone,ha preparado los exámenes en solitario
+A,preparation_midterm_company_not applicable,ya que no se dispone de información
+A,preparation_midterm_company_with friends,ha preparado los exámenes con amigos
+A,scholarship_type_25%,ha completado un cuarto del nivel de escolarización
+A,scholarship_type_50%,ha completado la mitad del nivel de escolarización
+A,scholarship_type_75%,ha completado tres cuartos del nivel de escolarización
+A,scholarship_type_Full,ha completado su nivel de escolarización
+A,scholarship_type_None,no ha completado ningún nivel de escolarización
+A,sex_female,es una mujer
+A,sex_male,es un hombre
+A,total_salary_USD 135-200,el nivel de ingresos familiar es el más bajo
+A,total_salary_USD 201-270,el nivel de ingresos familiar se encuentra por debajo de la media
+A,total_salary_USD 271-340,el nivel de ingresos familiar se encuentra en la media
+A,total_salary_USD 341-410,el nivel de ingresos familiar se encuentra por encima de la media
+A,total_salary_above 410,el nivel de ingresos familiar es el más alto
+A,transport_Bus,el autobus es su medio de transporte habitual
+A,transport_Other,utiliza otros medios de transporte alternativos
+A,transport_Private car/taxi,el coche privado o el taxi son sus medios de transporte habituales
+A,transport_bicycle,la bicicleta es su medio de transporte habitual
+A,weekly_study_hours_<5 hours,su dedicación al estudio (en horas) es de los más bajos
+A,weekly_study_hours_6-10 hours,su dedicación al estudio (en horas) está por debajo de la media
+A,weekly_study_hours_11-20 hours,su dedicación al estudio (en horas está por encima de la media
+A,weekly_study_hours_more than 20 hours,su dedicación al estudio (en horas) es de los más altos
+A,weekly_study_hours_None,su dedicación al estudio (en horas) es nulo
+B,accomodation_Other,vive en otras instalaciones
+B,accomodation_dormitory,vive en un dormitorio
+B,accomodation_rental,vive de alquiler
+B,accomodation_with family,vive con su familia
+B,age_18-21,se encuentra por debajo de la media de edad
+B,age_22-25,se encuentra en la media de edad
+B,age_above 26,se encuentra por encima de la media de edad
+B,father_occup_government officer,su padre es funcionario
+B,father_occup_other,su padre se encuentra en otra situación laboral
+B,father_occup_private sector employee,su padre es trabajador por cuenta ajena
+B,father_occup_retired,su padre está jubilado
+B,father_occup_self-employment,su padre es trabajador por cuenta propia
+B,impact_of_projects_negative,el impacto de los proyectos ha sido negativo
+B,impact_of_projects_neutral,el impacto de los proyectos ha sido neutro
+B,impact_of_projects_positive,el impacto de los proyectos ha sido positivo
+B,mother_ed_MSc.,su madre posee un master
+B,mother_ed_Ph.D.,su madre es doctora
+B,mother_ed_high school,su madre tiene el instituto
+B,mother_ed_primary school,su madre tiene la escuela primaria
+B,mother_ed_secondary school,su madre tiene la escuela secundaria
+B,mother_ed_university,su madre tiene un título universitario
+B,mother_occup_government officer,su madre es funcionaria
+B,mother_occup_housewife,su madre es ama de casa
+B,mother_occup_private sector employee,su madre es trabajadora por cuenta ajena
+B,mother_occup_retired,su madre está jubilada
+B,mother_occup_self-employment,su madre es trabajadora por cuenta propia
+B,partner_No,no dispone de Partner
+B,partner_Yes,dispone de Partner
+B,preparation_midterm_company_alone,ha preparado los exámenes en solitario
+B,preparation_midterm_company_not applicable,ya que no se dispone de información
+B,preparation_midterm_company_with friends,ha preparado los exámenes con amigos
+B,scholarship_type_25%,ha completado un cuarto del nivel de escolarización
+B,scholarship_type_50%,ha completado la mitad del nivel de escolarización
+B,scholarship_type_75%,ha completado tres cuartos del nivel de escolarización
+B,scholarship_type_Full,ha completado su nivel de escolarización
+B,scholarship_type_None,no ha completado ningún nivel de escolarización
+B,sex_female,es una mujer
+B,sex_male,es un hombre
+B,total_salary_USD 135-200,el nivel de ingresos familiar es el más bajo
+B,total_salary_USD 201-270,el nivel de ingresos familiar se encuentra por debajo de la media
+B,total_salary_USD 271-340,el nivel de ingresos familiar se encuentra en la media
+B,total_salary_USD 341-410,el nivel de ingresos familiar se encuentra por encima de la media
+B,total_salary_above 410,el nivel de ingresos familiar es el más alto
+B,transport_Bus,el autobus es su medio de transporte habitual
+B,transport_Other,utiliza otros medios de transporte alternativos
+B,transport_Private car/taxi,el coche privado o el taxi son sus medios de transporte habituales
+B,transport_bicycle,la bicicleta es su medio de transporte habitual
+B,weekly_study_hours_<5 hours,su dedicación al estudio (en horas) es de los más bajos
+B,weekly_study_hours_6-10 hours,su dedicación al estudio (en horas) está por debajo de la media
+B,weekly_study_hours_11-20 hours,su dedicación al estudio (en horas está por encima de la media
+B,weekly_study_hours_more than 20 hours,su dedicación al estudio (en horas) es de los más altos
+B,weekly_study_hours_None,su dedicación al estudio (en horas) es nulo
+C,accomodation_Other,vive en otras instalaciones
+C,accomodation_dormitory,vive en un dormitorio
+C,accomodation_rental,vive de alquiler
+C,accomodation_with family,vive con su familia
+C,age_18-21,se encuentra por debajo de la media de edad
+C,age_22-25,se encuentra en la media de edad
+C,age_above 26,se encuentra por encima de la media de edad
+C,father_occup_government officer,su padre es funcionario
+C,father_occup_other,su padre se encuentra en otra situación laboral
+C,father_occup_private sector employee,su padre es trabajador por cuenta ajena
+C,father_occup_retired,su padre está jubilado
+C,father_occup_self-employment,su padre es trabajador por cuenta propia
+C,impact_of_projects_negative,el impacto de los proyectos ha sido negativo
+C,impact_of_projects_neutral,el impacto de los proyectos ha sido neutro
+C,impact_of_projects_positive,el impacto de los proyectos ha sido positivo
+C,mother_ed_MSc.,su madre posee un master
+C,mother_ed_Ph.D.,su madre es doctora
+C,mother_ed_high school,su madre tiene el instituto
+C,mother_ed_primary school,su madre tiene la escuela primaria
+C,mother_ed_secondary school,su madre tiene la escuela secundaria
+C,mother_ed_university,su madre tiene un título universitario
+C,mother_occup_government officer,su madre es funcionaria
+C,mother_occup_housewife,su madre es ama de casa
+C,mother_occup_private sector employee,su madre es trabajadora por cuenta ajena
+C,mother_occup_retired,su madre está jubilada
+C,mother_occup_self-employment,su madre es trabajadora por cuenta propia
+C,partner_No,no dispone de Partner
+C,partner_Yes,dispone de Partner
+C,preparation_midterm_company_alone,ha preparado los exámenes en solitario
+C,preparation_midterm_company_not applicable,ya que no se dispone de información
+C,preparation_midterm_company_with friends,ha preparado los exámenes con amigos
+C,scholarship_type_25%,ha completado un cuarto del nivel de escolarización
+C,scholarship_type_50%,ha completado la mitad del nivel de escolarización
+C,scholarship_type_75%,ha completado tres cuartos del nivel de escolarización
+C,scholarship_type_Full,ha completado su nivel de escolarización
+C,scholarship_type_None,no ha completado ningún nivel de escolarización
+C,sex_female,es una mujer
+C,sex_male,es un hombre
+C,total_salary_USD 135-200,el nivel de ingresos familiar es el más bajo
+C,total_salary_USD 201-270,el nivel de ingresos familiar se encuentra por debajo de la media
+C,total_salary_USD 271-340,el nivel de ingresos familiar se encuentra en la media
+C,total_salary_USD 341-410,el nivel de ingresos familiar se encuentra por encima de la media
+C,total_salary_above 410,el nivel de ingresos familiar es el más alto
+C,transport_Bus,el autobus es su medio de transporte habitual
+C,transport_Other,utiliza otros medios de transporte alternativos
+C,transport_Private car/taxi,el coche privado o el taxi son sus medios de transporte habituales
+C,transport_bicycle,la bicicleta es su medio de transporte habitual
+C,weekly_study_hours_<5 hours,su dedicación al estudio (en horas) es de los más bajos
+C,weekly_study_hours_6-10 hours,su dedicación al estudio (en horas) está por debajo de la media
+C,weekly_study_hours_11-20 hours,su dedicación al estudio (en horas está por encima de la media
+C,weekly_study_hours_more than 20 hours,su dedicación al estudio (en horas) es de los más altos
+C,weekly_study_hours_None,su dedicación al estudio (en horas) es nulo
+D,accomodation_Other,vive en otras instalaciones
+D,accomodation_dormitory,vive en un dormitorio
+D,accomodation_rental,vive de alquiler
+D,accomodation_with family,vive con su familia
+D,age_18-21,se encuentra por debajo de la media de edad
+D,age_22-25,se encuentra en la media de edad
+D,age_above 26,se encuentra por encima de la media de edad
+D,father_occup_government officer,su padre es funcionario
+D,father_occup_other,su padre se encuentra en otra situación laboral
+D,father_occup_private sector employee,su padre es trabajador por cuenta ajena
+D,father_occup_retired,su padre está jubilado
+D,father_occup_self-employment,su padre es trabajador por cuenta propia
+D,impact_of_projects_negative,el impacto de los proyectos ha sido negativo
+D,impact_of_projects_neutral,el impacto de los proyectos ha sido neutro
+D,impact_of_projects_positive,el impacto de los proyectos ha sido positivo
+D,mother_ed_MSc.,su madre posee un master
+D,mother_ed_Ph.D.,su madre es doctora
+D,mother_ed_high school,su madre tiene el instituto
+D,mother_ed_primary school,su madre tiene la escuela primaria
+D,mother_ed_secondary school,su madre tiene la escuela secundaria
+D,mother_ed_university,su madre tiene un título universitario
+D,mother_occup_government officer,su madre es funcionaria
+D,mother_occup_housewife,su madre es ama de casa
+D,mother_occup_private sector employee,su madre es trabajadora por cuenta ajena
+D,mother_occup_retired,su madre está jubilada
+D,mother_occup_self-employment,su madre es trabajadora por cuenta propia
+D,partner_No,no dispone de Partner
+D,partner_Yes,dispone de Partner
+D,preparation_midterm_company_alone,ha preparado los exámenes en solitario
+D,preparation_midterm_company_not applicable,ya que no se dispone de información
+D,preparation_midterm_company_with friends,ha preparado los exámenes con amigos
+D,scholarship_type_25%,ha completado un cuarto del nivel de escolarización
+D,scholarship_type_50%,ha completado la mitad del nivel de escolarización
+D,scholarship_type_75%,ha completado tres cuartos del nivel de escolarización
+D,scholarship_type_Full,ha completado su nivel de escolarización
+D,scholarship_type_None,no ha completado ningún nivel de escolarización
+D,sex_female,es una mujer
+D,sex_male,es un hombre
+D,total_salary_USD 135-200,el nivel de ingresos familiar es el más bajo
+D,total_salary_USD 201-270,el nivel de ingresos familiar se encuentra por debajo de la media
+D,total_salary_USD 271-340,el nivel de ingresos familiar se encuentra en la media
+D,total_salary_USD 341-410,el nivel de ingresos familiar se encuentra por encima de la media
+D,total_salary_above 410,el nivel de ingresos familiar es el más alto
+D,transport_Bus,el autobus es su medio de transporte habitual
+D,transport_Other,utiliza otros medios de transporte alternativos
+D,transport_Private car/taxi,el coche privado o el taxi son sus medios de transporte habituales
+D,transport_bicycle,la bicicleta es su medio de transporte habitual
+D,weekly_study_hours_<5 hours,su dedicación al estudio (en horas) es de los más bajos
+D,weekly_study_hours_6-10 hours,su dedicación al estudio (en horas) está por debajo de la media
+D,weekly_study_hours_11-20 hours,su dedicación al estudio (en horas está por encima de la media
+D,weekly_study_hours_more than 20 hours,su dedicación al estudio (en horas) es de los más altos
+D,weekly_study_hours_None,su dedicación al estudio (en horas) es nulo
+Fail,accomodation_Other,vive en otras instalaciones
+Fail,accomodation_dormitory,vive en un dormitorio
+Fail,accomodation_rental,vive de alquiler
+Fail,accomodation_with family,vive con su familia
+Fail,age_18-21,se encuentra por debajo de la media de edad
+Fail,age_22-25,se encuentra en la media de edad
+Fail,age_above 26,se encuentra por encima de la media de edad
+Fail,father_occup_government officer,su padre es funcionario
+Fail,father_occup_other,su padre se encuentra en otra situación laboral
+Fail,father_occup_private sector employee,su padre es trabajador por cuenta ajena
+Fail,father_occup_retired,su padre está jubilado
+Fail,father_occup_self-employment,su padre es trabajador por cuenta propia
+Fail,impact_of_projects_negative,el impacto de los proyectos ha sido negativo
+Fail,impact_of_projects_neutral,el impacto de los proyectos ha sido neutro
+Fail,impact_of_projects_positive,el impacto de los proyectos ha sido positivo
+Fail,mother_ed_MSc.,su madre posee un master
+Fail,mother_ed_Ph.D.,su madre es doctora
+Fail,mother_ed_high school,su madre tiene el instituto
+Fail,mother_ed_primary school,su madre tiene la escuela primaria
+Fail,mother_ed_secondary school,su madre tiene la escuela secundaria
+Fail,mother_ed_university,su madre tiene un título universitario
+Fail,mother_occup_government officer,su madre es funcionaria
+Fail,mother_occup_housewife,su madre es ama de casa
+Fail,mother_occup_private sector employee,su madre es trabajadora por cuenta ajena
+Fail,mother_occup_retired,su madre está jubilada
+Fail,mother_occup_self-employment,su madre es trabajadora por cuenta propia
+Fail,partner_No,no dispone de Partner
+Fail,partner_Yes,dispone de Partner
+Fail,preparation_midterm_company_alone,ha preparado los exámenes en solitario
+Fail,preparation_midterm_company_not applicable,ya que no se dispone de información
+Fail,preparation_midterm_company_with friends,ha preparado los exámenes con amigos
+Fail,scholarship_type_25%,ha completado un cuarto del nivel de escolarización
+Fail,scholarship_type_50%,ha completado la mitad del nivel de escolarización
+Fail,scholarship_type_75%,ha completado tres cuartos del nivel de escolarización
+Fail,scholarship_type_Full,ha completado su nivel de escolarización
+Fail,scholarship_type_None,no ha completado ningún nivel de escolarización
+Fail,sex_female,es una mujer
+Fail,sex_male,es un hombre
+Fail,total_salary_USD 135-200,el nivel de ingresos familiar es el más bajo
+Fail,total_salary_USD 201-270,el nivel de ingresos familiar se encuentra por debajo de la media
+Fail,total_salary_USD 271-340,el nivel de ingresos familiar se encuentra en la media
+Fail,total_salary_USD 341-410,el nivel de ingresos familiar se encuentra por encima de la media
+Fail,total_salary_above 410,el nivel de ingresos familiar es el más alto
+Fail,transport_Bus,el autobus es su medio de transporte habitual
+Fail,transport_Other,utiliza otros medios de transporte alternativos
+Fail,transport_Private car/taxi,el coche privado o el taxi son sus medios de transporte habituales
+Fail,transport_bicycle,la bicicleta es su medio de transporte habitual
+Fail,weekly_study_hours_<5 hours,su dedicación al estudio (en horas) es de los más bajos
+Fail,weekly_study_hours_6-10 hours,su dedicación al estudio (en horas) está por debajo de la media
+Fail,weekly_study_hours_11-20 hours,su dedicación al estudio (en horas está por encima de la media
+Fail,weekly_study_hours_more than 20 hours,su dedicación al estudio (en horas) es de los más altos
+Fail,weekly_study_hours_None,su dedicación al estudio (en horas) es nulo

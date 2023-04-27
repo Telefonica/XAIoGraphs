@@ -33,7 +33,7 @@
             <mat-grid-tile *ngFor="let header of headers">
                 <div fxFlex fxLayout="column" fxLayoutAlign="center center" [className]="'criterias' + criteria['score_' + header + '_class']">
                     <label class="criterias_value_class">{{ criteria['score_' + header] }}</label>
-                    <label>{{ criteria['score_' + header + '_value'] }}</label>
+                    <label class="criterias_percent_class">{{ criteria['score_' + header + '_value'] }}</label>
                 </div>
             </mat-grid-tile>
         </ng-container>

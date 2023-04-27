@@ -20,6 +20,7 @@
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
         <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
             <label class="localDistributionTitle">Features-values importance</label>
+            <label class="localDistributionSubTitle" *ngIf="currentTarget">( {{ currentTarget.target }} )</label>
         </div>
         <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px" *ngIf="!hidePicture">
             <mat-icon style="cursor: pointer;" matTooltip="Download as image" (click)="downloadPicture()" alt="Download as image">photo_camera</mat-icon>

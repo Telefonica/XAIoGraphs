@@ -1,0 +1,53 @@
+feature_value,reason
+accomodation_other,having been in another type of accommodation
+accomodation_dormitory,having been housed in a bedroom
+accomodation_rental,having been in a rented accommodation
+accomodation_with family,having been in a family accommodation
+age_18-21,being under 21 years old
+age_22-25,being between 22 and 25 years old
+age_above 26,being over 26 years old
+father_occup_government officer,having a father working as a civil servant
+father_occup_other,having a parent with a different type of employment
+father_occup_private sector employee,having a father working in the private sector
+father_occup_retired,having a father withdrawn from work
+father_occup_self-employment,having a father working on his own
+impact_of_projects_negative,school activities have had a negative impact.
+impact_of_projects_neutral,the out-of-school activities had no impact.
+impact_of_projects_positive,school activities have had a positive impact.
+mother_ed_msc.,having a mother with a master
+mother_ed_ph.d.,having a mother with a doctorate
+mother_ed_high school,having a mother who has surpassed the school
+mother_ed_primary school,having a mother who has passed primary school
+mother_ed_secondary school,having a mother who has passed high school
+mother_ed_university,having a mother with university studies
+mother_occup_government officer,having a mother working as a civil servant
+mother_occup_housewife,having a mother who works as a home lover
+mother_occup_private sector employee,having a mother working in the private sector
+mother_occup_retired,having a mother withdrawn from work
+mother_occup_self-employment,having a mother working on her own
+partner_no,not having a partner
+partner_yes,having a partner
+preparation_midterm_company_alone,preparing for the semi-annual exam
+preparation_midterm_company_not applicable,not applicable preparation for semestrial exams
+preparation_midterm_company_with friends,preparing for semestral exams with friends
+scholarship_type_25%,25% of scholarship type
+scholarship_type_50%,50% of scholarship type
+scholarship_type_75%,75% of scholarship type
+scholarship_type_full,100% of scholarship type
+scholarship_type_none,0% of scholarship type
+sex_female,being a woman
+sex_male,being a man
+total_salary_usd 135-200,have a salary between 135k and 200k usd
+total_salary_usd 201-270,have a salary between 201k and 270k usd
+total_salary_usd 271-340,have a salary between 271k and 340k usd
+total_salary_usd 341-410,have a salary between 341k and 410k usd
+total_salary_above 410,have a salary above 410k usd
+transport_bus,transportation by bus
+transport_other,transportation by other means
+transport_private car/taxi,transportation by private vehicle or taxi
+transport_bicycle,transportation by bicycle
+weekly_study_hours_11-20 hours,study between 11 and 20 hours a week
+weekly_study_hours_6-10 hours,study 6 to 10 hours a week
+weekly_study_hours_<5 hours,study less than 5 hours a week
+weekly_study_hours_none,do not devote time to weekly study
+weekly_study_hours_more than 20 hours,study more than 20 hours a week

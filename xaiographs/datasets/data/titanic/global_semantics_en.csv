@@ -1,0 +1,21 @@
+feature_value,reason
+gender_male,to be a man
+gender_female,to be a woman
+is_alone_1,travel alone
+family_size_2,to be from a family of few members
+family_size_3-5,be a large family
+family_size_>5,be a family with many members
+age_<12_years,be a child
+age_12_18_years,be a teenager
+age_18_30_years,be young
+age_30_60_years,be an adult
+age_>60_years,be an older person
+class_1,travel in 1st class
+class_2,travel in 2nd class
+class_3,travel in 3rd class
+ticket_price_High,pay too much for the ticket
+ticket_price_Mid,pay for a mid-cost ticket
+ticket_price_Low,pay little for the ticket
+embarked_S,embark in a lower class town
+embarked_Q,boarding in a middle class town
+embarked_C,boarding in a high class town

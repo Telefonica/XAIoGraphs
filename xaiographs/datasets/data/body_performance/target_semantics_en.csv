@@ -1,0 +1,103 @@
+target,feature_value,reason
+high_performance,age_26-35,a young with a physical condition above average
+high_performance,age_36-45,a young with a higher than average physical condition
+high_performance,age_46-55,a adult man with a physical condition above average
+high_performance,age_<25,an adult with a physical condition above average
+high_performance,age_>55,an older person with a higher than average physical condition
+high_performance,body_fat_%_15-mid-30,a low percentage of body fat
+high_performance,body_fat_%_over_30,a normal body fat percentage
+high_performance,body_fat_%_under_15,a high percentage of body fat
+high_performance,broad_jump_cm_150-mid-229,is able to make a jump over the average length
+high_performance,broad_jump_cm_over_229,is able to make a jump in average
+high_performance,broad_jump_cm_under_150,is able to make a jump below average length
+high_performance,diastolic_68-mid-89,diastolic pressure is lower than average
+high_performance,diastolic_over_89,diastolic pressure is on average
+high_performance,diastolic_under_68,diastolic pressure is higher than average
+high_performance,gender_F,is a woman
+high_performance,gender_M,is a man
+high_performance,gripForce_26-mid-47,grip strength is higher than average
+high_performance,gripForce_over_47,strength is in the middle
+high_performance,gripForce_under_26,grip force is lower than average
+high_performance,height_cm_160-mid-176,waist size is higher than the average
+high_performance,height_cm_over_176,waist is in the middle
+high_performance,height_cm_under_160,waist size is lower than the average
+high_performance,sit-ups_counts_25-mid-54,abdominal count is lower than average
+high_performance,sit-ups_counts_over_54,abdominal count is on average
+high_performance,sit-ups_counts_under_25,abdominal count is higher than average
+high_performance,sit_and_bend_forward_cm_6-mid-23,flexibility is lower than average
+high_performance,sit_and_bend_forward_cm_over_23,flexibility is on average
+high_performance,sit_and_bend_forward_cm_under_6,flexibility is higher than average
+high_performance,systolic_115-mid-144,systemic pressure is lower than average
+high_performance,systolic_over_144,systemic pressure is on average
+high_performance,systolic_under_115,systemic pressure is higher than average
+high_performance,weight_kg_55-mid-79,weighs less than average
+high_performance,weight_kg_over_79,weight on average
+high_performance,weight_kg_under_55,weight greater than average
+low_performance,age_26-35,a young with a physical condition above average
+low_performance,age_36-45,a young with a higher than average physical condition
+low_performance,age_46-55,a adult man with a physical condition above average
+low_performance,age_<25,an adult with a physical condition above average
+low_performance,age_>55,an older person with a higher than average physical condition
+low_performance,body_fat_%_15-mid-30,a low percentage of body fat
+low_performance,body_fat_%_over_30,a normal body fat percentage
+low_performance,body_fat_%_under_15,a high percentage of body fat
+low_performance,broad_jump_cm_150-mid-229,is able to make a jump over the average length
+low_performance,broad_jump_cm_over_229,is able to make a jump in average
+low_performance,broad_jump_cm_under_150,is able to make a jump below average length
+low_performance,diastolic_68-mid-89,diastolic pressure is lower than average
+low_performance,diastolic_over_89,diastolic pressure is on average
+low_performance,diastolic_under_68,diastolic pressure is higher than average
+low_performance,gender_F,is a woman
+low_performance,gender_M,is a man
+low_performance,gripForce_26-mid-47,grip strength is higher than average
+low_performance,gripForce_over_47,strength is in the middle
+low_performance,gripForce_under_26,grip force is lower than average
+low_performance,height_cm_160-mid-176,waist size is higher than the average
+low_performance,height_cm_over_176,waist is in the middle
+low_performance,height_cm_under_160,waist size is lower than the average
+low_performance,sit-ups_counts_25-mid-54,abdominal count is lower than average
+low_performance,sit-ups_counts_over_54,abdominal count is on average
+low_performance,sit-ups_counts_under_25,abdominal count is higher than average
+low_performance,sit_and_bend_forward_cm_6-mid-23,flexibility is lower than average
+low_performance,sit_and_bend_forward_cm_over_23,flexibility is on average
+low_performance,sit_and_bend_forward_cm_under_6,flexibility is higher than average
+low_performance,systolic_115-mid-144,systemic pressure is lower than average
+low_performance,systolic_over_144,systemic pressure is on average
+low_performance,systolic_under_115,systemic pressure is higher than average
+low_performance,weight_kg_55-mid-79,weighs less than average
+low_performance,weight_kg_over_79,weight on average
+low_performance,weight_kg_under_55,weight greater than average
+mid_performance,age_26-35,a young with an average physical condition
+mid_performance,age_36-45,a young with an average physical condition
+mid_performance,age_46-55,a adult man with an average physical condition
+mid_performance,age_<25,an adult with an average physical condition
+mid_performance,age_>55,an older person with an average physical condition
+mid_performance,body_fat_%_15-mid-30,a low percentage of body fat
+mid_performance,body_fat_%_over_30,a normal body fat percentage
+mid_performance,body_fat_%_under_15,a high percentage of body fat
+mid_performance,broad_jump_cm_150-mid-229,is able to make a jump over the average length
+mid_performance,broad_jump_cm_over_229,is able to make a jump in average
+mid_performance,broad_jump_cm_under_150,is able to make a jump below average length
+mid_performance,diastolic_68-mid-89,diastolic pressure is lower than average
+mid_performance,diastolic_over_89,diastolic pressure is on average
+mid_performance,diastolic_under_68,diastolic pressure is higher than average
+mid_performance,gender_F,is a woman
+mid_performance,gender_M,is a man
+mid_performance,gripForce_26-mid-47,grip strength is higher than average
+mid_performance,gripForce_over_47,strength is in the middle
+mid_performance,gripForce_under_26,grip force is lower than average
+mid_performance,height_cm_160-mid-176,waist size is higher than the average
+mid_performance,height_cm_over_176,waist is in the middle
+mid_performance,height_cm_under_160,waist size is lower than the average
+mid_performance,sit-ups_counts_25-mid-54,abdominal count is lower than average
+mid_performance,sit-ups_counts_over_54,abdominal count is on average
+mid_performance,sit-ups_counts_under_25,abdominal count is higher than average
+mid_performance,sit_and_bend_forward_cm_6-mid-23,flexibility is lower than average
+mid_performance,sit_and_bend_forward_cm_over_23,flexibility is on average
+mid_performance,sit_and_bend_forward_cm_under_6,flexibility is higher than average
+mid_performance,systolic_115-mid-144,systemic pressure is lower than average
+mid_performance,systolic_over_144,systemic pressure is on average
+mid_performance,systolic_under_115,systemic pressure is higher than average
+mid_performance,weight_kg_55-mid-79,weighs less than average
+mid_performance,weight_kg_over_79,weight on average
+mid_performance,weight_kg_under_55,weight greater than average

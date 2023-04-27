@@ -1,0 +1,41 @@
+target,feature_value,reason
+NO_SURVIVED,gender_male,han muerto muchos hombres
+NO_SURVIVED,gender_female,ser mujer
+NO_SURVIVED,is_alone_1,viajaban solos
+NO_SURVIVED,family_size_2,eran de una familia de pocos miembros
+NO_SURVIVED,family_size_3-5,eran de familia numerosa
+NO_SURVIVED,family_size_>5,eran de una familia de muchos miembros
+NO_SURVIVED,age_<12_years,eran niños
+NO_SURVIVED,age_12_18_years,eran adolescentes
+NO_SURVIVED,age_18_30_years,eran jovenes
+NO_SURVIVED,age_30_60_years,eran adultos
+NO_SURVIVED,age_>60_years,eran mayores
+NO_SURVIVED,class_1,pocos viajaban en 1ª clase
+NO_SURVIVED,class_2,algunos viajaban en 2ª clase
+NO_SURVIVED,class_3,muchos viajaban en 3ª clase
+NO_SURVIVED,ticket_price_High,pagaron mucho por el billete
+NO_SURVIVED,ticket_price_Mid,pagaron un billete de coste medio
+NO_SURVIVED,ticket_price_Low,pagaron poco por el billete
+NO_SURVIVED,embarked_C,pocos embarcaron en Cherbourg
+NO_SURVIVED,embarked_Q,algunos embarcaron en Queenstown
+NO_SURVIVED,embarked_S,muchos embarcaron en Southampton
+SURVIVED,gender_male,sobrevivieron pocos hombres
+SURVIVED,gender_female,sobrevivieron muchas mujeres
+SURVIVED,is_alone_1,viajaban solos
+SURVIVED,family_size_2,eran de una familia de pocos miembros
+SURVIVED,family_size_3-5,eran de familia numerosa
+SURVIVED,family_size_>5,eran de una familia de muchos miembros
+SURVIVED,age_<12_years,eran niños
+SURVIVED,age_12_18_years,eran adolescentes
+SURVIVED,age_18_30_years,eran jovenes
+SURVIVED,age_30_60_years,eran adultos
+SURVIVED,age_>60_years,eran mayores
+SURVIVED,class_1,muchos viajaban en 1ª clase
+SURVIVED,class_2,algunos viajaban en 2ª clase
+SURVIVED,class_3,pocos viajaban en 3ª clase
+SURVIVED,ticket_price_High,pagaron mucho por el billete
+SURVIVED,ticket_price_Mid,pagaron un billete de coste medio
+SURVIVED,ticket_price_Low,pagaron poco por el billete
+SURVIVED,embarked_C,muchos embarcaron en Cherbourg
+SURVIVED,embarked_Q,algunos embarcaron en Queenstown
+SURVIVED,embarked_S,pocos embarcaron en Southampton

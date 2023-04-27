@@ -1,0 +1,41 @@
+target,feature_value,reason
+NO_SURVIVED,gender_male,many men have died
+NO_SURVIVED,gender_female,to be a woman
+NO_SURVIVED,is_alone_1,they traveled alone
+NO_SURVIVED,family_size_2,they were from a family of few members
+NO_SURVIVED,family_size_3-5,they were from a large family
+NO_SURVIVED,family_size_>5,they were from a family of many members
+NO_SURVIVED,age_<12_years,they were children
+NO_SURVIVED,age_12_18_years,they were teenagers
+NO_SURVIVED,age_18_30_years,they were young
+NO_SURVIVED,age_30_60_years,they were adults
+NO_SURVIVED,age_>60_years,they were older
+NO_SURVIVED,class_1,few traveled in 1st class
+NO_SURVIVED,class_2,some traveled in 2nd class
+NO_SURVIVED,class_3,many traveled in 3rd class
+NO_SURVIVED,ticket_price_High,they paid a lot for the ticket
+NO_SURVIVED,ticket_price_Mid,they paid a medium cost ticket
+NO_SURVIVED,ticket_price_Low,they paid little for the ticket
+NO_SURVIVED,embarked_C,few embarked in Cherbourg
+NO_SURVIVED,embarked_Q,some embarked in Queenstown
+NO_SURVIVED,embarked_S,many boarded at Southampton
+SURVIVED,gender_male,few men survived
+SURVIVED,gender_female,many women survived
+SURVIVED,is_alone_1,they traveled alone
+SURVIVED,family_size_2,they were from a family of few members
+SURVIVED,family_size_3-5,they were from a large family
+SURVIVED,family_size_>5,they were from a family of many members
+SURVIVED,age_<12_years,they were children
+SURVIVED,age_12_18_years,they were teenagers
+SURVIVED,age_18_30_years,they were young
+SURVIVED,age_30_60_years,they were adults
+SURVIVED,age_>60_years,they were older
+SURVIVED,class_1,many traveled in 1st class
+SURVIVED,class_2,some traveled in 2nd class
+SURVIVED,class_3,few traveled in 3rd class
+SURVIVED,ticket_price_High,they paid a lot for the ticket
+SURVIVED,ticket_price_Mid,they paid a medium cost ticket
+SURVIVED,ticket_price_Low,they paid little for the ticket
+SURVIVED,embarked_C,many embarked in Cherbourg
+SURVIVED,embarked_Q,some embarked in Queenstown
+SURVIVED,embarked_S,few boarded at Southampton
