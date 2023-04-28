@@ -17,14 +17,13 @@ expected
 -  Features (predictor columns) must either be categorical or have undergone a discretization process (their domain
 must be comprised by a limited number of values)
 
- 
-
 To provide an understanding on what goes on when running 
 [`fit()`](../api_reference/explainability.md#xaiographs.Explainer.fit) of the 
 [`Explainer`](../api_reference/explainability.md) class. Let us delve into the two main parts of the process
 
 
 ## Feature Selection
+
 As it will be shown in the explainability part, the process can quickly become computationally expensive. The two 
 straightforward ways to mitigate this problem are, either limiting the number of samples to explain, or limiting the 
 number of features to be taken into account:
@@ -34,7 +33,7 @@ number of features to be taken into account:
 -  The latter can be tuned by means of the `number_of_features` parameter when instantiating the 
 [`Explainer`](../api_reference/explainability.md) class. 
 
-```{note}
+```{tip}
 Both parameters have been initialized with sensitive defaults according to our experience, so ,for a first run, they can
  be safely left untouched
 ```
@@ -67,13 +66,15 @@ $$
 - From here, several statistics are calculated:
 
 $$              
-[\sqrt{median(mjs)}, \sqrt{mean(mjs)}, \sqrt{max(mjs)}, \sqrt{sum(mjs)}]
+{\begin{bmatrix}\sqrt{median(mjs)}, \sqrt{mean(mjs)}, \sqrt{max(mjs)}, \sqrt{sum(mjs)}\end{bmatrix}}
 $$       
 
 So it turns out that the modified Jensen-Shannon distance returns a four element array containing the calculations
  above.
- 
-```{hint}
+
+```{admonition} Four better than one
+:class: important
+
 Computing four different statistics rather than a single one helps balancing the pros and cons of each of them when 
 considered individually
 ```
@@ -81,43 +82,71 @@ considered individually
 With that four element result in mind:
 - After applying the formula to each of the N features, N four element arrays will be obtained and stacked:
 
-$
+$$
 \mathbf{A} = {\begin{bmatrix}
     a_{00} & a_{01} & a_{02} & a_{03} \\
     a_{10} & a_{11} & a_{12} & a_{13} \\
     \vdots & \vdots & \ddots & \vdots \\
     a_{N-10} & a_{N-11} & a_{N-12} & a_{N-13}
 \end{bmatrix}}
-$
+$$
 
 - Now, for the resulting *(N, 4)* matrix, each value is normalized by diving it by the sum of its column elements:
 
-$
+$$
 \mathbf{A'} = {\begin{bmatrix}
     a_{00}/\sum_{i=0}^{N-1} a_{i0} & a_{01}/\sum_{i=0}^{N-1} a_{i1} & a_{02}/\sum_{i=0}^{N-1} a_{i2} & a_{03}/\sum_{i=0}^{N-1} a_{i3} \\
     a_{10}/\sum_{i=0}^{N-1} a_{i0} & a_{11}/\sum_{i=0}^{N-1} a_{i1} & a_{12}/\sum_{i=0}^{N-1} a_{i2} & a_{13}/\sum_{i=0}^{N-1} a_{i3} \\
     \vdots & \vdots & \ddots & \vdots \\
     a_{N-10}/\sum_{i=0}^{N-1} a_{i0} & a_{N-11}/\sum_{i=0}^{N-1} a_{i1} & a_{N-12}/\sum_{i=0}^{N-1} a_{i2} & a_{N-13}/\sum_{i=0}^{N-1} a_{i3}
 \end{bmatrix}}
-$
+$$
 - Then, for each feature (each matrix row), its elements are added, as a result the matrix becomes single column hence 
  a vector containing one element per feature:
  
-$
+$$
 \mathbf{b} = {\begin{bmatrix}
-    a_{00'} + a_{01'} + a_{02'} + a_{03'} \\
-    a_{10'} + a_{11'} + a_{12'} + a_{13'} \\
+    a_{00}' + a_{01}' + a_{02}' + a_{03}' \\
+    a_{10}' + a_{11}' + a_{12}' + a_{13}' \\
     \vdots \\
-    a_{N-10'} + a_{N-11'} + a_{N-12'} + a_{N-13'}
-\end{bmatrix}} = [b_{0}, b_{1}, \dots, b_{N-1}]
-$
+    a_{N-10}' + a_{N-11}' + a_{N-12}' + a_{N-13}'
+\end{bmatrix}} = {\begin{bmatrix} b_{0} & b_{1} & \dots & b_{N-1}\end{bmatrix}}
+$$
+
 where
 $
-a_{nm'} = a_{nm}/\sum_{i=0}^{n} a_{im}
+a_{nm}' = a_{nm}/\sum_{i=0}^{n} a_{im}
 $
 and
 $
-b_{n} = \sum_{i=0}^{n} a_{ni'}
+b_{n} = \sum_{i=0}^{n} a_{ni}'
 $
 
+
 - Finally each element is normalized by dividing it by the sum of all the elements.
+$
+\mathbf{b'} = {\begin{bmatrix} b_{0}/\sum_{i=0}^{N-1} b_{i} & b_{1}/\sum_{i=0}^{N-1} b_{i} & \dots & b_{N-1}/\sum_{i=0}^{N-1} b_{i}\end{bmatrix}}
+= {\begin{bmatrix} b_{0}' & b_{1}' & \dots & b_{N-1}'\end{bmatrix}}
+$
+
+The obtained vector contains a number for each feature and that number represents the feature distance between:
+- The feature values distribution when target equals to the target class being taken into account
+- The feature values distribution when target is different from that target class
+
+So that, the higher the distance, the most relevant the feature will be...for that target class. Hence this must be 
+computed for all possible target values in the case of a multiple classification problem (a non-binary problem). So:
+- In the case of a binary classification problem, we can proceed to rank the obtained distances
+- In the case of a multiple classification problem, feature distributions distances for the rest of the possible target 
+classes must be computed. Once this is done, distances for each feature will be added, ending up with a single number
+per feature
+
+At this point we have a single number per feature which must be ranked: the highest the number the most relevant the
+ feature is considered
+
+```{admonition} Choose your top K
+:class: important
+
+How many of the most important features will be picked up can be setup by means of the `number_of_features` parameter 
+when instantiating the [`Explainer`](../api_reference/explainability.md) class.
+```
+  
