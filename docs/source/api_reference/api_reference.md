@@ -7,7 +7,7 @@ For more information, please refer to the whole [User Guide](user_guide/user_gui
 raw specifications might not be sufficient to provide comprehensive instructions on how to utilize them.
 
 
-## [xaiographs.Explainer](explainer.md)
+## [xaiographs.Explainer](explainability.md)
 
 ```{eval-rst}
 .. autosummary::

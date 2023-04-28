@@ -36,7 +36,7 @@ WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute fi
 
 class Explainer(object):
     """
-    This class is intended to provide an abstract layer which encapsulates everything related to the explanation process
+    The Explainer class provides an abstract layer which encapsulates everything related to the explanation process
     from statistics calculation, importance calculation (using the engine chosen by the user) and information export for
     visualization tasks.
 

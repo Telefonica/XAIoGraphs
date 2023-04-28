@@ -1,11 +1,11 @@
 # 💻  XAIoWeb
 
 XAIoWeb is a web interface executed in local mode (127.0.0.1:8080) that allows to visualize the results of the 
-explainability and fairness methods after executing the `fit()` methods of the [`Explainer`](../api_reference/explainer.md), 
+explainability and fairness methods after executing the `fit()` methods of the [`Explainer`](../api_reference/explainability.md), 
 [`Why`](../api_reference/why.md) or [`Fairness`](../api_reference/fairness.md) classes of XAIoGraph.
 
 A sequence of JSON files are generated in the `xaioweb_files` folder after executing the `fit()` method of the 
-[`Explainer`](../api_reference/explainer.md), [`Why`](../api_reference/why.md) or 
+[`Explainer`](../api_reference/explainability.md), [`Why`](../api_reference/why.md) or 
 [`Fairness`](../api_reference/fairness.md) classes (folder name is specified in the class constructor's 
 `destination_path` parameter.) Web interface displays the outcomes using these JSON files. The following are the files:
 
