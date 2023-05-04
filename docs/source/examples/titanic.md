@@ -56,7 +56,7 @@ of the target columns (`target_cols`), it will execute all of the computations r
 
 ```python
 >>> explainer = Explainer(importance_engine='LIDE', verbose=1)
->>> explainer.fit(dataset=df_dataset, feature_cols=feature_cols, target_cols=target_cols)
+>>> explainer.fit(df=df_dataset, feature_cols=feature_cols, target_cols=target_cols)
 ```
 &nbsp;
 
