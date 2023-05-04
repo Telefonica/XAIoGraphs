@@ -3,6 +3,9 @@
 
 <h3 class="user-guide-tittle"><a href="explainability.html">1. Explainability</a></h3>
 
+* [Feature selection](explainability.md#feature-selection)
+* [LIDE](explainability.md#lide-local-interpretable-data-explanations)
+
 <h3 class="user-guide-tittle"><a href="why.html">2. Reason Why</a></h3>
 
 <h3 class="user-guide-tittle"><a href="fairness.html">3. Fairness</a></h3>

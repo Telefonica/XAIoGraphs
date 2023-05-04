@@ -44,9 +44,6 @@ class Explainer(object):
 
     Parameters
     ----------
-    dataset : pandas.DataFrame
-        The structure containing the whole dataset.
-
     importance_engine : str
         The name of the method use to compute feature importance.
 
@@ -67,7 +64,7 @@ class Explainer(object):
 
     """
 
-    def __init__(self, dataset: pd.DataFrame, importance_engine: str, destination_path: str = './xaioweb_files',
+    def __init__(self, importance_engine: str, destination_path: str = './xaioweb_files',
                  number_of_features: int = 8, verbose: int = 0):
         self.__global_explainability = None
         self.__global_frequency_feature_value = None
@@ -79,7 +76,6 @@ class Explainer(object):
         self.__sample_ids_to_display = list()
         self.__top_features = None
         self.__top_features_by_target = None
-        self.__df = dataset
         self.__destination_path = destination_path
         self.__engine = importance_engine
         self.__number_of_features = number_of_features
@@ -412,22 +408,26 @@ class Explainer(object):
         else:
             return self.__top_features_by_target
 
-    def __get_common_info(self, feature_cols: List[str], target_cols: List[str]) -> Tuple[FeaturesInfo, TargetInfo]:
+    @staticmethod
+    def __get_common_info(df: pd.DataFrame, feature_cols: List[str], target_cols: List[str]) -> Tuple[FeaturesInfo,
+                                                                                                      TargetInfo]:
         """
         This function orchestrates the generation of both, features columns information and target information
 
+        :param df:           Pandas DataFrame, containing the dataset for which the required information will be
+                             retrieved
         :param feature_cols: List of strings, containing the column names for the features
         :param target_cols:  List of strings, containing the possible targets
         :return:             NamedTuple, containing all the feature column names lists which will be used all through
                              the execution flow and another NamedTuple containing target related info
         """
 
-        features_info = get_features_info(df=self.__df, feature_cols=feature_cols, target_cols=target_cols)
-        target_info = get_target_info(df=self.__df, target_cols=target_cols)
+        features_info = get_features_info(df=df, feature_cols=feature_cols, target_cols=target_cols)
+        target_info = get_target_info(df=df, target_cols=target_cols)
 
         return features_info, target_info
 
-    def fit(self, feature_cols: List[str], target_cols: List[str], num_samples_local_expl: int = 100,
+    def fit(self, df: pd.DataFrame, feature_cols: List[str], target_cols: List[str], num_samples_local_expl: int = 100,
             num_samples_global_expl: int = 50000, batch_size_expl: int = 5000, train_stratify: bool = True):
         """It coordinates all the steps of the explanation process which consists of the following parts:
 
@@ -442,6 +442,9 @@ class Explainer(object):
 
         Parameters
         ----------
+        df : pandas.DataFrame
+            Structure containing the whole dataset.
+
         feature_cols : List[str]
             List containing the names of those columns representing features within the dataset DataFrame.
 
@@ -475,10 +478,11 @@ class Explainer(object):
         #   Feature related information: different features columns names lists
         #   Target related information: top1_targets (ground truths) for each row, target_probs (probability for each
         #   target), top1_argmax (the indexes version of the top1_targets) and target columns names
-        features_info, target_info = self.__get_common_info(feature_cols=feature_cols, target_cols=target_cols)
+        features_info, target_info = Explainer.__get_common_info(df=df, feature_cols=feature_cols,
+                                                                 target_cols=target_cols)
 
         # Feature selector is instantiated
-        selector = FeatureSelector(df=self.__df, feature_cols=features_info.feature_columns, target_info=target_info,
+        selector = FeatureSelector(df=df, feature_cols=features_info.feature_columns, target_info=target_info,
                                    number_of_features=self.__number_of_features, verbose=self.__verbose)
 
         # Then it's used to select the top K features
@@ -487,10 +491,10 @@ class Explainer(object):
         self.__top_features_by_target = selector.top_features_by_target
 
         # Dataset must be rebuilt by selecting the topk features, the ID and the target columns
-        self.__df = self.__df[[ID] + topk_features + target_cols]
+        df = df[[ID] + topk_features + target_cols]
 
         # Since feature columns have changed, information related to features must be generated again
-        features_info = get_features_info(df=self.__df, feature_cols=topk_features, target_cols=target_cols)
+        features_info = get_features_info(df=df, feature_cols=topk_features, target_cols=target_cols)
 
         # Computations have been split in two types: statistics calculation and importance calculation
         #   An ImportanceCalculator object is used to compute importance values
@@ -502,7 +506,7 @@ class Explainer(object):
                                                                              train_stratify=train_stratify,
                                                                              verbose=self.__verbose)
         top1_importance_features, global_explainability, global_nodes_importance, df_explanation_global = (
-            importance_calculator.calculate_importance(df=self.__df, features_info=features_info,
+            importance_calculator.calculate_importance(df=df, features_info=features_info,
                                                        num_samples=num_samples_global_expl, batch_size=batch_size_expl))
         self.__importance_values = importance_calculator.importance_values
 

@@ -30,8 +30,8 @@ def main():
     df_global_semantics, df_target_semantics, df_why_templates = load_education_performance_why(language=LANG)
 
     # EXPLAINER
-    explainer = Explainer(dataset=example_dataset, importance_engine='LIDE', number_of_features=13, verbose=1)
-    explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+    explainer = Explainer(importance_engine='LIDE', number_of_features=13, verbose=1)
+    explainer.fit(df=example_dataset, feature_cols=feature_cols, target_cols=target_cols)
 
     # WHY
     why = Why(language=LANG,
