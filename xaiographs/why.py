@@ -114,7 +114,7 @@ class Why(object):
     def __init__(self, language: str, local_reliability: pd.DataFrame, local_feat_val_expl: pd.DataFrame,
                  why_elements: pd.DataFrame, why_target: pd.DataFrame, why_templates: pd.DataFrame,
                  n_local_features: int = 2, n_global_features: int = 2, min_reliability: float = 0.0,
-                 destination_path: str = './xaioweb_files', sample_ids_to_export: Optional[List[int]] = None,
+                 destination_path: str = './xaioweb_files', sample_ids_to_export: Optional[pd.Series] = None,
                  verbose: int = 0):
         self.__df_why = None
         self.__language = language

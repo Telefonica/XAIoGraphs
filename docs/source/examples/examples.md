@@ -87,8 +87,8 @@ handing it a list containing the names of the feature columns (`feature_cols`) a
 of the target columns (`target_cols`), it will execute all of the computations required to provide the explainability:
 
 ```python
->>> explainer = Explainer(dataset=df_dataset, importance_engine='LIDE', verbose=1)
->>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
+>>> explainer = Explainer(importance_engine='LIDE', verbose=1)
+>>> explainer.fit(df=df_dataset, feature_cols=feature_cols, target_cols=target_cols)
 ```
 &nbsp;
 
