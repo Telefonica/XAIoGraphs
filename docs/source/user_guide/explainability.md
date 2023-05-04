@@ -9,6 +9,8 @@ user) and information export for visualization tasks. It is intended to offer to
 algorithms (currenty only ***LIDE (Local Interpretable Data Explanations***) is available).
 
 
+## Requirements
+
 To perform the calculations involved in this process, we need a tabular dataset with the following characteristics:
 - 'N' columns with features (predictor columns)
 -  A target column (column to be explained)
@@ -149,4 +151,60 @@ At this point we have a single number per feature which must be ranked: the high
 How many of the most important features will be picked up can be setup by means of the `number_of_features` parameter 
 when instantiating the [`Explainer`](../api_reference/explainability.md) class.
 ```
-  
+ 
+## LIDE (Local Interpretable Data Explanations)
+
+LIDE is a local explainability algorithm which works on tabular data and doesn't make any assumptions on the origin of 
+the target (the column to be explained). Before further reading, please take a look at the 
+[requirements section](#requirements)
+
+Let us understand what local explainability means:
+- Explainability means that the algorithm tries to estimate how predictor columns (features) influence the target column
+ value. In other words, the importance of the features in relation to the target
+- Local implies that LIDE, provides a customized and independent estimation for each sample (dataset row)
+
+For taxonomy lovers, LIDE belongs to the surrogate model based algorithms family, which are  models that are used to 
+explain individual predictions of black box machine learning models. In a more mathematical way:
+- Given a black box model (or complex function) $F(X)$, for each $x$ within the dataset an explainable 
+a local model $g(Z')=g(h(X))$ is defined (for instance, a linear model). This model must be able to locally 
+approximate the black box model (or complex function) to explain
+
+```{tip}
+Explanation models often use simplified inputs $x'$ that map to the original inputs through a mapping function 
+$h$ so that $x = h(x')$
+```
+
+More formally: for each tuple of variables $X = \{x_{1}, x_{2}, \dots, x_{N}\}$ a linear surrogate model exists
+ so that:
+
+$$
+g(Z') = φ_{0} + \sum_{i=1}^{M} φ_{i}z_{i}'  
+$$
+
+which satisfies the following: $ F(X) = g(Z') = g(h(X))$. This property is called *Local Accuracy* where:
+- $Z'=h(X)$ represents the mapping between $X$ (features used by the black box model) and the dummy variables $Z'$ used to 
+provide the explanation. For instance, if $x ∈ \{a, b, c\}$ then, the subsequent dummy variables are:
+
+$$
+z_{a}'=h(x=a)={\begin{bmatrix} 1 & 0 & 0\end{bmatrix}}
+
+z_{b}'=h(x=b)={\begin{bmatrix} 0 & 1 & 0\end{bmatrix}}
+
+z_{c}'=h(x=c)={\begin{bmatrix} 0 & 0 & 1\end{bmatrix}}
+$$
+
+- $M$ is the number of dummy variables used to generate the explanation for the black box model
+
+Now, if *Missingness* and *Consistency* properties [are achieved](https://arxiv.org/pdf/1705.07874.pdf) along
+ *Local Accuracy* then the above coefficients $φ_{i}$ of the linear surrogated model, match the Shapley values (defined 
+ by the following equation):
+
+$$
+φ_{i}(v)=\sum_{S⊆M\{i\}} \frac{|S|!(M-|S|-1)!}{M!}(v(S ∪ {i}) - v(S))
+$$
+where:
+- $M$ represents the number of features
+- $S$ represents a feature coalition (group)
+- $v(S)$ represents the *coalition worth*. Which can be described as the estimation of the black box model (or complex
+ function) prediction if this had been generated taking into account only the features included in coalition $S$
+ 
