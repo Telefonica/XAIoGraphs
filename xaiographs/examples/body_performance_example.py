@@ -30,7 +30,7 @@ def main():
     df_global_semantics, df_target_semantics = load_body_performance_why(language=LANG)
 
     # EXPLAINER
-    explainer = Explainer(importance_engine='LIDE', verbose=1)
+    explainer = Explainer(importance_engine='LIDE', number_of_features=11, verbose=1)
     explainer.fit(df=example_dataset, feature_cols=feature_cols, target_cols=target_cols)
 
     # WHY
