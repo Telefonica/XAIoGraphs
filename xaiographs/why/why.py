@@ -111,8 +111,15 @@ class Why(object):
         LANG_EN: ' and '
     }
 
+    WHY_TEMPLATE_PATH = {
+        LANG_EN: 'templates/why_templates_en.csv',
+        LANG_ES: 'templates/why_templates_es.csv'
+    }
+
+    SRC_DIR = os.path.dirname(__file__)
+
     def __init__(self, language: str, local_reliability: pd.DataFrame, local_feat_val_expl: pd.DataFrame,
-                 why_elements: pd.DataFrame, why_target: pd.DataFrame, why_templates: pd.DataFrame,
+                 why_elements: pd.DataFrame, why_target: pd.DataFrame, why_templates: Optional[pd.DataFrame] = None,
                  n_local_features: int = 2, n_global_features: int = 2, min_reliability: float = 0.0,
                  destination_path: str = './xaioweb_files', sample_ids_to_export: Optional[pd.Series] = None,
                  verbose: int = 0):
@@ -124,7 +131,7 @@ class Why(object):
         self.__local_feat_val_expl = local_feat_val_expl
         self.__why_elements = why_elements
         self.__why_target = why_target
-        self.__why_templates = why_templates
+        self.__why_templates = self.__get_template(df_templates=why_templates, language=language)
         self.__n_local_features = n_local_features
         self.__n_global_features = n_global_features
         self.__min_reliability = min_reliability
@@ -153,6 +160,35 @@ class Why(object):
             print(WARN_MSG.format('\"why_explanation\"'))
         else:
             return self.__df_why
+
+    def __get_template(self, df_templates: Union[pd.DataFrame, None], language: str = LANG_EN) -> pd.DataFrame:
+        """Returns a dataframe with sentence templates. The first element of the dataframe corresponds to a default
+        phrase that will be returned when the reliability threshold (min_reliability) is not exceeded. The rest of
+        the elements are default sentence templates. Default templates available in English and Spanish.
+
+        Parameters
+        ----------
+        df_templates : Union[pd.DataFrame, None]
+            Structure containing the templates of the sentences with the explanation. If the parameter is null, it
+            returns the default template in English or Spanish.
+
+        language : str
+            Language identifier.
+
+            .. important::
+               Spanish (*'es'*) and English (*'en'*) are the available options for version 0.0.2
+
+        Returns
+        -------
+        phrase templates : pandas.DataFrame
+            Returns a dataframe with sentence templates
+        """
+        if df_templates is not None:
+            return df_templates
+        else:
+            return (pd.read_fwf(os.path.join(self.SRC_DIR, self.WHY_TEMPLATE_PATH[LANG_ES]), header=None)
+                    if language == LANG_ES
+                    else pd.read_fwf(os.path.join(self.SRC_DIR, self.WHY_TEMPLATE_PATH[LANG_EN]), header=None))
 
     def __build_template(self, items: Union[List, Tuple]) -> str:
         """

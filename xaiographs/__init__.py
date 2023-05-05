@@ -18,4 +18,4 @@ see https://www.gnu.org/licenses/."""
 
 from .exgraph.explainer import Explainer
 from .fairness import Fairness
-from .why import Why
+from .why.why import Why

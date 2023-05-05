@@ -34,10 +34,6 @@ TITANIC_TARGET_SEMANTICS_PATH = {
     LANG_EN: 'data/titanic/target_semantics_en.csv',
     LANG_ES: 'data/titanic/target_semantics_es.csv'
 }
-TITANIC_WHY_TEMPLATE_PATH = {
-    LANG_EN: 'data/why_templates_en.csv',
-    LANG_ES: 'data/why_templates_es.csv'
-}
 FEATURE_COLS_TITANIC = ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
 TARGET_COLS_TITANIC = ['SURVIVED', 'NO_SURVIVED']
 
@@ -52,10 +48,6 @@ BODY_PERFORMANCE_GLOBAL_SEMANTICS_PATH = {
 BODY_PERFORMANCE_TARGET_SEMANTICS_PATH = {
     LANG_EN: 'data/body_performance/target_semantics_en.csv',
     LANG_ES: 'data/body_performance/target_semantics_es.csv'
-}
-BODY_PERFORMANCE_WHY_TEMPLATE_PATH = {
-    LANG_EN: 'data/why_templates_en.csv',
-    LANG_ES: 'data/why_templates_es.csv'
 }
 FEATURE_COLS_BODY_PERFORMANCE = ['age', 'gender', 'height_cm', 'weight_kg', 'body_fat_%', 'diastolic', 'systolic',
                                  'gripForce', 'sit_and_bend_forward_cm', 'sit-ups_counts', 'broad_jump_cm']
@@ -72,10 +64,6 @@ EDUCATION_PERFORMANCE_GLOBAL_SEMANTICS_PATH = {
 EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH = {
     LANG_EN: 'data/education_performance/target_semantics_en.csv',
     LANG_ES: 'data/education_performance/target_semantics_es.csv'
-}
-EDUCATION_PERFORMANCE_WHY_TEMPLATE_PATH = {
-    LANG_EN: 'data/why_templates_en.csv',
-    LANG_ES: 'data/why_templates_es.csv'
 }
 FEATURE_COLS_EDUCATION_PERFORMANCE = ['age', 'sex', 'graduated_h_school_type', 'scholarship_type',
                                       'additional_work', 'activity', 'partner', 'total_salary', 'transport',
@@ -187,8 +175,8 @@ def load_titanic_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str,
     return df_dataset, FEATURE_COLS_TITANIC, TARGET_COLS_TITANIC, TARGET_COL, PREDICT_COL
 
 
-def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Function that returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
+def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
     calculated with the Titanic dataset.
 
 
@@ -200,15 +188,14 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
 
     Returns
     -------
-    load_titanic_why : Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
+    load_titanic_why : Tuple[pd.DataFrame, pd.DataFrame]
         + pd.DataFrame with the natural language explanation of global feature-value we want to use
         + pd.DataFrame with the natural language explanation of feature-value we want to use per target
-        + pd.DataFrame with the templates of the sentences with the explanation
 
 
     Example:
             >>> from xaiographs.datasets import load_titanic_why
-            >>> df_global_semantics, df_target_semantics, df_why_templates = load_titanic_why()
+            >>> df_global_semantics, df_target_semantics = load_titanic_why()
             >>> df_global_semantics.head(5)
                  feature_value                              reason
             0      gender_male                         to be a man
@@ -223,13 +210,6 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
             2  NO_SURVIVED       is_alone_1                     they traveled alone
             3  NO_SURVIVED    family_size_2  they were from a family of few members
             4  NO_SURVIVED  family_size_3-5           they were from a large family
-            >>> df_why_templates.head(5)
-                                                               0
-            0    An explanation cannot be offered for this case.
-            1  For $temp_local_explain, this case has been cl...
-            2  For $temp_local_explain, this case has been cl...
-            3  This case has been classified as $target becau...
-            4  The classification of this case as $target is ...
 
     """
     df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_ES]))
@@ -238,11 +218,8 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
     df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_EN])))
-    df_why_templates = (pd.read_fwf(os.path.join(SRC_DIR, TITANIC_WHY_TEMPLATE_PATH[LANG_ES]), header=None)
-                        if language == LANG_ES
-                        else pd.read_fwf(os.path.join(SRC_DIR, TITANIC_WHY_TEMPLATE_PATH[LANG_EN]), header=None))
 
-    return df_global_semantic, df_target_semantic, df_why_templates
+    return df_global_semantic, df_target_semantic
 
 
 def load_body_performance() -> pd.DataFrame:
@@ -345,8 +322,8 @@ def load_body_performance_discretized() -> Tuple[pd.DataFrame, List[str], List[s
     return df_dataset, FEATURE_COLS_BODY_PERFORMANCE, TARGET_COLS_BODY_PERFORMANCE, TARGET_COL, PREDICT_COL
 
 
-def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Function that returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
+def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
     calculated with the Body Performance dataset.
 
 
@@ -358,15 +335,14 @@ def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd
 
     Returns
     -------
-    load_body_performance_why : Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
+    load_body_performance_why : Tuple[pd.DataFrame, pd.DataFrame]
         + pd.DataFrame with the natural language explanation of global feature-value we want to use
         + pd.DataFrame with the natural language explanation of feature-value we want to use per target
-        + pd.DataFrame with the templates of the sentences with the explanation
 
 
     Example:
             >>> from xaiographs.datasets import load_body_performance_why
-            >>> df_global_semantics, df_target_semantics, df_why_templates = load_body_performance_why()
+            >>> df_global_semantics, df_target_semantics = load_body_performance_why()
             >>> df_global_semantics.head(5)
                     feature_value	reason
                 0	    age_26-35	being a child
@@ -381,12 +357,6 @@ def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd
                 2	high_performance	    age_46-55    a young man with a physical condition above av...
                 3	high_performance	      age_<25    an adult with a physical condition above average
                 4	high_performance	      age_>55    an older person with a higher than average phy...
-            >>> df_why_templates.head(5)
-                0	An explanation cannot be offered for this case.
-                1	For $temp_local_explain, this case has been cl...
-                2	For $temp_local_explain, this case has been cl...
-                3	This case has been classified as $target becau...
-                4	The classification of this case as $target is ...
 
     """
     df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_ES]))
@@ -395,11 +365,8 @@ def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd
     df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_EN])))
-    df_why_templates = (pd.read_fwf(os.path.join(SRC_DIR, BODY_PERFORMANCE_WHY_TEMPLATE_PATH[LANG_ES]), header=None)
-                        if language == LANG_ES
-                        else pd.read_fwf(os.path.join(SRC_DIR, BODY_PERFORMANCE_WHY_TEMPLATE_PATH[LANG_EN]), header=None))
 
-    return df_global_semantic, df_target_semantic, df_why_templates
+    return df_global_semantic, df_target_semantic
 
 
 def load_education_performance() -> pd.DataFrame:
@@ -538,8 +505,8 @@ def load_education_performance_discretized() -> Tuple[pd.DataFrame, List[str], L
     return df_dataset, FEATURE_COLS_EDUCATION_PERFORMANCE, TARGET_COLS_EDUCATION_PERFORMANCE, TARGET_COL, PREDICT_COL
 
 
-def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Function that returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
+def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
     calculated with the Body Performance dataset.
 
 
@@ -551,20 +518,28 @@ def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFram
 
     Returns
     -------
-    load_education_performance_why : Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]
+    load_education_performance_why : Tuple[pd.DataFrame, pd.DataFrame]
         + pd.DataFrame with the natural language explanation of global feature-value we want to use
         + pd.DataFrame with the natural language explanation of feature-value we want to use per target
-        + pd.DataFrame with the templates of the sentences with the explanation
 
 
     Example:
             >>> from xaiographs.datasets import load_education_performance_why
-            >>> df_global_semantics, df_target_semantics, df_why_templates = load_education_performance_why()
+            >>> df_global_semantics, df_target_semantics = load_education_performance_why()
             >>> df_global_semantics.head(5)
-
+                          feature_value                                        reason
+            0        accomodation_other  having been in another type of accommodation
+            1    accomodation_dormitory               having been housed in a bedroom
+            2       accomodation_rental         having been in a rented accommodation
+            3  accomodation_with family         having been in a family accommodation
+            4                 age_18-21                      being under 21 years old
             >>> df_target_semantics.head(5)
-
-            >>> df_why_templates.head(5)
+              target             feature_value                       reason
+            0      A        accomodation_Other     live in other facilities
+            1      A    accomodation_dormitory          living in a bedroom
+            2      A       accomodation_rental             living in rental
+            3      A  accomodation_with family     he lives with his family
+            4      A                 age_18-21  it is below the average age
 
     """
     df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_ES]))
@@ -573,8 +548,5 @@ def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFram
     df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_EN])))
-    df_why_templates = (pd.read_fwf(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_WHY_TEMPLATE_PATH[LANG_ES]), header=None)
-                        if language == LANG_ES
-                        else pd.read_fwf(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_WHY_TEMPLATE_PATH[LANG_EN]), header=None))
 
-    return df_global_semantic, df_target_semantic, df_why_templates
+    return df_global_semantic, df_target_semantic

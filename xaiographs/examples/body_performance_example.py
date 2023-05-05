@@ -27,7 +27,7 @@ LANG = 'en'
 def main():
     # LOAD DATASETS & SEMANTICS
     example_dataset, feature_cols, target_cols, y_true, y_predict = load_body_performance_discretized()
-    df_global_semantics, df_target_semantics, df_why_templates = load_body_performance_why(language=LANG)
+    df_global_semantics, df_target_semantics = load_body_performance_why(language=LANG)
 
     # EXPLAINER
     explainer = Explainer(importance_engine='LIDE', verbose=1)
@@ -38,7 +38,6 @@ def main():
               local_reliability=explainer.local_dataset_reliability,
               local_feat_val_expl=explainer.local_feature_value_explainability,
               why_elements=df_global_semantics,
-              why_templates=df_why_templates,
               why_target=df_target_semantics,
               sample_ids_to_export=explainer.sample_ids_to_display,
               verbose=1)
