@@ -3,6 +3,7 @@
 
 <h3 class="user-guide-tittle"><a href="explainability.html">1. Explainability</a></h3>
 
+* [Requirements](explainability.md#requirements)
 * [Feature selection](explainability.md#feature-selection)
 * [LIDE](explainability.md#lide-local-interpretable-data-explanations)
 

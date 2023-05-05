@@ -206,5 +206,36 @@ where:
 - $M$ represents the number of features
 - $S$ represents a feature coalition (group)
 - $v(S)$ represents the *coalition worth*. Which can be described as the estimation of the black box model (or complex
- function) prediction if this had been generated taking into account only the features included in coalition $S$
+ function) ($F(X)$) prediction if this had been generated taking into account only the features included in coalition 
+ $S$
  
+So, coalition worth can be computed as the expected value of the blackbox model prediction when the coalition features 
+are within the model input:
+
+$$
+v(S) = E[F(X_{s̅}, X_{s})|X_{s}] = \int{F(X_{s̅}, X_{s})P(X_{s̅}|X_{s}}) dX_{s̅}
+$$
+where:
+- $S$ represents $X_{s}≡\{x_{1}, x_{2}, \dots, x_{s}\} ⊆ X$ which are the features included in the coalition
+- $S̅$ represents $X_{s̅}=\{X\}-\{X_{s}\}$ which is the set of features complementary to $S$
+- $P(X_{s̅}|X_{s})$ is the probability of $X_{s̅}$ given or conditioned by $X_{s}$
+ 
+In order to simplify the above calculation, SHAP algorithm assumes the *Feature Independence* hypothesis, which is a 
+strong assumption:
+
+$$
+P(X_{s̅}|X_{s}) = P(X_{s̅})
+$$ 
+ **LIDE does not rely on that assumption** but instead, directly estimates $P(X_{s̅}|X_{s})$ (thus the $v(S)$ needed to 
+ obtain the Shapley values). We won't delve into details, but, in order to to that estimation it relies on two 
+ hypotheses:
+ - $Z'=h(X)=f(discretize(X))$, that is to say, dummy variables used for explanation are obtained from the discretized 
+ version of features X used by the black box model
+ - When generating the explanation, access is granted to a set of statistically significant historical data 
+ $\{x_{1}^{i}, x_{2}^{i}, \dots, x_{N}^{i}, F(x^{i})\}$ where $i ∈ [1, K]$ being $K$ large enough depending on the 
+ problem to be explained
+ 
+The latter assumption is particularly crucial since LIDE depends on the historical data at disposal: a larger amount 
+leads to a high quality explanation and a higher computational overhead. Less data means the opposite: less quality
+ explanation but also a less computationally demanding process. Furthermore, LIDE does neither generate artificial data
+ nor modify the probability distribution of the problem to be solved.
