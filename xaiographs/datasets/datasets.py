@@ -30,51 +30,49 @@ TITANIC_VALUES_SEMANTICS_PATH = {
     LANG_EN: 'data/titanic/values_semantics_en.csv',
     LANG_ES: 'data/titanic/values_semantics_es.csv'
 }
-TITANIC_TARGET_SEMANTICS_PATH = {
-    LANG_EN: 'data/titanic/target_semantics_en.csv',
-    LANG_ES: 'data/titanic/target_semantics_es.csv'
+TITANIC_TARGET_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/titanic/target_values_semantics_en.csv',
+    LANG_ES: 'data/titanic/target_value_semantics_es.csv'
 }
 FEATURE_COLS_TITANIC = ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
 TARGET_COLS_TITANIC = ['SURVIVED', 'NO_SURVIVED']
 
-
 # Body Performance Dataset
-BODY_PERFORMANCE_PATH = 'data/body_performance/dataset.csv'
-BODY_PERFORMANCE_DISCRETIZED_PATH = 'data/body_performance/dataset_discretized.csv'
-BODY_PERFORMANCE_VALUES_SEMANTICS_PATH = {
+BODY_PERFORM_PATH = 'data/body_performance/dataset.csv'
+BODY_PERFORM_DISCRETIZED_PATH = 'data/body_performance/dataset_discretized.csv'
+BODY_PERFORM_VALUES_SEMANTICS_PATH = {
     LANG_EN: 'data/body_performance/values_semantics_en.csv',
     LANG_ES: 'data/body_performance/values_semantics_es.csv'
 }
-BODY_PERFORMANCE_TARGET_SEMANTICS_PATH = {
-    LANG_EN: 'data/body_performance/target_semantics_en.csv',
-    LANG_ES: 'data/body_performance/target_semantics_es.csv'
+BODY_PERFORM_TARGET_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/body_performance/target_values_semantics_en.csv',
+    LANG_ES: 'data/body_performance/target_value_semantics_es.csv'
 }
-FEATURE_COLS_BODY_PERFORMANCE = ['age', 'gender', 'height_cm', 'weight_kg', 'body_fat_%', 'diastolic', 'systolic',
-                                 'gripForce', 'sit_and_bend_forward_cm', 'sit-ups_counts', 'broad_jump_cm']
-TARGET_COLS_BODY_PERFORMANCE = ['high_performance', 'mid_performance', 'low_performance']
-
+FEATURE_COLS_BODY_PERFORM = ['age', 'gender', 'height_cm', 'weight_kg', 'body_fat_%', 'diastolic', 'systolic',
+                             'gripForce', 'sit_and_bend_forward_cm', 'sit-ups_counts', 'broad_jump_cm']
+TARGET_COLS_BODY_PERFORM = ['high_performance', 'mid_performance', 'low_performance']
 
 # Education Performance Dataset
-EDUCATION_PERFORMANCE_PATH = 'data/education_performance/dataset_performance.csv'
-EDUCATION_PERFORMANCE_DISCRETIZED_PATH = 'data/education_performance/dataset_discretized.csv'
-EDUCATION_PERFORMANCE_VALUES_SEMANTICS_PATH = {
+EDUC_PERFORM_PATH = 'data/education_performance/dataset_performance.csv'
+EDUC_PERFORM_DISCRETIZED_PATH = 'data/education_performance/dataset_discretized.csv'
+EDUC_PERFORM_VALUES_SEMANTICS_PATH = {
     LANG_EN: 'data/education_performance/values_semantics_en.csv',
     LANG_ES: 'data/education_performance/values_semantics_es.csv'
 }
-EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH = {
-    LANG_EN: 'data/education_performance/target_semantics_en.csv',
-    LANG_ES: 'data/education_performance/target_semantics_es.csv'
+EDUC_PERFORM_TARGET_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/education_performance/target_values_semantics_en.csv',
+    LANG_ES: 'data/education_performance/target_value_semantics_es.csv'
 }
-FEATURE_COLS_EDUCATION_PERFORMANCE = ['age', 'sex', 'graduated_h_school_type', 'scholarship_type',
-                                      'additional_work', 'activity', 'partner', 'total_salary', 'transport',
-                                      'accomodation', 'mother_ed', 'farther_ed', 'parental_status',
-                                      'mother_occup', 'father_occup', 'weekly_study_hours',
-                                      'reading_non_scientific', 'reading_scientific',
-                                      'attendance_seminars_dep', 'impact_of_projects', 'attendances_classes',
-                                      'preparation_midterm_company', 'preparation_midterm_time',
-                                      'taking_notes', 'listenning', 'discussion_improves_interest',
-                                      'flip_classrom']
-TARGET_COLS_EDUCATION_PERFORMANCE = ['A', 'B', 'C', 'D', 'Fail']
+FEATURE_COLS_EDUC_PERFORM = ['age', 'sex', 'graduated_h_school_type', 'scholarship_type',
+                             'additional_work', 'activity', 'partner', 'total_salary', 'transport',
+                             'accomodation', 'mother_ed', 'farther_ed', 'parental_status',
+                             'mother_occup', 'father_occup', 'weekly_study_hours',
+                             'reading_non_scientific', 'reading_scientific',
+                             'attendance_seminars_dep', 'impact_of_projects', 'attendances_classes',
+                             'preparation_midterm_company', 'preparation_midterm_time',
+                             'taking_notes', 'listenning', 'discussion_improves_interest',
+                             'flip_classrom']
+TARGET_COLS_EDUC_PERFORM = ['A', 'B', 'C', 'D', 'Fail']
 
 # All datasets that include predictions must have a column with the prediction and another with its real target
 TARGET_COL = 'y_true'
@@ -195,7 +193,7 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
 
     Example:
             >>> from xaiographs.datasets import load_titanic_why
-            >>> df_values_semantics, df_target_semantics = load_titanic_why()
+            >>> df_values_semantics, df_target_values_semantics = load_titanic_why()
             >>> df_values_semantics.head(5)
                  feature_value                              reason
             0      gender_male                         to be a man
@@ -203,7 +201,7 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
             2       is_alone_1                        travel alone
             3    family_size_2  to be from a family of few members
             4  family_size_3-5                   be a large family
-            >>> df_target_semantics.head(5)
+            >>> df_target_values_semantics.head(5)
                     target    feature_value                                  reason
             0  NO_SURVIVED      gender_male                      many men have died
             1  NO_SURVIVED    gender_female                           to be a woman
@@ -215,11 +213,11 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
     df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_VALUES_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, TITANIC_VALUES_SEMANTICS_PATH[LANG_EN])))
-    df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_ES]))
-                          if language == LANG_ES
-                          else pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_EN])))
+    df_target_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_VALUES_SEMANTICS_PATH[LANG_ES]))
+                                 if language == LANG_ES
+                                 else pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_VALUES_SEMANTICS_PATH[LANG_EN])))
 
-    return df_values_semantic, df_target_semantic
+    return df_values_semantic, df_target_values_semantic
 
 
 def load_body_performance() -> pd.DataFrame:
@@ -318,8 +316,8 @@ def load_body_performance_discretized() -> Tuple[pd.DataFrame, List[str], List[s
             >>> y_predict
             'y_predict'
     """
-    df_dataset = pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_DISCRETIZED_PATH))
-    return df_dataset, FEATURE_COLS_BODY_PERFORMANCE, TARGET_COLS_BODY_PERFORMANCE, TARGET_COL, PREDICT_COL
+    df_dataset = pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORM_DISCRETIZED_PATH))
+    return df_dataset, FEATURE_COLS_BODY_PERFORM, TARGET_COLS_BODY_PERFORM, TARGET_COL, PREDICT_COL
 
 
 def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -342,7 +340,7 @@ def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd
 
     Example:
             >>> from xaiographs.datasets import load_body_performance_why
-            >>> df_values_semantics, df_target_semantics = load_body_performance_why()
+            >>> df_values_semantics, df_target_values_semantics = load_body_performance_why()
             >>> df_values_semantics.head(5)
                     feature_value	reason
                 0	    age_26-35	being a child
@@ -350,7 +348,7 @@ def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd
                 2	    age_46-55	being young
                 3	      age_<25	to be adult
                 4	      age_>55   being an older person
-            >>> df_target_semantics.head(5)
+            >>> df_target_values_semantics.head(5)
                     target	            feature_value	reason
                 0	high_performance	    age_26-35    a child with a physical condition above average
                 1	high_performance	    age_36-45    a teenager with a higher than average physical...
@@ -359,14 +357,15 @@ def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd
                 4	high_performance	      age_>55    an older person with a higher than average phy...
 
     """
-    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_VALUES_SEMANTICS_PATH[LANG_ES]))
+    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORM_VALUES_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
-                          else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_VALUES_SEMANTICS_PATH[LANG_EN])))
-    df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_ES]))
-                          if language == LANG_ES
-                          else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_EN])))
+                          else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORM_VALUES_SEMANTICS_PATH[LANG_EN])))
+    df_target_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORM_TARGET_VALUES_SEMANTICS_PATH[LANG_ES]))
+                                 if language == LANG_ES
+                                 else pd.read_csv(
+        os.path.join(SRC_DIR, BODY_PERFORM_TARGET_VALUES_SEMANTICS_PATH[LANG_EN])))
 
-    return df_values_semantic, df_target_semantic
+    return df_values_semantic, df_target_values_semantic
 
 
 def load_education_performance() -> pd.DataFrame:
@@ -419,8 +418,8 @@ def load_education_performance() -> pd.DataFrame:
             2     1    1                        1                 4                2         2        2             1          1             1          3           4         4                2             2             2                   3                       2                   2                        1                   1                    1                            1                         1             2           2                             2              3          1   Fail
             3     2    1                        2                 3                1         1        1             1          2             1          1           1         5                3             2             4                   5                       3                   3                        1                   3                    1                            2                         1             1           1                             1              1          8   Fail
     """
-        
-    return pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_PATH))
+
+    return pd.read_csv(os.path.join(SRC_DIR, EDUC_PERFORM_PATH))
 
 
 def load_education_performance_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
@@ -501,8 +500,8 @@ def load_education_performance_discretized() -> Tuple[pd.DataFrame, List[str], L
             >>> y_predict
             'y_predict'
     """
-    df_dataset = pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_DISCRETIZED_PATH))
-    return df_dataset, FEATURE_COLS_EDUCATION_PERFORMANCE, TARGET_COLS_EDUCATION_PERFORMANCE, TARGET_COL, PREDICT_COL
+    df_dataset = pd.read_csv(os.path.join(SRC_DIR, EDUC_PERFORM_DISCRETIZED_PATH))
+    return df_dataset, FEATURE_COLS_EDUC_PERFORM, TARGET_COLS_EDUC_PERFORM, TARGET_COL, PREDICT_COL
 
 
 def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -525,7 +524,7 @@ def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFram
 
     Example:
             >>> from xaiographs.datasets import load_education_performance_why
-            >>> df_values_semantics, df_target_semantics = load_education_performance_why()
+            >>> df_values_semantics, df_target_values_semantics = load_education_performance_why()
             >>> df_values_semantics.head(5)
                           feature_value                                        reason
             0        accomodation_other  having been in another type of accommodation
@@ -533,7 +532,7 @@ def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFram
             2       accomodation_rental         having been in a rented accommodation
             3  accomodation_with family         having been in a family accommodation
             4                 age_18-21                      being under 21 years old
-            >>> df_target_semantics.head(5)
+            >>> df_target_values_semantics.head(5)
               target             feature_value                       reason
             0      A        accomodation_Other     live in other facilities
             1      A    accomodation_dormitory          living in a bedroom
@@ -542,11 +541,12 @@ def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFram
             4      A                 age_18-21  it is below the average age
 
     """
-    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_VALUES_SEMANTICS_PATH[LANG_ES]))
+    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUC_PERFORM_VALUES_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
-                          else pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_VALUES_SEMANTICS_PATH[LANG_EN])))
-    df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_ES]))
-                          if language == LANG_ES
-                          else pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_EN])))
+                          else pd.read_csv(os.path.join(SRC_DIR, EDUC_PERFORM_VALUES_SEMANTICS_PATH[LANG_EN])))
+    df_target_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUC_PERFORM_TARGET_VALUES_SEMANTICS_PATH[LANG_ES]))
+                                 if language == LANG_ES
+                                 else pd.read_csv(
+        os.path.join(SRC_DIR, EDUC_PERFORM_TARGET_VALUES_SEMANTICS_PATH[LANG_EN])))
 
-    return df_values_semantic, df_target_semantic
+    return df_values_semantic, df_target_values_semantic

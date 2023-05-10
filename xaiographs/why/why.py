@@ -38,7 +38,7 @@ REASON = 'reason'
 # FILE CONSTANTS
 WHY_XAIOWEB_FILE = 'local_reason_why.json'
 WHY_VALUES_SEMANTICS_TEMPLATE = 'values_semantics.csv'
-WHY_TARGET_SEMANTICS_TEMPLATE = 'target_semantics.csv'
+WHY_TARGET_VALUES_SEMANTICS_TEMPLATE = 'target_values_semantics.csv'
 
 
 class Why(object):
@@ -64,7 +64,7 @@ class Why(object):
     why_values_semantics : pandas.DataFrame
         Structure containing the natural language explanation of the nodes to be used.
 
-    why_target_semantics : pandas.DataFrame
+    why_target_values_semantics : pandas.DataFrame
         Structure containing the natural language explanation of the nodes we want to be used per target value.
 
     why_templates : pandas.DataFrame
@@ -99,7 +99,7 @@ class Why(object):
 
     """
 
-    _LOCAL = 'local'
+    _TARGET_VALUES = 'target_values'
     _VALUES = 'values'
     _SEP_LAST = {
         LANG_ES: ' y ',
@@ -113,9 +113,10 @@ class Why(object):
 
     SRC_DIR = os.path.dirname(__file__)
 
-    def __init__(self, language: str, explainer: Explainer, why_values_semantics: pd.DataFrame, why_target_semantics: pd.DataFrame,
-                 why_templates: Optional[pd.DataFrame] = None, n_local_features: int = 2, n_feature_values: int = 2,
-                 min_reliability: float = 0.0, destination_path: str = './xaioweb_files', verbose: int = 0):
+    def __init__(self, language: str, explainer: Explainer, why_values_semantics: pd.DataFrame,
+                 why_target_values_semantics: pd.DataFrame, why_templates: Optional[pd.DataFrame] = None,
+                 n_local_features: int = 2, n_feature_values: int = 2, min_reliability: float = 0.0,
+                 destination_path: str = './xaioweb_files', verbose: int = 0):
         self.__df_why = None
         self.__language = language
         if self.__language not in self._SEP_LAST.keys():
@@ -124,7 +125,7 @@ class Why(object):
         self.__local_feat_val_expl = explainer.local_feature_value_explainability
         self.__sample_ids_to_export = explainer.sample_ids_to_display
         self.__why_values_semantics = why_values_semantics
-        self.__why_target_semantics = why_target_semantics
+        self.__why_target_values_semantics = why_target_values_semantics
         self.__why_templates = self.__get_template(df_templates=why_templates, language=language)
         self.__n_local_features = n_local_features
         self.__n_feature_values = n_feature_values
@@ -245,8 +246,8 @@ class Why(object):
               .merge(self.__local_feat_val_expl[[sample_id_column, FEATURE_VALUE, IMPORTANCE]], on=sample_id_column,
                      how='inner')
               .merge(self.__why_values_semantics, on=FEATURE_VALUE, how='inner')
-              .merge(self.__why_target_semantics, on=[TARGET, FEATURE_VALUE], how='inner',
-                     suffixes=['_' + self._LOCAL, '_' + self._VALUES]))
+              .merge(self.__why_target_values_semantics, on=[TARGET, FEATURE_VALUE], how='inner',
+                     suffixes=['_' + self._TARGET_VALUES, '_' + self._VALUES]))
         df[RANK] = df.groupby(sample_id_column)[IMPORTANCE].rank(method='dense', ascending=False).astype(int)
 
         max_n_features = max(self.__n_local_features, self.__n_feature_values)
@@ -266,21 +267,21 @@ class Why(object):
                 return self.__why_templates.iloc[0, 0]
 
             # Build why sentence
-            kw_local = dict([('v_' + self._LOCAL + '_' + str(i), v) for i, v in
-                             enumerate(df_single[REASON + '_' + self._LOCAL].iloc[:self.__n_local_features])])
+            kw_target_values = dict([('v_' + self._TARGET_VALUES + '_' + str(i), v) for i, v in
+                                     enumerate(df_single[REASON + '_' + self._TARGET_VALUES].iloc[:self.__n_local_features])])
             kw_values = dict([('v_' + self._VALUES + '_' + str(i), v) for i, v in
                               enumerate(df_single[REASON + '_' + self._VALUES].iloc[:self.__n_feature_values])])
-            temp_local_explain = self.__build_template(items=list(kw_local))
+            temp_target_values_explain = self.__build_template(items=list(kw_target_values))
             temp_values_explain = self.__build_template(items=list(kw_values))
 
             temp_idx_max = self.__why_templates.shape[0] - 1
             temp_idx = self.__rng.randint(1, temp_idx_max) if template_index == RAND else min(template_index,
                                                                                               temp_idx_max)
             temp_why_str = (Template(Template(self.__why_templates.iloc[temp_idx, 0])
-                                     .substitute(temp_local_explain=temp_local_explain,
+                                     .substitute(temp_target_values_explain=temp_target_values_explain,
                                                  temp_values_explain=temp_values_explain,
                                                  target=df_single[TARGET].iloc[0]))
-                            .substitute(**kw_local, **kw_values)
+                            .substitute(**kw_target_values, **kw_values)
                             .capitalize())
             return temp_why_str
 
@@ -354,8 +355,8 @@ class Why(object):
                               index=False, sep=COMMA_SEP)
             xgprint(verbose,
                     'INFO:          Why instance: saving target values semantic template ({}) to {}'.format(
-                        WHY_TARGET_SEMANTICS_TEMPLATE, destination_template_path))
-            df_target.to_csv(path_or_buf=os.path.join(destination_template_path, WHY_TARGET_SEMANTICS_TEMPLATE),
+                        WHY_TARGET_VALUES_SEMANTICS_TEMPLATE, destination_template_path))
+            df_target.to_csv(path_or_buf=os.path.join(destination_template_path, WHY_TARGET_VALUES_SEMANTICS_TEMPLATE),
                              index=False, sep=COMMA_SEP)
         else:
             xgprint(verbose,
