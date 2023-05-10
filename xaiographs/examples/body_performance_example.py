@@ -27,7 +27,7 @@ LANG = 'en'
 def main():
     # LOAD DATASETS & SEMANTICS
     example_dataset, feature_cols, target_cols, y_true, y_predict = load_body_performance_discretized()
-    df_global_semantics, df_target_semantics = load_body_performance_why(language=LANG)
+    df_values_semantics, df_target_semantics = load_body_performance_why(language=LANG)
 
     # EXPLAINER
     explainer = Explainer(importance_engine='LIDE', number_of_features=11, verbose=1)
@@ -35,7 +35,7 @@ def main():
 
     # WHY
     why = Why(explainer=explainer,
-              why_global_semantics=df_global_semantics,
+              why_values_semantics=df_values_semantics,
               why_target_semantics=df_target_semantics,
               language=LANG,
               verbose=1)

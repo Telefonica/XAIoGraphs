@@ -26,9 +26,9 @@ from xaiographs.common.constants import LANG_EN, LANG_ES
 # Titanic Dataset
 TITANIC_PATH = 'data/titanic/dataset.csv'
 TITANIC_DISCRETIZED_PATH = 'data/titanic/dataset_discretized.csv'
-TITANIC_GLOBAL_SEMANTICS_PATH = {
-    LANG_EN: 'data/titanic/global_semantics_en.csv',
-    LANG_ES: 'data/titanic/global_semantics_es.csv'
+TITANIC_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/titanic/values_semantics_en.csv',
+    LANG_ES: 'data/titanic/values_semantics_es.csv'
 }
 TITANIC_TARGET_SEMANTICS_PATH = {
     LANG_EN: 'data/titanic/target_semantics_en.csv',
@@ -41,9 +41,9 @@ TARGET_COLS_TITANIC = ['SURVIVED', 'NO_SURVIVED']
 # Body Performance Dataset
 BODY_PERFORMANCE_PATH = 'data/body_performance/dataset.csv'
 BODY_PERFORMANCE_DISCRETIZED_PATH = 'data/body_performance/dataset_discretized.csv'
-BODY_PERFORMANCE_GLOBAL_SEMANTICS_PATH = {
-    LANG_EN: 'data/body_performance/global_semantics_en.csv',
-    LANG_ES: 'data/body_performance/global_semantics_es.csv'
+BODY_PERFORMANCE_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/body_performance/values_semantics_en.csv',
+    LANG_ES: 'data/body_performance/values_semantics_es.csv'
 }
 BODY_PERFORMANCE_TARGET_SEMANTICS_PATH = {
     LANG_EN: 'data/body_performance/target_semantics_en.csv',
@@ -57,9 +57,9 @@ TARGET_COLS_BODY_PERFORMANCE = ['high_performance', 'mid_performance', 'low_perf
 # Education Performance Dataset
 EDUCATION_PERFORMANCE_PATH = 'data/education_performance/dataset_performance.csv'
 EDUCATION_PERFORMANCE_DISCRETIZED_PATH = 'data/education_performance/dataset_discretized.csv'
-EDUCATION_PERFORMANCE_GLOBAL_SEMANTICS_PATH = {
-    LANG_EN: 'data/education_performance/global_semantics_en.csv',
-    LANG_ES: 'data/education_performance/global_semantics_es.csv'
+EDUCATION_PERFORMANCE_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/education_performance/values_semantics_en.csv',
+    LANG_ES: 'data/education_performance/values_semantics_es.csv'
 }
 EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH = {
     LANG_EN: 'data/education_performance/target_semantics_en.csv',
@@ -189,14 +189,14 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
     Returns
     -------
     load_titanic_why : Tuple[pd.DataFrame, pd.DataFrame]
-        + pd.DataFrame with the natural language explanation of global feature-value we want to use
+        + pd.DataFrame with the natural language explanation of feature-value we want to use
         + pd.DataFrame with the natural language explanation of feature-value we want to use per target
 
 
     Example:
             >>> from xaiographs.datasets import load_titanic_why
-            >>> df_global_semantics, df_target_semantics = load_titanic_why()
-            >>> df_global_semantics.head(5)
+            >>> df_values_semantics, df_target_semantics = load_titanic_why()
+            >>> df_values_semantics.head(5)
                  feature_value                              reason
             0      gender_male                         to be a man
             1    gender_female                       to be a woman
@@ -212,14 +212,14 @@ def load_titanic_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFram
             4  NO_SURVIVED  family_size_3-5           they were from a large family
 
     """
-    df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_ES]))
+    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_VALUES_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
-                          else pd.read_csv(os.path.join(SRC_DIR, TITANIC_GLOBAL_SEMANTICS_PATH[LANG_EN])))
+                          else pd.read_csv(os.path.join(SRC_DIR, TITANIC_VALUES_SEMANTICS_PATH[LANG_EN])))
     df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, TITANIC_TARGET_SEMANTICS_PATH[LANG_EN])))
 
-    return df_global_semantic, df_target_semantic
+    return df_values_semantic, df_target_semantic
 
 
 def load_body_performance() -> pd.DataFrame:
@@ -336,14 +336,14 @@ def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd
     Returns
     -------
     load_body_performance_why : Tuple[pd.DataFrame, pd.DataFrame]
-        + pd.DataFrame with the natural language explanation of global feature-value we want to use
+        + pd.DataFrame with the natural language explanation of feature-value we want to use
         + pd.DataFrame with the natural language explanation of feature-value we want to use per target
 
 
     Example:
             >>> from xaiographs.datasets import load_body_performance_why
-            >>> df_global_semantics, df_target_semantics = load_body_performance_why()
-            >>> df_global_semantics.head(5)
+            >>> df_values_semantics, df_target_semantics = load_body_performance_why()
+            >>> df_values_semantics.head(5)
                     feature_value	reason
                 0	    age_26-35	being a child
                 1	    age_36-45	being adolescent
@@ -359,14 +359,14 @@ def load_body_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd
                 4	high_performance	      age_>55    an older person with a higher than average phy...
 
     """
-    df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_ES]))
+    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_VALUES_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
-                          else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_EN])))
+                          else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_VALUES_SEMANTICS_PATH[LANG_EN])))
     df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, BODY_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_EN])))
 
-    return df_global_semantic, df_target_semantic
+    return df_values_semantic, df_target_semantic
 
 
 def load_education_performance() -> pd.DataFrame:
@@ -519,14 +519,14 @@ def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFram
     Returns
     -------
     load_education_performance_why : Tuple[pd.DataFrame, pd.DataFrame]
-        + pd.DataFrame with the natural language explanation of global feature-value we want to use
+        + pd.DataFrame with the natural language explanation of feature-value we want to use
         + pd.DataFrame with the natural language explanation of feature-value we want to use per target
 
 
     Example:
             >>> from xaiographs.datasets import load_education_performance_why
-            >>> df_global_semantics, df_target_semantics = load_education_performance_why()
-            >>> df_global_semantics.head(5)
+            >>> df_values_semantics, df_target_semantics = load_education_performance_why()
+            >>> df_values_semantics.head(5)
                           feature_value                                        reason
             0        accomodation_other  having been in another type of accommodation
             1    accomodation_dormitory               having been housed in a bedroom
@@ -542,11 +542,11 @@ def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFram
             4      A                 age_18-21  it is below the average age
 
     """
-    df_global_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_ES]))
+    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_VALUES_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
-                          else pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_GLOBAL_SEMANTICS_PATH[LANG_EN])))
+                          else pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_VALUES_SEMANTICS_PATH[LANG_EN])))
     df_target_semantic = (pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_ES]))
                           if language == LANG_ES
                           else pd.read_csv(os.path.join(SRC_DIR, EDUCATION_PERFORMANCE_TARGET_SEMANTICS_PATH[LANG_EN])))
 
-    return df_global_semantic, df_target_semantic
+    return df_values_semantic, df_target_semantic

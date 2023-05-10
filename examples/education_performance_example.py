@@ -24,7 +24,7 @@ LANG = 'en'
 
 # LOAD DATASETS & SEMANTICS
 example_dataset, feature_cols, target_cols, y_true, y_predict = load_education_performance_discretized()
-df_global_semantics, df_target_semantics = load_education_performance_why(language=LANG)
+df_values_semantics, df_target_semantics = load_education_performance_why(language=LANG)
 
 # EXPLAINER
 explainer = Explainer(importance_engine='LIDE', number_of_features=13, verbose=1)
@@ -33,7 +33,7 @@ explainer.fit(df=example_dataset, feature_cols=feature_cols, target_cols=target_
 # WHY
 why = Why(language=LANG,
           explainer=explainer,
-          why_global_semantics=df_global_semantics,
+          why_values_semantics=df_values_semantics,
           why_target_semantics=df_target_semantics,
           verbose=1)
 why.fit()
