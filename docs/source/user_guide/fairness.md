@@ -17,6 +17,9 @@ order to explain and indicate which target class and which value of the sensitiv
 injustice in classification.
 
 
+## Requirements
+
+
 To perform these calculations we need a dataset with the following characteristics:
 - 'N' columns with features
 - Column with target class ('y_true')
