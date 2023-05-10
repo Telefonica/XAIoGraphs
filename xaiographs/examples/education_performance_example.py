@@ -35,11 +35,9 @@ def main():
 
     # WHY
     why = Why(language=LANG,
-              local_reliability=explainer.local_dataset_reliability,
-              local_feat_val_expl=explainer.local_feature_value_explainability,
-              why_elements=df_global_semantics,
-              why_target=df_target_semantics,
-              sample_ids_to_export=explainer.sample_ids_to_display,
+              explainer=explainer,
+              why_global_semantics=df_global_semantics,
+              why_target_semantics=df_target_semantics,
               verbose=1)
     why.fit()
 

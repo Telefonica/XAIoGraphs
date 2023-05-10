@@ -25,6 +25,7 @@ import pandas as pd
 
 from xaiographs.common.constants import ID, FEATURE_VALUE, LANG_EN, LANG_ES, IMPORTANCE, RELIABILITY, RANK, TARGET
 from xaiographs.common.utils import xgprint
+from xaiographs.exgraph.explainer import Explainer
 
 # Warning message
 WARN_MSG = 'WARNING: {} is empty, because nothing has been processed. Execute fit() function to get results.'
@@ -56,17 +57,14 @@ class Why(object):
         .. important::
            Spanish (*'es'*) and English (*'en'*) are the available options for version 0.0.2
 
-    local_reliability : pandas.DataFrame
-        Structure containing, for each sample, its top1 target and the reliability value associated to that target.
+    explainer : Explainer
+        Object provides an abstract layer which encapsulates everything related to the explanation process from
+        statistics calculation and importance calculation.
 
-    local_feat_val_expl : pandas.DataFrame
-        Structure containing, for each sample, as many rows as feature-value pairs, together with their calculated \
-        importance.
-
-    why_elements : pandas.DataFrame
+    why_global_semantics : pandas.DataFrame
         Structure containing the natural language explanation of the nodes to be used.
 
-    why_target : pandas.DataFrame
+    why_target_semantics : pandas.DataFrame
         Structure containing the natural language explanation of the nodes we want to be used per target value.
 
     why_templates : pandas.DataFrame
@@ -86,9 +84,6 @@ class Why(object):
 
     destination_path : str, default='./xaioweb_files'
         The path where output XAIoWeb files will be stored.
-
-    sample_ids_to_export : List[int], default=None
-        Ids of those samples for which their explanation will be displayed in an interactive environment.
 
     verbose : int, default=0
         Verbosity level.
@@ -118,26 +113,24 @@ class Why(object):
 
     SRC_DIR = os.path.dirname(__file__)
 
-    def __init__(self, language: str, local_reliability: pd.DataFrame, local_feat_val_expl: pd.DataFrame,
-                 why_elements: pd.DataFrame, why_target: pd.DataFrame, why_templates: Optional[pd.DataFrame] = None,
-                 n_local_features: int = 2, n_global_features: int = 2, min_reliability: float = 0.0,
-                 destination_path: str = './xaioweb_files', sample_ids_to_export: Optional[pd.Series] = None,
-                 verbose: int = 0):
+    def __init__(self, language: str, explainer: Explainer, why_global_semantics: pd.DataFrame, why_target_semantics: pd.DataFrame,
+                 why_templates: Optional[pd.DataFrame] = None, n_local_features: int = 2, n_global_features: int = 2,
+                 min_reliability: float = 0.0, destination_path: str = './xaioweb_files', verbose: int = 0):
         self.__df_why = None
         self.__language = language
         if self.__language not in self._SEP_LAST.keys():
             raise NameError('Language {} not supported'.format(self.__language))
-        self.__local_reliability = local_reliability
-        self.__local_feat_val_expl = local_feat_val_expl
-        self.__why_elements = why_elements
-        self.__why_target = why_target
+        self.__local_reliability = explainer.local_dataset_reliability
+        self.__local_feat_val_expl = explainer.local_feature_value_explainability
+        self.__sample_ids_to_export = explainer.sample_ids_to_display
+        self.__why_global_semantics = why_global_semantics
+        self.__why_target_semantics = why_target_semantics
         self.__why_templates = self.__get_template(df_templates=why_templates, language=language)
         self.__n_local_features = n_local_features
         self.__n_global_features = n_global_features
         self.__min_reliability = min_reliability
         self.__destination_path = destination_path
         self.__rng = random.SystemRandom()
-        self.__sample_ids_to_export = sample_ids_to_export
         self.__verbose = verbose
         xgprint(self.__verbose, 'INFO: Instantiating Why. Language has been set to: {}'.format(self.__language))
 
@@ -251,8 +244,8 @@ class Why(object):
         df = (local_expl[[sample_id_column, RELIABILITY, TARGET]]
               .merge(self.__local_feat_val_expl[[sample_id_column, FEATURE_VALUE, IMPORTANCE]], on=sample_id_column,
                      how='inner')
-              .merge(self.__why_elements, on=FEATURE_VALUE, how='inner')
-              .merge(self.__why_target, on=[TARGET, FEATURE_VALUE], how='inner',
+              .merge(self.__why_global_semantics, on=FEATURE_VALUE, how='inner')
+              .merge(self.__why_target_semantics, on=[TARGET, FEATURE_VALUE], how='inner',
                      suffixes=['_' + self._LOCAL, '_' + self._GLOBAL]))
         df[RANK] = df.groupby(sample_id_column)[IMPORTANCE].rank(method='dense', ascending=False).astype(int)
 

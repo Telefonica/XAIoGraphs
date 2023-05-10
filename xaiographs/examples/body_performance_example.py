@@ -34,12 +34,10 @@ def main():
     explainer.fit(df=example_dataset, feature_cols=feature_cols, target_cols=target_cols)
 
     # WHY
-    why = Why(language=LANG,
-              local_reliability=explainer.local_dataset_reliability,
-              local_feat_val_expl=explainer.local_feature_value_explainability,
-              why_elements=df_global_semantics,
-              why_target=df_target_semantics,
-              sample_ids_to_export=explainer.sample_ids_to_display,
+    why = Why(explainer=explainer,
+              why_global_semantics=df_global_semantics,
+              why_target_semantics=df_target_semantics,
+              language=LANG,
               verbose=1)
     why.fit()
 

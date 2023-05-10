@@ -185,12 +185,9 @@ semantics defined (in Padas DataFrame):
 
 ```python
 why = Why(language='en',
-          local_reliability=explainer.local_dataset_reliability,             # Reliability value of individual explanation
-          local_feat_val_expl=explainer.local_feature_value_explainability,  # Importance value features of each element
+          explainer=explainer,
           why_elements=df_global_semantics,                                  # DataFrame with Feature-Value Semantic per target
-          why_templates=df_why_templates,                                    # Phrase templates 
           why_target=df_target_semantics,                                    # DataFrame with Feature-Value Semantic
-          sample_ids_to_export=explainer.sample_ids_to_display,
           verbose=1)
 why.fit()
 ```
