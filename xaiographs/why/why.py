@@ -302,19 +302,22 @@ class Why(object):
         self.__df_why = df_final
 
     @staticmethod
-    def build_semantic_templates(global_feat_val_expl: pd.DataFrame, destination_template_path: Optional[str] = None,
-                                 verbose: int = 0) -> List[pd.DataFrame]:
+    def build_semantic_templates(explainer: Explainer, destination_template_path: str = './', verbose: int = 0) -> None:
         """Builds and saves (when requested) the template files for semantic information; the resulting files must be
         filled up by the user and moved to the corresponding language folder.
 
         Parameters
         ----------
-        global_feat_val_expl : pandas.DataFrame
-            Structure containing, for each feature value and target pairs, its importance and rank. The rank \
-            represents the importance of that feature value pair for the given target value
+        explainer : Explainer
+            Object provides an abstract layer which encapsulates everything related to the explanation process from
+            statistics calculation and importance calculation. Particularly we need Explainer object to obtain
+            global_target_feature_value_explainability property that contains for each feature value and target pairs,
+            its importance and rank. The rank represents the importance of that feature value pair for the given
+            target value
 
         destination_template_path : str
-            Path to save both: the element (feature-value) template file and the target template file in CSV format
+            Path to save both: the element (feature-value) template file and the target template file in CSV format.
+            By default save in relative path.
 
         verbose : int, default=0
             Verbosity level.
@@ -322,24 +325,18 @@ class Why(object):
             .. hint::
                Any value greater than 0 means verbosity is on.
 
-        Returns
-        -------
-        [df_element, df_target] : List of two pandas.DataFrames
-            Being the first one the element template data and the second one the target template data
-
-
         """
         xgprint(verbose,
                 'INFO:     Why instance: building semantic templates for feature-value pairs and target values...')
 
         # Build element template DataFrame
-        df_element = (global_feat_val_expl[[FEATURE_VALUE]]
+        df_element = (explainer.global_target_feature_value_explainability[[FEATURE_VALUE]]
                       .drop_duplicates()
                       .sort_values(by=FEATURE_VALUE))
         df_element[REASON] = ''
 
         # Build target template DataFrame
-        df_target = (global_feat_val_expl[[TARGET]]
+        df_target = (explainer.global_target_feature_value_explainability[[TARGET]]
                      .drop_duplicates()
                      .merge(df_element, how='cross')
                      .sort_values(by=[TARGET, FEATURE_VALUE]))
@@ -362,4 +359,3 @@ class Why(object):
             xgprint(verbose,
                     'WARN:          Why instance: unable to save neither feature-value pairs nor target semantic '
                     'templates. A path through `destination_template_path` parameter must be provided')
-        return [df_element, df_target]
