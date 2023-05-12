@@ -29,8 +29,8 @@ Documentation of the characteristics of [`Titanic Dataset`](../user_guide/datase
 To determine the explainability of this dataset, we have discretize the continuous features (`age`, `family_size` 
 and `ticket_price`) and produce as many columns representing the probability of the target as there are targets in 
 the dataset.In this example, we will have two columns with probabilities of `0` and `1`: `SURVIVED` and `NO_SURVIVED`. 
-The function [`load_titanic()`](../api_reference/datasets.md#xaiographs.datasets.load_titanic_discretized) in 
-XAIoGraphs already provides this altered dataset.
+The function [`load_titanic_discretized()`](../api_reference/datasets.md#xaiographs.datasets.load_titanic_discretized) 
+in XAIoGraphs already provides this altered dataset.
 
 ```python
 >>> from xaiographs.datasets import load_titanic_discretized
@@ -174,7 +174,7 @@ For each problem, these semantics must be defined. XAIoGraphs includes the templ
 via [`load_titanic_why()`](../api_reference/datasets.md#xaiographs.datasets.load_titanic_why) function.
 
 ```python
-df_global_semantics, df_target_semantics, df_why_templates = load_titanic_why(language='en')
+df_values_semantics, df_target_values_semantics = load_titanic_why(language='en')
 ```
 &nbsp;
 
@@ -184,10 +184,10 @@ calling the method [`fit()`](../api_reference/why.md#fit) after executing the `E
 semantics defined (in Padas DataFrame):
 
 ```python
-why = Why(language='en',
+why = Why(language=LANG,
           explainer=explainer,
-          why_elements=df_global_semantics,                                  # DataFrame with Feature-Value Semantic per target
-          why_target=df_target_semantics,                                    # DataFrame with Feature-Value Semantic
+          why_values_semantics=df_values_semantics,
+          why_target_values_semantics=df_target_values_semantics,
           verbose=1)
 why.fit()
 ```

@@ -40,7 +40,7 @@ LANG = 'en'
 
 # LOAD DATASETS & SEMANTICS
 df_titanic, feature_cols, target_cols, y_true, y_predict = load_titanic_discretized()
-df_global_semantics, df_target_semantics = load_titanic_why(language=LANG)
+df_values_semantics, df_target_values_semantics = load_titanic_why(language=LANG)
 
 # EXPLAINER
 explainer = Explainer(importance_engine='LIDE', verbose=1)
@@ -49,8 +49,8 @@ explainer.fit(df=df_titanic, feature_cols=feature_cols, target_cols=target_cols)
 # WHY
 why = Why(language=LANG,
           explainer=explainer,
-          why_global_semantics=df_global_semantics,
-          why_target_semantics=df_target_semantics,
+          why_values_semantics=df_values_semantics,
+          why_target_values_semantics=df_target_values_semantics,
           verbose=1)
 why.fit()
 
