@@ -2,7 +2,7 @@
 
 # Datasets
 
-### Methods:
+**Methods:**
 
 ```{eval-rst}
 .. autosummary::
