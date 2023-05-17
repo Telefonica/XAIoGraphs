@@ -32,7 +32,7 @@ TITANIC_VALUES_SEMANTICS_PATH = {
 }
 TITANIC_TARGET_VALUES_SEMANTICS_PATH = {
     LANG_EN: 'data/titanic/target_values_semantics_en.csv',
-    LANG_ES: 'data/titanic/target_value_semantics_es.csv'
+    LANG_ES: 'data/titanic/target_values_semantics_es.csv'
 }
 FEATURE_COLS_TITANIC = ['gender', 'title', 'age', 'family_size', 'is_alone', 'embarked', 'class', 'ticket_price']
 TARGET_COLS_TITANIC = ['SURVIVED', 'NO_SURVIVED']
@@ -46,7 +46,7 @@ BODY_PERFORM_VALUES_SEMANTICS_PATH = {
 }
 BODY_PERFORM_TARGET_VALUES_SEMANTICS_PATH = {
     LANG_EN: 'data/body_performance/target_values_semantics_en.csv',
-    LANG_ES: 'data/body_performance/target_value_semantics_es.csv'
+    LANG_ES: 'data/body_performance/target_values_semantics_es.csv'
 }
 FEATURE_COLS_BODY_PERFORM = ['age', 'gender', 'height_cm', 'weight_kg', 'body_fat_%', 'diastolic', 'systolic',
                              'gripForce', 'sit_and_bend_forward_cm', 'sit-ups_counts', 'broad_jump_cm']
@@ -61,7 +61,7 @@ EDUC_PERFORM_VALUES_SEMANTICS_PATH = {
 }
 EDUC_PERFORM_TARGET_VALUES_SEMANTICS_PATH = {
     LANG_EN: 'data/education_performance/target_values_semantics_en.csv',
-    LANG_ES: 'data/education_performance/target_value_semantics_es.csv'
+    LANG_ES: 'data/education_performance/target_values_semantics_es.csv'
 }
 FEATURE_COLS_EDUC_PERFORM = ['age', 'sex', 'graduated_h_school_type', 'scholarship_type',
                              'additional_work', 'activity', 'partner', 'total_salary', 'transport',

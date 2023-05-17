@@ -72,11 +72,11 @@ class Why(object):
         `Python template module <https://docs.python.org/3.7/library/string.html#template-strings>`_) of the sentences
         with the explanation.
 
-    n_local_features : int, default=2
-        Number of local features to take into account for the explanation.
+    n_values : int, default=2
+        Number of feature-values to take into account for the explanation.
 
-    n_feature_values : int, default=2
-        Number of features to take into account for the explanation.
+    n_target_values : int, default=2
+        Number of feature-values per target to take into account for the explanation.
 
     min_reliability : float, default=0.0
         Minimum reliability value to give an explanation; for the cases with an associated reliability below this \
@@ -115,7 +115,7 @@ class Why(object):
 
     def __init__(self, language: str, explainer: Explainer, why_values_semantics: pd.DataFrame,
                  why_target_values_semantics: pd.DataFrame, why_templates: Optional[pd.DataFrame] = None,
-                 n_local_features: int = 2, n_feature_values: int = 2, min_reliability: float = 0.0,
+                 n_values: int = 2, n_target_values: int = 2, min_reliability: float = 0.0,
                  destination_path: str = './xaioweb_files', verbose: int = 0):
         self.__df_why = None
         self.__language = language
@@ -127,8 +127,8 @@ class Why(object):
         self.__why_values_semantics = why_values_semantics
         self.__why_target_values_semantics = why_target_values_semantics
         self.__why_templates = self.__get_template(df_templates=why_templates, language=language)
-        self.__n_local_features = n_local_features
-        self.__n_feature_values = n_feature_values
+        self.__n_values = n_values
+        self.__n_target_values = n_target_values
         self.__min_reliability = min_reliability
         self.__destination_path = destination_path
         self.__rng = random.SystemRandom()
@@ -247,10 +247,10 @@ class Why(object):
                      how='inner')
               .merge(self.__why_values_semantics, on=FEATURE_VALUE, how='inner')
               .merge(self.__why_target_values_semantics, on=[TARGET, FEATURE_VALUE], how='inner',
-                     suffixes=['_' + self._TARGET_VALUES, '_' + self._VALUES]))
+                     suffixes=['_' + self._VALUES, '_' + self._TARGET_VALUES]))
         df[RANK] = df.groupby(sample_id_column)[IMPORTANCE].rank(method='dense', ascending=False).astype(int)
 
-        max_n_features = max(self.__n_local_features, self.__n_feature_values)
+        max_n_features = max(self.__n_values, self.__n_target_values)
         df_rank = df[df[RANK] <= max_n_features]
 
         def __get_single_why(df_single: pd.DataFrame) -> str:
@@ -267,16 +267,18 @@ class Why(object):
                 return self.__why_templates.iloc[0, 0]
 
             # Build why sentence
-            kw_target_values = dict([('v_' + self._TARGET_VALUES + '_' + str(i), v) for i, v in
-                                     enumerate(df_single[REASON + '_' + self._TARGET_VALUES].iloc[:self.__n_local_features])])
-            kw_values = dict([('v_' + self._VALUES + '_' + str(i), v) for i, v in
-                              enumerate(df_single[REASON + '_' + self._VALUES].iloc[:self.__n_feature_values])])
-            temp_target_values_explain = self.__build_template(items=list(kw_target_values))
+            kw_values = (dict([('v_' + self._VALUES + '_' + str(i), v)
+                               for i, v in enumerate(df_single[REASON + '_' + self._VALUES].iloc[:self.__n_values])]))
+            kw_target_values = (dict([('v_' + self._TARGET_VALUES + '_' + str(i), v)
+                                      for i, v in enumerate(df_single[REASON + '_' + self._TARGET_VALUES].iloc[:self.__n_target_values])]))
+
             temp_values_explain = self.__build_template(items=list(kw_values))
+            temp_target_values_explain = self.__build_template(items=list(kw_target_values))
 
             temp_idx_max = self.__why_templates.shape[0] - 1
-            temp_idx = self.__rng.randint(1, temp_idx_max) if template_index == RAND else min(template_index,
-                                                                                              temp_idx_max)
+            temp_idx = (self.__rng.randint(1, temp_idx_max) if template_index == RAND
+                        else min(template_index, temp_idx_max))
+
             temp_why_str = (Template(Template(self.__why_templates.iloc[temp_idx, 0])
                                      .substitute(temp_target_values_explain=temp_target_values_explain,
                                                  temp_values_explain=temp_values_explain,
