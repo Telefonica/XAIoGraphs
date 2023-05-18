@@ -121,7 +121,7 @@ class Why(object):
         self.__language = language
         if self.__language not in self._SEP_LAST.keys():
             raise NameError('Language {} not supported'.format(self.__language))
-        self.__local_reliability = explainer.local_dataset_reliability
+        self.__local_reliability = explainer.local_reliability
         self.__local_feat_val_expl = explainer.local_feature_value_explainability
         self.__sample_ids_to_export = explainer.sample_ids_to_display
         self.__why_values_semantics = why_values_semantics

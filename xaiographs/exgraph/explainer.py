@@ -71,7 +71,7 @@ class Explainer(object):
         self.__global_target_feature_value_explainability = None
         self.__global_target_explainability = None
         self.__importance_values = None
-        self.__local_dataset_reliability = None
+        self.__local_reliability = None
         self.__local_feature_value_explainability = None
         self.__sample_ids_to_display = list()
         self.__top_features = None
@@ -231,7 +231,7 @@ class Explainer(object):
             return self.__importance_values
 
     @property
-    def local_dataset_reliability(self):
+    def local_reliability(self):
         """Property that, for each sample, returns its top1 target and the reliability value associated to that target.
 
         .. caution::
@@ -255,11 +255,10 @@ class Explainer(object):
             +---------------+------------------------------------+
 
         """
-        if self.__local_dataset_reliability is None:
+        if self.__local_reliability is None:
             print(WARN_MSG.format('\"global_target_feature_value_explainability\"'))
         else:
-            df_local_dataset_reliability = pd.DataFrame(self.__local_dataset_reliability, columns=[ID, TARGET,
-                                                                                                   RELIABILITY])
+            df_local_dataset_reliability = pd.DataFrame(self.__local_reliability, columns=[ID, TARGET, RELIABILITY])
             df_local_dataset_reliability[ID] = pd.to_numeric(df_local_dataset_reliability[ID], downcast="unsigned")
             df_local_dataset_reliability[RELIABILITY] = pd.to_numeric(df_local_dataset_reliability[RELIABILITY],
                                                                       downcast="float")
@@ -521,13 +520,13 @@ class Explainer(object):
         self.__sample_ids_to_display = sample_ids
 
         # local_dataset_reliability property is computed
-        self.__local_dataset_reliability = np.concatenate((df_explanation_global[ID].values.reshape(-1, 1),
-                                                           target_info.top1_targets.reshape(-1, 1),
-                                                           np.abs(1 - np.round(df_explanation_global[
+        self.__local_reliability = np.concatenate((df_explanation_global[ID].values.reshape(-1, 1),
+                                                   target_info.top1_targets.reshape(-1, 1),
+                                                   np.abs(1 - np.round(df_explanation_global[
                                                                features_info.reliability_columns].values[
                                                                np.arange(len(df_explanation_global)),
                                                                target_info.top1_argmax].reshape(-1, 1), decimals=2))),
-                                                          axis=1)
+                                                  axis=1)
 
         # Once global explanation related information is calculated. The explanation DataFrame is sampled, so that only
         # some rows will be taken into account when generating the local output for visualization
