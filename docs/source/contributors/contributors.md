@@ -1,6 +1,6 @@
 # 🤝 Contributors
 
-XAIoGraphs has been developed by the AI Products team (Telefónica I+D - Chief Data Officer)
+XAIoGraphs has been developed by AI Products team (Telefónica I+D - Chief Data Officer)
 
 * [Ricardo Moya](https://github.com/TFRicardoMoya)
 * [Matteo Salvatori](https://github.com/matteo-salvatori)
