@@ -117,18 +117,18 @@ Let's look at how to build the `Reason Why` for the following element:
 
 2. We define a sentence template that has three elements:
    1. `$target`: It will be replaced by the class name to which the element belongs. (`SURVIVED` or `NO_SURVIVED`)
-   2. `$temp_global_explain`: It will be replaced by a semantics that describes each Feature-Value.
-   3. `$temp_local_explain`: It will be replaced with a semantics that explains each Feature-Value in relation to the target.
+   2. `$temp_values_explain`: It will be replaced by a semantics that describes each Feature-Value.
+   3. `$temp_target_values_explain`: It will be replaced with a semantics that explains each Feature-Value in relation to the target.
    
 
 ```python
-For $temp_local_explain, this case has been classified as $target, considering that $temp_global_explain.
+For $temp_values_explain, this case has been classified as $target, considering that $temp_target_values_explain.
 ```
 &nbsp;
 
 3. Two semantics that associate a brief description with each Feature-Value must be defined. One of those semantics 
-will be used to complete the template's `$temp_local_explain` sentence component, while the other semantics will be 
-used to complete the template's `$temp_global_explain` sentence part.
+will be used to complete the template's `$temp_target_values_explain` sentence component, while the other semantics 
+will be used to complete the template's `$temp_values_explain` sentence part.
 
 
 * Depending on the target, the first semantics assigns a descriptive word to each Feature-Value:
@@ -179,9 +179,9 @@ df_values_semantics, df_target_values_semantics = load_titanic_why(language='en'
 &nbsp;
 
 
-We build the natural language sentences of the "Reason Why" using the class [`Why`](../api_reference/why.md) and 
-calling the method [`fit()`](../api_reference/why.md#fit) after executing the `Explainer` and with the templates and 
-semantics defined (in Padas DataFrame):
+We build the natural language sentences of the `Reason Why` using the class [`Why`](../api_reference/why.md) and 
+calling the method [`fit()`](../api_reference/why.md#fit) after executing the 
+[`Explainer`](../api_reference/explainability.md) and with the templates and semantics defined (in padas.DataFrame):
 
 ```python
 why = Why(language=LANG,
@@ -194,8 +194,8 @@ why.fit()
 &nbsp;
 
 
-We use the [`why_explanation`](../api_reference/why.md#xaiographs.Why.why_explanation) attribute to get the 
-"Reason Why" phrases for each of the items.
+We use the [`why_explanation`](../api_reference/why.md#xaiographs.Why.why_explanation) property to get the 
+`Reason Why` sentences for each of the items.
 
 ```python
 >>> why.why_explanation[why.why_explanation.id==0]
@@ -204,13 +204,14 @@ We use the [`why_explanation`](../api_reference/why.md#xaiographs.Why.why_explan
 ```
 &nbsp;
 
-In this example, the 'Reason Why' sentence is created in natural language using the template and semantics.
+In this example, the `Reason Why` sentence is created in natural language using the template and semantics.
 
 
 ```{hint}
 The function [`build_semantic_templates()`](../api_reference/why.md#xaiographs.Why.build_semantic_templates) of 
-class [`Why`](../api_reference/why.md)  returns two `.csv` files (`global_semantics.csv` and `target_semantics.csv`) 
-containing the Feature-Value pairs required to complete the semantics.
+class [`Why`](../api_reference/why.md)  returns two `.csv` files 
+(`values_semantics.csv` and `target_values_semantics.csv`) containing the Feature-Value pairs required to complete 
+the semantics.
 ```
 
 
