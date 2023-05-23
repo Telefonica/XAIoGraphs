@@ -212,9 +212,14 @@ class FeatureSelector(object):
             feature_ranks.extend([info[0] for info in distance_rank_info[target_value]])
 
             # For a binary problem, there'll be only two values for the target, so that their distances are symmetrical
-            # there's no need to compute distances for the two values, one is enough
+            # there's no need to compute distances for the two values, one is enough. The trivial distances will be
+            # kept just for information consistency purposes
             if len(self.__target_values) == 2:
+                trivial_target_value = (
+                    self.__target_values[0] if self.__target_values[0] != target_value else self.__target_values[1])
+                distance_rank_info[trivial_target_value] = next(iter(distance_rank_info.values()))
                 break
+
         self.__top_features_by_target = distance_rank_info
 
         # Finally, all obtained ranks for the different target values are aggregated for each feature. The largest rank

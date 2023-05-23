@@ -640,15 +640,23 @@ class Explainer(object):
             >>> explainer = Explainer(dataset=df_titanic, importance_engine='LIDE', verbose=1)
             >>> explainer.fit(feature_cols=feature_cols, target_cols=target_cols)
             >>> explainer.top_features_by_target
-                    target       feature  distance
-            0  NO_SURVIVED        gender  0.262507
-            1  NO_SURVIVED         title  0.241172
-            2  NO_SURVIVED         class  0.128430
-            3  NO_SURVIVED  ticket_price  0.117809
-            4  NO_SURVIVED      embarked  0.076622
-            5  NO_SURVIVED   family_size  0.069195
-            6  NO_SURVIVED      is_alone  0.053045
-            7  NO_SURVIVED           age  0.051220
+                     target       feature  distance
+            0      SURVIVED        gender  0.262507
+            1      SURVIVED         title  0.241172
+            2      SURVIVED         class  0.128430
+            3      SURVIVED  ticket_price  0.117809
+            4      SURVIVED      embarked  0.076622
+            5      SURVIVED   family_size  0.069195
+            6      SURVIVED      is_alone  0.053045
+            7      SURVIVED           age  0.051220
+            8   NO_SURVIVED        gender  0.262507
+            9   NO_SURVIVED         title  0.241172
+            10  NO_SURVIVED         class  0.128430
+            11  NO_SURVIVED  ticket_price  0.117809
+            12  NO_SURVIVED      embarked  0.076622
+            13  NO_SURVIVED   family_size  0.069195
+            14  NO_SURVIVED      is_alone  0.053045
+            15  NO_SURVIVED           age  0.051220
 
         """
         if self.__top_features_by_target is None:
