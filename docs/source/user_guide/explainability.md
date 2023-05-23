@@ -239,3 +239,387 @@ The latter assumption is particularly crucial since LIDE depends on the historic
 leads to a high quality explanation and a higher computational overhead. Less data means the opposite: less quality
  explanation but also a less computationally demanding process. Furthermore, LIDE does neither generate artificial data
  nor modify the probability distribution of the problem to be solved.
+
+
+## Example
+
+Following that, we will demonstrate how to acquire the various explainability results in XAIoGraphs for a 
+classification problem using tabular data, with `titanic` dataset example.
+Raw titanic dataset can be obtained using the 
+[`load_titanic()`](../api_reference/datasets.md#xaiographs.datasets.load_titanic) function:
+
+```python
+>>> from xaiographs.datasets import load_titanic
+>>> df_dataset = load_titanic()
+>>> df_dataset.head(3)
+    id  gender title      age  family_size  is_alone embarked  class  ticket_price  survived
+0    0  female   Mrs  29.0000            0         1        S      1      211.3375         1
+1    1    male    Mr   0.9167            3         0        S      1      151.5500         1
+2    2  female   Mrs   2.0000            3         0        S      1      151.5500         0
+```
+
+To determine the explainability, we have discretize the continuous features (`age`, `family_size` and `ticket_price`) 
+and produce as many columns representing the probability of the target as there are targets in the dataset.
+In this example, we will have two columns with probabilities of `0` and `1`: `SURVIVED` and `NO_SURVIVED`. 
+The function [`load_titanic_discretized()`](../api_reference/datasets.md#xaiographs.datasets.load_titanic_discretized) 
+in XAIoGraphs already provides this altered dataset.
+
+```python
+>>> from xaiographs.datasets import load_titanic_discretized
+>>> df_dataset, features_cols, target_cols, _, _ = load_titanic_discretized()
+>>> df_dataset[features_cols + target_cols].head(3)
+   id  gender title          age family_size  is_alone embarked  class ticket_price  SURVIVED NO_SURVIVED 
+0   0  female   Mrs  18_30_years           1         1        S      1         High         1           0 
+1   1    male    Mr    <12_years         3-5         0        S      1         High         1           0 
+2   2  female   Mrs    <12_years         3-5         0        S      1         High         0           1
+```
+
+To obtain different explainability results, we must create an object of class [`Explainer`](../api_reference/explainer.md) 
+and parse it through the `dataset` and the explainability engine (`LIDE`). Later, by using the `fit()` method and 
+handing it a list containing the names of the feature columns (`feature_cols`) and another list containing the names 
+of the target columns (`target_cols`), it will execute all of the computations required to provide the explainability:
+
+```python
+>>> from xaiographs import Explainer
+>>> from xaiographs.datasets import load_titanic_discretized
+>>> df_dataset, features_cols, target_cols, _, _ = load_titanic_discretized()
+>>> explainer = Explainer(importance_engine='LIDE', number_of_features=8, verbose=1)
+>>> explainer.fit(df=df_dataset, feature_cols=features_cols, target_cols=target_cols)
+```
+
+```{warning}
+By default, the `LIDE` explainability method performs explanations with the 8 most essential features. 
+You can change this value using the class constructor's `number_of_features` parameter.
+
+`number_of_features` parameter must be less than 13 to avoid "infinite" computation durations.
+```
+
+
+The following are the outcomes provided by the [`Explainer`](../api_reference/explainer.md)  class's various properties:
+
+&nbsp;
+
+<h4> Top Features </h4>
+
+Because the explainability procedure is quite expensive and it is not computationally feasible to explain more than 12 
+or 13 features, we organize the variables a priori by relevance (see 
+[`Features Selector`](explainability.md#feature-selection) section).
+This will allow us to select the 'N' variables to explain (`number_of_features` parameter constructor).
+
+The variable selector's rating is retrieved by accessing the 
+[`top_features`](../api_reference/explainability.md#xaiographs.Explainer.top_features) property.
+
+
+```python
+>>> explainer.top_features
+        feature  rank
+0        gender     1
+1         title     2
+2         class     3
+3  ticket_price     4
+4      embarked     5
+5   family_size     6
+6      is_alone     7
+7           age     8
+```
+
+
+&nbsp;
+
+<h4> Top Features by Target </h4>
+
+
+The [`top_features_by_target`](../api_reference/explainability.md#xaiographs.Explainer.top_features_by_target) 
+property displays the importance of features by target together with the 
+[Jensen-Shannon distance](https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.jensenshannon.html) distance:
+
+```python
+>>> explainer.top_features_by_target
+         target       feature  distance
+0      SURVIVED        gender  0.262507
+1      SURVIVED         title  0.241172
+2      SURVIVED         class  0.128430
+3      SURVIVED  ticket_price  0.117809
+4      SURVIVED      embarked  0.076622
+5      SURVIVED   family_size  0.069195
+6      SURVIVED      is_alone  0.053045
+7      SURVIVED           age  0.051220
+8   NO_SURVIVED        gender  0.262507
+9   NO_SURVIVED         title  0.241172
+10  NO_SURVIVED         class  0.128430
+11  NO_SURVIVED  ticket_price  0.117809
+12  NO_SURVIVED      embarked  0.076622
+13  NO_SURVIVED   family_size  0.069195
+14  NO_SURVIVED      is_alone  0.053045
+15  NO_SURVIVED           age  0.051220
+```
+
+
+```{note}
+Because this is a binary example, the distance between the variables is the same for both classes.
+```
+
+&nbsp;
+
+<h4> Global Explainability </h4>
+
+[`global_explainability`](../api_reference/explainability.md#xaiographs.Explainer.global_explainability) property 
+containing each feature ranked by its global importance.
+
+```python
+>>> explainer.global_explainability
+        feature  importance  rank
+0        gender    0.124936     1
+1         title    0.122790     2
+2         class    0.089931     3
+3  ticket_price    0.062145     4
+7           age    0.059930     5
+4      embarked    0.059490     6
+5   family_size    0.042980     7
+6      is_alone    0.031692     8
+```
+
+&nbsp;
+
+<h4> Global Target Explainability </h4>
+
+[`global_target_explainability`](../api_reference/explainability.md#xaiographs.Explainer.global_target_explainability) 
+property returns all  features to be explained, ranked by their global importance by target value.
+
+```python
+>>> explainer.global_target_explainability
+         target       feature  importance  rank
+8   NO_SURVIVED        gender    0.124936     1
+9   NO_SURVIVED         title    0.122790     2
+10  NO_SURVIVED         class    0.089931     3
+11  NO_SURVIVED  ticket_price    0.062145     4
+15  NO_SURVIVED           age    0.059930     5
+12  NO_SURVIVED      embarked    0.059490     6
+13  NO_SURVIVED   family_size    0.042980     7
+14  NO_SURVIVED      is_alone    0.031692     8
+0      SURVIVED        gender    0.124936     1
+1      SURVIVED         title    0.122790     2
+2      SURVIVED         class    0.089931     3
+3      SURVIVED  ticket_price    0.062145     4
+7      SURVIVED           age    0.059930     5
+4      SURVIVED      embarked    0.059490     6
+5      SURVIVED   family_size    0.042980     7
+6      SURVIVED      is_alone    0.031692     8
+```
+
+
+&nbsp;
+
+<h4> Global Target Feature-Value Explainability </h4>
+
+
+[`global_target_feature_value_explainability`](../api_reference/explainability.md#xaiographs.Explainer.global_target_feature_value_explainability)
+property that, for each target value, returns all the pairs feature-value ranked by their global importance.
+
+```python
+>>> explainer.global_target_feature_value_explainability
+         target      feature_value  importance  rank
+6   NO_SURVIVED      age_<12_years   -0.181679     1
+28  NO_SURVIVED     family_size_>5    0.179046     2
+30  NO_SURVIVED      gender_female   -0.172290     3
+46  NO_SURVIVED          title_Mrs   -0.168379     4
+8   NO_SURVIVED      age_>60_years    0.141469     5
+10  NO_SURVIVED            class_1   -0.114309     6
+16  NO_SURVIVED         embarked_C   -0.097454     7
+32  NO_SURVIVED        gender_male    0.095240     8
+44  NO_SURVIVED           title_Mr    0.094939     9
+24  NO_SURVIVED      family_size_2   -0.084919    10
+14  NO_SURVIVED            class_3    0.066115    11
+38  NO_SURVIVED  ticket_price_High   -0.063437    12
+40  NO_SURVIVED   ticket_price_Low    0.053317    13
+12  NO_SURVIVED            class_2   -0.035934    14
+20  NO_SURVIVED         embarked_S    0.030768    15
+48  NO_SURVIVED         title_rare   -0.020909    16
+34  NO_SURVIVED         is_alone_0   -0.019949    17
+42  NO_SURVIVED   ticket_price_Mid    0.017978    18
+26  NO_SURVIVED    family_size_3-5    0.017444    19
+0   NO_SURVIVED    age_12_18_years   -0.016456    20
+18  NO_SURVIVED         embarked_Q   -0.015209    21
+4   NO_SURVIVED    age_30_60_years    0.014129    22
+2   NO_SURVIVED    age_18_30_years    0.013591    23
+22  NO_SURVIVED      family_size_1    0.005527    24
+36  NO_SURVIVED         is_alone_1    0.005527    24
+7      SURVIVED      age_<12_years    0.181679     1
+29     SURVIVED     family_size_>5   -0.179046     2
+31     SURVIVED      gender_female    0.172290     3
+47     SURVIVED          title_Mrs    0.168379     4
+9      SURVIVED      age_>60_years   -0.141469     5
+11     SURVIVED            class_1    0.114309     6
+17     SURVIVED         embarked_C    0.097454     7
+33     SURVIVED        gender_male   -0.095240     8
+45     SURVIVED           title_Mr   -0.094939     9
+25     SURVIVED      family_size_2    0.084919    10
+15     SURVIVED            class_3   -0.066115    11
+39     SURVIVED  ticket_price_High    0.063437    12
+41     SURVIVED   ticket_price_Low   -0.053317    13
+13     SURVIVED            class_2    0.035934    14
+21     SURVIVED         embarked_S   -0.030768    15
+49     SURVIVED         title_rare    0.020909    16
+35     SURVIVED         is_alone_0    0.019949    17
+43     SURVIVED   ticket_price_Mid   -0.017978    18
+27     SURVIVED    family_size_3-5   -0.017444    19
+1      SURVIVED    age_12_18_years    0.016456    20
+19     SURVIVED         embarked_Q    0.015209    21
+5      SURVIVED    age_30_60_years   -0.014129    22
+3      SURVIVED    age_18_30_years   -0.013591    23
+23     SURVIVED      family_size_1   -0.005527    24
+37     SURVIVED         is_alone_1   -0.005527    24
+```
+
+&nbsp;
+
+<h4> Global Frequency Feature Values </h4>
+
+
+[`global_frequency_feature_value`](../api_reference/explainability.md#xaiographs.Explainer.global_frequency_feature_value)
+property returns the number of occurrences for each feature-value pair.
+
+```python
+>>> explainer.global_frequency_feature_value.sort_values('frequency', ascending=False)
+        feature_value  frequency
+36         is_alone_1       1025
+22      family_size_1       1025
+20         embarked_S        916
+32        gender_male        843
+44           title_Mr        818
+14            class_3        709
+2     age_18_30_years        551
+4     age_30_60_years        522
+38  ticket_price_High        477
+30      gender_female        466
+46          title_Mrs        457
+40   ticket_price_Low        433
+42   ticket_price_Mid        399
+10            class_1        323
+34         is_alone_0        284
+12            class_2        277
+16         embarked_C        270
+24      family_size_2        159
+18         embarked_Q        123
+0     age_12_18_years        105
+6       age_<12_years         98
+26    family_size_3-5         90
+28     family_size_>5         35
+48         title_rare         34
+8       age_>60_years         33
+```
+
+
+&nbsp;
+
+<h4> Local Feature Value Explainability</h4>
+
+
+[`local_feature_value_explainability`](../api_reference/explainability.md#xaiographs.Explainer.local_feature_value_explainability)
+property that, for each sample, returns as many rows as feature-value pairs, together with their calculated importance.
+
+```python
+>>> explainer.local_feature_value_explainability.head(16)
+    id      feature_value  importance  rank
+0    0      gender_female    0.191029     1
+1    0          title_Mrs    0.189320     2
+2    0            class_1    0.147101     3
+3    0  ticket_price_High    0.101550     4
+4    0         embarked_S   -0.027895     8
+5    0      family_size_1    0.004920     6
+6    0         is_alone_1    0.004920     6
+7    0    age_18_30_years    0.008612     5
+8    1        gender_male   -0.055966     7
+9    1           title_Mr   -0.058635     8
+10   1            class_1    0.386458     1
+11   1  ticket_price_High    0.021270     4
+12   1         embarked_S   -0.003752     5
+13   1    family_size_3-5   -0.010774     6
+14   1         is_alone_0    0.029181     3
+15   1      age_<12_years    0.311776     2
+```
+
+
+&nbsp;
+
+<h4> Local Reliability</h4>
+
+[`local_reliability`](../api_reference/explainability.md#xaiographs.Explainer.local_reliability) property that, for 
+each sample, returns its top1 target and the reliability value associated to that target.
+
+```python
+>>> explainer.local_reliability.head(10)
+   id       target  reliability
+0   0     SURVIVED         1.00
+1   1     SURVIVED         1.00
+2   2  NO_SURVIVED         1.00
+3   3  NO_SURVIVED         1.00
+4   4  NO_SURVIVED         0.20
+5   5     SURVIVED         0.28
+6   6     SURVIVED         0.75
+7   7  NO_SURVIVED         0.86
+8   8     SURVIVED         1.00
+9   9  NO_SURVIVED         1.00
+```
+
+
+&nbsp;
+
+<h4> Importance Values</h4>
+
+
+[`importance_values`](../api_reference/explainability.md#xaiographs.importance_values) property returns the computed 
+importance values. Structure (numpy.array) containing for each sample, feature and target value, the computed importance values.
+
+```python
+>>> explainer.importance_values
+array([[[ 0.19102919, -0.19102919],
+        [ 0.18931973, -0.18931973],
+        [ 0.14710146, -0.14710146],
+        ...,
+        [ 0.0049198 , -0.0049198 ],
+        [ 0.0049198 , -0.0049198 ],
+        [ 0.00861183, -0.00861183]],
+
+       [[-0.05596649,  0.05596649],
+        [-0.05863524,  0.05863524],
+        [ 0.38645767, -0.38645767],
+        ...,
+        [-0.01077448,  0.01077448],
+        [ 0.0291813 , -0.0291813 ],
+        [ 0.31177627, -0.31177627]],
+
+       [[ 0.04319279, -0.04319279],
+        [ 0.04255799, -0.04255799],
+        [-0.09668253,  0.09668253],
+        ...,
+        [-0.02768731,  0.02768731],
+        [ 0.00612063, -0.00612063],
+        [-0.34010499,  0.34010499]],
+
+       ...,
+
+       [[-0.09110644,  0.09110644],
+        [-0.09225141,  0.09225141],
+        [-0.06639871,  0.06639871],
+        ...,
+        [-0.02507825,  0.02507825],
+        [-0.02507825,  0.02507825],
+        [-0.03583761,  0.03583761]],
+
+       [[-0.09110644,  0.09110644],
+        [-0.09225141,  0.09225141],
+        [-0.06639871,  0.06639871],
+        ...,
+        [-0.02507825,  0.02507825],
+        [-0.02507825,  0.02507825],
+        [-0.03583761,  0.03583761]],
+
+       [[-0.08246317,  0.08246317],
+        [-0.08290531,  0.08290531],
+        [-0.04468906,  0.04468906],
+        ...,
+        [-0.02018317,  0.02018317],
+        [-0.02018317,  0.02018317],
+        [-0.02992086,  0.02992086]]])
+```

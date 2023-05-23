@@ -212,7 +212,7 @@ class Explainer(object):
 
     @property
     def importance_values(self):
-        """Property that returns the computed importance values.
+        """Property returns the computed importance values.
 
         .. caution::
            If the method :meth:`local_explain` from an :class:`ImportanceCalculator` child class has not been \
@@ -221,7 +221,7 @@ class Explainer(object):
         Returns
         -------
         importance_values : numpy.array, shape (n_samples, n_features, n_target_values)
-            Structure containing containing for each sample, feature and target value, the computed importance values
+            Structure containing for each sample, feature and target value, the computed importance values
 
 
         """
@@ -309,7 +309,7 @@ class Explainer(object):
 
     @property
     def sample_ids_to_display(self):
-        """Property that retrieves the sample ids which will be used to build the interactive visualization.
+        """Property retrieves the sample ids which will be used to build the interactive visualization.
 
         .. caution::
            If the method :meth:`fit` from the :class:`Explainer` class has not been executed, it will return a warning \
@@ -329,7 +329,7 @@ class Explainer(object):
 
     @property
     def top_features(self):
-        """Property that returns all the features ranked by the ``FeatureSelector``. Ranking is calculated as follows:
+        """Property returns all the features ranked by the ``FeatureSelector``. Ranking is calculated as follows:
 
         - For each target value and for all the features, two histograms are calculated per feature. The first one \
         considering the input pandas DataFrame filtered by the target value and the second one considering the \
@@ -384,7 +384,7 @@ class Explainer(object):
 
     @property
     def top_features_by_target(self):
-        """Property that returns all the features ranked by the ``FeatureSelector``.
+        """Property returns all the features ranked by the ``FeatureSelector``.
 
         .. seealso::
            For further information about how the selection process works, please refer to :attr:`top_features` from \
