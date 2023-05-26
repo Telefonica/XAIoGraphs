@@ -26,8 +26,8 @@ Documentation of the characteristics of [`Titanic Dataset`](../user_guide/datase
 ## Titanic Explainer
 
 
-To determine the explainability of this dataset, we have discretize the continuous features (`age`, `family_size` 
-and `ticket_price`) and produce as many columns representing the probability of the target as there are targets in 
+To determine the explainability of this dataset, we have discretized the continuous features (`age`, `family_size` 
+and `ticket_price`) and produced as many columns representing the probability of the target as there are targets in 
 the dataset.In this example, we will have two columns with probabilities of `0` and `1`: `SURVIVED` and `NO_SURVIVED`. 
 The function [`load_titanic_discretized()`](../api_reference/datasets.md#xaiographs.datasets.load_titanic_discretized) 
 in XAIoGraphs already provides this altered dataset.
@@ -50,7 +50,7 @@ predictions, you would have to create the `SURVIVED` and `NO_SURVIVED` columns w
 &nbsp;
 
 To obtain different explainability results, we must create an object of class [`Explainer`](../api_reference/explainer.md) 
-and parse it through the `dataset` and the explainability engine (`LIDE`). Later, by using the `fit()` method and 
+and analyze it through the `dataset` and the explainability engine (`LIDE`). Later, by using the `fit()` method and 
 handing it a list containing the names of the feature columns (`feature_cols`) and another list containing the names 
 of the target columns (`target_cols`), it will execute all of the computations required to provide the explainability:
 

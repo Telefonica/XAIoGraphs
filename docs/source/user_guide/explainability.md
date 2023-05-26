@@ -93,7 +93,7 @@ $$
 \end{bmatrix}}
 $$
 
-- Now, for the resulting *(N, 4)* matrix, each value is normalized by diving it by the sum of its column elements:
+- Now, for the resulting *(N, 4)* matrix, each value is normalized by dividing it by the sum of its column elements:
 
 $$
 \mathbf{A'} = {\begin{bmatrix}
@@ -103,7 +103,7 @@ $$
     a_{N-10}/\sum_{i=0}^{N-1} a_{i0} & a_{N-11}/\sum_{i=0}^{N-1} a_{i1} & a_{N-12}/\sum_{i=0}^{N-1} a_{i2} & a_{N-13}/\sum_{i=0}^{N-1} a_{i3}
 \end{bmatrix}}
 $$
-- Then, for each feature (each matrix row), its elements are added, as a result the matrix becomes single column hence 
+- Then, for each feature (each matrix row), its elements are added, as a result the matrix becomes a single column hence 
  a vector containing one element per feature:
  
 $$
@@ -135,7 +135,7 @@ The obtained vector contains a number for each feature and that number represent
 - The feature values distribution when target equals to the target class being taken into account
 - The feature values distribution when target is different from that target class
 
-So that, the higher the distance, the most relevant the feature will be...for that target class. Hence this must be 
+Therefore, the higher the distance, the most relevant the feature will be...for that target class. Hence this must be 
 computed for all possible target values in the case of a multiple classification problem (a non-binary problem). So:
 - In the case of a binary classification problem, we can proceed to rank the obtained distances
 - In the case of a multiple classification problem, feature distributions distances for the rest of the possible target 
@@ -154,8 +154,8 @@ when instantiating the [`Explainer`](../api_reference/explainability.md) class.
  
 ## LIDE (Local Interpretable Data Explanations)
 
-LIDE is a local explainability algorithm which works on tabular data and doesn't make any assumptions on the origin of 
-the target (the column to be explained). Before further reading, please take a look at the 
+LIDE is a local explainability algorithm which works on tabular data and doesn't make any assumptions about the origin 
+of the target (the column to be explained). Before further reading, please take a look at the 
 [requirements section](#requirements)
 
 Let us understand what local explainability means:
@@ -227,7 +227,7 @@ $$
 P(X_{s̅}|X_{s}) = P(X_{s̅})
 $$ 
  **LIDE does not rely on that assumption** but instead, directly estimates $P(X_{s̅}|X_{s})$ (thus the $v(S)$ needed to 
- obtain the Shapley values). We won't delve into details, but, in order to to that estimation it relies on two 
+ obtain the Shapley values). We won't delve into details, but, in order to this estimation it relies on two 
  hypotheses:
  - $Z'=h(X)=f(discretize(X))$, that is to say, dummy variables used for explanation are obtained from the discretized 
  version of features X used by the black box model
@@ -258,8 +258,8 @@ Raw titanic dataset can be obtained using the
 2    2  female   Mrs   2.0000            3         0        S      1      151.5500         0
 ```
 
-To determine the explainability, we have discretize the continuous features (`age`, `family_size` and `ticket_price`) 
-and produce as many columns representing the probability of the target as there are targets in the dataset.
+To determine the explainability, we have discretized the continuous features (`age`, `family_size` and `ticket_price`) 
+and produced as many columns representing the probability of the target as there are targets in the dataset.
 In this example, we will have two columns with probabilities of `0` and `1`: `SURVIVED` and `NO_SURVIVED`. 
 The function [`load_titanic_discretized()`](../api_reference/datasets.md#xaiographs.datasets.load_titanic_discretized) 
 in XAIoGraphs already provides this altered dataset.
@@ -275,7 +275,7 @@ in XAIoGraphs already provides this altered dataset.
 ```
 
 To obtain different explainability results, we must create an object of class [`Explainer`](../api_reference/explainer.md) 
-and parse it through the `dataset` and the explainability engine (`LIDE`). Later, by using the `fit()` method and 
+and analyze it through the `dataset` and the explainability engine (`LIDE`). Later, by using the `fit()` method and 
 handing it a list containing the names of the feature columns (`feature_cols`) and another list containing the names 
 of the target columns (`target_cols`), it will execute all of the computations required to provide the explainability:
 

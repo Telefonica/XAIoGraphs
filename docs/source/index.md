@@ -21,7 +21,7 @@ This library includes the following functionalities:
 + **Global Explainability**: Explains predictions or decisions as a whole, focusing on the variables that have the most influence.
 + **Local Explainability**: Explains the prediction of a single element.
 + **Reliability Measure** of local explainability.
-+ **Resaon Why:** *explanation in natural language* of the classification of each element.
++ **Reason Why:** *explanation in natural language* of the classification of each element.
 + **Fairness Scoring**: highlights potential discriminations in classifications based on sensitive features.
 
 To understand or ***interpret the explanations*** uses ***XAIoWeb***, a ***web interface*** running in local mode (127.0.0.1:8080). 

@@ -7,7 +7,7 @@ explainability and fairness methods after executing the `fit()` methods of the [
 A sequence of JSON files are generated in the `xaioweb_files` folder after executing the `fit()` method of the 
 [`Explainer`](../api_reference/explainability.md), [`Why`](../api_reference/why.md) or 
 [`Fairness`](../api_reference/fairness.md) classes (folder name is specified in the class constructor's 
-`destination_path` parameter.) Web interface displays the outcomes using these JSON files. The following are the files:
+`destination_path` parameter). Web interface displays the outcomes using the following JSON files:
 
 
 | JSON FILE NAME                  |
@@ -34,13 +34,13 @@ A sequence of JSON files are generated in the `xaioweb_files` folder after execu
 If any of these files are not generated, the website will not display the results.
 ```
 
-To launch the web (with the virtual environment enabled), run the following entry point:
+To launch the web (with the virtual environment enabled), run the following command:
 
 ```python
 >> xaioweb -d xaioweb_files -o
 ```
 
-This entry point takes the following parameters:
+This command takes the following parameters:
 
 - `-d` o `--data` [REQUIRED]: JSON files path
 - `-p` o `--port` [OPTIONAL]: Web server port. 8080 by default
@@ -79,7 +79,7 @@ It must be understood that all entries in the dataset are analyzed individually 
 aggregated in this module.
 
 It is important to understand that the results are presented at the level of the entire dataset and according to the 
-different targets that make up it.
+different targets that make it up.
 
 The page is divided into two major sections, the top (formed by the Features Importance and Target distribution graphs) 
 displays the information of the entire dataset. The bottom, under the title "Feature distribution by target", shows 
@@ -94,7 +94,7 @@ the features information for a specific target, displaing consolidated calculati
 ```
 &nbsp;
 
-Next, we will look at each of the graphs that make up it and its meaning.
+Next, we will look at each of the graphs that make it up and its meaning.
 
 &nbsp;
 ### Features importance
@@ -111,7 +111,7 @@ but also by its opacity level.
 ```
 &nbsp;
 
-Take notes that in the upper right corner of the chart, next to the export function, we have a switch that allows you 
+Notice that in the upper right corner of the chart, next to the export function, we have a switch that allows you 
 to show the breakdown of values according to the target.
 
 
@@ -159,7 +159,7 @@ for the selected target.
 ```
 &nbsp;
 
-Take notes that in the upper right corner of the chart, next to the export function, we have a switch that allows you 
+Notice that in the upper right corner of the chart, next to the export function, we have a switch that allows you 
 to compare the values of the selected target with the general data shown in the top chart. In the specific case of 
 datasets with binary target (there are only 2 possible values for the target) this graph will show overlapping graphs, 
 as the average values of a target are annulled with those of the opposite.
@@ -190,13 +190,12 @@ redest color) and those located more on the right will contribute more negativel
 The different numerical values are represented depending on the opacity of the color, so that those more relevant 
 (both positively and negatively) will have a more solid color, while those closer to the value 0 will be a more 
 white color. The length of each of the possible values of a feature represents the number of occurrences of that value 
-within the dataset, so that the longer values have more presence while the smaller ones have little occurrence 
+within the dataset, so that the longest values have more presence while the smallest ones have little occurrence 
 in the data.
 
 &nbsp;
 ### Features-values importance (by target)
-This graph displays the specific contribution values for the feature/value pairs. This can be positive (represented 
-in red) or negative.(representado en azul)
+This graph displays the specific contribution values for the feature/value pairs. This can be positive (red) or negative (blue).
 
 
 It is important to note that the values shown are the same as those shown on the HeatMap.
@@ -210,8 +209,8 @@ It is important to note that the values shown are the same as those shown on the
 ```
 &nbsp;
 
-Take notes that in the upper right corner of the chart, next to the export function, we have a switch that allows 
-you to visualize the frequency of the feature/value (Represented in the HeatMap by its length)
+Notice that in the upper right corner of the chart, next to the export function, we have a switch that allows 
+you to visualize the frequency of the feature-value (represented in the HeatMap by its length)
 
 
 ```{image} ../../imgs/XaioWeb_Global_Target_Features-values_importance_Frecuency.png
@@ -309,8 +308,7 @@ the reasons why this case has the target it has.
 
 &nbsp;
 ### Features-values importance
-This graph displays the specific contribution values for the feature/value pairs. This can be positive (represented 
-in red) or negative.(representado en azul)
+This graph displays the specific contribution values for the feature/value pairs. This can be positive (red) or negative (blue).
 
 
 ```{image} ../../imgs/XaioWeb_Local_Features_values_importance.png
@@ -406,7 +404,7 @@ This graph shows the analysis performed for each of the sensitive features based
 ```
 
 &nbsp;
-### Confussion Matrix
+### Confusion Matrix
 This graph is a confusion matrix to represent the performance of the prediction algorithm.
 
 
@@ -415,19 +413,19 @@ real class instances.
 
 
 ```{image} ../../imgs/XaioWeb_Fairness_Confussion_Matrix.png
-:alt: Fairness Confussion Matrix
+:alt: Fairness Confusion Matrix
 :class: bg-primary
 :width: 400px
 :align: center
 ```
 &nbsp;
 
-Take notes that in the upper right corner of the chart, next to the export function, we have a switch that allows you 
+Notice that in the upper right corner of the chart, next to the export function, we have a switch that allows you 
 to analize the numeric values or percentage values.
 
 
 ```{image} ../../imgs/XaioWeb_Fairness_Confussion_Matrix_Percentage.png
-:alt: Fairness Confussion Matrix Percentage
+:alt: Fairness Confusion Matrix Percentage
 :class: bg-primary
 :width: 400px
 :align: center
