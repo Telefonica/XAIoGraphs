@@ -26,7 +26,7 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setup(
-    name='XAIoGraphs',
+    name='xaiographs',
     version=__VERSION__,
     description='Python library providing Explainability & Fairness AI functionalities',
     long_description_content_type="text/markdown",
