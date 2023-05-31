@@ -1,4 +1,4 @@
-# <img src="docs/imgs/icon.png" align="left"/>  XAIoGraphs
+# <img src="https://github.com/Telefonica/XAIoGraphs/blob/master/docs/imgs/icon.png?raw=True" align="left"/>  XAIoGraphs
 
 ![python versions](https://img.shields.io/badge/python-3.7%2C%203.8%2C%203.9-blue.svg)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
@@ -10,7 +10,7 @@ The explainability methods in this library don't make any hypotheses about the d
 Simply need data and predictions (or decisions), being able to explain AI models, rule models, and reality.
 
 <p align="center">
-    <img src="docs/imgs/XAIoGraphs_schema.png" width="800px" />
+    <img src="https://github.com/Telefonica/XAIoGraphs/blob/master/docs/imgs/XAIoGraphs_schema.png?raw=True" width="800px" />
 </p>
 
 This library includes the following functionalities:
@@ -25,7 +25,7 @@ To understand or ***interpret the explanations*** uses ***XAIoWeb***, a ***web i
 It displays the explanations' outcomes in three sections: Global, Local and Fairness.
 
 <p align="center">
-    <img src="docs/imgs/XAIoWeb.png" width="800px" />
+    <img src="https://github.com/Telefonica/XAIoGraphs/blob/master/docs/imgs/XAIoWeb.png?raw=True" width="800px" />
 </p>
 
 
