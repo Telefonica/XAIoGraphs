@@ -11,9 +11,10 @@ The following datasets are included:
 | Datset                                          | Rows  | Num. Feats |      Task       |
 |:------------------------------------------------|:-----:|:----------:|:---------------:|
 | [Titanic](#titanic)                             | 1309  |     8      |     Binary      |
-| [Compas](#compas)                               | ????  |    ????    |     Binary      |
 | [Body Performace](#body-performance)            | 13393 |     11     | Multi-Class (3) | 
 | [Education Performance](#education-performance) |  145  |     29     | Multi-Class (5) |
+
+[//]: # (| [Compas]&#40;#compas&#41;                               | ????  |    ????    |     Binary      |)
 
 These datasets are accessible in both raw and discretized form, ready for usage by the 
 [`Explainability`](../api_reference/explainability.md)  and [`Fairness`](../api_reference/fairness.md) classes.
@@ -47,17 +48,26 @@ perished.Individual Titanic passengers' chances of survival are described in the
 
 
 
-&nbsp;
-## Compas
+[//]: # (&nbsp;)
 
-|                                              |                                                                                                   |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------|
-| **Source**                                   | [https://github.com/propublica/compas-analysis](https://github.com/propublica/compas-analysis)    |
-| **Num Rows:**                                | TBD                                                                                               |
-| **Num Features**                             | TBD                                                                                               |
-| **Num Targets:**                             | TBD                                                                                               |
-| **function to obtain dataset**               | [`xaiographs.datasets.TBD()`](../api_reference/datasets.md#xaiographs.datasets.TBD)               | 
-| **function to obtain discretized dataset**   | [`xaiographs.datasets.TBD()`](../api_reference/datasets.md#xaiographs.datasets.TBD)               |
+[//]: # (## Compas)
+
+[//]: # ()
+[//]: # (|                                              |                                                                                                   |)
+
+[//]: # (|----------------------------------------------|---------------------------------------------------------------------------------------------------|)
+
+[//]: # (| **Source**                                   | [https://github.com/propublica/compas-analysis]&#40;https://github.com/propublica/compas-analysis&#41;    |)
+
+[//]: # (| **Num Rows:**                                | TBD                                                                                               |)
+
+[//]: # (| **Num Features**                             | TBD                                                                                               |)
+
+[//]: # (| **Num Targets:**                             | TBD                                                                                               |)
+
+[//]: # (| **function to obtain dataset**               | [`xaiographs.datasets.TBD&#40;&#41;`]&#40;../api_reference/datasets.md#xaiographs.datasets.TBD&#41;               | )
+
+[//]: # (| **function to obtain discretized dataset**   | [`xaiographs.datasets.TBD&#40;&#41;`]&#40;../api_reference/datasets.md#xaiographs.datasets.TBD&#41;               |)
 
 
 &nbsp;

@@ -27,6 +27,7 @@
 <h3 class="user-guide-tittle"><a href="datasets.html">4. Datasets</a></h3>
 
 * [Titanic](datasets.md#titanic)
-* [Compas](datasets.md#compas)
 * [Body Performace](datasets.md#body-performace)
 * [Education Performance](datasets.md#education-performance)
+
+[//]: # (* [Compas]&#40;datasets.md#compas&#41;)
