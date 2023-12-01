@@ -117,7 +117,7 @@ jobs:
 
       needs: [ test_library_matrix, test_doc_ci ]
 
-#      runs-on: cdorunner-aipro-cicd
+      runs-on: ${{ matrix.os }}
 
       steps:
         - name: Clean up workspace
