@@ -1,0 +1,8 @@
+feature_value,reason
+Age_range_25 - 45,middle-aged
+Age_range_Greater than 45,be older than 45 years
+Age_range_Less than 25,be young
+is_recid_NO,not being a repeat offender
+is_recid_YES,be a repeat offender
+is_violent_recid_NO,not being a repeat offender
+is_violent_recid_YES,be a violent repeat offender

@@ -23,6 +23,7 @@ import pandas as pd
 
 from xaiographs.common.constants import LANG_EN, LANG_ES
 
+ID = ['id']
 # Titanic Dataset
 TITANIC_PATH = 'data/titanic/dataset.csv'
 TITANIC_DISCRETIZED_PATH = 'data/titanic/dataset_discretized.csv'
@@ -88,6 +89,17 @@ COMPAS_TARGET_VALUES_SEMANTICS_PATH = {
 FEATURE_COLS_COMPAS = ['Gender', 'Age_range', 'Ethnicity', 'MaritalStatus', 'c_charge_degree', 'is_recid',
                        'is_violent_recid']
 TARGET_COLS_COMPAS = ['High_Recid', 'Medium_Recid', 'Low_Recid']
+
+# COMPAS Reality Dataset
+COMPAS_REALITY_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/compas_reality/values_semantics_en.csv',
+    LANG_ES: 'data/compas_reality/values_semantics_es.csv'
+}
+COMPAS_REALITY_TARGET_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/compas_reality/target_values_semantics_en.csv',
+    LANG_ES: 'data/compas_reality/target_values_semantics_es.csv'
+}
+TARGET_COLS_COMPAS_REALITY = ['Recid', 'No_Recid']
 
 # All datasets that include predictions must have a column with the prediction and another with its real target
 TARGET_COL = 'y_true'
@@ -574,23 +586,23 @@ def load_compas() -> pd.DataFrame:
     """Returns COMPAS dataset with the following Features:
 
     + **id:** unique studen identifier
-    + **FirstName:**
-    + **LastName:**
-    + **Gender:**
-    + **Age_range:**
-    + **Ethnicity:**
-    + **days_b_screening_arrest:**
-    + **c_jail_in:**
-    + **c_jail_out:**
-    + **Days_in_jail:**
-    + **c_charge_degree:**
-    + **c_charge_desc:**
-    + **is_recid:**
-    + **is_violent_recid:**
-    + **score_risk_recidivism:**
-    + **score_text_risk_recidivism:**
-    + **score_risk_violence:**
-    + **score_text_risk_violence:**
+    + **FirstName**
+    + **LastName**
+    + **Gender**
+    + **Age_range**
+    + **Ethnicity**
+    + **days_b_screening_arrest**
+    + **c_jail_in**
+    + **c_jail_out**
+    + **Days_in_jail**
+    + **c_charge_degree**
+    + **c_charge_desc**
+    + **is_recid**
+    + **is_violent_recid**
+    + **score_risk_recidivism**
+    + **score_text_risk_recidivism**
+    + **score_risk_violence**
+    + **score_text_risk_violence**
     + **Low_Recid:**
     + **Medium_Recid:**
     + **High_Recid:**
@@ -608,7 +620,7 @@ def load_compas() -> pd.DataFrame:
         Example:
             >>> from xaiographs.datasets import load_compas
             >>> df_dataset = load_compas()
-            >>> df_dataset.head(3) TODO
+            >>> df_dataset.head(3)
                id FirstName   LastName Gender        Age_range         Ethnicity  days_b_screening_arrest     c_jail_in    c_jail_out  Days_in_jail c_charge_degree                   c_charge_desc  is_recid  is_violent_recid score_risk_recidivism score_text_risk_recidivism  score_risk_violence score_text_risk_violence  Low_Recid  Medium_Recid  High_Recid  No_Recid  score_text_risk_violence  Low_Recid  Medium_Recid  High_Recid  No_Recid  Recid  predict_two_year_recid  real_two_year_recid
             0   1    miguel  hernandez   Male  Greater than 45             Other                     -1.0  13/8/13 6:03  14/8/13 5:41             1               F    Aggravated Assault w/Firearm         0                 0                     1                        Low                    1                      Low          1             0           0         1                       Low          1             0           0         1      0                       0                    0
             1   3     kevon      dixon   Male          25 - 45  African-American                     -1.0  26/1/13 3:45   5/2/13 5:36            10               F  Felony Battery w/Prior Convict         1                 1                     3                        Low                    1                      Low          1             0           0         0                       Low          1             0           0         0      1                       0                    1
@@ -619,29 +631,19 @@ def load_compas() -> pd.DataFrame:
 
 
 def load_compas_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
-    """Returns education performance dataset (and other metadata) to be tested in xaiographs. The dataset contains  \
-    a series of discretized features, five columns (A, B, C, D, Fail) with the probability [0,1] of classification  \
-    given by an ML model and two columns 'y_true' & 'y_predict' with GroundTruth and prediction given by ML model.  \
-    Dataset contains the following columns:
+    """TODO
 
     + **id:** unique studen identifier
-    + **Gender:**
+    + **Gender:** {Male, Female}
     + **Age_range:**
     + **Ethnicity:**
     + **MaritalStatus:**
     + **c_charge_degree:**
-    + **c_charge_desc:**
     + **is_recid:**
     + **is_violent_recid:**
-    + **score_risk_recidivism:**
-    + **score_text_risk_recidivism:**
-    + **score_risk_violence:**
-    + **score_text_risk_violence:**
     + **Low_Recid:**
     + **Medium_Recid:**
     + **High_Recid:**
-    + **No_Recid:**
-    + **Recid:**
     + **y_predict:**
     + **y_true:**
 
@@ -661,10 +663,10 @@ def load_compas_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, 
             >>> from xaiographs.datasets import load_compas_discretized
             >>> df_dataset, features_cols, target_cols, y_true, y_predict = load_compas_discretized()
             >>> df_dataset.head(3)
-               id Gender        Age_range         Ethnicity MaritalStatus c_charge_degree                  c_charge_desc is_recid is_violent_recid score_risk_recidivism score_text_risk_recidivism  score_risk_violence score_text_risk_violence  Low_Recid  Medium_Recid  High_Recid  No_Recid Recid y_predict    y_true
-            0   0   Male  Greater than 45             Other        Single               F   Aggravated Assault w/Firearm       NO               NO                     1                        Low                    1                      Low          1             0           0         1     0  No_Recid  No_Recid
-            1   1   Male          25 - 45  African-American        Single               F Felony Battery w/Prior Convict      YES              YES                     3                        Low                    1                      Low          1             0           0         0     1  No_Recid     Recid
-            2   4   Male          25 - 45             Other     Separated               M                        Battery       NO               NO                     1                        Low                    1                      Low          1             0           0         1     0  No_Recid  No_Recid
+              id Gender        Age_range         Ethnicity MaritalStatus c_charge_degree is_recid is_violent_recid  High_Recid  Medium_Recid  Low_Recid    y_true y_predict
+            0  1   Male  Greater than 45             Other        Single               F       NO               NO           0             0          1  No_Recid  No_Recid
+            1  3   Male          25 - 45  African-American        Single               F      YES              YES           0             0          1     Recid  No_Recid
+            2  5   Male          25 - 45             Other     Separated               M       NO               NO           0             0          1  No_Recid  No_Recid
             >>> features_cols
             ['Gender', 'Age_range', 'Ethnicity', 'MaritalStatus', 'c_charge_degree', 'is_recid', 'is_violent_recid']
             >>> target_cols
@@ -675,7 +677,8 @@ def load_compas_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, 
             'y_predict'
     """
     df_dataset = pd.read_csv(os.path.join(SRC_DIR, COMPAS_DISCRETIZED_PATH))
-    return df_dataset, FEATURE_COLS_COMPAS, TARGET_COLS_COMPAS, TARGET_COL, PREDICT_COL
+    return (df_dataset[ID + FEATURE_COLS_COMPAS + TARGET_COLS_COMPAS + [TARGET_COL] + [PREDICT_COL]],
+            FEATURE_COLS_COMPAS, TARGET_COLS_COMPAS, TARGET_COL, PREDICT_COL)
 
 
 def load_compas_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -699,20 +702,20 @@ def load_compas_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame
     Example:
             >>> from xaiographs.datasets import load_compas_why
             >>> df_values_semantics, df_target_values_semantics = load_compas_why()
-            >>> df_values_semantics.head(5) TODO
-                          feature_value                                        reason
-            0        accomodation_other  having been in another type of accommodation
-            1    accomodation_dormitory               having been housed in a bedroom
-            2       accomodation_rental         having been in a rented accommodation
-            3  accomodation_with family         having been in a family accommodation
-            4                 age_18-21                      being under 21 years old
-            >>> df_target_values_semantics.head(5) TODO
-              target             feature_value                       reason
-            0      A        accomodation_Other     live in other facilities
-            1      A    accomodation_dormitory          living in a bedroom
-            2      A       accomodation_rental             living in rental
-            3      A  accomodation_with family     he lives with his family
-            4      A                 age_18-21  it is below the average age
+            >>> df_values_semantics.head(5)
+                            feature_value                  reason
+            0           Age_range_25 - 45             middle-aged
+            1   Age_range_Greater than 45  be older than 45 years
+            2      Age_range_Less than 25                be young
+            3  Ethnicity_African-American             being black
+            4             Ethnicity_Asian     being of Asian race
+            >>> df_target_values_semantics.head(5)
+                   target               feature_value                                                                                         reason
+            0  High_Recid           Age_range_25 - 45 some in the age range between 25 and 45 years old were classified as "High Risk of recidivism"
+            1  High_Recid   Age_range_Greater than 45                 few of those over 45 years of age were classified as "High Risk of recidivism"
+            2  High_Recid      Age_range_Less than 25                        many under 25 years of age were classified as "High Risk of recidivism"
+            3  High_Recid  Ethnicity_African-American                                        many classified as "High Risk of Recidivism" were Black
+            4  High_Recid             Ethnicity_Asian                            very few classified as "High Risk of Recidivism" were of Asian race
 
     """
     df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, COMPAS_VALUES_SEMANTICS_PATH[LANG_ES]))
@@ -722,5 +725,99 @@ def load_compas_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame
                                  if language == LANG_ES
                                  else pd.read_csv(
         os.path.join(SRC_DIR, COMPAS_TARGET_VALUES_SEMANTICS_PATH[LANG_EN])))
+
+    return df_values_semantic, df_target_values_semantic
+
+
+def load_compas_reality_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
+    """TODO
+
+    + **id:** unique studen identifier
+    + **Gender:**
+    + **Age_range:**
+    + **Ethnicity:**
+    + **MaritalStatus:**
+    + **c_charge_degree:**
+    + **is_recid:**
+    + **is_violent_recid:**
+    + **No_Recid:**
+    + **Recid:**
+
+
+    Returns
+    -------
+    load_compas_discretized : Tuple[pd.DataFrame, List[str], List[str], str, str]
+        + pd.DataFrame, with data
+        + List[str], with features name columns
+        + List[str], with target names probabilities
+
+
+
+    Example:
+            >>> from xaiographs.datasets import load_compas_reality_discretized
+            >>> df_dataset, features_cols, target_cols = load_compas_reality_discretized()
+            >>> df_dataset.head(3)
+              id Gender        Age_range         Ethnicity MaritalStatus c_charge_degree is_recid is_violent_recid  Recid  No_Recid
+            0  1   Male  Greater than 45             Other        Single               F       NO               NO      0         1
+            1  3   Male          25 - 45  African-American        Single               F      YES              YES      1         0
+            2  5   Male          25 - 45             Other     Separated               M       NO               NO      0         1
+
+            >>> features_cols
+            ['Gender', 'Age_range', 'Ethnicity', 'MaritalStatus', 'c_charge_degree', 'is_recid', 'is_violent_recid']
+            >>> target_cols
+            ['Recid', 'No_Recid']
+
+    """
+    df_dataset = pd.read_csv(os.path.join(SRC_DIR, COMPAS_DISCRETIZED_PATH))
+    return (df_dataset[ID + FEATURE_COLS_COMPAS + TARGET_COLS_COMPAS_REALITY],
+            FEATURE_COLS_COMPAS,
+            TARGET_COLS_COMPAS_REALITY)
+
+
+def load_compas_reality_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
+    calculated with the COMPAS dataset.
+
+
+    Parameters
+    ----------
+    language : str
+        Language identifier {es: Spanish, en: English}. Default uses English language
+
+
+    Returns
+    -------
+    load_compas_why : Tuple[pd.DataFrame, pd.DataFrame]
+        + pd.DataFrame with the natural language explanation of feature-value we want to use
+        + pd.DataFrame with the natural language explanation of feature-value we want to use per target
+
+
+    Example:
+            >>> from xaiographs.datasets import load_compas_reality_why
+            >>> df_values_semantics, df_target_values_semantics = load_compas_reality_why()
+            >>> df_values_semantics.head(5)
+                           feature_value                  reason
+            0           Age_range_25 - 45             middle-aged
+            1   Age_range_Greater than 45  be older than 45 years
+            2      Age_range_Less than 25                be young
+            3  Ethnicity_African-American             being black
+            4             Ethnicity_Asian     being of Asian race
+            >>> df_target_values_semantics.head(5)
+              target               feature_value                                                              reason
+            0  Recid           Age_range_25 - 45 some in the age range between 25 and 45 years were repeat offenders
+            1  Recid   Age_range_Greater than 45                          few of those over 45 were repeat offenders
+            2  Recid      Age_range_Less than 25           many of those under 25 years of age were repeat offenders
+            3  Recid  Ethnicity_African-American                                    many repeat offenders were Black
+            4  Recid             Ethnicity_Asian                                very few repeat offenders were Asian
+
+    """
+    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, COMPAS_REALITY_VALUES_SEMANTICS_PATH[LANG_ES]))
+                          if language == LANG_ES
+                          else pd.read_csv(os.path.join(SRC_DIR, COMPAS_REALITY_VALUES_SEMANTICS_PATH[LANG_EN])))
+    df_target_values_semantic = (
+        pd.read_csv(os.path.join(SRC_DIR, COMPAS_REALITY_TARGET_VALUES_SEMANTICS_PATH[LANG_ES]))
+        if language == LANG_ES
+        else pd.read_csv(
+            os.path.join(SRC_DIR, COMPAS_REALITY_TARGET_VALUES_SEMANTICS_PATH[LANG_EN])))
 
     return df_values_semantic, df_target_values_semantic

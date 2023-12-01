@@ -1,0 +1,15 @@
+target,feature_value,reason
+Recid,Age_range_25 - 45,algunos del rango de edad entre 25 y 45 años fueron reincidentes
+Recid,Age_range_Greater than 45,pocos de los mayores de 45 años fueron reincidentes
+Recid,Age_range_Less than 25,muchos de los menores de 25 años fueron reincidentes
+Recid,is_recid_NO,pocos eran No Reincidentes
+Recid,is_recid_YES,muchos eran Reincidentes
+Recid,is_violent_recid_NO,pocos eran No Reincidentes Violentos
+Recid,is_violent_recid_YES,muchos eran Reincidentes Violentos
+No_Recid,Age_range_25 - 45,algunos del rango de edad entre 25 y 45 años fueron reincidentes
+No_Recid,Age_range_Greater than 45,muchos de los mayores de 45 años fueron reincidentes
+No_Recid,Age_range_Less than 25,pocos menores de 25 años fueron reincidentes
+No_Recid,is_recid_NO,muchos eran No Reincidentes
+No_Recid,is_recid_YES,pocos eran Reincidentes
+No_Recid,is_violent_recid_NO,muchos eran No Reincidentes Violentos
+No_Recid,is_violent_recid_YES,pocos eran Reincidentes Violentos

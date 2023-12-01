@@ -1,0 +1,15 @@
+target,feature_value,reason
+Recid,Age_range_25 - 45,some in the age range between 25 and 45 years were repeat offenders
+Recid,Age_range_Greater than 45,few of those over 45 were repeat offenders
+Recid,Age_range_Less than 25,many of those under 25 years of age were repeat offenders
+Recid,is_recid_NO,few were Non-recidivists
+Recid,is_recid_YES,many were repeat offenders
+Recid,is_violent_recid_NO,few were No Violent Repeat Offenders
+Recid,is_violent_recid_YES,many were Violent Repeat Offenders
+No_Recid,Age_range_25 - 45,some in the age range between 25 and 45 years were repeat offenders
+No_Recid,Age_range_Greater than 45,many of those over 45 years of age were repeat offenders
+No_Recid,Age_range_Less than 25,few people under 25 years of age were repeat offenders
+No_Recid,is_recid_NO,many were Non-recidivists
+No_Recid,is_recid_YES,few were repeat offenders
+No_Recid,is_violent_recid_NO,many were Non-Violent Repeat Offenders
+No_Recid,is_violent_recid_YES,few were Violent Repeat Offenders

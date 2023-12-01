@@ -31,3 +31,6 @@ from .datasets import load_education_performance_why
 from .datasets import load_compas
 from .datasets import load_compas_discretized
 from .datasets import load_compas_why
+
+from .datasets import load_compas_reality_discretized
+from .datasets import load_compas_reality_why

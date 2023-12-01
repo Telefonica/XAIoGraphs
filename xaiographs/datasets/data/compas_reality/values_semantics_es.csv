@@ -1,0 +1,8 @@
+feature_value,reason
+Age_range_25 - 45,ser de mediana edad
+Age_range_Greater than 45,ser mayor de 45 años
+Age_range_Less than 25,ser joven
+is_recid_NO,no ser reincidente
+is_recid_YES,ser reincidente
+is_violent_recid_NO,no ser reincidente
+is_violent_recid_YES,ser reincidente violento
