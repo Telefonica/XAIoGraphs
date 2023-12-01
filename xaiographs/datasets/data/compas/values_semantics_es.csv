@@ -1,0 +1,14 @@
+feature_value,reason
+Age_range_25 - 45,ser de mediana edad
+Age_range_Greater than 45,ser mayor de 45 años
+Age_range_Less than 25,ser joven
+Ethnicity_African-American,ser de raza negra
+Ethnicity_Asian,ser de raza asiatica
+Ethnicity_Caucasian,ser de raza blanca
+Ethnicity_Hispanic,ser latino-americano
+Ethnicity_Native American,ser nativo-americano
+Ethnicity_Other,no tener en cuenta tu raza
+is_recid_NO,no ser reincidente
+is_recid_YES,ser reincidente
+is_violent_recid_NO,no ser reincidente
+is_violent_recid_YES,ser reincidente violento

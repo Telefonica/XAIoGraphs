@@ -1,0 +1,40 @@
+target,feature_value,reason
+High_Recid,Age_range_25 - 45,algunos del rango de edad entre 25 y 45 años se les clasifico como "Alto Riesgo de reincidencia"
+High_Recid,Age_range_Greater than 45,pocos de los mayores de 45 años se les clasifico como "Alto Riesgo de reincidencia"
+High_Recid,Age_range_Less than 25,muchos menores de 25 años se les clasifico como "Alto Riesgo de reincidencia"
+High_Recid,Ethnicity_African-American,muchos clasificados como de "Alto Riesgo de reincidencia" eran de raza Negra
+High_Recid,Ethnicity_Asian,muy pocos clasificados como de "Alto Riesgo de reincidencia" eran de raza Asiática
+High_Recid,Ethnicity_Caucasian,muy pocos clasificados como de "Alto Riesgo de reincidencia" eran de raza Blanca
+High_Recid,Ethnicity_Hispanic,muy pocos clasificados como de "Alto Riesgo de reincidencia" eran de raza Latino-Americana
+High_Recid,Ethnicity_Native American,muchos clasificados como de "Alto Riesgo de reincidencia" eran Nativos Americanos
+High_Recid,Ethnicity_Other,muy pocos clasificados como de "Alto Riesgo de reincidencia" no se les tuvo en cuenta su raza
+High_Recid,is_recid_NO,pocos eran No Reincidentes
+High_Recid,is_recid_YES,muchos eran Reincidentes
+High_Recid,is_violent_recid_NO,pocos eran No Reincidentes Violentos
+High_Recid,is_violent_recid_YES,muchos eran Reincidentes Violentos
+Low_Recid,Age_range_25 - 45,algunos del rango de edad entre 25 y 45 años se les clasifico como "Bajo Riesgo de reincidencia"
+Low_Recid,Age_range_Greater than 45,muchos de los mayores de 45 años se les clasifico como "Bajo Riesgo de reincidencia"
+Low_Recid,Age_range_Less than 25,pocos menores de 25 años se les clasifico como "Bajo Riesgo de reincidencia"
+Low_Recid,Ethnicity_African-American,pocos clasificados como de "Bajo Riesgo de reincidencia" eran de raza Negra
+Low_Recid,Ethnicity_Asian,la mayoria de los clasificados como de "Bajo Riesgo de reincidencia" eran de raza Asiática
+Low_Recid,Ethnicity_Caucasian,muchos clasificados como de "Bajo Riesgo de reincidencia" eran de raza Blanca
+Low_Recid,Ethnicity_Hispanic,muchos clasificados como de "Bajo Riesgo de reincidencia" eran de raza Latino-Americana
+Low_Recid,Ethnicity_Native American,muy pocos clasificados como de "Bajo Riesgo de reincidencia" eran Nativos Americanos
+Low_Recid,Ethnicity_Other,la mayoria de los clasificados como de "Bajo Riesgo de reincidencia" se les tuvo en cuenta su raza
+Low_Recid,is_recid_NO,muchos eran No Reincidentes
+Low_Recid,is_recid_YES,pocos eran Reincidentes
+Low_Recid,is_violent_recid_NO,muchos eran No Reincidentes Violentos
+Low_Recid,is_violent_recid_YES,pocos eran Reincidentes Violentos
+Medium_Recid,Age_range_25 - 45,muchos del rango de edad entre 25 y 45 años se les clasifico como "Riesgo Medio de reincidencia"
+Medium_Recid,Age_range_Greater than 45,algunos de los mayores de 45 años se les clasifico como "Riesgo Medio de reincidencia"
+Medium_Recid,Age_range_Less than 25,algunos de los menores de 25 años se les clasifico como "Riesgo Medio de reincidencia"
+Medium_Recid,Ethnicity_African-American,algunos clasificados como de "Riesgo Medio de reincidencia" eran de raza Negra
+Medium_Recid,Ethnicity_Asian,muchos clasificados como de "Riesgo Medio de reincidencia" eran de raza Asiática
+Medium_Recid,Ethnicity_Caucasian,muchos clasificados como de "Riesgo Medio de reincidencia" eran de raza Blanca
+Medium_Recid,Ethnicity_Hispanic,muchos clasificados como de "Riesgo Medio de reincidencia" eran de raza Latino-Americana
+Medium_Recid,Ethnicity_Native American,algunos clasificados como de "Riesgo Medio de reincidencia" eran Nativos Americanos
+Medium_Recid,Ethnicity_Other,muchos clasificados como de "Riesgo Medio de reincidencia" se les tuvo en cuenta su raza
+Medium_Recid,is_recid_NO,muchos eran No Reincidentes
+Medium_Recid,is_recid_YES,algunos eran Reincidentes
+Medium_Recid,is_violent_recid_NO,muchos eran No Reincidentes Violentos
+Medium_Recid,is_violent_recid_YES,algunos eran Reincidentes Violentos

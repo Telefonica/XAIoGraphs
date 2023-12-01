@@ -1,0 +1,40 @@
+target,feature_value,reason
+High_Recid,Age_range_25 - 45,some in the age range between 25 and 45 years old were classified as "High Risk of recidivism"
+High_Recid,Age_range_Greater than 45,few of those over 45 years of age were classified as "High Risk of recidivism"
+High_Recid,Age_range_Less than 25,many under 25 years of age were classified as "High Risk of recidivism"
+High_Recid,Ethnicity_African-American,many classified as "High Risk of Recidivism" were Black
+High_Recid,Ethnicity_Asian,very few classified as "High Risk of Recidivism" were of Asian race
+High_Recid,Ethnicity_Caucasian,very few classified as "High Risk of Recidivism" were White
+High_Recid,Ethnicity_Hispanic,very few classified as "High Risk of Recidivism" were of Latin American race
+High_Recid,Ethnicity_Native American,many classified as "High Risk of Recidivism" were Native Americans
+High_Recid,Ethnicity_Other,very few classified as "High Risk of Recidivism" did not take their race into account
+High_Recid,is_recid_NO,few were No Repeat Offenders
+High_Recid,is_recid_YES,many were repeat offenders
+High_Recid,is_violent_recid_NO,few were No Violent Repeat Offenders
+High_Recid,is_violent_recid_YES,many were Violent Repeat Offenders
+Low_Recid,Age_range_25 - 45,some in the age range between 25 and 45 years old were classified as "Low Risk of recidivism"
+Low_Recid,Age_range_Greater than 45,many of those over 45 years of age were classified as "Low Risk of recidivism"
+Low_Recid,Age_range_Less than 25,few under 25 years of age were classified as "Low Risk of recidivism"
+Low_Recid,Ethnicity_African-American,few classified as "Low Risk of Recidivism" were Black
+Low_Recid,Ethnicity_Asian,the majority of those classified as "Low Risk of recidivism" were of Asian race
+Low_Recid,Ethnicity_Caucasian,many classified as "Low Risk of Recidivism" were White
+Low_Recid,Ethnicity_Hispanic,many classified as "Low Risk of Recidivism" were of Latin American race
+Low_Recid,Ethnicity_Native American, very few classified as "Low Risk of recidivism" were Native Americans
+Low_Recid,Ethnicity_Other,the majority of those classified as "Low Risk of Recidivism" had their race taken into account
+Low_Recid,is_recid_NO,many were Non-recidivists
+Low_Recid,is_recid_YES,few were repeat offenders
+Low_Recid,is_violent_recid_NO,many were Non-Violent Repeat Offenders
+Low_Recid,is_violent_recid_YES,few were Violent Repeat Offenders
+Medium_Recid,Age_range_25 - 45,many in the age range between 25 and 45 years old were classified as "Medium risk of recidivism"
+Medium_Recid,Age_range_Greater than 45,some of those over 45 years of age were classified as "Medium risk of recidivism"
+Medium_Recid,Age_range_Less than 25,some of those under 25 years of age were classified as "Medium Risk of recidivism"
+Medium_Recid,Ethnicity_African-American,some classified as "Medium Risk of Recidivism" were Black
+Medium_Recid,Ethnicity_Asian,many classified as "Medium Risk of Recidivism" were of Asian race
+Medium_Recid,Ethnicity_Caucasian,many classified as "Medium Risk of Recidivism" were White
+Medium_Recid,Ethnicity_Hispanic,many classified as "Medium Risk of Recidivism" were of Latin American race
+Medium_Recid,Ethnicity_Native American,some classified as "Medium Risk of Recidivism" were Native Americans
+Medium_Recid,Ethnicity_Other,many classified as "Medium Risk of Recidivism" had their race taken into account
+Medium_Recid,is_recid_NO,many were Non-recidivists
+Medium_Recid,is_recid_YES,some were Repeat Offenders
+Medium_Recid,is_violent_recid_NO,many were Non-Violent Repeat Offenders
+Medium_Recid,is_violent_recid_YES,some were Violent Repeat Offenders
