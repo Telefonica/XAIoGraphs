@@ -11,10 +11,10 @@ The following datasets are included:
 | Datset                                          | Rows  | Num. Feats |      Task       |
 |:------------------------------------------------|:-----:|:----------:|:---------------:|
 | [Titanic](#titanic)                             | 1309  |     8      |     Binary      |
+| [Compas](#compas)                               | 4230  |     7      | Multi-Class (3) |
+| [Compas Reality](#compas)                       | 4230  |     7      |     Binary      |
 | [Body Performace](#body-performance)            | 13393 |     11     | Multi-Class (3) | 
 | [Education Performance](#education-performance) |  145  |     29     | Multi-Class (5) |
-
-[//]: # (| [Compas]&#40;#compas&#41;                               | ????  |    ????    |     Binary      |)
 
 These datasets are accessible in both raw and discretized form, ready for usage by the 
 [`Explainability`](../api_reference/explainability.md)  and [`Fairness`](../api_reference/fairness.md) classes.
@@ -48,26 +48,24 @@ perished.Individual Titanic passengers' chances of survival are described in the
 
 
 
-[//]: # (&nbsp;)
+&nbsp;
+## Compas
 
-[//]: # (## Compas)
+COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) is a popular commercial algorithm used 
+by judges and parole officers for scoring criminal defendant’s likelihood of reoffending (recidivism). It has been 
+shown that the algorithm is biased in favor of white defendants, and against black inmates, based on a 2 year follow 
+up study (i.e who actually committed crimes or violent crimes after 2 years). The pattern of mistakes, as measured 
+by precision/sensitivity is notable.
 
-[//]: # ()
-[//]: # (|                                              |                                                                                                   |)
-
-[//]: # (|----------------------------------------------|---------------------------------------------------------------------------------------------------|)
-
-[//]: # (| **Source**                                   | [https://github.com/propublica/compas-analysis]&#40;https://github.com/propublica/compas-analysis&#41;    |)
-
-[//]: # (| **Num Rows:**                                | TBD                                                                                               |)
-
-[//]: # (| **Num Features**                             | TBD                                                                                               |)
-
-[//]: # (| **Num Targets:**                             | TBD                                                                                               |)
-
-[//]: # (| **function to obtain dataset**               | [`xaiographs.datasets.TBD&#40;&#41;`]&#40;../api_reference/datasets.md#xaiographs.datasets.TBD&#41;               | )
-
-[//]: # (| **function to obtain discretized dataset**   | [`xaiographs.datasets.TBD&#40;&#41;`]&#40;../api_reference/datasets.md#xaiographs.datasets.TBD&#41;               |)
+|                                                      |                                                                                                                                             |
+|------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| **Source**                                           | [https://github.com/propublica/compas-analysis](https://github.com/propublica/compas-analysis)                                              |
+| **Num Rows:**                                        | 4230                                                                                                                                        |
+| **Num Features**                                     | 7                                                                                                                                           |
+| **Num Targets:**                                     | 3 (model) - 2 (reality)                                                                                                                     |
+| **function to obtain dataset**                       | [`xaiographs.datasets.load_compas()`](../api_reference/datasets.md#xaiographs.datasets.datasets.load_compas)                                | 
+| **function to obtain discretized dataset (Model)**   | [`xaiographs.datasets.load_compas_discretized()`](../api_reference/datasets.md#xaiographs.datasets.load_compas_discretized)                 |
+| **function to obtain discretized dataset (Reality)** | [`xaiographs.datasets.load_compas_reality_discretized()`](../api_reference/datasets.md#xaiographs.datasets.load_compas_reality_discretized) |
 
 
 &nbsp;

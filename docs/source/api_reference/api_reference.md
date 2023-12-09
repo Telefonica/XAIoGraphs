@@ -46,6 +46,11 @@ raw specifications might not be sufficient to provide comprehensive instructions
     xaiographs.datasets.load_titanic
     xaiographs.datasets.load_titanic_discretized
     xaiographs.datasets.load_titanic_why
+    xaiographs.datasets.load_compas
+    xaiographs.datasets.load_compas_discretized
+    xaiographs.datasets.load_compas_why
+    xaiographs.datasets.load_compas_reality_discretized
+    xaiographs.datasets.load_compas_reality_why
     xaiographs.datasets.load_body_performance
     xaiographs.datasets.load_body_performance_discretized
     xaiographs.datasets.load_body_performance_why

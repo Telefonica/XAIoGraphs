@@ -5,13 +5,13 @@ XAIoGraphs contains a set of examples that can be executed as `entry points`:
 
 
 
-| Example                                           | Entry Point                    | Rows  | Num. Feats |      Task       |
-|:--------------------------------------------------|:-------------------------------|:-----:|:----------:|:---------------:|
-| [Titanic](titanic.md)                             | titanic_example                | 1309  |     8      |     Binary      |
-| [Body Performace](body_performance.md)            | body_performance_example       | 13393 |     11     | Multi-Class (3) | 
-| [Education Performance](education_performance.md) | education_performance_example  |  145  |     29     | Multi-Class (5) |
-
-[//]: # (| [Compas]&#40;compas.md&#41;                               | compas_example                 | ????  |    ????    |     Binary      |)
+| Example                                           | Entry Point                   | Rows  | Num. Feats |       Task       |
+|:--------------------------------------------------|:------------------------------|:-----:|:----------:|:----------------:|
+| [Titanic](titanic.md)                             | titanic_example               | 1309  |     8      |      Binary      |
+| [COMPAS](compas.md)                               | compas_example                | 4230  |     7      | Multi-Class (3)  |
+| [COMPAS Reality](compas_reality.md)               | compas_reality_example        | 4230  |     7      |      Binary      |
+| [Body Performace](body_performance.md)            | body_performance_example      | 13393 |     11     | Multi-Class (3)  | 
+| [Education Performance](education_performance.md) | education_performance_example |  145  |     29     | Multi-Class (5)  |
 
 
 Use the entry points to see an example run with the XAIoGraphs library installed in a Python virtual environment 
@@ -32,7 +32,7 @@ Run the following command with the virtual environment enabled to see the result
 You can see more information about each of these examples at the links below:
 
 * [Titanic Example](titanic.md)
+* [Compas Example](compas.md)
+* [Compas Reality Example](compas_reality.md)
 * [Body Performace Example](body_performance.md)
 * [Education Performance Example](education_performance.md)
-
-[//]: # (* [Compas Example]&#40;compas.md&#41;)

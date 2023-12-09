@@ -575,17 +575,10 @@ def load_education_performance_why(language: str = LANG_EN) -> Tuple[pd.DataFram
     return df_values_semantic, df_target_values_semantic
 
 
-
-
-
-
-
-
-
 def load_compas() -> pd.DataFrame:
     """Returns COMPAS dataset with the following Features:
 
-    + **id:** unique studen identifier
+    + **id**
     + **FirstName**
     + **LastName**
     + **Gender**
@@ -603,13 +596,13 @@ def load_compas() -> pd.DataFrame:
     + **score_text_risk_recidivism**
     + **score_risk_violence**
     + **score_text_risk_violence**
-    + **Low_Recid:**
-    + **Medium_Recid:**
-    + **High_Recid:**
-    + **No_Recid:**
-    + **Recid:**
-    + **predict_two_year_recid:**
-    + **real_two_year_recid:**
+    + **Low_Recid**
+    + **Medium_Recid**
+    + **High_Recid**
+    + **No_Recid**
+    + **Recid**
+    + **predict_two_year_recid**
+    + **real_two_year_recid**
 
     Returns
     -------
@@ -631,21 +624,25 @@ def load_compas() -> pd.DataFrame:
 
 
 def load_compas_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
-    """TODO
+    """Returns COMPAS dataset (and other metadata) to be tested in xaiographs. The dataset contains  \
+    a series of discretized features, three columns (Low_Recid, Medium_Recid, High_Recid) with the probability [0,1] \
+    of classification given by COMPAS model that predict the probability of recidivism,  and two columns 'y_true' & \
+    'y_predict' with GroundTruth and prediction given by ML model (0: did not recidivist two years after arrest, \
+    1: two years after the arrest, recidivist). Dataset contains the following columns:
 
-    + **id:** unique studen identifier
+    + **id:** unique person identifier
     + **Gender:** {Male, Female}
-    + **Age_range:**
-    + **Ethnicity:**
-    + **MaritalStatus:**
-    + **c_charge_degree:**
-    + **is_recid:**
-    + **is_violent_recid:**
-    + **Low_Recid:**
-    + **Medium_Recid:**
-    + **High_Recid:**
-    + **y_predict:**
-    + **y_true:**
+    + **Age_range:** {Less than 25, 25 - 45, Greater than 45}
+    + **Ethnicity:** {African-American, Asian, Caucasian, Hispanic, Native American, Other}
+    + **MaritalStatus:** {Married, Separated, Single, Other}
+    + **c_charge_degree:** {F, M}
+    + **is_recid:** {YES, NO}
+    + **is_violent_recid:** {YES, NO}
+    + **Low_Recid:** probability assigned by the model to the label "low probability of recidivism".
+    + **Medium_Recid:** probability assigned by the model to the label "medium probability of recidivism".
+    + **High_Recid:** probability assigned by the model to the label "High probability of recidivism".
+    + **y_predict:** Model prediction (1: recidivism, 0: no recidivism)
+    + **y_true:** Recidivism two years after arrest (1: recidivism, 0: no recidivism)
 
 
     Returns
@@ -730,18 +727,20 @@ def load_compas_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame
 
 
 def load_compas_reality_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
-    """TODO
+    """Returns COMPAS dataset (and other metadata) to be tested in xaiographs. The dataset contains  \
+    a series of discretized features, two columns (No_Recid, Recid) with two flags indicating whether or not they \
+    reoffended two years after arrest. Dataset contains the following columns:
 
-    + **id:** unique studen identifier
-    + **Gender:**
-    + **Age_range:**
-    + **Ethnicity:**
-    + **MaritalStatus:**
-    + **c_charge_degree:**
-    + **is_recid:**
-    + **is_violent_recid:**
-    + **No_Recid:**
-    + **Recid:**
+    + **id:** unique person identifier
+    + **Gender:** {Male, Female}
+    + **Age_range:** {Less than 25, 25 - 45, Greater than 45}
+    + **Ethnicity:** {African-American, Asian, Caucasian, Hispanic, Native American, Other}
+    + **MaritalStatus:** {Married, Separated, Single, Other}
+    + **c_charge_degree:** {F, M}
+    + **is_recid:** {YES, NO}
+    + **is_violent_recid:** {YES, NO}
+    + **No_Recid:** not recidivist two years after arrest
+    + **Recid:** recidivist two years after the arrest
 
 
     Returns
@@ -770,8 +769,7 @@ def load_compas_reality_discretized() -> Tuple[pd.DataFrame, List[str], List[str
     """
     df_dataset = pd.read_csv(os.path.join(SRC_DIR, COMPAS_DISCRETIZED_PATH))
     return (df_dataset[ID + FEATURE_COLS_COMPAS + TARGET_COLS_COMPAS_REALITY],
-            FEATURE_COLS_COMPAS,
-            TARGET_COLS_COMPAS_REALITY)
+            FEATURE_COLS_COMPAS, TARGET_COLS_COMPAS_REALITY)
 
 
 def load_compas_reality_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -795,20 +793,16 @@ def load_compas_reality_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.D
     Example:
             >>> from xaiographs.datasets import load_compas_reality_why
             >>> df_values_semantics, df_target_values_semantics = load_compas_reality_why()
-            >>> df_values_semantics.head(5)
+            >>> df_values_semantics.head(3)
                            feature_value                  reason
             0           Age_range_25 - 45             middle-aged
             1   Age_range_Greater than 45  be older than 45 years
             2      Age_range_Less than 25                be young
-            3  Ethnicity_African-American             being black
-            4             Ethnicity_Asian     being of Asian race
-            >>> df_target_values_semantics.head(5)
+            >>> df_target_values_semantics.head(3)
               target               feature_value                                                              reason
             0  Recid           Age_range_25 - 45 some in the age range between 25 and 45 years were repeat offenders
             1  Recid   Age_range_Greater than 45                          few of those over 45 were repeat offenders
             2  Recid      Age_range_Less than 25           many of those under 25 years of age were repeat offenders
-            3  Recid  Ethnicity_African-American                                    many repeat offenders were Black
-            4  Recid             Ethnicity_Asian                                very few repeat offenders were Asian
 
     """
     df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, COMPAS_REALITY_VALUES_SEMANTICS_PATH[LANG_ES]))

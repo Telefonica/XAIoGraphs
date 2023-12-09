@@ -38,6 +38,10 @@ It displays the explanations outcomes in three sections: Global, Local and Fairn
 ```{include} quickstart/quickstart.md
 ```
 
+<hr>
+
+```{include} contributors/contributors.md
+```
 
 ```{toctree}
 :hidden:

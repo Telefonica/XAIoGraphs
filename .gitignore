@@ -68,6 +68,9 @@ venv.bak/
 
 # mkdocs documentation
 /site
+/docs/build/html
+/docs/build/log
+/docs/build/*.tar.gz
 
 # mypy
 .mypy_cache/
