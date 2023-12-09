@@ -118,7 +118,7 @@ This entry point takes the following parameters:
 
 # 🤝 Contributors
 
-XAIoGraphs has been developed by the AI Products team (Telefónica I+D - Chief Data Officer)
+XAIoGraphs has been developed by ***Applied AI & Privacy*** team (Telefónica Innovación Digital - Chief Data Officer)
 
 * [Ricardo Moya](https://www.linkedin.com/in/phdricardomoya/)
 * [Matteo Salvatori](https://github.com/matteo-salvatori)
