@@ -32,6 +32,6 @@ export const ctsGlobal = {
     label_local_target_Features_values_importance: 'Local Features-values importance',
     label_local_target_Features_values_relations: 'Local Features-values relations',
     label_fairness_criteria_score: 'Fairness Criterias Score',
-    label_fairness_confussion_matrix: 'Fairness Confussion Matrix',
+    label_fairness_confusion_matrix: 'Fairness Confusion Matrix',
     label_fairness_feature_fairness_criterias: 'Fairness Feature Criterias',
 };

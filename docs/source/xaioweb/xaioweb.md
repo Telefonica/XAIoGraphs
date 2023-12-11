@@ -412,7 +412,7 @@ As in any confusion matrix, columns represent the number of predictions for each
 real class instances.
 
 
-```{image} ../../imgs/XaioWeb_Fairness_Confussion_Matrix.png
+```{image} ../../imgs/XaioWeb_Fairness_Confusion_Matrix.png
 :alt: Fairness Confusion Matrix
 :class: bg-primary
 :width: 400px
@@ -424,7 +424,7 @@ Notice that in the upper right corner of the chart, next to the export function,
 to analize the numeric values or percentage values.
 
 
-```{image} ../../imgs/XaioWeb_Fairness_Confussion_Matrix_Percentage.png
+```{image} ../../imgs/XaioWeb_Fairness_Confusion_Matrix_Percentage.png
 :alt: Fairness Confusion Matrix Percentage
 :class: bg-primary
 :width: 400px

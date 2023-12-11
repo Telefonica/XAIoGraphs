@@ -120,7 +120,7 @@ export class ConfMatrixComponent implements OnInit {
             html2canvas(this.exportableArea.nativeElement).then(exportCanvas => {
                 const canvas = exportCanvas.toDataURL().replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
                 let link = document.createElement('a');
-                link.download = ctsGlobal.label_fairness_confussion_matrix + ctsGlobal.image_extension;
+                link.download = ctsGlobal.label_fairness_confusion_matrix + ctsGlobal.image_extension;
                 link.href = canvas;
                 link.click();
                 this.hidePicture = false
