@@ -1,0 +1,27 @@
+feature_value,reason
+battery size_4000_4700_mAh,having a battery size between 4000 and 4700 mAh
+battery size_<4000_mAh,having a battery size smaller than 4000 mAh
+battery size_>4700_mAh,having a battery size larger than 4700 mAh
+internal memory_128_GB,having 128 GB of internal memory
+internal memory_<=64_GB,having 64 GB or less of internal memory
+internal memory_>=256_GB,having 256 GB or more of internal memory
+main camera_15_50_MP,having a main camera between 15 and 50 MP
+main camera_<15_MP,having a main camera with less than 15 MP
+main camera_>50_MP,having a main camera with more than 50 MP
+performance_Low,having low performance
+performance_Mid,having mid-range performance
+performance_Top,having top performance
+performance_Ultra top,having ultra top performance
+price_200_450_dollars,having a price between 200 and 450 dollars
+price_450_700_dollars,having a price between 450 and 700 dollars
+price_<200_dollars,having a price less than 200 dollars
+price_>700_dollars,having a price greater than 700 dollars
+screen size_6.4_6.6_inches,having a screen size between 6.4 and 6.6 inches
+screen size_<6.4_inches,having a screen size smaller than 6.4 inches
+screen size_>6.6_inches,having a screen size larger than 6.6 inches
+selfie camera_10_30_MP,having a selfie camera between 10 and 30 MP
+selfie camera_<10_MP,having a selfie camera with less than 10 MP
+selfie camera_>30_MP,having a selfie camera with more than 30 MP
+weight_190_205_g,having a weight between 190 and 205 grams
+weight_<190_g,having a weight less than 190 grams
+weight_>205_g,having a weight greater than 205 grams
