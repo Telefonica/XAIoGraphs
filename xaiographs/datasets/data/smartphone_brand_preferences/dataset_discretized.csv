@@ -1,0 +1,259 @@
+id,internal memory,performance,main camera,selfie camera,battery size,screen size,weight,price,age,gender,occupation,y_true,y_predict,Apple,Google,Motorola,Samsung,Xiaomi
+0,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Female,Technology,Samsung,Apple,1,0,0,0,0
+1,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,35_45_years,Female,Technology,Apple,Apple,1,0,0,0,0
+2,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,25_35_years,Female,Business,Google,Google,0,1,0,0,0
+3,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,25_35_years,Female,Business,Samsung,Samsung,0,0,0,1,0
+4,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Female,Administration,Google,Google,0,1,0,0,0
+5,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Female,Administration,Motorola,Motorola,0,0,1,0,0
+6,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Administration,Apple,Apple,1,0,0,0,0
+7,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Male,Administration,Samsung,Samsung,0,0,0,1,0
+8,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Male,Administration,Apple,Apple,1,0,0,0,0
+9,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Female,Other,Motorola,Motorola,0,0,1,0,0
+10,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Other,Samsung,Samsung,0,0,0,1,0
+11,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Female,Other,Motorola,Motorola,0,0,1,0,0
+12,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Female,Other,Motorola,Motorola,0,0,1,0,0
+13,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Female,Other,Xiaomi,Xiaomi,0,0,0,0,1
+14,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+15,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Male,Business,Apple,Apple,1,0,0,0,0
+16,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,>45_years,Female,Business,Apple,Apple,1,0,0,0,0
+17,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,<25_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+18,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,<25_years,Male,Administration,Motorola,Motorola,0,0,1,0,0
+19,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,<25_years,Male,Administration,Motorola,Motorola,0,0,1,0,0
+20,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,<25_years,Male,Administration,Apple,Apple,1,0,0,0,0
+21,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Male,Other,Motorola,Motorola,0,0,1,0,0
+22,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,25_35_years,Male,Other,Motorola,Motorola,0,0,1,0,0
+23,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Male,Other,Google,Google,0,1,0,0,0
+24,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+25,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+26,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+27,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+28,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+29,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Male,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+30,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Male,Technology,Google,Google,0,1,0,0,0
+31,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+32,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Male,Technology,Apple,Apple,1,0,0,0,0
+33,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Technology,Apple,Apple,1,0,0,0,0
+34,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Male,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+35,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Male,Technology,Google,Google,0,1,0,0,0
+36,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,35_45_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+37,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Female,Technology,Samsung,Samsung,0,0,0,1,0
+38,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,35_45_years,Female,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+39,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,35_45_years,Female,Technology,Motorola,Samsung,0,0,0,1,0
+40,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,35_45_years,Female,Technology,Xiaomi,Motorola,0,1,0,0,0
+41,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Male,Administration,Google,Google,0,1,0,0,0
+42,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,25_35_years,Male,Administration,Motorola,Motorola,0,0,1,0,0
+43,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,25_35_years,Male,Administration,Google,Google,0,1,0,0,0
+44,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Male,Administration,Xiaomi,Xiaomi,0,0,0,0,1
+45,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,25_35_years,Male,Administration,Samsung,Samsung,0,0,0,1,0
+46,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Administration,Samsung,Samsung,0,0,0,1,0
+47,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,35_45_years,Female,Other,Motorola,Motorola,0,0,1,0,0
+48,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,35_45_years,Female,Other,Xiaomi,Xiaomi,0,0,0,0,1
+49,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,35_45_years,Female,Other,Samsung,Samsung,0,0,0,1,0
+50,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,>45_years,Female,Business,Motorola,Motorola,0,0,1,0,0
+51,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,>45_years,Female,Business,Google,Google,0,1,0,0,0
+54,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Business,Samsung,Samsung,0,0,0,1,0
+55,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,25_35_years,Male,Business,Google,Google,0,1,0,0,0
+56,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Male,Business,Apple,Apple,1,0,0,0,0
+57,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+58,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Male,Other,Xiaomi,Xiaomi,0,0,0,0,1
+59,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,25_35_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+60,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+61,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,>45_years,Male,Other,Motorola,Motorola,0,0,1,0,0
+62,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,>45_years,Male,Other,Apple,Apple,1,0,0,0,0
+63,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,>45_years,Male,Other,Google,Google,0,1,0,0,0
+64,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,>45_years,Male,Other,Xiaomi,Xiaomi,0,0,0,0,1
+65,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+66,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,>45_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+67,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,>45_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+68,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,>45_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+69,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,35_45_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+70,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,35_45_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+71,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Female,Other,Xiaomi,Xiaomi,0,0,0,0,1
+72,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+73,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Other,Samsung,Samsung,0,0,0,1,0
+74,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+75,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Male,Technology,Google,Google,0,1,0,0,0
+76,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Male,Technology,Google,Google,0,1,0,0,0
+77,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+78,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Technology,Apple,Apple,1,0,0,0,0
+79,<=64_GB,Low,<15_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+80,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Female,Technology,Google,Google,0,1,0,0,0
+81,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+82,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,25_35_years,Female,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+83,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,>45_years,Male,Administration,Google,Google,0,1,0,0,0
+84,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Male,Administration,Xiaomi,Xiaomi,0,0,0,0,1
+85,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,>45_years,Male,Administration,Google,Google,0,1,0,0,0
+86,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+87,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Business,Samsung,Samsung,0,0,0,1,0
+88,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Business,Apple,Apple,1,0,0,0,0
+89,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,>45_years,Male,Business,Apple,Apple,1,0,0,0,0
+90,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Male,Business,Xiaomi,Xiaomi,0,0,0,0,1
+91,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Male,Business,Xiaomi,Xiaomi,0,0,0,0,1
+92,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,>45_years,Male,Business,Apple,Apple,1,0,0,0,0
+93,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Male,Other,Google,Google,0,1,0,0,0
+94,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+95,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+96,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Male,Other,Motorola,Motorola,0,0,1,0,0
+97,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Male,Other,Xiaomi,Xiaomi,0,0,0,0,1
+98,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,35_45_years,Female,Other,Apple,Apple,1,0,0,0,0
+99,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,>45_years,Male,Administration,Google,Google,0,1,0,0,0
+100,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Male,Administration,Xiaomi,Xiaomi,0,0,0,0,1
+101,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,>45_years,Male,Administration,Google,Google,0,1,0,0,0
+102,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,35_45_years,Female,Technology,Google,Google,0,1,0,0,0
+103,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,35_45_years,Female,Technology,Google,Google,0,1,0,0,0
+104,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,35_45_years,Female,Technology,Apple,Apple,1,0,0,0,0
+105,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,35_45_years,Female,Technology,Apple,Apple,1,0,0,0,0
+106,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,<25_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+107,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Female,Other,Apple,Apple,1,0,0,0,0
+108,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,<25_years,Female,Other,Xiaomi,Xiaomi,0,0,0,0,1
+109,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,<25_years,Female,Other,Google,Google,0,1,0,0,0
+110,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,<25_years,Male,Administration,Google,Google,0,1,0,0,0
+111,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,<25_years,Male,Administration,Apple,Apple,1,0,0,0,0
+112,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Male,Administration,Apple,Apple,1,0,0,0,0
+113,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,<25_years,Male,Administration,Xiaomi,Xiaomi,0,0,0,0,1
+114,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,<25_years,Male,Administration,Samsung,Samsung,0,0,0,1,0
+115,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Male,Administration,Samsung,Samsung,0,0,0,1,0
+116,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Male,Administration,Samsung,Samsung,0,0,0,1,0
+117,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+118,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,>45_years,Female,Administration,Samsung,Samsung,0,0,0,1,0
+119,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,>45_years,Female,Administration,Xiaomi,Xiaomi,0,0,0,0,1
+120,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Male,Business,Apple,Apple,1,0,0,0,0
+121,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,<25_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+122,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,<25_years,Male,Other,Google,Google,0,1,0,0,0
+123,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,<25_years,Male,Other,Apple,Apple,1,0,0,0,0
+124,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,<25_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+125,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Business,Samsung,Samsung,0,0,0,1,0
+126,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Business,Samsung,Samsung,0,0,0,1,0
+127,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Technology,Samsung,Samsung,0,0,0,1,0
+128,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Technology,Apple,Apple,1,0,0,0,0
+129,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Female,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+130,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Technology,Samsung,Samsung,0,0,0,1,0
+131,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Technology,Samsung,Samsung,0,0,0,1,0
+132,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,>45_years,Female,Technology,Apple,Apple,1,0,0,0,0
+133,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Female,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+134,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Female,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+135,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,>45_years,Female,Technology,Apple,Apple,1,0,0,0,0
+136,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Female,Technology,Apple,Apple,1,0,0,0,0
+137,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Technology,Apple,Apple,1,0,0,0,0
+138,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Female,Technology,Apple,Apple,1,0,0,0,0
+139,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Technology,Apple,Apple,1,0,0,0,0
+140,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+141,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Female,Other,Xiaomi,Xiaomi,0,0,0,0,1
+142,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Female,Other,Apple,Apple,1,0,0,0,0
+143,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,35_45_years,Female,Other,Samsung,Samsung,0,0,0,1,0
+148,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,25_35_years,Female,Technology,Google,Google,0,1,0,0,0
+149,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Technology,Apple,Google,0,1,0,0,0
+150,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Female,Technology,Apple,Google,0,1,0,0,0
+151,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Technology,Samsung,Google,0,1,0,0,0
+152,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,25_35_years,Female,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+153,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+154,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Male,Other,Xiaomi,Google,0,1,0,0,0
+155,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,35_45_years,Male,Other,Motorola,Xiaomi,0,0,0,0,1
+156,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,35_45_years,Male,Other,Xiaomi,Xiaomi,0,0,0,0,1
+157,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,35_45_years,Male,Other,Apple,Apple,1,0,0,0,0
+158,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,35_45_years,Male,Other,Google,Google,0,1,0,0,0
+159,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,35_45_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+160,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,35_45_years,Male,Other,Xiaomi,Xiaomi,0,0,0,0,1
+161,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Female,Business,Samsung,Samsung,0,0,0,1,0
+162,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,>45_years,Female,Other,Samsung,Samsung,0,0,0,1,0
+163,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,>45_years,Female,Other,Apple,Apple,1,0,0,0,0
+164,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,>45_years,Female,Other,Google,Google,0,1,0,0,0
+165,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,<25_years,Female,Technology,Samsung,Samsung,0,0,0,1,0
+166,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,<25_years,Female,Technology,Apple,Apple,1,0,0,0,0
+167,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Female,Technology,Samsung,Samsung,0,0,0,1,0
+168,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,<25_years,Female,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+169,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,<25_years,Female,Technology,Apple,Apple,1,0,0,0,0
+170,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+171,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+172,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Female,Business,Xiaomi,Xiaomi,0,0,0,0,1
+173,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Business,Samsung,Samsung,0,0,0,1,0
+174,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Business,Apple,Apple,1,0,0,0,0
+175,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Business,Samsung,Samsung,0,0,0,1,0
+176,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,<25_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+177,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,<25_years,Male,Technology,Google,Google,0,1,0,0,0
+178,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Male,Technology,Apple,Apple,1,0,0,0,0
+179,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,<25_years,Male,Technology,Apple,Apple,1,0,0,0,0
+180,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,<25_years,Male,Technology,Apple,Apple,1,0,0,0,0
+181,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+182,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,>45_years,Male,Other,Apple,Apple,1,0,0,0,0
+183,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,35_45_years,Female,Business,Apple,Apple,1,0,0,0,0
+184,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,35_45_years,Female,Business,Motorola,Motorola,0,0,1,0,0
+185,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,35_45_years,Female,Business,Samsung,Samsung,0,0,0,1,0
+186,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,35_45_years,Female,Business,Xiaomi,Xiaomi,0,0,0,0,1
+187,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Female,Business,Apple,Apple,1,0,0,0,0
+188,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,35_45_years,Female,Administration,Apple,Apple,1,0,0,0,0
+189,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,35_45_years,Female,Administration,Google,Google,0,1,0,0,0
+190,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,35_45_years,Female,Administration,Samsung,Samsung,0,0,0,1,0
+191,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Male,Other,Xiaomi,Xiaomi,0,0,0,0,1
+192,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Other,Samsung,Samsung,0,0,0,1,0
+193,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+194,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,35_45_years,Male,Technology,Apple,Apple,1,0,0,0,0
+195,128_GB,Mid,<15_MP,<10_MP,4000_4700_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Male,Technology,Google,Google,0,1,0,0,0
+196,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Male,Technology,Google,Google,0,1,0,0,0
+197,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,>45_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+198,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,>45_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+199,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Female,Administration,Apple,Apple,1,0,0,0,0
+200,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,<25_years,Female,Administration,Google,Google,0,1,0,0,0
+201,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Female,Administration,Samsung,Samsung,0,0,0,1,0
+202,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Female,Administration,Samsung,Samsung,0,0,0,1,0
+203,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,25_35_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+204,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+205,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Female,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+206,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Technology,Samsung,Samsung,0,0,0,1,0
+207,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Male,Business,Motorola,Motorola,0,0,1,0,0
+208,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Male,Business,Google,Google,0,1,0,0,0
+209,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Business,Samsung,Samsung,0,0,0,1,0
+210,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Female,Business,Apple,Apple,1,0,0,0,0
+211,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Male,Technology,Apple,Apple,1,0,0,0,0
+212,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,<25_years,Male,Technology,Apple,Apple,1,0,0,0,0
+213,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,<25_years,Male,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+214,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+215,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,<25_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+216,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,>45_years,Female,Technology,Motorola,Motorola,0,0,1,0,0
+217,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Female,Business,Apple,Samsung,0,0,0,1,0
+218,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Female,Business,Motorola,Motorola,0,0,1,0,0
+219,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Business,Apple,Apple,1,0,0,0,0
+220,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Female,Business,Xiaomi,Xiaomi,0,0,0,0,1
+221,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Business,Samsung,Samsung,0,0,0,1,0
+222,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+223,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,25_35_years,Female,Other,Xiaomi,Xiaomi,0,0,0,0,1
+224,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,25_35_years,Female,Other,Google,Google,0,1,0,0,0
+225,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+226,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,25_35_years,Male,Other,Motorola,Motorola,0,0,1,0,0
+227,128_GB,Mid,<15_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,200_450_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+228,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,25_35_years,Male,Other,Xiaomi,Apple,1,0,0,0,0
+229,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,35_45_years,Female,Other,Google,Samsung,0,0,0,1,0
+230,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,<25_years,Male,Business,Xiaomi,Xiaomi,0,0,0,0,1
+231,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,<25_years,Male,Business,Google,Apple,1,0,0,0,0
+232,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,35_45_years,Female,Administration,Apple,Apple,1,0,0,0,0
+233,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,35_45_years,Female,Administration,Google,Google,0,1,0,0,0
+234,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Female,Other,Motorola,Motorola,0,0,1,0,0
+235,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Female,Other,Apple,Apple,1,0,0,0,0
+236,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,25_35_years,Female,Other,Samsung,Samsung,0,0,0,1,0
+237,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Male,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+238,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,>45_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+239,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Male,Business,Apple,Apple,1,0,0,0,0
+240,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Business,Samsung,Samsung,0,0,0,1,0
+241,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,<6.4_inches,<190_g,<200_dollars,25_35_years,Male,Business,Xiaomi,Xiaomi,0,0,0,0,1
+242,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,<25_years,Female,Other,Motorola,Motorola,0,0,1,0,0
+243,128_GB,Mid,>50_MP,10_30_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,<25_years,Female,Other,Xiaomi,Xiaomi,0,0,0,0,1
+244,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,<25_years,Female,Other,Xiaomi,Xiaomi,0,0,0,0,1
+245,128_GB,Mid,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,<25_years,Female,Other,Google,Samsung,0,0,0,1,0
+246,<=64_GB,Low,<15_MP,<10_MP,<4000_mAh,6.4_6.6_inches,<190_g,<200_dollars,25_35_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+247,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Technology,Apple,Apple,1,0,0,0,0
+248,128_GB,Ultra top,>50_MP,>30_MP,>4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+249,128_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,25_35_years,Male,Technology,Apple,Apple,1,0,0,0,0
+250,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Other,Apple,Apple,1,0,0,0,0
+251,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,>45_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+252,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,>45_years,Male,Technology,Google,Google,0,1,0,0,0
+253,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Male,Technology,Xiaomi,Xiaomi,0,0,0,0,1
+254,128_GB,Low,15_50_MP,10_30_MP,>4700_mAh,>6.6_inches,>205_g,450_700_dollars,>45_years,Female,Business,Motorola,Motorola,0,0,1,0,0
+255,>=256_GB,Mid,>50_MP,10_30_MP,>4700_mAh,6.4_6.6_inches,190_205_g,200_450_dollars,>45_years,Female,Business,Xiaomi,Xiaomi,0,0,0,0,1
+256,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,>45_years,Female,Business,Samsung,Samsung,0,0,0,1,0
+257,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,25_35_years,Male,Technology,Apple,Apple,1,0,0,0,0
+258,<=64_GB,Low,15_50_MP,<10_MP,>4700_mAh,6.4_6.6_inches,190_205_g,<200_dollars,25_35_years,Male,Technology,Motorola,Motorola,0,0,1,0,0
+259,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,25_35_years,Male,Technology,Google,Xiaomi,0,0,0,0,1
+260,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,6.4_6.6_inches,190_205_g,>700_dollars,25_35_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+261,>=256_GB,Low,<15_MP,<10_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,25_35_years,Male,Technology,Samsung,Samsung,0,0,0,1,0
+262,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,>45_years,Female,Other,Apple,Apple,1,0,0,0,0
+263,>=256_GB,Ultra top,<15_MP,10_30_MP,4000_4700_mAh,>6.6_inches,>205_g,>700_dollars,>45_years,Female,Other,Apple,Apple,1,0,0,0,0

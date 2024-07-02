@@ -1,0 +1,131 @@
+target,feature_value,reason
+Apple,battery size_4000_4700_mAh,some Apple phones have a battery size between 4000 and 4700 mAh
+Apple,battery size_<4000_mAh,many Apple models have batteries smaller than 4000 mAh
+Apple,battery size_>4700_mAh,few Apple phones feature batteries larger than 4700 mAh
+Apple,internal memory_128_GB,many Apple phones offer 128 GB of internal memory
+Apple,internal memory_<=64_GB,entry-level Apple models have 64 GB or less internal memory
+Apple,internal memory_>=256_GB,many Apple phones come with 256 GB
+Apple,main camera_15_50_MP,some Apple phones have main cameras between 15 and 50 MP
+Apple,main camera_<15_MP,many older Apple models have main cameras with less than 15 MP
+Apple,main camera_>50_MP,newer Apple models have main cameras with more than 50 MP
+Apple,performance_Low,some budget Apple models have low performance
+Apple,performance_Mid,many Apple phones offer mid-range performance
+Apple,performance_Top,top-tier Apple models provide high performance
+Apple,performance_Ultra top,flagship Apple phones deliver ultra top performance
+Apple,price_200_450_dollars,Apple offers some phones in the 200 to 450 dollars range
+Apple,price_450_700_dollars,many Apple models are priced between 450 and 700 dollars
+Apple,price_<200_dollars,very few Apple phones are priced below 200 dollars
+Apple,price_>700_dollars,premium Apple models often exceed 700 dollars
+Apple,screen size_6.4_6.6_inches,many Apple phones have screens between 6.4 and 6.6 inches
+Apple,screen size_<6.4_inches,many Apple models have screens smaller than 6.4 inches
+Apple,screen size_>6.6_inches,large Apple phones feature screens larger than 6.6 inches
+Apple,selfie camera_10_30_MP,Apple phones typically have selfie cameras between 10 and 30 MP
+Apple,selfie camera_<10_MP,entry-level Apple models have selfie cameras with less than 10 MP
+Apple,selfie camera_>30_MP,newer Apple models have selfie cameras with more than 30 MP
+Apple,weight_190_205_g,some Apple phones weigh between 190 and 205 grams
+Apple,weight_<190_g,many Apple models weigh less than 190 grams
+Apple,weight_>205_g,larger Apple phones weigh more than 205 grams
+Google,battery size_4000_4700_mAh,many Google phones have a battery size between 4000 and 4700 mAh
+Google,battery size_<4000_mAh,some Google models have batteries smaller than 4000 mAh
+Google,battery size_>4700_mAh,high-end Google phones feature batteries larger than 4700 mAh
+Google,internal memory_128_GB,many Google phones offer 128 GB of internal memory
+Google,internal memory_<=64_GB,entry-level Google models have 64 GB or less internal memory
+Google,internal memory_>=256_GB,premium Google phones come with 256 GB or more internal memory
+Google,main camera_15_50_MP,Google phones typically have main cameras between 15 and 50 MP
+Google,main camera_<15_MP,older Google models have main cameras with less than 15 MP
+Google,main camera_>50_MP,newer Google models have main cameras with more than 50 MP
+Google,performance_Low,some budget Google models have low performance
+Google,performance_Mid,many Google phones offer mid-range performance
+Google,performance_Top,few Google models provide high performance
+Google,performance_Ultra top,flagship Google phones deliver ultra top performance
+Google,price_200_450_dollars,Google offers some phones in the 200 to 450 dollars range
+Google,price_450_700_dollars,many Google models are priced between 450 and 700 dollars
+Google,price_<200_dollars,few Google phones are priced below 200 dollars
+Google,price_>700_dollars,premium Google models often exceed 700 dollars
+Google,screen size_6.4_6.6_inches,some Google phones have screens between 6.4 and 6.6 inches
+Google,screen size_<6.4_inches,many Google models have screens smaller than 6.4 inches
+Google,screen size_>6.6_inches,large Google phones feature screens larger than 6.6 inches
+Google,selfie camera_10_30_MP,some Google phones have selfie cameras between 10 and 30 MP
+Google,selfie camera_<10_MP,many Google models have selfie cameras with less than 10 MP
+Google,selfie camera_>30_MP,newer Google models have selfie cameras with more than 30 MP
+Google,weight_190_205_g,some Google phones weigh between 190 and 205 grams
+Google,weight_<190_g,lightweight Google models weigh less than 190 grams
+Google,weight_>205_g,many Google phones weigh more than 205 grams
+Motorola,battery size_4000_4700_mAh,some Motorola phones have a battery size between 4000 and 4700 mAh
+Motorola,battery size_<4000_mAh,some Motorola models have batteries smaller than 4000 mAh
+Motorola,battery size_>4700_mAh,many Motorola phones feature batteries larger than 4700 mAh
+Motorola,internal memory_128_GB,some Motorola phones offer 128 GB of internal memory
+Motorola,internal memory_<=64_GB,many Motorola models have 64 GB or less internal memory
+Motorola,internal memory_>=256_GB,few Motorola phones come with 256 GB or more internal memory
+Motorola,main camera_15_50_MP,Motorola phones typically have main cameras between 15 and 50 MP
+Motorola,main camera_<15_MP,older Motorola models have main cameras with less than 15 MP
+Motorola,main camera_>50_MP,newer Motorola models have main cameras with more than 50 MP
+Motorola,performance_Low,many budget Motorola models have low performance
+Motorola,performance_Mid,some Motorola phones offer mid-range performance
+Motorola,performance_Top,some Motorola models provide high performance
+Motorola,performance_Ultra top,flagship Motorola phones deliver ultra top performance
+Motorola,price_200_450_dollars,Motorola offers phones in the 200 to 450 dollars range
+Motorola,price_450_700_dollars,some Motorola models are priced between 450 and 700 dollars
+Motorola,price_<200_dollars,many Motorola phones are priced below 200 dollars
+Motorola,price_>700_dollars,very few Motorola models often exceed 700 dollars
+Motorola,screen size_6.4_6.6_inches,many Motorola phones have screens between 6.4 and 6.6 inches
+Motorola,screen size_<6.4_inches,older Motorola models have screens smaller than 6.4 inches
+Motorola,screen size_>6.6_inches,large Motorola phones feature screens larger than 6.6 inches
+Motorola,selfie camera_10_30_MP,some Motorola phones have selfie cameras between 10 and 30 MP
+Motorola,selfie camera_<10_MP,many Motorola models have selfie cameras with less than 10 MP
+Motorola,selfie camera_>30_MP,newer Motorola models have selfie cameras with more than 30 MP
+Motorola,weight_190_205_g,many Motorola phones weigh between 190 and 205 grams
+Motorola,weight_<190_g,lightweight Motorola models weigh less than 190 grams
+Motorola,weight_>205_g,larger Motorola phones weigh more than 205 grams
+Samsung,battery size_4000_4700_mAh,some Samsung phones have a battery size between 4000 and 4700 mAh
+Samsung,battery size_<4000_mAh,some Samsung models have batteries smaller than 4000 mAh
+Samsung,battery size_>4700_mAh,some Samsung phones feature batteries larger than 4700 mAh
+Samsung,internal memory_128_GB,many Samsung phones offer 128 GB of internal memory
+Samsung,internal memory_<=64_GB,entry-level Samsung models have 64 GB or less internal memory
+Samsung,internal memory_>=256_GB,some Samsung phones come with 256 GB
+Samsung,main camera_15_50_MP,Samsung phones typically have main cameras between 15 and 50 MP
+Samsung,main camera_<15_MP,older Samsung models have main cameras with less than 15 MP
+Samsung,main camera_>50_MP,newer Samsung models have main cameras with more than 50 MP
+Samsung,performance_Low,some budget Samsung models have low performance
+Samsung,performance_Mid,some Samsung phones offer mid-range performance
+Samsung,performance_Top,some Samsung models provide high performance
+Samsung,performance_Ultra top,flagship Samsung phones deliver ultra top performance
+Samsung,price_200_450_dollars,Samsung offers phones in the 200 to 450 dollars range
+Samsung,price_450_700_dollars,some Samsung models are priced between 450 and 700 dollars
+Samsung,price_<200_dollars,very few Samsung phones are priced below 200 dollars
+Samsung,price_>700_dollars,many Samsung models often exceed 700 dollars
+Samsung,screen size_6.4_6.6_inches,some Samsung phones have screens between 6.4 and 6.6 inches
+Samsung,screen size_<6.4_inches,older Samsung models have screens smaller than 6.4 inches
+Samsung,screen size_>6.6_inches,many Samsung phones feature screens larger than 6.6 inches
+Samsung,selfie camera_10_30_MP,some Samsung phones have selfie cameras between 10 and 30 MP
+Samsung,selfie camera_<10_MP,entry-level Samsung models have selfie cameras with less than 10 MP
+Samsung,selfie camera_>30_MP,many Samsung models have selfie cameras with more than 30 MP
+Samsung,weight_190_205_g,some Samsung phones weigh between 190 and 205 grams
+Samsung,weight_<190_g,lightweight Samsung models weigh less than 190 grams
+Samsung,weight_>205_g,many Samsung phones weigh more than 205 grams
+Xiaomi,battery size_4000_4700_mAh,some Xiaomi phones have a battery size between 4000 and 4700 mAh
+Xiaomi,battery size_<4000_mAh,some Xiaomi models have batteries smaller than 4000 mAh
+Xiaomi,battery size_>4700_mAh,many Xiaomi phones feature batteries larger than 4700 mAh
+Xiaomi,internal memory_128_GB,some Xiaomi phones offer 128 GB of internal memory
+Xiaomi,internal memory_<=64_GB,entry-level Xiaomi models have 64 GB or less internal memory
+Xiaomi,internal memory_>=256_GB,many Xiaomi phones come with 256 GB
+Xiaomi,main camera_15_50_MP,some Xiaomi phones have main cameras between 15 and 50 MP
+Xiaomi,main camera_<15_MP,older Xiaomi models have main cameras with less than 15 MP
+Xiaomi,main camera_>50_MP,many Xiaomi models have main cameras with more than 50 MP
+Xiaomi,performance_Low,some budget Xiaomi models have low performance
+Xiaomi,performance_Mid,many Xiaomi phones offer mid-range performance
+Xiaomi,performance_Top,few Xiaomi models provide high performance
+Xiaomi,performance_Ultra top,few Xiaomi phones deliver ultra top performance
+Xiaomi,price_200_450_dollars,Xiaomi offers many phones in the 200 to 450 dollars range
+Xiaomi,price_450_700_dollars,few Xiaomi models are priced between 450 and 700 dollars
+Xiaomi,price_<200_dollars,some Xiaomi phones are priced below 200 dollars
+Xiaomi,price_>700_dollars,very few Xiaomi models often exceed 700 dollars
+Xiaomi,screen size_6.4_6.6_inches,many Xiaomi phones have screens between 6.4 and 6.6 inches
+Xiaomi,screen size_<6.4_inches,older Xiaomi models have screens smaller than 6.4 inches
+Xiaomi,screen size_>6.6_inches,large Xiaomi phones feature screens larger than 6.6 inches
+Xiaomi,selfie camera_10_30_MP,Xiaomi phones typically have selfie cameras between 10 and 30 MP
+Xiaomi,selfie camera_<10_MP,entry-level Xiaomi models have selfie cameras with less than 10 MP
+Xiaomi,selfie camera_>30_MP,newer Xiaomi models have selfie cameras with more than 30 MP
+Xiaomi,weight_190_205_g,many Xiaomi phones weigh between 190 and 205 grams
+Xiaomi,weight_<190_g,lightweight Xiaomi models weigh less than 190 grams
+Xiaomi,weight_>205_g,larger Xiaomi phones weigh more than 205 grams
