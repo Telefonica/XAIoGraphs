@@ -101,6 +101,20 @@ COMPAS_REALITY_TARGET_VALUES_SEMANTICS_PATH = {
 }
 TARGET_COLS_COMPAS_REALITY = ['Recid', 'No_Recid']
 
+# Smartphone Brand Preferences Dataset
+PHONE_BRAND_PREFERENCES_PATH = 'data/smartphone_brand_preferences/dataset.csv'
+PHONE_BRAND_PREFERENCES_DISCRETIZED_PATH = 'data/smartphone_brand_preferences/dataset_discretized.csv'
+PHONE_BRAND_PREFERENCES_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/smartphone_brand_preferences/values_semantics_en.csv',
+    LANG_ES: 'data/smartphone_brand_preferences/values_semantics_es.csv'
+}
+PHONE_BRAND_PREFERENCES_TARGET_VALUES_SEMANTICS_PATH = {
+    LANG_EN: 'data/smartphone_brand_preferences/target_values_semantics_en.csv',
+    LANG_ES: 'data/smartphone_brand_preferences/target_values_semantics_es.csv'
+}
+FEATURE_COLS_PHONE_BRAND_PREFERENCES = ['internal memory', 'performance', 'main camera', 'selfie camera', 'battery size', 'screen size', 'weight','price', 'age', 'gender', 'occupation']
+TARGET_COLS_PHONE_BRAND_PREFERENCES = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Google'] 
+
 # All datasets that include predictions must have a column with the prediction and another with its real target
 TARGET_COL = 'y_true'
 PREDICT_COL = 'y_predict'
@@ -813,5 +827,151 @@ def load_compas_reality_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.D
         if language == LANG_ES
         else pd.read_csv(
             os.path.join(SRC_DIR, COMPAS_REALITY_TARGET_VALUES_SEMANTICS_PATH[LANG_EN])))
+
+    return df_values_semantic, df_target_values_semantic
+
+def load_phone_brand_preferences() -> pd.DataFrame:
+    """ Returns the smarthpone brand preferences dataset that contains the following Features:
+
+    + **user_id:** id of user
+    + **brand:** Apple, Asus, Google, Motorola, Samsung, ...
+    + **model: Iphone, Galaxy S, ...
+    + **internal memory:** in GB
+    + **RAM**: in GB
+    + **performance:** from AnTuTu rating 
+    + **main camera:** in MP
+    + **selfie camera:** in MP
+    + **battery size:** in mAh	
+    + **screen size:** in inches
+    + **weight:** in grams
+    + **price: in dollars, collected from Amazon and Best-Buy (in Aug 22).
+    + **release date:** dd/mm/yyyy
+    + **age:** age of user
+    + **gender:** {female, male}
+    + **occupation:** occupation of user
+
+        
+    Returns
+    -------
+    load_phone_brand_preferences : pd.DataFrame
+        Smartphone brand preferences dataset
+
+        Example:
+            >>> from xaiographs.datasets import load_phone_brand_preferences
+            >>> df_dataset = load_phone_brand_preferences()
+            >>> print(df_dataset.head(5).to_string(index=False))
+              brand           model  internal memory  performance  main camera  selfie camera  battery size  screen size  weight  price release date  age gender   occupation
+            Samsung      Galaxy S22              128         8.81           50             10          3700          6.1     167    528   25/02/2022   38 Female Data analyst
+              Apple   iPhone 13 Pro              256         7.94           12             12          3065          6.1     204    999   24/09/2021   38 Female Data analyst
+             Google       Pixel 6 A              128         6.76           50              8          4614          6.4     207    499   28/10/2021   31 Female        sales
+            Samsung Galaxy S22 Plus              128         7.22           50             10          4500          6.6     195    899   25/02/2022   31 Female        sales
+             Google        Pixel 6a              128         6.88           12              8          4410          6.1     178    449   21/07/2021   27 Female  Team leader
+    """
+    return pd.read_csv(os.path.join(SRC_DIR, PHONE_BRAND_PREFERENCES_PATH))
+
+def load_phone_brand_preferences_discretized() -> Tuple[pd.DataFrame, List[str], List[str], str, str]:
+    """Returns smartphone brand preferences dataset (and other metadata) to be tested in xaiographs. \
+    The dataset contains a series of discretized features, four columns (Apple, Samsung, Xiaomi, Other) \
+    with the probability [0,1] of classification given by an ML model and two columns 'y_true' and 'y_predict' \
+    with GroundTruth and prediction given by ML model.  \
+    Dataset contains the following columns:
+
+    + **id:** unique user identifier
+    + **model: {iPhone_13, Galaxy S, ...}
+    + **internal memory:** {<=64_GB, 128_GB, >=256_GB}
+    + **performance:** {Low, Mid, Top, Ultra top}
+    + **main camera:** {0_15_MP, 15_30_MP, >30_MP}
+    + **selfie camera:** {0_15_MP, 15_30_MP, >30_MP}
+    + **battery size:** {<4000_mAh, 4000_4700_mAh, >4000_mAh}
+    + **screen size:** {<6.4_inches, 6.4_6.6_inches, >6.6_inches}
+    + **weight:** {<190_g, 190_205_g, >205_g}
+    + **price: {<200_dollars, 200_450_dollars, 450_700_dollars, >700_dollars}
+    + **age:** {<25_years, 25_35_years, 25_45_years, >45_years}
+    + **gender:** {female, male}
+    + **occupation:** {Administrative, Business, Technology, Other}
+    + **Apple:** probability [0,1] that the user will choose this brand. Calculated by ML model
+    + **Samsung:** probability [0,1] that the user will choose this brand. Calculated by ML model
+    + **Xiaomi:** probability [0,1] that the user will choose this brand. Calculated by ML model
+    + **Google:** probability [0,1] that the user will choose this brand. Calculated by ML model
+    + **Motorola:** probability [0,1] that the user will choose this brand. Calculated by ML model
+    + **y_true:** real target - {Apple, Samsung, Xiaomi, Other}
+    + **y_predict:** machine learning model prediction - {Apple, Samsung, Xiaomi, Other}
+
+    Returns
+    -------
+    load_phone_brand_preferences_discretized : Tuple[pd.DataFrame, List[str], List[str], str, str]
+        + pd.DataFrame, with data
+        + List[str], with features name columns
+        + List[str], with target names probabilities
+        + str, with GroundTruth
+        + str, with prediction ML model
+    
+    Example:
+            >>> from xaiographs.datasets import load_phone_brand_preferences_discretized
+            >>> df_dataset, features_cols, target_cols, y_true, y_predict = load_phone_brand_preferences_discretized()
+            >>> print(df_dataset.head(5).to_string(index=False))
+             id internal memory performance main camera selfie camera  battery size    screen size    weight           price         age gender     occupation  y_true y_predict  Apple  Google  Motorola  Samsung  Xiaomi
+              0          128_GB   Ultra top    15_50_MP        <10_MP     <4000_mAh    <6.4_inches    <190_g 450_700_dollars 35_45_years Female     Technology Samsung     Apple      1       0         0        0       0
+              1        >=256_GB         Top      <15_MP      10_30_MP     <4000_mAh    <6.4_inches 190_205_g    >700_dollars 35_45_years Female     Technology   Apple     Apple      1       0         0        0       0
+              2          128_GB         Mid    15_50_MP        <10_MP 4000_4700_mAh    <6.4_inches    >205_g 450_700_dollars 25_35_years Female       Business  Google    Google      0       1         0        0       0
+              3          128_GB         Mid    15_50_MP        <10_MP 4000_4700_mAh 6.4_6.6_inches 190_205_g    >700_dollars 25_35_years Female       Business Samsung   Samsung      0       0         0        1       0
+              4          128_GB         Mid      <15_MP        <10_MP 4000_4700_mAh    <6.4_inches    <190_g 200_450_dollars 25_35_years Female Administration  Google    Google      0       1         0        0       0
+            >>> print(features_cols)
+            ['internal memory', 'performance', 'main camera', 'selfie camera', 'battery size', 'screen size', 'weight', 'price', 'age', 'gender', 'occupation']
+            >>> target_cols
+            ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Google']
+            >>> y_true
+            'y_true'
+            >>> y_predict
+            'y_predict'
+    """
+    df_dataset = pd.read_csv(os.path.join(SRC_DIR, PHONE_BRAND_PREFERENCES_DISCRETIZED_PATH))
+    
+    return df_dataset, FEATURE_COLS_PHONE_BRAND_PREFERENCES, TARGET_COLS_PHONE_BRAND_PREFERENCES, TARGET_COL, PREDICT_COL
+
+def load_phone_brand_preferences_why(language: str = LANG_EN) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Returns the necessary DataFrames to test the WHY module of XAIoGraphs with the explainability \
+    calculated with the Smartphone Brand Preferences dataset.
+
+    
+    Parameters
+    ----------
+    language : str
+        Language identifier {es: Spanish, en: English}. Default uses English language
+
+
+    Returns
+    -------
+    load_phone_brand_preferences_why : Tuple[pd.DataFrame, pd.DataFrame]
+        + pd.DataFrame with the natural language explanation of feature-value we want to use
+        + pd.DataFrame with the natural language explanation of feature-value we want to use per target
+
+    
+    Example:
+            >>> from xaiographs.datasets import load_smartphone_why
+            >>> df_values_semantics, df_target_values_semantics = load_smartphone_why()
+            >>> print(df_values_semantics.head(5).to_string(index=False))
+                         feature_value                                          reason
+            battery size_4000_4700_mAh having a battery size between 4000 and 4700 mAh
+                battery size_<4000_mAh     having a battery size smaller than 4000 mAh
+                battery size_>4700_mAh      having a battery size larger than 4700 mAh
+                internal memory_128_GB                having 128 GB of internal memory
+               internal memory_<=64_GB         having 64 GB or less of internal memory
+            >>> print(df_target_values_semantics.head(5).to_string(index=False))
+            target              feature_value                                                          reason
+             Apple battery size_4000_4700_mAh some Apple phones have a battery size between 4000 and 4700 mAh
+             Apple     battery size_<4000_mAh          many Apple models have batteries smaller than 4000 mAh
+             Apple     battery size_>4700_mAh         few Apple phones feature batteries larger than 4700 mAh
+             Apple     internal memory_128_GB               many Apple phones offer 128 GB of internal memory
+             Apple    internal memory_<=64_GB     entry-level Apple models have 64 GB or less internal memory
+    
+    """
+
+    df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, PHONE_BRAND_PREFERENCES_VALUES_SEMANTICS_PATH[LANG_ES]))
+                          if language == LANG_ES
+                          else pd.read_csv(os.path.join(SRC_DIR, PHONE_BRAND_PREFERENCES_VALUES_SEMANTICS_PATH[LANG_EN])))
+    df_target_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, PHONE_BRAND_PREFERENCES_TARGET_VALUES_SEMANTICS_PATH[LANG_ES]))
+                                 if language == LANG_ES
+                                 else pd.read_csv(os.path.join(SRC_DIR, PHONE_BRAND_PREFERENCES_TARGET_VALUES_SEMANTICS_PATH[LANG_EN])))
 
     return df_values_semantic, df_target_values_semantic
