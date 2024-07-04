@@ -57,5 +57,8 @@ raw specifications might not be sufficient to provide comprehensive instructions
     xaiographs.datasets.load_education_performance
     xaiographs.datasets.load_education_performance_discretized
     xaiographs.datasets.load_education_performance_why
+    xaiographs.datasets.load_smartphone_brand_preferences
+    xaiographs.datasets.load_smartphone_brand_preferences_discretized
+    xaiographs.datasets.load_smartphone_brand_preferences_why
 ```
 
