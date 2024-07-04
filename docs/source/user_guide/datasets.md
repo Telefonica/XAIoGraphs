@@ -8,13 +8,14 @@ To test the capabilities of XAIoGraphs, it provides a series of datasets via
 
 The following datasets are included:
 
-| Datset                                          | Rows  | Num. Feats |      Task       |
-|:------------------------------------------------|:-----:|:----------:|:---------------:|
-| [Titanic](#titanic)                             | 1309  |     8      |     Binary      |
-| [Compas](#compas)                               | 4230  |     7      | Multi-Class (3) |
-| [Compas Reality](#compas)                       | 4230  |     7      |     Binary      |
-| [Body Performace](#body-performance)            | 13393 |     11     | Multi-Class (3) | 
-| [Education Performance](#education-performance) |  145  |     29     | Multi-Class (5) |
+| Dataset                                                         | Rows  | Num. Feats |       Task       |
+|:----------------------------------------------------------------|:-----:|:----------:|:----------------:|
+| [Titanic](titanic.md)                                           | 1309  |     8      |      Binary      |
+| [COMPAS](compas.md)                                             | 4230  |     7      | Multi-Class (3)  |
+| [COMPAS Reality](compas_reality.md)                             | 4230  |     7      |      Binary      |
+| [Body Performace](body_performance.md)                          | 13393 |     11     | Multi-Class (3)  | 
+| [Education Performance](education_performance.md)               |  145  |     29     | Multi-Class (5)  |
+| [Smartphone Brand Preferences](smartphone_brand_preferences.md) |  981  |     17     | Multi-Class (5)  |
 
 These datasets are accessible in both raw and discretized form, ready for usage by the 
 [`Explainability`](../api_reference/explainability.md)  and [`Fairness`](../api_reference/fairness.md) classes.
@@ -98,6 +99,20 @@ purpose is to predict students' end-of-term performances using ML techniques.
 | **Num Targets:**                             | 5                                                                                                                                                                                                |
 | **function to obtain dataset**               | [`xaiographs.datasets.load_education_performance()`](../api_reference/datasets.md#xaiographs.datasets.load_education_performance)                                                                | 
 | **function to obtain discretized dataset**   | [`xaiographs.datasets.load_education_performance_discretized()`](../api_reference/datasets.md#xaiographs.datasets.load_education_performance_discretized)                                        |
+
+&nbsp;
+## Smartphone Brand Preferences
+
+The data was collected through a combination of three datasets containing the most noteworthy features on the preferred smartphones in the US in 2022, user's data and smartphone ratings. This information was obtained via a Mechanical Turk survey where participants assessed 10 randomly presented phones by likelihood of purchase and provided personal information. This example highlights the most important features smartphones from certain brands have, to predict the most likely smartphone-brand purchase.
+
+|                                              |                                                                                                                                                                                                  |
+|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Source**                                   | [https://www.kaggle.com/datasets/meirnizri/cellphones-recommendations/data?select=cellphones+ratings.csv](https://www.kaggle.com/datasets/meirnizri/cellphones-recommendations/data?select=cellphones+ratings.csv) |
+| **Num Rows:**                                | 981                                                                                                                                                                                              |
+| **Num Features**                             | 17                                                                                                                                                                                               |
+| **Num Targets:**                             | 5                                                                                                                                                                                                |
+| **function to obtain dataset**               | [`xaiographs.datasets.load_phone_brand_preferences()`](../api_reference/datasets.md#xaiographs.datasets.load_education_performance)                                                                | 
+| **function to obtain discretized dataset**   | [`xaiographs.datasets.load_phone_brand_preferences_discretized()`](../api_reference/datasets.md#xaiographs.datasets.load_education_performance_discretized)                                        |
 
 
 [< 📚 User Guide](user_guide/user_guide)

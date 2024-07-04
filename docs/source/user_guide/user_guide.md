@@ -30,5 +30,6 @@
 * [COMPAS](datasets.md#compas)
 * [Body Performace](datasets.md#body-performace)
 * [Education Performance](datasets.md#education-performance)
+* [Smartphone Brand Preferences](datasets.md#smartphone-brand-preferences)
 
 [//]: # (* [Compas]&#40;datasets.md#compas&#41;)

@@ -22,6 +22,9 @@
     xaiographs.datasets.load_education_performance
     xaiographs.datasets.load_education_performance_discretized
     xaiographs.datasets.load_education_performance_why
+    xaiographs.datasets.load_phone_brand_preferences
+    xaiographs.datasets.load_phone_brand_preferences_discretized
+    xaiographs.datasets.load_phone_brand_preferences_why
 ```
 
 ```{eval-rst}
@@ -39,6 +42,9 @@
 .. autofunction:: xaiographs.datasets.load_education_performance
 .. autofunction:: xaiographs.datasets.load_education_performance_discretized
 .. autofunction:: xaiographs.datasets.load_education_performance_why
+.. autofunction:: xaiographs.datasets.load_phone_brand_preferences
+.. autofunction:: xaiographs.datasets.load_phone_brand_preferences_discretized
+.. autofunction:: xaiographs.datasets.load_phone_brand_preferences_why
 ```
 
 
