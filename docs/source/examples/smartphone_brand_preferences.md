@@ -13,12 +13,12 @@ function:
 >>> from xaiographs.datasets import load_phone_brand_preferences
 >>> df_dataset = load_phone_brand_preferences()
 >>> df_dataset.head(5)
-   brand    model             internal memory  performance  main camera  selfie camera  battery size  screen size  weight  price release date  age gender  occupation   
-0  Samsung       Galaxy S22  128              8.81         50           10             3700          6.1          167     528    25/02/2022   38   Female  Data analyst
-1    Apple    iPhone 13 Pro  256              7.94         12           12             3065          6.1          204     999    24/09/2021   38   Female  Data analyst
-2   Google        Pixel 6 A  128              6.76         50            8             4614          6.4          207     499    28/10/2021   31   Female         sales
-3  Samsung  Galaxy S22 Plus  128              7.22         50           10             4500          6.6          195     899    25/02/2022   31   Female         sales
-4   Google         Pixel 6a  128              6.88         12            8             4410          6.1          178     449    21/07/2021   27   Female   Team leader
+      brand  internal_memory  performance  main_camera  selfie_camera  battery_size  screen size  weight  price  age   gender    occupation   
+0  Samsung              128         8.81           50             10          3700          6.1     167    528   38   Female  Data analyst
+1    Apple              256         7.94           12             12          3065          6.1     204    999   38   Female  Data analyst
+2   Google              128         6.76           50              8          4614          6.4     207    499   31   Female         sales
+3  Samsung              128         7.22           50             10          4500          6.6     195    899   31   Female         sales
+4   Google              128         6.88           12              8          4410          6.1     178    449   27   Female   Team leader
 
 ```
 
@@ -31,12 +31,12 @@ columns with targets probabilities using
 >>> from xaiographs.datasets import load_phone_brand_preferences_discretized
 >>> df_dataset, features_cols, target_cols, y_true, y_predict = load_phone_brand_preferences_discretized()
 >>> df_dataset.head(5)
-   id internal memory performance main camera selfie camera battery size   screen size     weight     price            age          gender  occupation      y_true   y_predict  Apple  Google  Motorola  Samsung  Xiaomi
-0  0     128_GB        Ultra top   15_50_MP      <10_MP          <4000_mAh     <6.4_inches     <190_g  450_700_dollars  35_45_years  Female      Technology  Samsung    Apple   1      0       0         0        0     
-1  1   >=256_GB              Top     <15_MP    10_30_MP          <4000_mAh     <6.4_inches  190_205_g     >700_dollars  35_45_years  Female      Technology    Apple    Apple   1      0       0         0        0     
-2  2     128_GB              Mid   15_50_MP      <10_MP      4000_4700_mAh     <6.4_inches     >205_g  450_700_dollars  25_35_years  Female        Business   Google   Google   0      1       0         0        0     
-3  3     128_GB              Mid   15_50_MP      <10_MP      4000_4700_mAh  6.4_6.6_inches  190_205_g     >700_dollars  25_35_years  Female        Business  Samsung  Samsung   0      0       0         1        0     
-4  4     128_GB              Mid     <15_MP      <10_MP      4000_4700_mAh     <6.4_inches     <190_g  200_450_dollars  25_35_years  Female  Administration   Google   Google   0      1       0         0        0     
+   id internal_memory performance main_camera selfie_camera   battery_size     screen_size     weight            price          age  gender      occupation   y_true  y_predict  Apple  Google  Motorola  Samsung  Xiaomi
+0  0          128_GB   Ultra top    15_50_MP        <10_MP      <4000_mAh     <6.4_inches     <190_g  450_700_dollars  35_45_years  Female      Technology  Samsung      Apple      1       0         0        0       0     
+1  1        >=256_GB         Top      <15_MP      10_30_MP      <4000_mAh     <6.4_inches  190_205_g     >700_dollars  35_45_years  Female      Technology    Apple      Apple      1       0         0        0       0     
+2  2          128_GB         Mid    15_50_MP        <10_MP  4000_4700_mAh     <6.4_inches     >205_g  450_700_dollars  25_35_years  Female        Business   Google     Google      0       1         0        0       0     
+3  3          128_GB         Mid    15_50_MP        <10_MP  4000_4700_mAh  6.4_6.6_inches  190_205_g     >700_dollars  25_35_years  Female        Business  Samsung    Samsung      0       0         0        1       0     
+4  4          128_GB         Mid      <15_MP        <10_MP  4000_4700_mAh     <6.4_inches     <190_g  200_450_dollars  25_35_years  Female  Administration   Google     Google      0       1         0        0       0     
 
 ```
 

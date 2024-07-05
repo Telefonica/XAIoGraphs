@@ -34,3 +34,7 @@ from .datasets import load_compas_why
 
 from .datasets import load_compas_reality_discretized
 from .datasets import load_compas_reality_why
+
+from .datasets import load_phone_brand_preferences
+from .datasets import load_phone_brand_preferences_discretized
+from .datasets import load_phone_brand_preferences_why

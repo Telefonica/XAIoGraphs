@@ -112,7 +112,7 @@ PHONE_BRAND_PREFERENCES_TARGET_VALUES_SEMANTICS_PATH = {
     LANG_EN: 'data/smartphone_brand_preferences/target_values_semantics_en.csv',
     LANG_ES: 'data/smartphone_brand_preferences/target_values_semantics_es.csv'
 }
-FEATURE_COLS_PHONE_BRAND_PREFERENCES = ['internal memory', 'performance', 'main camera', 'selfie camera', 'battery size', 'screen size', 'weight','price', 'age', 'gender', 'occupation']
+FEATURE_COLS_PHONE_BRAND_PREFERENCES = ['internal_memory', 'performance', 'main_camera', 'selfie_camera', 'battery_size', 'screen_size', 'weight','price', 'age', 'gender', 'occupation']
 TARGET_COLS_PHONE_BRAND_PREFERENCES = ['Apple', 'Samsung', 'Xiaomi', 'Motorola', 'Google'] 
 
 # All datasets that include predictions must have a column with the prediction and another with its real target
@@ -835,7 +835,6 @@ def load_phone_brand_preferences() -> pd.DataFrame:
 
     + **user_id:** id of user
     + **brand:** Apple, Asus, Google, Motorola, Samsung, ...
-    + **model: Iphone, Galaxy S, ...
     + **internal memory:** in GB
     + **RAM**: in GB
     + **performance:** from AnTuTu rating 
@@ -844,8 +843,7 @@ def load_phone_brand_preferences() -> pd.DataFrame:
     + **battery size:** in mAh	
     + **screen size:** in inches
     + **weight:** in grams
-    + **price: in dollars, collected from Amazon and Best-Buy (in Aug 22).
-    + **release date:** dd/mm/yyyy
+    + **price:** in dollars, collected from Amazon and Best-Buy (in Aug 22).
     + **age:** age of user
     + **gender:** {female, male}
     + **occupation:** occupation of user
@@ -861,12 +859,12 @@ def load_phone_brand_preferences() -> pd.DataFrame:
             >>> from xaiographs.datasets import load_phone_brand_preferences
             >>> df_dataset = load_phone_brand_preferences()
             >>> df_dataset.head(5)
-              brand    model             internal memory  performance  main camera  selfie camera  battery size  screen size  weight  price release date  age gender  occupation   
-            0  Samsung       Galaxy S22  128              8.81         50           10             3700          6.1          167     528    25/02/2022   38   Female  Data analyst
-            1    Apple    iPhone 13 Pro  256              7.94         12           12             3065          6.1          204     999    24/09/2021   38   Female  Data analyst
-            2   Google        Pixel 6 A  128              6.76         50            8             4614          6.4          207     499    28/10/2021   31   Female         sales
-            3  Samsung  Galaxy S22 Plus  128              7.22         50           10             4500          6.6          195     899    25/02/2022   31   Female         sales
-            4   Google         Pixel 6a  128              6.88         12            8             4410          6.1          178     449    21/07/2021   27   Female   Team leader
+                 brand  internal_memory  performance  main_camera  selfie_camera  battery_size  screen_size  weight  price  age   gender    occupation   
+            0  Samsung              128         8.81           50             10          3700          6.1     167    528   38   Female  Data analyst
+            1    Apple              256         7.94           12             12          3065          6.1     204    999   38   Female  Data analyst
+            2   Google              128         6.76           50              8          4614          6.4     207    499   31   Female         sales
+            3  Samsung              128         7.22           50             10          4500          6.6     195    899   31   Female         sales
+            4   Google              128         6.88           12              8          4410          6.1     178    449   27   Female   Team leader
     """
     return pd.read_csv(os.path.join(SRC_DIR, PHONE_BRAND_PREFERENCES_PATH))
 
@@ -878,7 +876,6 @@ def load_phone_brand_preferences_discretized() -> Tuple[pd.DataFrame, List[str],
     Dataset contains the following columns:
 
     + **id:** unique user identifier
-    + **model: {iPhone_13, Galaxy S, ...}
     + **internal memory:** {<=64_GB, 128_GB, >=256_GB}
     + **performance:** {Low, Mid, Top, Ultra top}
     + **main camera:** {0_15_MP, 15_30_MP, >30_MP}
@@ -886,7 +883,7 @@ def load_phone_brand_preferences_discretized() -> Tuple[pd.DataFrame, List[str],
     + **battery size:** {<4000_mAh, 4000_4700_mAh, >4000_mAh}
     + **screen size:** {<6.4_inches, 6.4_6.6_inches, >6.6_inches}
     + **weight:** {<190_g, 190_205_g, >205_g}
-    + **price: {<200_dollars, 200_450_dollars, 450_700_dollars, >700_dollars}
+    + **price:** {<200_dollars, 200_450_dollars, 450_700_dollars, >700_dollars}
     + **age:** {<25_years, 25_35_years, 25_45_years, >45_years}
     + **gender:** {female, male}
     + **occupation:** {Administrative, Business, Technology, Other}
@@ -907,16 +904,17 @@ def load_phone_brand_preferences_discretized() -> Tuple[pd.DataFrame, List[str],
         + str, with GroundTruth
         + str, with prediction ML model
     
-    Example:
+        
+        Example:
             >>> from xaiographs.datasets import load_phone_brand_preferences_discretized
             >>> df_dataset, features_cols, target_cols, y_true, y_predict = load_phone_brand_preferences_discretized()
             >>> df_dataset.head(5)
-               id internal memory performance main camera selfie camera battery size   screen size     weight     price            age          gender  occupation      y_true   y_predict  Apple  Google  Motorola  Samsung  Xiaomi
-            0  0     128_GB        Ultra top   15_50_MP      <10_MP          <4000_mAh     <6.4_inches     <190_g  450_700_dollars  35_45_years  Female      Technology  Samsung    Apple   1      0       0         0        0     
-            1  1   >=256_GB              Top     <15_MP    10_30_MP          <4000_mAh     <6.4_inches  190_205_g     >700_dollars  35_45_years  Female      Technology    Apple    Apple   1      0       0         0        0     
-            2  2     128_GB              Mid   15_50_MP      <10_MP      4000_4700_mAh     <6.4_inches     >205_g  450_700_dollars  25_35_years  Female        Business   Google   Google   0      1       0         0        0     
-            3  3     128_GB              Mid   15_50_MP      <10_MP      4000_4700_mAh  6.4_6.6_inches  190_205_g     >700_dollars  25_35_years  Female        Business  Samsung  Samsung   0      0       0         1        0     
-            4  4     128_GB              Mid     <15_MP      <10_MP      4000_4700_mAh     <6.4_inches     <190_g  200_450_dollars  25_35_years  Female  Administration   Google   Google   0      1       0         0        0     
+              id internal_memory performance main_camera selfie_camera   battery_size     screen_size     weight            price          age  gender      occupation   y_true  y_predict  Apple  Google  Motorola  Samsung  Xiaomi
+            0  0          128_GB   Ultra top    15_50_MP        <10_MP      <4000_mAh     <6.4_inches     <190_g  450_700_dollars  35_45_years  Female      Technology  Samsung      Apple      1       0         0        0       0     
+            1  1        >=256_GB         Top      <15_MP      10_30_MP      <4000_mAh     <6.4_inches  190_205_g     >700_dollars  35_45_years  Female      Technology    Apple      Apple      1       0         0        0       0     
+            2  2          128_GB         Mid    15_50_MP        <10_MP  4000_4700_mAh     <6.4_inches     >205_g  450_700_dollars  25_35_years  Female        Business   Google     Google      0       1         0        0       0     
+            3  3          128_GB         Mid    15_50_MP        <10_MP  4000_4700_mAh  6.4_6.6_inches  190_205_g     >700_dollars  25_35_years  Female        Business  Samsung    Samsung      0       0         0        1       0     
+            4  4          128_GB         Mid      <15_MP        <10_MP  4000_4700_mAh     <6.4_inches     <190_g  200_450_dollars  25_35_years  Female  Administration   Google     Google      0       1         0        0       0     
             >>> features_cols
             ['internal memory', 'performance', 'main camera', 'selfie camera', 'battery size', 'screen size', 'weight', 'price', 'age', 'gender', 'occupation']
             >>> target_cols
@@ -948,24 +946,24 @@ def load_phone_brand_preferences_why(language: str = LANG_EN) -> Tuple[pd.DataFr
         + pd.DataFrame with the natural language explanation of feature-value we want to use per target
 
     
-    Example:
+        Example:
             >>> from xaiographs.datasets import load_phone_brand_preferences_why
             >>> df_values_semantics, df_target_values_semantics = load_phone_brand_preferences_why()
             >>> df_values_semantics.head(5)
-              feature_value               reason                                          
+                            feature_value                                           reason                                          
             0  battery size_4000_4700_mAh  having a battery size between 4000 and 4700 mAh
             1      battery size_<4000_mAh      having a battery size smaller than 4000 mAh
             2      battery size_>4700_mAh       having a battery size larger than 4700 mAh
             3      internal memory_128_GB                 having 128 GB of internal memory
             4     internal memory_<=64_GB          having 64 GB or less of internal memory
             >>> df_target_values_semantics.head(5)
-              target feature_value               reason                                                          
+              target               feature_value                                                           reason                                                          
             0  Apple  battery size_4000_4700_mAh  some Apple phones have a battery size between 4000 and 4700 mAh
             1  Apple      battery size_<4000_mAh           many Apple models have batteries smaller than 4000 mAh
             2  Apple      battery size_>4700_mAh          few Apple phones feature batteries larger than 4700 mAh
             3  Apple      internal memory_128_GB                many Apple phones offer 128 GB of internal memory
             4  Apple     internal memory_<=64_GB      entry-level Apple models have 64 GB or less internal memory
-    
+        
     """
 
     df_values_semantic = (pd.read_csv(os.path.join(SRC_DIR, PHONE_BRAND_PREFERENCES_VALUES_SEMANTICS_PATH[LANG_ES]))
