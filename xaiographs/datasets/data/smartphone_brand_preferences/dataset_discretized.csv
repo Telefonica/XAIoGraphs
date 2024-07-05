@@ -1,4 +1,4 @@
-id,internal memory,performance,main camera,selfie camera,battery size,screen size,weight,price,age,gender,occupation,y_true,y_predict,Apple,Google,Motorola,Samsung,Xiaomi
+id,internal_memory,performance,main_camera,selfie_camera,battery_size,screen_size,weight,price,age,gender,occupation,y_true,y_predict,Apple,Google,Motorola,Samsung,Xiaomi
 0,128_GB,Ultra top,15_50_MP,<10_MP,<4000_mAh,<6.4_inches,<190_g,450_700_dollars,35_45_years,Female,Technology,Samsung,Apple,1,0,0,0,0
 1,>=256_GB,Top,<15_MP,10_30_MP,<4000_mAh,<6.4_inches,190_205_g,>700_dollars,35_45_years,Female,Technology,Apple,Apple,1,0,0,0,0
 2,128_GB,Mid,15_50_MP,<10_MP,4000_4700_mAh,<6.4_inches,>205_g,450_700_dollars,25_35_years,Female,Business,Google,Google,0,1,0,0,0

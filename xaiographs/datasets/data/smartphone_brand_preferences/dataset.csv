@@ -1,265 +1,259 @@
-brand,model,internal memory,performance,main camera,selfie camera,battery size,screen size,weight,price,release date,age,gender,occupation
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,38,Female,Data analyst
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,38,Female,Data analyst
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,31,Female,sales
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,31,Female,sales
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,27,Female,Team leader
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,27,Female,Team leader
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,27,Female,Team leader
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,39,Male,QA Software Manager
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,39,Male,QA Software Manager
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,30,Female,Healthcare
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,30,Female,Healthcare
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,30,Female,Healthcare
-Motorola,Moto G Stylus (2022),128,2.3,50,16,5000,6.8,215,500,27/04/2022,30,Female,Healthcare
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,30,Female,Healthcare
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,30,Female,Healthcare
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,42,Male,executive
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,50,Female,manager
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,25,Male,Manager
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,25,Male,worker
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,25,Male,worker
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,25,Male,worker
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,33,Male,Warehousing
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,33,Male,Warehousing
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,33,Male,Warehousing
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,33,Male,Warehousing
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,33,Male,Warehousing
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,33,Female,Sales
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,33,Female,Sales
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,33,Female,Sales
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,28,Male,Information Technology
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,28,Male,Information Technology
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,30,Male,information
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,30,Male,information
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,30,Male,information
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,30,Male,information
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,30,Male,information
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,43,Female,IT
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,43,Female,IT
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,43,Female,IT
-Motorola,Moto G Stylus (2022),128,2.3,50,16,5000,6.8,215,500,27/04/2022,43,Female,IT
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,43,Female,IT
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,32,Male,Administrator
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,32,Male,Administrator
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,32,Male,Administrator
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,32,Male,Administrator
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,32,Male,Administrator
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,32,Male,Administrator
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,37,Female,EDUCATION
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,37,Female,homemaker
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,37,Female,homemaker
-Motorola,Moto G Stylus (2022),128,2.3,50,16,5000,6.8,215,500,27/04/2022,50,Female,manager
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,50,Female,manager
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,38,-Select Gender-,ADMINISTRATIVE OFFICER
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,38,-Select Gender-,ADMINISTRATIVE OFFICER
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,32,Male,manager
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,32,Male,manager
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,32,Male,manager
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,32,Male,Information technology
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,32,Male,Information technology
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,32,Male,Information technology
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,31,Male,construction
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,50,Male,Manager
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,50,Male,Manager
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,50,Male,Manager
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,50,Male,Manager
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,35,Male,team leader
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,48,Male,IT
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,48,Male,IT
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,48,Male,IT
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,38,Female,IT
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,38,Female,IT
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,30,Female,Administrative officer
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,30,Female,Administrative officer
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,30,Female,Administrative officer
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,29,Male,Information Technology
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,29,Male,Information Technology
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,29,Male,Information Technology
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,29,Male,Information Technology
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,29,Male,Information Technology
-Motorola,Moto G Play (2021),32,1.42,13,5,5000,6.5,204,159,14/01/2021,29,Female,Information Technology
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,29,Female,Information Technology
-Motorola,Moto G Stylus (2022),128,2.3,50,16,5000,6.8,215,500,27/04/2022,29,Female,Information Technology
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,29,Female,Information Technology
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,58,Male,ADMINISTRATIVE OFFICER
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,58,Male,ADMINISTRATIVE OFFICER
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,58,Male,ADMINISTRATIVE OFFICER
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,31,Male,construction
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,32,Female,registered
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,32,Female,registered
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,56,Male,business
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,56,Male,business
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,56,Male,business
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,56,Male,business
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,33,Male,Transportation
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,33,Male,Transportation
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,33,Male,Transportation
-Motorola,Moto G Stylus (2022),128,2.3,50,16,5000,6.8,215,500,27/04/2022,33,Male,Transportation
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,33,Male,Education
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,45,Female,MANAGER
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,58,Male,ADMINISTRATIVE OFFICER
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,58,Male,ADMINISTRATIVE OFFICER
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,58,Male,ADMINISTRATIVE OFFICER
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,40,Female,Information Technology
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,40,Female,Information Technology
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,40,Female,Information Technology
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,40,Female,Information Technology
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,25,Female,software developer
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,25,Female,Manager
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,25,Female,Manager
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,25,Female,Manager
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,23,Male,worker
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,23,Male,worker
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,23,Male,worker
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,23,Male,worker
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,23,Male,worker
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,23,Male,worker
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,23,Male,worker
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,33,Female,Sales
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,61,Female,Ops Manager
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,61,Female,Ops Manager
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,42,Male,banking
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,25,Male,Manager
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,25,Male,Manager
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,25,Male,Manager
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,25,Male,Manager
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,32,Male,manager
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,32,Male,manager
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,27,Female,Information Technology
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,27,Female,Information Technology
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,27,Female,Information Technology
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,27,Female,Information Technology
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,27,Female,Information Technology
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,61,Female,Information Technology
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,61,Female,Information Technology
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,61,Female,Information Technology
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,61,Female,Information Technology
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,31,Female,Data analyst
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,31,Female,Data analyst
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,31,Female,Data analyst
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,31,Female,Data analyst
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,30,Female,Security
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,30,Female,Security
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,39,Female,master degree
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,39,Female,master degree
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,38,-Select Gender-,Manager
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,38,-Select Gender-,Manager
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,38,-Select Gender-,Manager
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,38,-Select Gender-,Manager
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,27,Female,Information Technology
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,27,Female,Information Technology
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,27,Female,Information Technology
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,27,Female,Information Technology
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,27,Female,Information Technology
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,30,Male,Security
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,30,Male,Security
-Motorola,Moto G Stylus (2022),128,2.3,50,16,5000,6.8,215,500,27/04/2022,41,Male,MANAGER
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,41,Male,MANAGER
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,41,Male,MANAGER
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,41,Male,MANAGER
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,41,Male,MANAGER
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,41,Male,MANAGER
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,28,Female,Accountant
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,57,Female,it
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,57,Female,it
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,57,Female,it
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,25,Female,Technical Engineer
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,25,Female,Technical Engineer
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,25,Female,Technical Engineer
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,25,Female,Technical Engineer
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,25,Female,Technical Engineer
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,32,Male,teacher
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,32,Male,teacher
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,49,Female,president transportation company
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,32,Male,manager
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,32,Male,manager
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,32,Male,manager
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,25,Male,software developer
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,25,Male,software developer
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,25,Male,software developer
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,25,Male,software developer
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,25,Male,software developer
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,25,Male,software developer
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,46,Male,Administrative officer
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,37,Female,SALES MANAGER
-Motorola,Moto G Stylus (2022),128,2.3,50,16,5000,6.8,215,500,27/04/2022,37,Female,SALES MANAGER
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,37,Female,SALES MANAGER
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,37,Female,SALES MANAGER
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,37,Female,SALES MANAGER
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,42,Female,Purchase Manager
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,42,Female,Purchase Manager
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,42,Female,Purchase Manager
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,46,Male,writer
-Samsung,Galaxy S22,128,8.81,50,10,3700,6.1,167,528,25/02/2022,35,Male,HEALTHARE
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,35,Male,HEALTHARE
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,39,Male,Computer technician
-Google,Pixel 6a,128,6.88,12,8,4410,6.1,178,449,21/07/2021,34,Male,ICT Officer
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,34,Male,ICT Officer
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,48,Male,IT
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,48,Male,IT
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,25,Female,System Administrator
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,25,Female,System Administrator
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,25,Female,System Administrator
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,25,Female,System Administrator
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,29,Female,Information Technology
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,29,Female,Information Technology
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,29,Female,Information Technology
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,29,Female,Information Technology
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,32,Male,manager
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,32,Male,manager
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,32,Male,manager
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,37,Female,SALES MANAGER
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,25,Male,software developer
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,25,Male,software developer
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,25,Male,software developer
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,25,Male,software developer
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,25,Male,software developer
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,55,Female,IT
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,28,Female,FINANCE
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,28,Female,FINANCE
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,28,Female,FINANCE
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,28,Female,FINANCE
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,28,Female,FINANCE
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,30,Female,Security
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,30,Female,Security
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,30,Female,Security
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,32,Male,Information technology
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,32,Male,Information technology
-Apple,iPhone SE (2022),128,7.23,12,7,2018,4.7,144,429,18/03/2022,32,Male,Information technology
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,32,Male,Information technology
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,42,Female,Manager
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,25,Male,Executive Manager
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,25,Male,Executive Manager
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,40,Female,team worker in it
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,40,Female,team worker in it
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,29,Female,Finance
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,29,Female,Finance
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,29,Female,Finance
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,46,Male,technician
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,46,Male,technician
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,32,Male,manager
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,32,Male,manager
-Xiaomi,Redmi Note 11,128,2.44,50,13,5000,6.4,179,174,09/02/2022,32,Male,manager
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,25,Female,Manager
-Xiaomi,Poco F4,128,6.98,64,20,4500,6.6,195,428,27/07/2022,25,Female,Manager
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,25,Female,Manager
-Google,Pixel 6 Pro ,128,7.19,50,11,5003,6.7,210,699,28/10/2021,25,Female,Manager
-Motorola,Moto G Pure,32,1.02,13,5,4000,6.5,188,129,14/10/2021,34,Male,WEB DESIGN
-Apple,iPhone 13 Mini,128,7.72,12,12,2438,5.4,141,699,24/09/2021,34,Male,WEB DESIGN
-Samsung,Galaxy S22 Ultra,128,9.68,108,40,5000,6.8,228,840,25/02/2022,34,Male,WEB DESIGN
-Apple,iPhone 13,128,7.75,12,12,3240,6.1,174,699,24/09/2021,34,Male,WEB DESIGN
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,35,Male,HEALTHCARE
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,49,Male,Information Technology
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,49,Male,Information Technology
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,49,Male,Information Technology
-Motorola,Moto G Stylus (2022),128,2.3,50,16,5000,6.8,215,500,27/04/2022,50,Female,manager
-Xiaomi,11T Pro,256,7.59,108,16,5000,6.6,204,435,05/10/2021,50,Female,manager
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,50,Female,manager
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,29,Male,Information Technology
-Motorola,Moto G Power (2022),64,1.35,50,8,5000,6.5,203,189,22/02/2022,29,Male,Information Technology
-Google,Pixel 6  ,128,6.76,50,8,4614,6.4,207,499,28/10/2021,29,Male,Information Technology
-Samsung,Galaxy S22 Plus,128,7.22,50,10,4500,6.6,195,899,25/02/2022,29,Male,Information Technology
-Samsung,Galaxy Z Fold 3,256,6.35,12,4,4400,7.6,271,1799,11/08/2021,29,Male,Information Technology
-Apple,iPhone 13 Pro,256,7.94,12,12,3065,6.1,204,999,24/09/2021,56,Female,retail
-Apple,iPhone 13 Pro Max,256,8.01,12,12,4352,6.7,240,1199,24/09/2021,56,Female,retail
+brand,internal_memory,performance,main_camera,selfie_camera,battery_size,screen_size,weight,price,age,gender,occupation
+Samsung,128,8.81,50,10,3700,6.1,167,528,38,Female,Data analyst
+Apple,256,7.94,12,12,3065,6.1,204,999,38,Female,Data analyst
+Google,128,6.76,50,8,4614,6.4,207,499,31,Female,sales
+Samsung,128,7.22,50,10,4500,6.6,195,899,31,Female,sales
+Google,128,6.88,12,8,4410,6.1,178,449,27,Female,Team leader
+Motorola,64,1.35,50,8,5000,6.5,203,189,27,Female,Team leader
+Apple,128,7.75,12,12,3240,6.1,174,699,27,Female,Team leader
+Samsung,128,8.81,50,10,3700,6.1,167,528,39,Male,QA Software Manager
+Apple,128,7.75,12,12,3240,6.1,174,699,39,Male,QA Software Manager
+Motorola,32,1.42,13,5,5000,6.5,204,159,30,Female,Healthcare
+Samsung,128,8.81,50,10,3700,6.1,167,528,30,Female,Healthcare
+Motorola,64,1.35,50,8,5000,6.5,203,189,30,Female,Healthcare
+Motorola,128,2.3,50,16,5000,6.8,215,500,30,Female,Healthcare
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,30,Female,Healthcare
+Apple,128,7.75,12,12,3240,6.1,174,699,30,Female,Healthcare
+Apple,128,7.75,12,12,3240,6.1,174,699,42,Male,executive
+Apple,128,7.72,12,12,2438,5.4,141,699,50,Female,manager
+Samsung,128,7.22,50,10,4500,6.6,195,899,25,Male,Manager
+Motorola,32,1.42,13,5,5000,6.5,204,159,25,Male,worker
+Motorola,32,1.02,13,5,4000,6.5,188,129,25,Male,worker
+Apple,128,7.75,12,12,3240,6.1,174,699,25,Male,worker
+Motorola,32,1.42,13,5,5000,6.5,204,159,33,Male,Warehousing
+Motorola,32,1.02,13,5,4000,6.5,188,129,33,Male,Warehousing
+Google,128,7.19,50,11,5003,6.7,210,699,33,Male,Warehousing
+Samsung,256,6.35,12,4,4400,7.6,271,1799,33,Male,Warehousing
+Apple,128,7.75,12,12,3240,6.1,174,699,33,Male,Warehousing
+Apple,256,8.01,12,12,4352,6.7,240,1199,33,Female,Sales
+Apple,128,7.72,12,12,2438,5.4,141,699,33,Female,Sales
+Apple,128,7.75,12,12,3240,6.1,174,699,33,Female,Sales
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,28,Male,Information Technology
+Google,128,7.19,50,11,5003,6.7,210,699,28,Male,Information Technology
+Motorola,32,1.42,13,5,5000,6.5,204,159,30,Male,information
+Apple,256,7.94,12,12,3065,6.1,204,999,30,Male,information
+Apple,256,8.01,12,12,4352,6.7,240,1199,30,Male,information
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,30,Male,information
+Google,128,7.19,50,11,5003,6.7,210,699,30,Male,information
+Motorola,32,1.42,13,5,5000,6.5,204,159,43,Female,IT
+Samsung,128,8.81,50,10,3700,6.1,167,528,43,Female,IT
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,43,Female,IT
+Motorola,128,2.3,50,16,5000,6.8,215,500,43,Female,IT
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,43,Female,IT
+Google,128,6.88,12,8,4410,6.1,178,449,32,Male,Administrator
+Motorola,32,1.02,13,5,4000,6.5,188,129,32,Male,Administrator
+Google,128,6.76,50,8,4614,6.4,207,499,32,Male,Administrator
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,32,Male,Administrator
+Samsung,128,7.22,50,10,4500,6.6,195,899,32,Male,Administrator
+Samsung,128,9.68,108,40,5000,6.8,228,840,32,Male,Administrator
+Motorola,32,1.42,13,5,5000,6.5,204,159,37,Female,EDUCATION
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,37,Female,homemaker
+Samsung,128,7.22,50,10,4500,6.6,195,899,37,Female,homemaker
+Motorola,128,2.3,50,16,5000,6.8,215,500,50,Female,manager
+Google,128,7.19,50,11,5003,6.7,210,699,50,Female,manager
+Samsung,128,8.81,50,10,3700,6.1,167,528,32,Male,manager
+Google,128,6.76,50,8,4614,6.4,207,499,32,Male,manager
+Apple,128,7.23,12,7,2018,4.7,144,429,32,Male,manager
+Apple,256,8.01,12,12,4352,6.7,240,1199,32,Male,Information technology
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,32,Male,Information technology
+Samsung,128,7.22,50,10,4500,6.6,195,899,32,Male,Information technology
+Samsung,128,9.68,108,40,5000,6.8,228,840,31,Male,construction
+Motorola,32,1.42,13,5,5000,6.5,204,159,50,Male,Manager
+Apple,256,7.94,12,12,3065,6.1,204,999,50,Male,Manager
+Google,128,7.19,50,11,5003,6.7,210,699,50,Male,Manager
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,50,Male,Manager
+Apple,128,7.75,12,12,3240,6.1,174,699,35,Male,team leader
+Motorola,32,1.42,13,5,5000,6.5,204,159,48,Male,IT
+Motorola,32,1.02,13,5,4000,6.5,188,129,48,Male,IT
+Motorola,64,1.35,50,8,5000,6.5,203,189,48,Male,IT
+Motorola,32,1.42,13,5,5000,6.5,204,159,38,Female,IT
+Motorola,32,1.02,13,5,4000,6.5,188,129,38,Female,IT
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,30,Female,Administrative officer
+Apple,128,7.23,12,7,2018,4.7,144,429,30,Female,Administrative officer
+Samsung,128,9.68,108,40,5000,6.8,228,840,30,Female,Administrative officer
+Motorola,32,1.42,13,5,5000,6.5,204,159,29,Male,Information Technology
+Google,128,6.88,12,8,4410,6.1,178,449,29,Male,Information Technology
+Google,128,7.19,50,11,5003,6.7,210,699,29,Male,Information Technology
+Samsung,128,9.68,108,40,5000,6.8,228,840,29,Male,Information Technology
+Apple,128,7.75,12,12,3240,6.1,174,699,29,Male,Information Technology
+Motorola,32,1.42,13,5,5000,6.5,204,159,29,Female,Information Technology
+Google,128,6.88,12,8,4410,6.1,178,449,29,Female,Information Technology
+Motorola,128,2.3,50,16,5000,6.8,215,500,29,Female,Information Technology
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,29,Female,Information Technology
+Google,128,6.76,50,8,4614,6.4,207,499,58,Male,ADMINISTRATIVE OFFICER
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,58,Male,ADMINISTRATIVE OFFICER
+Google,128,7.19,50,11,5003,6.7,210,699,58,Male,ADMINISTRATIVE OFFICER
+Samsung,128,9.68,108,40,5000,6.8,228,840,31,Male,construction
+Samsung,128,8.81,50,10,3700,6.1,167,528,32,Female,registered
+Apple,128,7.72,12,12,2438,5.4,141,699,32,Female,registered
+Apple,128,7.72,12,12,2438,5.4,141,699,56,Male,business
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,56,Male,business
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,56,Male,business
+Apple,128,7.23,12,7,2018,4.7,144,429,56,Male,business
+Google,128,6.88,12,8,4410,6.1,178,449,33,Male,Transportation
+Apple,256,7.94,12,12,3065,6.1,204,999,33,Male,Transportation
+Apple,128,7.72,12,12,2438,5.4,141,699,33,Male,Transportation
+Motorola,128,2.3,50,16,5000,6.8,215,500,33,Male,Transportation
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,33,Male,Education
+Apple,128,7.23,12,7,2018,4.7,144,429,45,Female,MANAGER
+Google,128,6.76,50,8,4614,6.4,207,499,58,Male,ADMINISTRATIVE OFFICER
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,58,Male,ADMINISTRATIVE OFFICER
+Google,128,7.19,50,11,5003,6.7,210,699,58,Male,ADMINISTRATIVE OFFICER
+Google,128,6.88,12,8,4410,6.1,178,449,40,Female,Information Technology
+Google,128,6.76,50,8,4614,6.4,207,499,40,Female,Information Technology
+Apple,256,8.01,12,12,4352,6.7,240,1199,40,Female,Information Technology
+Apple,128,7.23,12,7,2018,4.7,144,429,40,Female,Information Technology
+Motorola,64,1.35,50,8,5000,6.5,203,189,25,Female,software developer
+Apple,256,8.01,12,12,4352,6.7,240,1199,25,Female,Manager
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,25,Female,Manager
+Google,128,7.19,50,11,5003,6.7,210,699,25,Female,Manager
+Google,128,6.88,12,8,4410,6.1,178,449,23,Male,worker
+Apple,256,7.94,12,12,3065,6.1,204,999,23,Male,worker
+Apple,256,8.01,12,12,4352,6.7,240,1199,23,Male,worker
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,23,Male,worker
+Samsung,128,7.22,50,10,4500,6.6,195,899,23,Male,worker
+Samsung,256,6.35,12,4,4400,7.6,271,1799,23,Male,worker
+Samsung,128,9.68,108,40,5000,6.8,228,840,23,Male,worker
+Apple,256,7.94,12,12,3065,6.1,204,999,33,Female,Sales
+Samsung,128,8.81,50,10,3700,6.1,167,528,61,Female,Ops Manager
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,61,Female,Ops Manager
+Apple,128,7.75,12,12,3240,6.1,174,699,42,Male,banking
+Samsung,128,8.81,50,10,3700,6.1,167,528,25,Male,Manager
+Google,128,6.88,12,8,4410,6.1,178,449,25,Male,Manager
+Apple,256,7.94,12,12,3065,6.1,204,999,25,Male,Manager
+Samsung,128,7.22,50,10,4500,6.6,195,899,25,Male,Manager
+Samsung,256,6.35,12,4,4400,7.6,271,1799,32,Male,manager
+Samsung,128,9.68,108,40,5000,6.8,228,840,32,Male,manager
+Samsung,128,8.81,50,10,3700,6.1,167,528,27,Female,Information Technology
+Apple,256,8.01,12,12,4352,6.7,240,1199,27,Female,Information Technology
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,27,Female,Information Technology
+Samsung,256,6.35,12,4,4400,7.6,271,1799,27,Female,Information Technology
+Samsung,128,9.68,108,40,5000,6.8,228,840,27,Female,Information Technology
+Apple,256,8.01,12,12,4352,6.7,240,1199,61,Female,Information Technology
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,61,Female,Information Technology
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,61,Female,Information Technology
+Apple,128,7.75,12,12,3240,6.1,174,699,61,Female,Information Technology
+Apple,256,7.94,12,12,3065,6.1,204,999,31,Female,Data analyst
+Apple,128,7.72,12,12,2438,5.4,141,699,31,Female,Data analyst
+Apple,128,7.23,12,7,2018,4.7,144,429,31,Female,Data analyst
+Apple,128,7.75,12,12,3240,6.1,174,699,31,Female,Data analyst
+Apple,256,8.01,12,12,4352,6.7,240,1199,30,Female,Security
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,30,Female,Security
+Apple,128,7.72,12,12,2438,5.4,141,699,39,Female,master degree
+Samsung,128,9.68,108,40,5000,6.8,228,840,39,Female,master degree
+Google,128,6.76,50,8,4614,6.4,207,499,27,Female,Information Technology
+Apple,128,7.72,12,12,2438,5.4,141,699,27,Female,Information Technology
+Apple,128,7.23,12,7,2018,4.7,144,429,27,Female,Information Technology
+Samsung,128,9.68,108,40,5000,6.8,228,840,27,Female,Information Technology
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,27,Female,Information Technology
+Apple,256,8.01,12,12,4352,6.7,240,1199,30,Male,Security
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,30,Male,Security
+Motorola,128,2.3,50,16,5000,6.8,215,500,41,Male,MANAGER
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,41,Male,MANAGER
+Apple,128,7.23,12,7,2018,4.7,144,429,41,Male,MANAGER
+Google,128,7.19,50,11,5003,6.7,210,699,41,Male,MANAGER
+Samsung,128,9.68,108,40,5000,6.8,228,840,41,Male,MANAGER
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,41,Male,MANAGER
+Samsung,128,8.81,50,10,3700,6.1,167,528,28,Female,Accountant
+Samsung,128,8.81,50,10,3700,6.1,167,528,57,Female,it
+Apple,256,7.94,12,12,3065,6.1,204,999,57,Female,it
+Google,128,6.76,50,8,4614,6.4,207,499,57,Female,it
+Samsung,128,8.81,50,10,3700,6.1,167,528,25,Female,Technical Engineer
+Apple,128,7.23,12,7,2018,4.7,144,429,25,Female,Technical Engineer
+Samsung,128,9.68,108,40,5000,6.8,228,840,25,Female,Technical Engineer
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,25,Female,Technical Engineer
+Apple,128,7.75,12,12,3240,6.1,174,699,25,Female,Technical Engineer
+Apple,256,7.94,12,12,3065,6.1,204,999,32,Male,teacher
+Apple,256,8.01,12,12,4352,6.7,240,1199,32,Male,teacher
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,49,Female,president transportation company
+Samsung,128,8.81,50,10,3700,6.1,167,528,32,Male,manager
+Apple,256,8.01,12,12,4352,6.7,240,1199,32,Male,manager
+Samsung,256,6.35,12,4,4400,7.6,271,1799,32,Male,manager
+Samsung,128,8.81,50,10,3700,6.1,167,528,25,Male,software developer
+Google,128,6.76,50,8,4614,6.4,207,499,25,Male,software developer
+Apple,256,8.01,12,12,4352,6.7,240,1199,25,Male,software developer
+Apple,128,7.72,12,12,2438,5.4,141,699,25,Male,software developer
+Apple,128,7.23,12,7,2018,4.7,144,429,25,Male,software developer
+Samsung,128,9.68,108,40,5000,6.8,228,840,25,Male,software developer
+Apple,128,7.72,12,12,2438,5.4,141,699,46,Male,Administrative officer
+Apple,256,7.94,12,12,3065,6.1,204,999,37,Female,SALES MANAGER
+Motorola,128,2.3,50,16,5000,6.8,215,500,37,Female,SALES MANAGER
+Samsung,256,6.35,12,4,4400,7.6,271,1799,37,Female,SALES MANAGER
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,37,Female,SALES MANAGER
+Apple,128,7.75,12,12,3240,6.1,174,699,37,Female,SALES MANAGER
+Apple,128,7.23,12,7,2018,4.7,144,429,42,Female,Purchase Manager
+Google,128,7.19,50,11,5003,6.7,210,699,42,Female,Purchase Manager
+Samsung,128,9.68,108,40,5000,6.8,228,840,42,Female,Purchase Manager
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,46,Male,writer
+Samsung,128,8.81,50,10,3700,6.1,167,528,35,Male,HEALTHARE
+Apple,256,8.01,12,12,4352,6.7,240,1199,35,Male,HEALTHARE
+Apple,256,8.01,12,12,4352,6.7,240,1199,39,Male,Computer technician
+Google,128,6.88,12,8,4410,6.1,178,449,34,Male,ICT Officer
+Google,128,7.19,50,11,5003,6.7,210,699,34,Male,ICT Officer
+Motorola,32,1.02,13,5,4000,6.5,188,129,48,Male,IT
+Motorola,64,1.35,50,8,5000,6.5,203,189,48,Male,IT
+Apple,256,8.01,12,12,4352,6.7,240,1199,25,Female,System Administrator
+Google,128,7.19,50,11,5003,6.7,210,699,25,Female,System Administrator
+Samsung,256,6.35,12,4,4400,7.6,271,1799,25,Female,System Administrator
+Samsung,128,9.68,108,40,5000,6.8,228,840,25,Female,System Administrator
+Motorola,32,1.02,13,5,4000,6.5,188,129,29,Female,Information Technology
+Motorola,64,1.35,50,8,5000,6.5,203,189,29,Female,Information Technology
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,29,Female,Information Technology
+Samsung,256,6.35,12,4,4400,7.6,271,1799,29,Female,Information Technology
+Motorola,64,1.35,50,8,5000,6.5,203,189,32,Male,manager
+Google,128,7.19,50,11,5003,6.7,210,699,32,Male,manager
+Samsung,128,9.68,108,40,5000,6.8,228,840,32,Male,manager
+Apple,128,7.72,12,12,2438,5.4,141,699,37,Female,SALES MANAGER
+Apple,256,8.01,12,12,4352,6.7,240,1199,25,Male,software developer
+Apple,128,7.72,12,12,2438,5.4,141,699,25,Male,software developer
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,25,Male,software developer
+Samsung,256,6.35,12,4,4400,7.6,271,1799,25,Male,software developer
+Samsung,128,9.68,108,40,5000,6.8,228,840,25,Male,software developer
+Motorola,64,1.35,50,8,5000,6.5,203,189,55,Female,IT
+Apple,256,7.94,12,12,3065,6.1,204,999,28,Female,FINANCE
+Motorola,64,1.35,50,8,5000,6.5,203,189,28,Female,FINANCE
+Apple,256,8.01,12,12,4352,6.7,240,1199,28,Female,FINANCE
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,28,Female,FINANCE
+Samsung,128,9.68,108,40,5000,6.8,228,840,28,Female,FINANCE
+Apple,256,7.94,12,12,3065,6.1,204,999,30,Female,Security
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,30,Female,Security
+Google,128,7.19,50,11,5003,6.7,210,699,30,Female,Security
+Apple,256,7.94,12,12,3065,6.1,204,999,32,Male,Information technology
+Motorola,32,1.02,13,5,4000,6.5,188,129,32,Male,Information technology
+Apple,128,7.23,12,7,2018,4.7,144,429,32,Male,Information technology
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,32,Male,Information technology
+Google,128,6.76,50,8,4614,6.4,207,499,42,Female,Manager
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,25,Male,Executive Manager
+Google,128,7.19,50,11,5003,6.7,210,699,25,Male,Executive Manager
+Apple,256,7.94,12,12,3065,6.1,204,999,40,Female,team worker in it
+Google,128,6.76,50,8,4614,6.4,207,499,40,Female,team worker in it
+Motorola,64,1.35,50,8,5000,6.5,203,189,29,Female,Finance
+Apple,256,8.01,12,12,4352,6.7,240,1199,29,Female,Finance
+Samsung,128,7.22,50,10,4500,6.6,195,899,29,Female,Finance
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,46,Male,technician
+Samsung,128,9.68,108,40,5000,6.8,228,840,46,Male,technician
+Apple,256,7.94,12,12,3065,6.1,204,999,32,Male,manager
+Samsung,128,9.68,108,40,5000,6.8,228,840,32,Male,manager
+Xiaomi,128,2.44,50,13,5000,6.4,179,174,32,Male,manager
+Motorola,64,1.35,50,8,5000,6.5,203,189,25,Female,Manager
+Xiaomi,128,6.98,64,20,4500,6.6,195,428,25,Female,Manager
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,25,Female,Manager
+Google,128,7.19,50,11,5003,6.7,210,699,25,Female,Manager
+Motorola,32,1.02,13,5,4000,6.5,188,129,34,Male,WEB DESIGN
+Apple,128,7.72,12,12,2438,5.4,141,699,34,Male,WEB DESIGN
+Samsung,128,9.68,108,40,5000,6.8,228,840,34,Male,WEB DESIGN
+Apple,128,7.75,12,12,3240,6.1,174,699,34,Male,WEB DESIGN
+Apple,256,8.01,12,12,4352,6.7,240,1199,35,Male,HEALTHCARE
+Motorola,64,1.35,50,8,5000,6.5,203,189,49,Male,Information Technology
+Google,128,6.76,50,8,4614,6.4,207,499,49,Male,Information Technology
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,49,Male,Information Technology
+Motorola,128,2.3,50,16,5000,6.8,215,500,50,Female,manager
+Xiaomi,256,7.59,108,16,5000,6.6,204,435,50,Female,manager
+Samsung,256,6.35,12,4,4400,7.6,271,1799,50,Female,manager
+Apple,256,7.94,12,12,3065,6.1,204,999,29,Male,Information Technology
+Motorola,64,1.35,50,8,5000,6.5,203,189,29,Male,Information Technology
+Google,128,6.76,50,8,4614,6.4,207,499,29,Male,Information Technology
+Samsung,128,7.22,50,10,4500,6.6,195,899,29,Male,Information Technology
+Samsung,256,6.35,12,4,4400,7.6,271,1799,29,Male,Information Technology
+Apple,256,7.94,12,12,3065,6.1,204,999,56,Female,retail
+Apple,256,8.01,12,12,4352,6.7,240,1199,56,Female,retail
