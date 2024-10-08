@@ -50,7 +50,7 @@ setup(
             "education_performance_example = xaiographs.examples.education_performance_example:main",
             "compas_example = xaiographs.examples.compas_example:main",
             "compas_reality_example = xaiographs.examples.compas_reality_example:main",
-            "smartphone_brand_preferences_example = xaiographs.examples.smartphone_brand_preferences_example:main",
+            "smartphone_example = xaiographs.examples.smartphone_brand_preferences_example:main",
         ]
     }
 )
