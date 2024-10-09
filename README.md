@@ -131,8 +131,7 @@ XAIoGraphs has been developed by ***Applied AI & Privacy*** team (Telefónica In
 * [Alejandra Maria Alonso](https://www.linkedin.com/in/alejandraalonsodiaz/)
 * [Miguel Angel Martín](https://github.com/mamj-telefonica)
 * [Oriol Arnau](https://github.com/oarnau)
-
-
+* [Morganne De Witte](https://github.com/MorganneDeWitte)
 
 
 # 📥  Contact
