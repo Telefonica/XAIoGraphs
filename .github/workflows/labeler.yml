@@ -15,7 +15,7 @@ jobs:
       contents: read  #  to read a configuration file
       pull-requests: write  #  to add labels to pull requests
 
-    runs-on: cdorunner-aipro-cicd
+    runs-on: [ubuntu-latest]
 
     steps:
       - name: Checkout ${{ github.event.client_payload.pull_request.head.ref }}
