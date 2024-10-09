@@ -36,7 +36,7 @@ setup(
     author='Telefonica I+D',
     author_email='ricardo.moyagarcia@telefonica.com',
     license='AGPL-3.0 license',
-    python_requires='>=3.7',
+    python_requires='>=3.7,<3.10',
     packages=['xaiographs'],
     include_package_data=True,
     install_requires=required,
