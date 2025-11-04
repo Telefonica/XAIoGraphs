@@ -152,6 +152,7 @@ class Why(object):
         """
         if self.__df_why is None:
             print(WARN_MSG.format('\"why_explanation\"'))
+            return None
         else:
             return self.__df_why
 
@@ -261,16 +262,15 @@ class Why(object):
             :return: String with the final sentence for the requested case
             """
             # Check the reliability of the explainability values
-            r = df_single.head(1)
-            reliability = r[RELIABILITY].values[0]
+            reliability = df_single[RELIABILITY].iloc[0]
             if reliability < self.__min_reliability:
                 return self.__why_templates.iloc[0, 0]
 
             # Build why sentence
-            kw_values = (dict([('v_' + self._VALUES + '_' + str(i), v)
-                               for i, v in enumerate(df_single[REASON + '_' + self._VALUES].iloc[:self.__n_values])]))
-            kw_target_values = (dict([('v_' + self._TARGET_VALUES + '_' + str(i), v)
-                                      for i, v in enumerate(df_single[REASON + '_' + self._TARGET_VALUES].iloc[:self.__n_target_values])]))
+            kw_values = {'v_' + self._VALUES + '_' + str(i): v for i, v in
+                         enumerate(df_single[REASON + '_' + self._VALUES].iloc[:self.__n_values])}
+            kw_target_values = {'v_' + self._TARGET_VALUES + '_' + str(i): v for i, v in
+                                enumerate(df_single[REASON + '_' + self._TARGET_VALUES].iloc[:self.__n_target_values])}
 
             temp_values_explain = self.__build_template(items=list(kw_values))
             temp_target_values_explain = self.__build_template(items=list(kw_target_values))
@@ -287,7 +287,11 @@ class Why(object):
                             .capitalize())
             return temp_why_str
 
-        df_final = df_rank.groupby(sample_id_column).apply(__get_single_why).to_frame(REASON).reset_index()
+        df_final = (df_rank
+                    .groupby(sample_id_column)
+                    .apply(__get_single_why, include_groups=False)
+                    .to_frame(REASON)
+                    .reset_index())
 
         # Writing files for the web interface
         if self.__sample_ids_to_export is not None:
