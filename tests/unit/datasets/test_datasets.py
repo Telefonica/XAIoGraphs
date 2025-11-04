@@ -29,7 +29,7 @@ pd.set_option('display.max_rows', None)
 class DatasetsUnitTest(unittest.TestCase):
 
     @staticmethod
-    def load_titanic_unit_test():
+    def test_load_titanic():
         """ Test: Method to load titanic dataset
         """
         df_expected = pd.DataFrame({'id': [0, 1, 2],
@@ -47,7 +47,7 @@ class DatasetsUnitTest(unittest.TestCase):
         df_dataset = load_titanic()
         pd.testing.assert_frame_equal(df_dataset.head(3), df_expected)
 
-    def load_titanic_discretized_unit_test(self):
+    def test_load_titanic_discretized(self):
         """ Test: Method to load titanic dataset discretized
         """
         df_expected = pd.DataFrame({'id': [0, 1, 2],

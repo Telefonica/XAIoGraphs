@@ -38,7 +38,7 @@ class FairnessUnitTest(unittest.TestCase):
                 'y_predict': ['YES', 'YES', 'NO', 'YES', 'NO', 'NO', 'YES', 'YES', 'NO', 'NO']},
             columns=['Gender', 'Color', 'y_true', 'y_predict'])
 
-    def check_dataset_values_unit_test(self):
+    def test_check_dataset_values(self):
         """
         """
         print("\nDataset to test check_dataset_values_unit_test:\n{}".format(self.df_dataset))
@@ -87,7 +87,7 @@ class FairnessUnitTest(unittest.TestCase):
                                                      target_label='YES',
                                                      sensitive_value='ERROR_SENSITIVE_VALUE')
 
-    def calculate_independence_score_unit_test(self):
+    def test_calculate_independence_score(self):
         """ Test: Calculate Independence Criteria for 'Gender' sensitive Feature and Prediction value equals as 1.
 
         A-> sensitive Feature
@@ -110,7 +110,7 @@ class FairnessUnitTest(unittest.TestCase):
                                                      sensitive_value='MEN')
         assert round(independence_value_ok, 4) == 0.4167
 
-    def calculate_separation_score_unit_test(self):
+    def test_calculate_separation_score(self):
         """ Test: Calculate Separation Criteria for 'Gender' sensitive Feature and Prediction value equals as 1.
 
         A-> sensitive Feature
@@ -134,7 +134,7 @@ class FairnessUnitTest(unittest.TestCase):
                                               sensitive_value='MEN')
         assert round(separation_value, 2) == 0.25
 
-    def calculate_sufficiency_score_unit_test(self):
+    def test_calculate_sufficiency_score(self):
         """ Test: Calculate Separation Criteria for 'Gender' sensitive Feature and Prediction value equals as 1.
 
         A-> sensitive Feature
@@ -158,7 +158,7 @@ class FairnessUnitTest(unittest.TestCase):
                                                 sensitive_value='MEN')
         assert round(sufficiency_value, 2) == 0.25
 
-    def calculate_fairness_metrics_unit_test(self):
+    def test_calculate_fairness_metrics(self):
         """ Test: Calculate Independence, Separation and Sufficiency Criterias for 'Gender' sensitive Feature
         and Prediction value equals as 1.
 
@@ -196,7 +196,7 @@ class FairnessUnitTest(unittest.TestCase):
         assert round(fairness_scores[1], 2) == 0.25
         assert round(fairness_scores[2], 2) == 0.25
 
-    def score_weight_unit_test(self):
+    def test_score_weight(self):
         """ Test: Method to calculate weight of sensitive value vs target value
         """
         test_1 = Fairness._Fairness__score_weight(df=self.df_dataset,
@@ -224,7 +224,7 @@ class FairnessUnitTest(unittest.TestCase):
         assert round(test_3, 1) == 0.2
 
     @staticmethod
-    def get_fairness_category_unit_test():
+    def test_get_fairness_category():
         """ Test: Calculate Fairness Category based on Score Category:
         A+ : score <= 0.02
         A  : 0.02 < score <= 0.05
@@ -252,7 +252,7 @@ class FairnessUnitTest(unittest.TestCase):
         assert Fairness.get_fairness_category(score=1.0) == 'E'
         assert Fairness.get_fairness_category(score=1000) == 'E'
 
-    def encoder_dataset_unit_test(self):
+    def test_encoder_dataset(self):
         """ Test: Method to encoder not numeric features
         """
         df_expected = pd.DataFrame({'Gender': [0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
@@ -271,7 +271,7 @@ class FairnessUnitTest(unittest.TestCase):
 
         pd.testing.assert_frame_equal(df, df_expected)
 
-    def fit_correlation_features_unit_test(self):
+    def test_fit_correlation_features(self):
         """ Test: Method to calculate matrix correlation features (upper triangular matrix)
         """
         df_expected = pd.DataFrame({'Gender': [float('NaN'), float('NaN')],
@@ -293,7 +293,7 @@ class FairnessUnitTest(unittest.TestCase):
         pd.testing.assert_frame_equal(f.correlation_matrix, df_expected)
 
     @staticmethod
-    def find_highest_correlation_features_unit_test():
+    def test_find_highest_correlation_features():
         """ Test: Method that finds pairs of features that have a correlation greater than a threshold
         """
         df_test = pd.DataFrame({'F1': [float('NaN'), float('NaN'), float('NaN')],
@@ -328,7 +328,7 @@ class FairnessUnitTest(unittest.TestCase):
               .format(f.highest_correlation_features))
         assert f.highest_correlation_features.shape[0] == 0
 
-    def in_processing_unit_test(self):
+    def test_in_processing(self):
         """ Test: Method to encoder not numeric features
         """
         df_expected = pd.DataFrame({'sensitive_feature': ['Gender', 'Gender'],
@@ -361,27 +361,27 @@ class FairnessUnitTest(unittest.TestCase):
                                    predict_col='y_predict')
 
         # Check Fairness Metrics DataFrame
-        pd.testing.assert_frame_equal(f.fairness_info, df_expected, check_less_precise=2)
+        pd.testing.assert_frame_equal(f.fairness_info, df_expected, atol=0.01)
 
         # Check Independence Metrics DataFrame
         pd.testing.assert_frame_equal(f.independence_info,
                                       df_expected[['sensitive_feature', 'sensitive_value', 'target_label',
                                                    'independence_score', 'independence_category']],
-                                      check_less_precise=2)
+                                      atol=0.01)
 
         # Check Separation Metrics DataFrame
         pd.testing.assert_frame_equal(f.separation_info,
                                       df_expected[['sensitive_feature', 'sensitive_value', 'target_label',
                                                    'separation_score', 'separation_category']],
-                                      check_less_precise=2)
+                                      atol=0.01)
 
         # Check Sufficiency Metrics DataFrame
         pd.testing.assert_frame_equal(f.sufficiency_info,
                                       df_expected[['sensitive_feature', 'sensitive_value', 'target_label',
                                                    'sufficiency_score', 'sufficiency_category']],
-                                      check_less_precise=2)
+                                      atol=0.01)
 
-    def global_scores_unit_test(self):
+    def test_global_scores(self):
         """ Test: Method to encoder not numeric features
         """
         df_expected = pd.DataFrame({'sensitive_feature': ['Gender', 'Color'],
@@ -409,4 +409,4 @@ class FairnessUnitTest(unittest.TestCase):
         f._Fairness__global_scores()
 
         # Check Global Fairness Metrics DataFrame
-        pd.testing.assert_frame_equal(f.fairness_global_info, df_expected, check_less_precise=2)
+        pd.testing.assert_frame_equal(f.fairness_global_info, df_expected, atol=0.01)

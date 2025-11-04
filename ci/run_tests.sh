@@ -12,7 +12,7 @@ export CI_ENV=True
 #COVERAGE_FILE=test_results/.coverage_acceptance_transformations_behave coverage run --source=. --branch -m behave tests/acceptance/xaiographs/transformations --no-capture --junit --junit-directory test_results/acceptance && \
 #COVERAGE_FILE=test_results/.coverage_acceptance_viz_behave coverage run --source=. --branch -m behave tests/acceptance/xaiographs/viz --no-capture --junit --junit-directory test_results/acceptance && \
 #COVERAGE_FILE=test_results/.coverage_acceptance_why_behave coverage run --source=. --branch -m behave tests/acceptance/xaiographs/why --no-capture --junit --junit-directory test_results/acceptance && \
-COVERAGE_FILE=test_results/.coverage_unit nosetests --with-coverage --cover-erase --cover-package=. --cover-branches --with-xunit --xunit-file=test_results/unit -v -x tests/unit && \
+COVERAGE_FILE=test_results/.coverage_unit pytest tests/unit --cov=. --cov-branch --cov-report=xml --cov-report=term -v -x --junit-xml=test_results/unit/results.xml && \
 
 export COVERAGE_FILE=.coverage  && \
 coverage combine test_results/.coverage_*  && \

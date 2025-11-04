@@ -415,7 +415,7 @@ class Fairness(object):
 
     def independence_score(self, df: pd.DataFrame, sensitive_col: str, predict_col: str, target_label: str,
                            sensitive_value: str) -> float:
-        """Calculate independence criterion's score.
+        r"""Calculate independence criterion's score.
         We say that the random variables (Y, A) satisfy independence if the sensitive feature 'A'
         are statistically independent of the prediction 'Y'. We define the score as the difference (in absolute value)
         of the probabilities:
@@ -480,7 +480,7 @@ class Fairness(object):
 
     def separation_score(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
                          target_label: str, sensitive_value: str) -> float:
-        """Calculate separation criterion's score.
+        r"""Calculate separation criterion's score.
         We say the random variables (Y, A, T) satisfy separation if the sensitive characteristics 'A' are
         statistically independent of the prediction 'Y' given the target value 'T'. We define the score as the
         difference (in absolute value) of the probabilities:
@@ -549,7 +549,7 @@ class Fairness(object):
 
     def sufficiency_score(self, df: pd.DataFrame, sensitive_col: str, target_col: str, predict_col: str,
                           target_label: str, sensitive_value: str) -> float:
-        """Calculate sufficiency criterion's score.
+        r"""Calculate sufficiency criterion's score.
         We say the random variables (Y,A,T) satisfy sufficiency if the sensitive characteristics 'A' are
         statistically independent of the target value 'T' given the prediction 'Y'. We define the score as the
         difference (in absolute value) of the probabilities:
@@ -919,7 +919,7 @@ class Fairness(object):
         """
         df = self.__encoder_dataset(df=df)
         df_corr = df.corr(method='pearson').abs()
-        self.__correlation_matrix = df_corr.where(np.triu(np.ones(df_corr.shape), k=1).astype(np.bool))
+        self.__correlation_matrix = df_corr.where(np.triu(np.ones(df_corr.shape), k=1).astype(bool))
 
     def __encoder_dataset(self, df: pd.DataFrame) -> pd.DataFrame:
         """Function that given a DataFrame, pass all its non-numeric columns to the labelEncoder
@@ -927,6 +927,8 @@ class Fairness(object):
         :param df: pd.DataFrame, with dataset to labelEncoder non-numeric columns
         :return: pd.DataFrame, with non-numeric columns encoders
         """
+        # Create a copy to avoid SettingWithCopyWarning
+        df = df.copy()
         numeric_columns = df.select_dtypes(include=np.number).columns.tolist()
         all_columns = df.columns.tolist()
         pbar = tqdm(all_columns, disable=not self.verbose)

@@ -36,12 +36,11 @@ setup(
     author='Telefonica I+D',
     author_email='ricardo.moyagarcia@telefonica.com',
     license='AGPL-3.0 license',
-    python_requires='>=3.7,<3.10',
+    python_requires='>=3.10',
     packages=['xaiographs'],
     include_package_data=True,
     install_requires=required,
-    test_suite='nose.collector',
-    tests_require=['nose'],
+    tests_require=['pytest>=7.4.0', 'pytest-cov>=4.1.0'],
     entry_points={
         "console_scripts": [
             "{} = xaiographs.viz.launcher:main".format(WEB_ENTRY_POINT),
