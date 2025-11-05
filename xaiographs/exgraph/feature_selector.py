@@ -150,8 +150,19 @@ class FeatureSelector(object):
         This function retrieves for each feature col, its unique values
 
         :return: Dictionary containing a numpy array of unique values for each feature column
+        :raises: ValueError if any feature column contains NaN values
         """
-        return {feature_col: np.unique(self.__df[feature_col].values) for feature_col in self.__feature_cols}
+        unique_values_dict = {}
+        for feature_col in self.__feature_cols:
+            # Check for NaN values in the column
+            if self.__df[feature_col].isnull().any():
+                raise ValueError(
+                    "Column '{}' contains NaN values. "
+                    "Null values are not allowed in feature columns. "
+                    "Please remove or impute null values before processing the data.".format(feature_col)
+                )
+            unique_values_dict[feature_col] = np.unique(self.__df[feature_col].values)
+        return unique_values_dict
 
     def select_topk(self):
         """
@@ -212,14 +223,9 @@ class FeatureSelector(object):
             feature_ranks.extend([info[0] for info in distance_rank_info[target_value]])
 
             # For a binary problem, there'll be only two values for the target, so that their distances are symmetrical
-            # there's no need to compute distances for the two values, one is enough. The trivial distances will be
-            # kept just for information consistency purposes
+            # there's no need to compute distances for the two values, one is enough
             if len(self.__target_values) == 2:
-                trivial_target_value = (
-                    self.__target_values[0] if self.__target_values[0] != target_value else self.__target_values[1])
-                distance_rank_info[trivial_target_value] = next(iter(distance_rank_info.values()))
                 break
-
         self.__top_features_by_target = distance_rank_info
 
         # Finally, all obtained ranks for the different target values are aggregated for each feature. The largest rank
