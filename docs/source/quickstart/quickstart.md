@@ -6,12 +6,12 @@ Create a virtual environment using conda for easier management of dependencies a
 For installing conda, follow the instructions on the [official conda website](https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
 
 ```python
->> conda create --name xaio37 python=3.7
->> conda activate xaio37
+>> conda create --name env_xaio python=3.10
+>> conda activate env_xaio
 ```
 
 ```{warning} 
-Use a python version 3.7 or higher
+Use a python version 3.10 or higher
 ```
 
 XAIoGraphs can be installed from [PyPI](https://pypi.org/project/xaiographs/)

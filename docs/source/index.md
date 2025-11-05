@@ -2,7 +2,7 @@
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-green.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
-![python versions](https://img.shields.io/badge/python-3.7%2C%203.8%2C%203.9-blue.svg)
+![python versions](https://img.shields.io/badge/python-3.10%2C%203.11%2C%203.12-blue.svg)
 
 XAIoGraphs (e**X**plainability **A**rticicial **I**ntelligence **o**ver **Graphs**) is an Explicability and Fairness 
 Python library for classification problems with tabulated and discretized data.

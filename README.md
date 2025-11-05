@@ -1,6 +1,6 @@
 # <img src="https://github.com/Telefonica/XAIoGraphs/blob/master/docs/imgs/icon.png?raw=True" align="left"/>  XAIoGraphs
 
-![python versions](https://img.shields.io/badge/python-3.7%2C%203.8%2C%203.9-blue.svg)
+![python versions](https://img.shields.io/badge/python-3.10%2C%203.11%2C%203.12-blue.svg)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 XAIoGraphs (e**X**plainability **A**rticicial **I**ntelligence **o**ver **Graphs**) is an Explicability and Fairness 
@@ -37,12 +37,12 @@ Create a virtual environment using conda for easier management of dependencies a
 For installing conda, follow the instructions on the [official conda website](https://docs.conda.io/projects/conda/en/latest/user-guide/install/)
 
 ```python
->> conda create --name xaio_env python=3.7
->> conda activate xaio_env
+>> conda create --name env_xaio python=3.10
+>> conda activate env_xaio
 ```
 
 ```{warning} 
-Use a python version 3.7 or higher
+Use a python version 3.10 or higher
 ```
 
 
