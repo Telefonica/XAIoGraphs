@@ -170,9 +170,11 @@ class ImportanceCalculator(metaclass=ABCMeta):
             importances_mean_by_target.append(np.mean(importance_values[:, :, idx], axis=0))
 
         # Pandas DataFrame is built from the matrix and an additional column with the target names is prepended
-        return pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1),
-                                            np.stack(importances_mean_by_target, axis=0)), axis=1),
-                            columns=[TARGET] + feature_cols).apply(pd.to_numeric, errors='ignore')
+        df = pd.DataFrame(np.concatenate((np.array(target_cols).reshape(-1, 1),
+                                         np.stack(importances_mean_by_target, axis=0)), axis=1),
+                         columns=[TARGET] + feature_cols)
+        df[feature_cols] = df[feature_cols].apply(pd.to_numeric)
+        return df
 
     @staticmethod
     def _sanity_check(ground_truth: np.ndarray, prediction: np.ndarray, target_cols: List[str], scope: str):
