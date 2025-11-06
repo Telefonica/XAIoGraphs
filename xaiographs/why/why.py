@@ -254,9 +254,9 @@ class Why(object):
         max_n_features = max(self.__n_values, self.__n_target_values)
         df_rank = df[df[RANK] <= max_n_features]
 
-        def __get_single_why(df_single: pd.DataFrame) -> str:
+        def __get_single_why(df_single: pd.DataFrame, **kwargs) -> str:
             """
-            Builds a sentence with the reason why a single case has been assigned a label
+            Builds a sentence for a list (or tuple) of variable names as an enumeration in natural language
 
             :param df_single: Pandas DataFrame with the nodes associated to the selected case
             :return: String with the final sentence for the requested case
