@@ -4,7 +4,7 @@ XAIoGraphs has been developed by ***Applied AI & Privacy*** team (Telefónica In
 
 * [Ricardo Moya](https://www.linkedin.com/in/phdricardomoya/)
 * [Matteo Salvatori](https://www.linkedin.com/in/matteo-salvatori-7b6089129/)
-* [Enrique Fernandez](enrique-fernández-escribano-2771b343)
+* [Enrique Fernandez](https://www.linkedin.com/in/enrique-fern%C3%A1ndez-escribano-2771b343/)
 * [Alejandro Manuel Arranz](https://www.linkedin.com/in/al-ma-ar-lo/)
 * [Manuel Martín](https://www.linkedin.com/in/manuel-m-9548311b/)
 * [Mario Villaizan](https://www.linkedin.com/in/mario-villaiz%C3%A1n-vallelado/)
